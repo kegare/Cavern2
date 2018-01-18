@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "axis=z": { "model": "cavern:mirage_portal_ew" },
+        "axis=x": { "model": "cavern:mirage_portal_ns" }
+    }
+}

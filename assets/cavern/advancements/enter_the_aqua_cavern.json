@@ -1,0 +1,19 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:aqua_cavern_portal"
+        },
+        "title": {
+            "translate": "advancements.cavern.enter_the_aqua_cavern.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.enter_the_aqua_cavern.description"
+        }
+    },
+    "parent": "cavern:mine_aquamarine",
+    "criteria": {
+        "entered_aqua_cavern": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

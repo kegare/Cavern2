@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:diamond_pickaxe"
+        },
+        "title": {
+            "translate": "advancements.cavern.diamond_miner.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.diamond_miner.description"
+        },
+        "frame": "challenge"
+    },
+    "parent": "cavern:hexcite_miner",
+    "criteria": {
+        "diamond_miner": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "packed_ice": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "minecraft:packed_ice"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "recipes": [
+            "cavern:slippery_ice_packed",
+            "cavern:ice_stick_packed",
+            "cavern:ice_sword_packed",
+            "cavern:ice_pickaxe_packed",
+            "cavern:ice_axe_packed",
+            "cavern:ice_shovel_packed",
+            "cavern:ice_hoe_packed",
+            "cavern:ice_bow_packed"
+        ]
+    }
+}

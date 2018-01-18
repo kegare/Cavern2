@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:mirage_book",
+            "data": 1
+        },
+        "title": {
+            "translate": "advancements.cavern.enter_the_cavenia.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.enter_the_cavenia.description"
+        }
+    },
+    "parent": "cavern:mirage_trip",
+    "criteria": {
+        "entered_cavenia": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

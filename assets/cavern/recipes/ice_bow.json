@@ -1,0 +1,25 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "ice_bow",
+    "pattern": [
+        "#X ",
+        "# X",
+        "#X "
+    ],
+    "key": {
+        "#": {
+            "type": "forge:ore_dict",
+            "ore": "stickIce"
+        },
+        "X": {
+            "item": "minecraft:string"
+        }
+    },
+    "result": {
+        "type": "minecraft:item_nbt",
+        "item": "cavern:ice_bow",
+        "nbt": {
+            "IceCharge": 1
+        }
+    }
+}

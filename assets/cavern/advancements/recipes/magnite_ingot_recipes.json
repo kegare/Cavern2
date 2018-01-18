@@ -1,0 +1,26 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "magnite_ingot": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:cave_item",
+                        "data": 1
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "recipes": [
+            "cavern:magnite_ingot",
+            "cavern:magnite_block",
+            "cavern:magnite_sword",
+            "cavern:magnite_pickaxe",
+            "cavern:magnite_axe",
+            "cavern:magnite_shovel"
+        ]
+    }
+}

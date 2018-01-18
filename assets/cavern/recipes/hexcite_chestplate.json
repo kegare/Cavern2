@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "# #",
+        "###",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "cavern:cave_item",
+            "data": 2
+        }
+    },
+    "result": {
+        "item": "cavern:hexcite_chestplate"
+    }
+}

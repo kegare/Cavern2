@@ -1,0 +1,28 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:cave_item",
+            "data": 2
+        },
+        "title": {
+            "translate": "advancements.cavern.mine_hexcite.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.mine_hexcite.description"
+        }
+    },
+    "parent": "cavern:root",
+    "criteria": {
+        "hexcite": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:cave_item",
+                        "data": 2
+                    }
+                ]
+            }
+        }
+    }
+}

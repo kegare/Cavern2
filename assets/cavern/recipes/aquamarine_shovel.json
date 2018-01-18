@@ -1,0 +1,21 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "#",
+        "X",
+        "X"
+    ],
+    "key": {
+        "#": {
+            "item": "cavern:cave_item",
+            "data": 0
+        },
+        "X": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    "result": {
+        "item": "cavern:aquamarine_shovel"
+    }
+}

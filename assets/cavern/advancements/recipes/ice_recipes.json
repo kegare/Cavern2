@@ -1,0 +1,28 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "ice": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "minecraft:ice"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "recipes": [
+            "cavern:slippery_ice",
+            "cavern:ice_stick",
+            "cavern:ice_sword",
+            "cavern:ice_pickaxe",
+            "cavern:ice_axe",
+            "cavern:ice_shovel",
+            "cavern:ice_hoe",
+            "cavern:ice_bow",
+            "cavern:ice_bow_normal"
+        ]
+    }
+}

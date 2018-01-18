@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:aquamarine_pickaxe"
+        },
+        "title": {
+            "translate": "advancements.cavern.aquamarine_pickaxe.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.aquamarine_pickaxe.description"
+        }
+    },
+    "parent": "cavern:mine_aquamarine",
+    "criteria": {
+        "aquamarine_pickaxe": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:aquamarine_pickaxe"
+                    }
+                ]
+            }
+        }
+    }
+}

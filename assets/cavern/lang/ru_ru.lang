@@ -1,0 +1,431 @@
+#Russian translation
+
+gui.edit=Редактировать
+gui.add=Добавить
+gui.remove=Удалить
+gui.clear=Очистить
+gui.disabled=Отключено
+
+#Описание мода
+cavern.description=Добавляет пещерные измерения. Там нет поверхности.
+
+#Проверка версии
+cavern.version.message=Найдена новая версия %s 
+cavern.version.message.beta=Вы используете бета версию %s
+cavern.version.message.alpha=Вы используете альфа версию %s
+cavern.version.message.dev=Вы используете дев билд %s
+
+#Конфигурация
+#Базовая
+cavern.config.title=Cavern конфигурация
+cavern.config.detail=Подробная информация
+cavern.config.detail.hover=Показать подробную информацию.
+cavern.config.instant=Моментальный фильтр
+cavern.config.instant.hover=Фильтровать мгновенно при вводе символа в текстовом поле filter-textbox.
+
+cavern.config.general=Общие настройки
+cavern.config.general.tooltip=Изменение параметров, содержащихся в cavern-general.cfg
+cavern.config.general.versionNotify=Уведомление о версии
+cavern.config.general.versionNotify.tooltip=Уведомление о доступности новой версии.
+cavern.config.general.caveMusicVolume=Громкость музыки в пещерах
+cavern.config.general.caveMusicVolume.tooltip=Укажите громкость для пещерной музыки.
+cavern.config.general.miningPointPosition=Позиция шахты
+cavern.config.general.miningPointPosition.tooltip=Укажите позицию отображения точки добычи.
+cavern.config.general.miningPointPosition.0=В правом верхнем углу
+cavern.config.general.miningPointPosition.1=В левом верхнем углу
+cavern.config.general.miningPointPosition.2=В правом нижнем углу
+cavern.config.general.miningPointPosition.3=В левом нижнем углу
+cavern.config.general.miningPointPosition.4=Скрыто
+cavern.config.general.showMinerRank=Показать ранг шахтера
+cavern.config.general.showMinerRank.tooltip=Показывать шахтерский ранг вместе с шахтерскими точками.
+cavern.config.general.miningPointItems=Предметы горного дела
+cavern.config.general.miningPointItems.tooltip=Укажите предметы, которые могут получить точку добычи. Если не указывать, это будет определено автоматически.
+cavern.config.general.miningPoints=Точки шахты
+cavern.config.general.miningPoints.tooltip=Укажите точку добычи для каждого блока.
+cavern.config.general.miningCombo=Горное комбо
+cavern.config.general.miningCombo.tooltip=Включить ли горное комбо.
+cavern.config.general.caveborn=Caveborn
+cavern.config.general.caveborn.tooltip=Укажите тип caveborn. Перенос в измерение пещеры при первом соединении с миром.
+cavern.config.general.caveborn.0=Отключено
+cavern.config.general.caveborn.1=Пещера
+cavern.config.general.caveborn.2=Водная пещера
+cavern.config.general.caveborn.3=Пещерные земли
+cavern.config.general.portalCache=Кэш портала
+cavern.config.general.portalCache.tooltip=Включить ли кэш телепортаций для порталов.
+
+#Блоки
+cavern.config.points=Настройка очков горного дела
+cavern.config.points.block=блоки
+cavern.config.points.block.tooltip=Укажите имя блока.
+cavern.config.points.point=Очки
+cavern.config.points.point.tooltip=Укажите точку добычи блока.
+
+#Измерения
+cavern.config.dimension=Параметры измерения
+cavern.config.dimension.tooltip=Изменение настроек размеров измерения
+cavern.config.dimension.cavern=Пещера
+cavern.config.dimension.cavern.tooltip=Изменение параметров, содержащихся в cavern-dimension.cfg
+cavern.config.dimension.aquaCavern=Водная пещера
+cavern.config.dimension.aquaCavern.tooltip=Изменение параметров, содержащихся в aquacavern-dimension.cfg
+cavern.config.dimension.caveland=Пещерные земли
+cavern.config.dimension.caveland.tooltip=Изменение параметров, содержащихся в caveland-dimension.cfg
+cavern.config.dimension.dimension=Измерение
+cavern.config.dimension.dimension.tooltip=Укажите идентификатор измерения.
+cavern.config.dimension.worldHeight=Высота мира
+cavern.config.dimension.worldHeight.tooltip=Укажите высоту мира измерения.
+cavern.config.dimension.randomSeed=Рандомный сид
+cavern.config.dimension.randomSeed.tooltip=Нужноли задавать рандомный сид.
+cavern.config.dimension.biomeType=Тип биома
+cavern.config.dimension.biomeType.tooltip=Укажите тип биома для измерения.
+cavern.config.dimension.biomeType.0=Натуральный
+cavern.config.dimension.biomeType.1=Квадратный
+cavern.config.dimension.biomeType.2=Большие биомы
+cavern.config.dimension.generateCaves=Генерация пещер
+cavern.config.dimension.generateCaves.tooltip=Настройка генерации пещер в измерении.
+cavern.config.dimension.generateRavine=Генерация ущелий
+cavern.config.dimension.generateRavine.tooltip=Создать ли ущелье в измерении.
+cavern.config.dimension.generateExtremeCaves=Создание больших пещер
+cavern.config.dimension.generateExtremeCaves.tooltip=Создать ли большие пещеры в измерении.
+cavern.config.dimension.generateExtremeRavine=Генерация больших оврагов
+cavern.config.dimension.generateExtremeRavine.tooltip=Создать ли большие овраги в измерении.
+cavern.config.dimension.generateLakes=Генерация озер
+cavern.config.dimension.generateLakes.tooltip=Создать ли озера в измерении.
+cavern.config.dimension.generateDungeons=Генерация данжей
+cavern.config.dimension.generateDungeons.tooltip=Создать ли данжи в измерении.
+cavern.config.dimension.generateMineshaft=Генерация шахт
+cavern.config.dimension.generateMineshaft.tooltip=Создать ли шахты в измерении.
+cavern.config.dimension.generateRiver=Генерация рек
+cavern.config.dimension.generateRiver.tooltip=Создать ли реки в измерении.
+cavern.config.dimension.dungeonMobs=Мобы подземелий
+cavern.config.dimension.dungeonMobs.tooltip=Укажите какие мобы будут спавниться в измерении.
+cavern.config.dimension.monsterSpawn=Частота спавна моба
+cavern.config.dimension.monsterSpawn.tooltip=Укажите частоту спавна моба в измерении. Если указать значение 0, спавн монстров будет естественным.
+cavern.config.dimension.caveBrightness=Яркость пещеры
+cavern.config.dimension.caveBrightness.tooltip=Укажите яркость мира для измерения.
+
+#Генерация
+cavern.config.biomes=Настройка биомов
+cavern.config.biomes.tooltip=Измените настройки генерации биома измерения.
+cavern.config.biomes.weight=Частота
+cavern.config.biomes.weight.tooltip=Укажите частоту для генерации.
+cavern.config.biomes.terrainBlock=Ландшафтный блок
+cavern.config.biomes.terrainBlock.tooltip=Укажите имя блока местности.
+cavern.config.biomes.terrainBlockMeta=Метаданные блока местности
+cavern.config.biomes.terrainBlockMeta.tooltip=Укажите метаданные блока местности.
+cavern.config.biomes.topBlock=Верхний блок
+cavern.config.biomes.topBlock.tooltip=Укажите имя верхнего блока.
+cavern.config.biomes.topBlockMeta=Метаданные верхнего блока
+cavern.config.biomes.topBlockMeta.tooltip=Укажите метаданные верхнего блока.
+
+#Жилы
+cavern.config.veins=Настройка жил
+cavern.config.veins.tooltip=Измените настройки генерации жил в измерении.
+cavern.config.veins.block=Блок
+cavern.config.veins.block.tooltip=Укажите имя блока для генерации.
+cavern.config.veins.blockMeta=Метаданные блока
+cavern.config.veins.blockMeta.tooltip=Укажите метаданные генерируемого блока.
+cavern.config.veins.targetBlock=Целевой блок
+cavern.config.veins.targetBlock.tooltip=Укажите имя целевого блока генерации.
+cavern.config.veins.targetBlockMeta=Метаданные целевого блока
+cavern.config.veins.targetBlockMeta.tooltip=Укажите метаданные целевого блока генерации.
+cavern.config.veins.weight=Частота
+cavern.config.veins.weight.tooltip=Укажите частоту генерации.
+cavern.config.veins.chance=Вероятность
+cavern.config.veins.chance.tooltip=Укажите вероятность генерации.
+cavern.config.veins.size=Размер
+cavern.config.veins.size.tooltip=Укажите размер жилы для генерации.
+cavern.config.veins.height=Высота
+cavern.config.veins.height.tooltip=Укажите высоту для генерации.
+cavern.config.veins.minHeight=Минимальная высота
+cavern.config.veins.minHeight.tooltip=Укажите минимальную высоту для генерации.
+cavern.config.veins.maxHeight=Максимальная высота
+cavern.config.veins.maxHeight.tooltip=Укажите максимальную высоту для генерации.
+cavern.config.veins.biomes=Биомы
+cavern.config.veins.biomes.tooltip=Укажите принимаемые биомы для генерации.
+
+#Разное
+cavern.config.select.block=Выберите блок
+cavern.config.select.block.multiple=Выбрать блоки
+cavern.config.select.block.selected=%d выбранные блоки
+cavern.config.select.item=Выберите предмет
+cavern.config.select.item.multiple=Выберите предметы
+cavern.config.select.item.selected=%d выбранные редметы
+cavern.config.select.biome=Выберите биомы
+cavern.config.select.biome.selected=%d выбранные биомы
+cavern.config.select.biome.info.topBlock=Верхний блок
+cavern.config.select.biome.info.fillerBlock=Блок-заполнитель
+cavern.config.select.biome.info.temperature=Температура
+cavern.config.select.biome.info.rainfall=Количество осадков
+cavern.config.select.biome.info.type=Тип
+cavern.config.select.mob=Выберите мобов
+cavern.config.select.mob.selected=%d выбранные мобы
+cavern.config.select.entry.selected=%d выбранные записи
+
+#Ранг шахтера
+cavern.minerrank.beginner=Начинающий
+cavern.minerrank.stoneMiner=Каменный шахтер
+cavern.minerrank.ironMiner=Железный шахтер
+cavern.minerrank.goldMiner=Золотой шахтер
+cavern.minerrank.aquaMiner=Водный шахтер
+cavern.minerrank.diamondMiner=Алмазный шахтер
+cavern.minerrank.promoted=Поздравляем! %s получает новый ранг %s.
+
+#Загрузка мира
+cavern.terrain.wait=Подождите минуточку!
+cavern.terrain.load=Загружаем подземные красоты
+
+#Регенерация
+cavern.regeneration.regenerating=Регенерация измерения %s...
+cavern.regeneration.backup=Резервное копирование папки измерения %s...
+cavern.regeneration.backup.success=Папка с измерением %s скопирована
+cavern.regeneration.backup.failed=Не удалось создать резервную копию папки измерения %s 
+cavern.regeneration.regenerated=Измерение %s перегенерировано
+cavern.regeneration.failed=Не удалось регенерировать измерение %s 
+
+#Регенерация GUI
+cavern.regeneration.gui.title=Регенерация измерения
+cavern.regeneration.gui.info=Нельзя отменить после начала регенерации
+cavern.regeneration.gui.regenerate=Регенерация
+cavern.regeneration.gui.backup=Резервное копирование
+cavern.regeneration.gui.backup.tooltip=Если флажок установлен, будет выполнено резервное копирование данных измерений перед регенерацией.
+cavern.regeneration.gui.progress.start=Регенерация...
+cavern.regeneration.gui.progress.backup=Резервное копирование..
+cavern.regeneration.gui.progress.regenerated=Перегенерировано
+cavern.regeneration.gui.progress.failed=Ошибка
+
+#Тайлы
+tile.portal.cavern.name=Портал в пещеры
+tile.portal.aquaCavern.name=Портал в подводные пещеры
+tile.portal.caveland.name=Портал пещерных земель
+tile.portal.iceCavern.name=Портал в ледяные пещеры
+tile.portal.ruinsCavern.name=Портал в пещерные руины
+tile.portal.hugeCavern.name=Портал в огромные пещеры
+tile.oreAquamarine.name=Аквамариновая руда
+tile.blockAquamarine.name=Блок аквамарина
+tile.oreMagnite.name=Магнитная руда
+tile.oreRandomite.name=Случайная руда
+tile.oreHexcite.name=Гекситовая руда
+tile.blockHexcite.name=Блок гексита
+tile.fissured.name=Надломленный %s
+tile.oreManalite.name=Маналитная руда
+tile.blockManalite.name=Блок маналита
+tile.blockMagnite.name=Блок магнита
+tile.acresia.name=Акрезия
+tile.perverted.name=Извращенный
+tile.pervertedWood.name=Извращенное дерево
+tile.pervertedLeaves.name=Извращенные листья
+tile.pervertedSapling.name=Извращенный саженец
+tile.slipperyIce.name=Скользкий лед
+
+#Итемы
+item.swordHexcite.name=Гекситовый меч
+item.pickaxeHexcite.name=Гекситовая кирка
+item.axeHexcite.name=Гекситовый топор
+item.shovelHexcite.name=Гекситовая лопата
+item.hoeHexcite.name=Гекситовая мотыга
+item.helmetHexcite.name=Гекситовый шлем
+item.chestplateHexcite.name=Гекситовый нагрудник
+item.leggingsHexcite.name=Гекситовые поножи
+item.bootsHexcite.name=Гекситовые ботинки
+item.swordIce.name=Ледяной меч
+item.pickaxeIce.name=Ледяная кирка
+item.axeIce.name=Ледяной топор
+item.shovelIce.name=Ледяная лопата
+item.hoeIce.name=Ледяная мотыга
+item.bowIce.name=Ледяной лук
+item.magicalBook.name=Магическая книга
+item.magicalBook.flameBreath.name=Огненное дыхание
+item.magicalBook.explosion.name=Взрыв
+item.magicalBook.thunderbolt.name=Удар молнии
+item.magicalBook.venomBlast.name=Взрыв венома
+item.magicalBook.return.name=Возвращение
+item.magicalBook.return.no=Ваша точка респауна не существует
+item.magicalBook.heal.name=Исцеление
+item.magicalBook.holyBless.name=Святое благословение
+item.magicalBook.holyBless.failed=Магия святого благословения еще не может быть использована
+item.magicalBook.storage.name=Хранилище
+item.magicalBook.storage.stock=Стек
+item.magicalBook.warp.name=Варп
+item.magicalBook.warp.point=Точка варпа
+item.magicalBook.warp.point.set=Точка варпа установлена
+item.magicalBook.warp.point.far=Точка варпа слишком далеко
+item.magicalBook.torch.name=Факел
+item.magicalBook.torch.lack=У вас недостаточно факелов
+item.magicalBook.torch.exist=Вы уже выполняете волшебство факела
+item.magicalBook.torch.finish=Магия факела исчезла
+item.magicalBook.summon.name=Призыв
+item.magicalBook.compositing.name=Композитинг
+item.magicalBook.compositing.failed=Композитная магия не удалась
+item.magicalBook.flying.name=Полет
+item.magicalBook.infinity.name=Бесконечность
+item.magicalBook.infinity.failed=Магия бесконечности еще не может быть использована
+item.magicalBook.invisible.name=Невидимость
+item.magicalBook.teleport.name=Телепорт
+item.elixir.name=Элексир
+item.elixirMedium.name=Средний эликсир
+item.elixirHigh.name=Большой эликсир
+item.elixirAwaken.name=Эликсир просветления
+item.elixir.tooltip.mp=Восстановление MP
+item.bowCavenic.name=Пещерный лук
+item.bowCavenic.mode=Режим
+item.bowCavenic.normal=НОРМАЛЬНЫЙ
+item.bowCavenic.rapid=СКОРОСТРЕЛ
+item.bowCavenic.snipe=СНАЙПЕР
+item.bowCavenic.torch=ФАКЕЛ
+item.swordManalite.name=Магический меч: Маналит
+item.axeManalite.name=Магический топор: Маналит
+item.bowManalite.name=Магический лук: Маналит
+item.compassOre.name=Рудный компас
+item.swordComposite.name=Композитный меч
+item.pickaxeComposite.name=Композитная кирка
+item.axeComposite.name=Композитный топор
+item.shovelComposite.name=Композитная лопата
+item.hoeComposite.name=Композитная мотыга
+item.helmetComposite.name=Композитный шлем
+item.chestplateComposite.name=Композитный нагрудник
+item.leggingsComposite.name=Композитные поножи
+item.bootsComposite.name=Композитные ботинки
+item.aquamarine.name=Аквамарин
+item.ingotMagnite.name=Слиток магнита
+item.pickaxeAquamarine.name=Аквамариновая кирка
+item.axeAquamarine.name=Аквамариновый топор
+item.shovelAquamarine.name=Аквамариновая лопата
+item.swordMagnite.name=Аквамариновый меч
+item.pickaxeMagnite.name=Кирка из магнита
+item.axeMagnite.name=Топор из магнита
+item.shovelMagnite.name=Лопата из магнита
+item.acresia.name=Акрезия
+item.seedsAcresia.name=Семена акрезии
+item.fruitsAcresia.name=Плод акрезии
+item.hexcite.name=Гексит
+item.stickIce.name=Ледяная палка
+item.orbMiner.name=Сфера шахтерской мысли
+item.orbCavenic.name=Пещерная сфера
+item.manalite.name=Маналит
+
+
+#Отображение вкладки в меню креатива
+itemGroup.cavern=Пещеры
+
+#Достижения
+advancements.cavern.root.title=Пещеры
+advancements.cavern.root.description=Войдите в пещерное измерение
+advancements.cavern.mine_aquamarine.title=Аквамарин
+advancements.cavern.mine_aquamarine.description=Получите аквамарин
+advancements.cavern.enter_the_aqua_cavern.title=Водные пещеры
+advancements.cavern.enter_the_aqua_cavern.description=Войдите в измерение водных пещер
+advancements.cavern.aquamarine_pickaxe.title=Шахтер подводник
+advancements.cavern.aquamarine_pickaxe.description=Создайте аквамариновую кирку
+advancements.cavern.smelt_magnite.title=Магнит
+advancements.cavern.smelt_magnite.description=Выплавите слиток из магнитной руды
+advancements.cavern.magnite_tools.title=Магнитизм
+advancements.cavern.magnite_tools.description=Создайте магнитный инструмент
+advancements.cavern.mine_hexcite.title=Моя прелесть
+advancements.cavern.mine_hexcite.description=Получите гексцит
+advancements.cavern.mine_randomite.title=Странная руда
+advancements.cavern.mine_randomite.description=Выкопайте рандомную руду
+advancements.cavern.get_miner_orb.title=Шахтерские сокровища
+advancements.cavern.get_miner_orb.description=Получите сферу шахтерской мысли
+advancements.cavern.ore_compass.title=Поиск руды
+advancements.cavern.ore_compass.description=Создайте шахтерский компас
+advancements.cavern.enter_the_ruins_cavern.title=В руины
+advancements.cavern.enter_the_ruins_cavern.description=Войдите в измерение руин
+advancements.cavern.mine_fissure.title=Чудо-трещина
+advancements.cavern.mine_fissure.description=Получите треснувший блок
+advancements.cavern.iron_miner.title=Железный шахтер
+advancements.cavern.iron_miner.description=Станьте железным шахтером
+advancements.cavern.gold_miner.title=Золотой шахтер
+advancements.cavern.gold_miner.description=Станьте золотым шахтером
+advancements.cavern.hexcite_miner.title=Гекситовый шахтер
+advancements.cavern.hexcite_miner.description=Станьте гекситовым шахтером
+advancements.cavern.diamond_miner.title=Алмазный шахтер
+advancements.cavern.diamond_miner.description=Станьте алмазным шахтером
+advancements.cavern.good_mine.title=Хорошая шахта!
+advancements.cavern.good_mine.description=Откопайте множество руд не прерываясь
+advancements.cavern.pick_sapling.title=Где посадить?
+advancements.cavern.pick_sapling.description=Возьмите саженец
+advancements.cavern.enter_the_caveland.title=Пещерные земли
+advancements.cavern.enter_the_caveland.description=Войдите в пещерные земли
+advancements.cavern.harvest_acresia.title=Прочная культура
+advancements.cavern.harvest_acresia.description=Соберите урожай акреции ножницами
+advancements.cavern.ice_stuff.title=Ледяной материал
+advancements.cavern.ice_stuff.description=Получите упакованный лед
+advancements.cavern.enter_the_ice_cavern.title=Холодновато тут...
+advancements.cavern.enter_the_ice_cavern.description=Войдите в ледяные пещеры
+advancements.cavern.ice_charge.title=Ледяной заряд
+advancements.cavern.ice_charge.description=Зарядите льдом ледяное снаряжение
+advancements.cavern.slip_ice.title=Остерегайтесь скольжения
+advancements.cavern.slip_ice.description=Прогулка по скользкому льду
+advancements.cavern.get_magical_book.title=Изучение магии
+advancements.cavern.get_magical_book.description=Получите магическую книгу
+advancements.cavern.short_mp.title=Сделайте перерыв
+advancements.cavern.short_mp.description=Используйте слишком много магии
+advancements.cavern.mine_manalite.title=Волшебная сила
+advancements.cavern.mine_manalite.description=Получите маналит
+advancements.cavern.magical_weapons.title=Волшебное усилие
+advancements.cavern.magical_weapons.description=Создайте магическое оружие
+advancements.cavern.magician.title=Чародей
+advancements.cavern.magician.description=Станьте чародеем
+advancements.cavern.magic_flame_breath.title=Огнемёт
+advancements.cavern.magic_flame_breath.description=Успешно дыхните огнем
+advancements.cavern.magic_explosion.title=Подрывник
+advancements.cavern.magic_explosion.description=Используйте взрывную магию
+advancements.cavern.magic_warp.title=Варп
+advancements.cavern.magic_warp.description=Используйте магию телепортации
+advancements.cavern.magic_summon.title=Призыватель
+advancements.cavern.magic_summon.description=Используйте магию призыва
+advancements.cavern.magic_compositing.title=Композиция
+advancements.cavern.magic_compositing.description=Используйте композитную магию
+advancements.cavern.composite_tools.title=Фантастические инструменты
+advancements.cavern.composite_tools.description=Построить композитный инструмент с помощью магии композитинга
+advancements.cavern.mage.title=Маг
+advancements.cavern.mage.description=Станьте магом
+advancements.cavern.grand_mage.title=Великий маг
+advancements.cavern.grand_mage.description=Станьте великим магом
+advancements.cavern.kill_cavenic_mobs.title=Пещерный охотник
+advancements.cavern.kill_cavenic_mobs.description=Убейте по одному из мобов обитающих в пещерах
+advancements.cavern.get_cavenic_orb.title=Пещерная сфера
+advancements.cavern.get_cavenic_orb.description=Получите пещерную сферу
+advancements.cavern.cavenic_bow.title=Лучник эксперт
+advancements.cavern.cavenic_bow.description=Получите пещерный лук
+advancements.cavern.touch_caveman.title=Привет, пещерный человек
+advancements.cavern.touch_caveman.description=Прикоснитесь к пещерному человеку
+advancements.cavenia.root.title=Cavenia
+advancements.cavenia.root.description=Войдите в измерение Cavenia
+advancements.cavenia.hunter.title=Охотник
+advancements.cavenia.hunter.description=Станьте охотником
+advancements.cavenia.kill_crazy_mobs.title=Упрямый охотник
+advancements.cavenia.kill_crazy_mobs.description=Убейте каждого сумасшедшего монстра
+advancements.cavenia.crazy_hunter.title=Сумасшедший охотник
+advancements.cavenia.crazy_hunter.description=Станьте сумасшедшим охотником
+advancements.cavenia.ranger.title=Рейнджер
+advancements.cavenia.ranger.description=Станьте рейнджером
+advancements.cavenia.crazy_ranger.title=Сумасшедший рейнджер
+advancements.cavenia.crazy_ranger.description=Станьте сумасшедшим рейнджером
+advancements.cavern.get_diamond.title=Драгоценный ключ
+advancements.cavern.get_diamond.description=Получите алмаз
+advancements.cavern.enter_the_huge_cavern.title=Огромная пещера
+advancements.cavern.enter_the_huge_cavern.description=Войдите в измерение с огромными пещерами
+
+
+##Добавленное
+key.cavern.miningAssist=Переключении помощи в добыче
+key.cavern.magicSpelling=Волшебная книга заклинаний
+
+key.categories.cavern=Пещера
+
+cavern.miningassist.name=Помощь в добыче
+cavern.miningassist.disabled=Отключено
+cavern.miningassist.quick=СКОРОСТЬ
+cavern.miningassist.ranged=РАНЖИРОВАНИЕ
+cavern.miningassist.adit=ШТОЛЬНЯ
+cavern.miningassist.toggle.message=Помощь в добыче была изменена на %s
+cavern.miningassist.toggle.failed.message=Помощь в добыче не может быть изменена, пока не станет %s
+cavern.miningassist.toggle.press=Нажмите клавишу %s для смены режима
+cavern.miningassist.notify.message=Помощь в добыче установлена %s
+
+cavern.toast.ability.title=Способность разблокирована!
+
+tooltip.iceEquipment.charge=Ледяная зарядка: %s
+
+cavern.escapeMission.bad.message=Пещерные достижения еще не завершены

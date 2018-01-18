@@ -1,0 +1,28 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:cave_item",
+            "data": 0
+        },
+        "title": {
+            "translate": "advancements.cavern.mine_aquamarine.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.mine_aquamarine.description"
+        }
+    },
+    "parent": "cavern:root",
+    "criteria": {
+        "aquamarine": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:cave_item",
+                        "data": 0
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:mirage_book",
+            "data": 2
+        },
+        "title": {
+            "translate": "advancements.cavern.mirage_trip.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.mirage_trip.description"
+        }
+    },
+    "parent": "cavern:root",
+    "criteria": {
+        "mirage_book": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:mirage_book"
+                    }
+                ]
+            }
+        }
+    }
+}

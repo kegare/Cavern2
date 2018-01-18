@@ -1,0 +1,25 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "ice_pickaxe",
+    "pattern": [
+        "###",
+        " X ",
+        " X "
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:packed_ice"
+        },
+        "X": {
+            "type": "forge:ore_dict",
+            "ore": "stickIce"
+        }
+    },
+    "result": {
+        "type": "minecraft:item_nbt",
+        "item": "cavern:ice_pickaxe",
+        "nbt": {
+            "IceCharge": 28
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "##",
+        "#X",
+        " X"
+    ],
+    "key": {
+        "#": {
+            "item": "cavern:cave_item",
+            "data": 1
+        },
+        "X": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    "result": {
+        "item": "cavern:magnite_axe"
+    }
+}

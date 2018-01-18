@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "group": "cavern:sapling_perverted",
+    "pattern": [
+        "X",
+        "#"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:sapling",
+            "data": 0
+        },
+        "X": {
+            "item": "minecraft:fermented_spider_eye"
+        }
+    },
+    "result": {
+        "item": "cavern:perverted_sapling",
+        "data": 0
+    }
+}

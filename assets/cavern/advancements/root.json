@@ -1,0 +1,22 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:mossy_cobblestone"
+        },
+        "title": {
+            "translate": "advancements.cavern.root.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.root.description"
+        },
+        "background": "minecraft:textures/blocks/stonebrick.png"
+    },
+    "criteria": {
+        "entered_cavern": {
+            "trigger": "minecraft:changed_dimension",
+            "conditions": {
+                "to": "cavern"
+            }
+        }
+    }
+}

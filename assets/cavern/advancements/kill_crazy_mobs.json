@@ -1,0 +1,52 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:diamond_sword"
+        },
+        "title": {
+            "translate": "advancements.cavern.kill_crazy_mobs.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.kill_crazy_mobs.description"
+        },
+        "frame": "challenge"
+    },
+    "parent": "cavern:enter_the_cavenia",
+    "criteria": {
+        "crazy_skeleton": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "cavern:crazy_skeleton"
+                }
+            }
+        },
+        "crazy_creeper": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "cavern:crazy_creeper"
+                }
+            }
+        },
+        "crazy_zombie": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "cavern:crazy_zombie"
+                }
+            }
+        },
+        "crazy_spider": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "cavern:crazy_spider"
+                }
+            }
+        }
+    },
+    "rewards": {
+        "experience": 1000
+    }
+}

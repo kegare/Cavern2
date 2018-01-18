@@ -1,0 +1,25 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "ice_sword",
+    "pattern": [
+        "#",
+        "#",
+        "X"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:ice"
+        },
+        "X": {
+            "type": "forge:ore_dict",
+            "ore": "stickIce"
+        }
+    },
+    "result": {
+        "type": "minecraft:item_nbt",
+        "item": "cavern:ice_sword",
+        "nbt": {
+            "IceCharge": 3
+        }
+    }
+}

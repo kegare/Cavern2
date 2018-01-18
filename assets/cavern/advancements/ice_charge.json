@@ -1,0 +1,22 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:ice_pickaxe"
+        },
+        "title": {
+            "translate": "advancements.cavern.ice_charge.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.ice_charge.description"
+        }
+    },
+    "parent": "cavern:root",
+    "criteria": {
+        "ice_charge": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "rewards": {
+        "experience": 30
+    }
+}

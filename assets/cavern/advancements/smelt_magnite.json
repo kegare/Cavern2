@@ -1,0 +1,28 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:cave_item",
+            "data": 1
+        },
+        "title": {
+            "translate": "advancements.cavern.smelt_magnite.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.smelt_magnite.description"
+        }
+    },
+    "parent": "cavern:root",
+    "criteria": {
+        "magnite_ingot": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:cave_item",
+                        "data": 1
+                    }
+                ]
+            }
+        }
+    }
+}

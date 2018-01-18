@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:cave_block",
+            "data": 7
+        },
+        "title": {
+            "translate": "advancements.cavern.mine_fissure.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.mine_fissure.description"
+        }
+    },
+    "parent": "cavern:root",
+    "criteria": {
+        "mine_fissure": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

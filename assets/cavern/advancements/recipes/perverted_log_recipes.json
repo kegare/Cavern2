@@ -1,0 +1,27 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "perverted_log": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:perverted_log"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "recipes": [
+            "cavern:planks_perverted_oak",
+            "cavern:planks_perverted_spruce",
+            "cavern:planks_perverted_birch",
+            "cavern:planks_perverted_jungle",
+            "cavern:stick_perverted_oak",
+            "cavern:stick_perverted_spruce",
+            "cavern:stick_perverted_birch",
+            "cavern:stick_perverted_jungle"
+        ]
+    }
+}

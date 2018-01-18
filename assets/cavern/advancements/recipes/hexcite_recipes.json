@@ -1,0 +1,31 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "hexcite": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:cave_item",
+                        "data": 2
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "recipes": [
+            "cavern:hexcite",
+            "cavern:hexcite_block",
+            "cavern:hexcite_sword",
+            "cavern:hexcite_pickaxe",
+            "cavern:hexcite_axe",
+            "cavern:hexcite_shovel",
+            "cavern:hexcite_hoe",
+            "cavern:hexcite_helmet",
+            "cavern:hexcite_chestplate",
+            "cavern:hexcite_leggings",
+            "cavern:hexcite_boots"
+        ]
+    }
+}

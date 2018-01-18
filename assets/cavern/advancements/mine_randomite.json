@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:cave_block",
+            "data": 4
+        },
+        "title": {
+            "translate": "advancements.cavern.mine_randomite.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.mine_randomite.description"
+        }
+    },
+    "parent": "cavern:root",
+    "criteria": {
+        "mine_randomite": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

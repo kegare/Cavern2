@@ -1,0 +1,19 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:slippery_ice"
+        },
+        "title": {
+            "translate": "advancements.cavern.slip_ice.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.slip_ice.description"
+        }
+    },
+    "parent": "cavern:root",
+    "criteria": {
+        "slip_ice": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

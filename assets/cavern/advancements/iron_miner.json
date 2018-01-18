@@ -1,0 +1,19 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:iron_pickaxe"
+        },
+        "title": {
+            "translate": "advancements.cavern.iron_miner.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.iron_miner.description"
+        }
+    },
+    "parent": "cavern:root",
+    "criteria": {
+        "iron_miner": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

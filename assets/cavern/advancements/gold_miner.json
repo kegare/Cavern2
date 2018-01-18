@@ -1,0 +1,19 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:golden_pickaxe"
+        },
+        "title": {
+            "translate": "advancements.cavern.gold_miner.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.gold_miner.description"
+        }
+    },
+    "parent": "cavern:iron_miner",
+    "criteria": {
+        "gold_miner": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:cave_item",
+            "data": 4
+        },
+        "title": {
+            "translate": "advancements.cavern.get_miner_orb.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.get_miner_orb.description"
+        },
+        "frame": "goal"
+    },
+    "parent": "cavern:mine_randomite",
+    "criteria": {
+        "miner_orb": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:cave_item",
+                        "data": 4
+                    }
+                ]
+            }
+        }
+    }
+}

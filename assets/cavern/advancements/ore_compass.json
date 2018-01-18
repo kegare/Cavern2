@@ -1,0 +1,30 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:ore_compass"
+        },
+        "title": {
+            "translate": "advancements.cavern.ore_compass.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.ore_compass.description"
+        },
+        "frame": "challenge"
+    },
+    "parent": "cavern:get_miner_orb",
+    "criteria": {
+        "ore_compass": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:ore_compass"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 50
+    }
+}

@@ -1,0 +1,68 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:hexcite_sword"
+        },
+        "title": {
+            "translate": "advancements.cavern.kill_cavenic_mobs.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.kill_cavenic_mobs.description"
+        },
+        "frame": "challenge"
+    },
+    "parent": "cavern:root",
+    "criteria": {
+        "cavenic_skeleton": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "cavern:cavenic_skeleton"
+                }
+            }
+        },
+        "cavenic_creeper": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "cavern:cavenic_creeper"
+                }
+            }
+        },
+        "cavenic_zombie": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "cavern:cavenic_zombie"
+                }
+            }
+        },
+        "cavenic_spider": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "cavern:cavenic_spider"
+                }
+            }
+        },
+        "cavenic_witch": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "cavern:cavenic_witch"
+                }
+            }
+        },
+        "cavenic_bear": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "cavern:cavenic_bear"
+                }
+            }
+        }
+    },
+    "rewards": {
+        "experience": 300
+    }
+}

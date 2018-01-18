@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "cavern:cave_block",
+            "data": 1
+        }
+    ],
+    "result": {
+        "item": "cavern:cave_item",
+        "data": 0,
+        "count": 9
+    }
+}

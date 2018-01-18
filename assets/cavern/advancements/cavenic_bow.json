@@ -1,0 +1,27 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:cavenic_bow"
+        },
+        "title": {
+            "translate": "advancements.cavern.cavenic_bow.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.cavenic_bow.description"
+        },
+        "frame": "goal"
+    },
+    "parent": "cavern:get_cavenic_orb",
+    "criteria": {
+        "cavenic_bow": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:cavenic_bow"
+                    }
+                ]
+            }
+        }
+    }
+}

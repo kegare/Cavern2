@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "group": "cavern:stick_perverted",
+    "ingredients": [
+        {
+            "item": "cavern:perverted_log",
+            "data": 0
+        }
+    ],
+    "result": {
+        "item": "minecraft:stick",
+        "count": 8
+    }
+}

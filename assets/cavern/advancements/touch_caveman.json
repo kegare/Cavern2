@@ -1,0 +1,24 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:bread"
+        },
+        "title": {
+            "translate": "advancements.cavern.touch_caveman.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.touch_caveman.description"
+        }
+    },
+    "parent": "cavern:root",
+    "criteria": {
+        "caveman": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": {
+                    "type": "cavern:caveman"
+                }
+            }
+        }
+    }
+}

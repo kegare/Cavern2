@@ -1,0 +1,49 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:magnite_pickaxe"
+        },
+        "title": {
+            "translate": "advancements.cavern.magnite_tools.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.magnite_tools.description"
+        }
+    },
+    "parent": "cavern:smelt_magnite",
+    "criteria": {
+        "magnite_pickaxe": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:magnite_pickaxe"
+                    }
+                ]
+            }
+        },
+        "magnite_axe": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:magnite_axe"
+                    }
+                ]
+            }
+        },
+        "magnite_shovel": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:magnite_shovel"
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        ["magnite_pickaxe", "magnite_axe", "magnite_shovel"]
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:huge_cavern_portal"
+        },
+        "title": {
+            "translate": "advancements.cavern.enter_the_huge_cavern.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.enter_the_huge_cavern.description"
+        }
+    },
+    "parent": "cavern:get_diamond",
+    "criteria": {
+        "entered_huge_cavern": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

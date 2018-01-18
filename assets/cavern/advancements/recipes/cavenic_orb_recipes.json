@@ -1,0 +1,23 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "cavenic_orb": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:cave_item",
+                        "data": 5
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "recipes": [
+            "cavern:cavenic_sword",
+            "cavern:cavenic_axe",
+            "cavern:cavenic_bow"
+        ]
+    }
+}

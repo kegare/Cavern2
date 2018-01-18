@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "axis=z": { "model": "cavern:aqua_cavern_portal_ew" },
+        "axis=x": { "model": "cavern:aqua_cavern_portal_ns" }
+    }
+}

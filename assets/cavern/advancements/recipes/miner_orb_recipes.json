@@ -1,0 +1,21 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "miner_orb": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "cavern:cave_item",
+                        "data": 4
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "recipes": [
+            "cavern:ore_compass"
+        ]
+    }
+}

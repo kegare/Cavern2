@@ -1,0 +1,7 @@
+{
+    "parent": "block/portal_ew",
+    "textures": {
+        "particle": "cavern:blocks/cavern_portal",
+        "portal": "cavern:blocks/cavern_portal"
+    }
+}

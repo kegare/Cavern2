@@ -1,0 +1,74 @@
+{
+  "cavemusic.cave": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "cavern:cavemusic/cave",
+        "volume": 0.5,
+        "stream": true
+      }
+    ]
+  },
+  "cavemusic.unrest": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "cavern:cavemusic/unrest",
+        "volume": 0.5,
+        "stream": true
+      }
+    ]
+  },
+  "cavemusic.aqua": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "cavern:cavemusic/aqua",
+        "volume": 0.5,
+        "stream": true
+      }
+    ]
+  },
+  "cavemusic.hope": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "cavern:cavemusic/hope",
+        "volume": 0.5,
+        "stream": true
+      }
+    ]
+  },
+  "cavemusic.cavenia1": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "cavern:cavemusic/cavenia1",
+        "volume": 0.4,
+        "stream": true
+      }
+    ]
+  },
+  "cavemusic.cavenia2": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "cavern:cavemusic/cavenia2",
+        "volume": 0.4,
+        "stream": true
+      }
+    ]
+  },
+  "cave_portal": {
+    "category": "block",
+    "sounds": [
+      "cavern:cave_portal"
+    ]
+  },
+  "rank.promote": {
+    "category": "player",
+    "sounds": [
+      "cavern:promote"
+    ]
+  }
+}

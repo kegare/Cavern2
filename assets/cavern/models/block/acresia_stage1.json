@@ -1,0 +1,6 @@
+{
+    "parent": "block/crop",
+    "textures": {
+        "crop": "cavern:blocks/acresia_stage_1"
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:hexcite_pickaxe"
+        },
+        "title": {
+            "translate": "advancements.cavern.hexcite_miner.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.hexcite_miner.description"
+        },
+        "frame": "goal"
+    },
+    "parent": "cavern:gold_miner",
+    "criteria": {
+        "hexcite_miner": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

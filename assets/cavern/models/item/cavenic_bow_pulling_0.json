@@ -1,0 +1,6 @@
+{
+    "parent": "cavern:item/cavenic_bow",
+    "textures": {
+        "layer0": "cavern:items/cavenic_bow_pulling_0"
+    }
+}
