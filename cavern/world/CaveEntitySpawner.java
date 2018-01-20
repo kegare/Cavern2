@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 
@@ -55,7 +54,8 @@ public class CaveEntitySpawner
 		{
 			eligibleChunksForSpawning.clear();
 
-			int i = 0;
+			int playerCount = 0;
+			double playerHeight = 0.0D;
 
 			for (EntityPlayer player : world.playerEntities)
 			{
@@ -74,7 +74,9 @@ public class CaveEntitySpawner
 
 							if (!eligibleChunksForSpawning.contains(pos))
 							{
-								++i;
+								++playerCount;
+
+								playerHeight += player.posY;
 
 								if (!flag && world.getWorldBorder().contains(pos))
 								{
@@ -91,7 +93,8 @@ public class CaveEntitySpawner
 				}
 			}
 
-			int count = 0;
+			int playerY = playerHeight > 0.0D ? MathHelper.ceil(playerHeight / playerCount) : 50;
+			int totalCount = 0;
 			BlockPos spawnPos = world.getSpawnPoint();
 
 			for (EnumCreatureType type : EnumCreatureType.values())
@@ -101,10 +104,9 @@ public class CaveEntitySpawner
 
 				if (maxNumber > 0 && canSpawnCreature(world, spawnHostileMobs, spawnPeacefulMobs, spawnOnSetTickRate, type))
 				{
-					int j = world.countEntities(type, true);
-					int max = maxNumber * i / MOB_COUNT_DIV;
+					int max = maxNumber * playerCount / MOB_COUNT_DIV;
 
-					if (j <= max)
+					if (world.countEntities(type, true) <= max)
 					{
 						List<ChunkPos> shuffled = Lists.newArrayList(eligibleChunksForSpawning);
 						Collections.shuffle(shuffled);
@@ -113,7 +115,7 @@ public class CaveEntitySpawner
 
 						outside: for (ChunkPos chunkpos : shuffled)
 						{
-							BlockPos blockpos = getRandomChunkPosition(world, chunkpos.x, chunkpos.z);
+							BlockPos blockpos = getRandomPosition(world, chunkpos.x, playerY, chunkpos.z);
 							int originX = blockpos.getX();
 							int originY = blockpos.getY();
 							int originZ = blockpos.getZ();
@@ -121,7 +123,7 @@ public class CaveEntitySpawner
 
 							if (!state.isNormalCube())
 							{
-								int k = 0;
+								int mobCount = 0;
 
 								for (int l = 0; l < 3; ++l)
 								{
@@ -168,7 +170,7 @@ public class CaveEntitySpawner
 												{
 													e.printStackTrace();
 
-													return count;
+													return totalCount;
 												}
 
 												entity.setLocationAndAngles(posX, y, posZ, world.rand.nextFloat() * 360.0F, 0.0F);
@@ -184,7 +186,7 @@ public class CaveEntitySpawner
 
 													if (entity.isNotColliding())
 													{
-														++k;
+														++mobCount;
 
 														world.spawnEntity(entity);
 													}
@@ -193,13 +195,13 @@ public class CaveEntitySpawner
 														entity.setDead();
 													}
 
-													if (k >= ForgeEventFactory.getMaxSpawnPackSize(entity))
+													if (mobCount >= ForgeEventFactory.getMaxSpawnPackSize(entity))
 													{
 														continue outside;
 													}
 												}
 
-												count += k;
+												totalCount += mobCount;
 											}
 										}
 									}
@@ -210,7 +212,7 @@ public class CaveEntitySpawner
 				}
 			}
 
-			return count;
+			return totalCount;
 		}
 	}
 
@@ -259,13 +261,11 @@ public class CaveEntitySpawner
 		return 24.0D;
 	}
 
-	protected static BlockPos getRandomChunkPosition(World world, int x, int z)
+	protected BlockPos getRandomPosition(World world, int x, int y, int z)
 	{
-		Chunk chunk = world.getChunkFromChunkCoords(x, z);
 		int posX = x * 16 + world.rand.nextInt(16);
 		int posZ = z * 16 + world.rand.nextInt(16);
-		int i = MathHelper.roundUp(chunk.getHeight(new BlockPos(posX, 0, posZ)) + 1, 16);
-		int posY = world.rand.nextInt(i > 0 ? i : chunk.getTopFilledSegment() + 16 - 1);
+		int posY = MathHelper.getInt(world.rand, Math.max(y - 32, 1), Math.min(y + 32, world.getActualHeight()));
 
 		return new BlockPos(posX, posY, posZ);
 	}

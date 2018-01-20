@@ -5,27 +5,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.Constants.NBT;
 
 public class ItemPickaxeIce extends ItemPickaxeCave implements IIceEquipment
 {
 	public ItemPickaxeIce()
 	{
 		super(CaveItems.ICE, "pickaxeIce");
-	}
-
-	@Override
-	public int getCharge(ItemStack stack)
-	{
-		NBTTagCompound nbt = stack.getTagCompound();
-
-		if (nbt == null || !nbt.hasKey("IceCharge", NBT.TAG_ANY_NUMERIC))
-		{
-			return 0;
-		}
-
-		return nbt.getInteger("IceCharge");
 	}
 
 	@Override
