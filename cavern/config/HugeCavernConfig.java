@@ -15,6 +15,7 @@ import cavern.config.manager.CaveBiomeManager;
 import cavern.config.manager.CaveVein;
 import cavern.config.manager.CaveVeinManager;
 import cavern.config.property.ConfigBiomeType;
+import cavern.config.property.ConfigItems;
 import cavern.core.Cavern;
 import cavern.util.BlockMeta;
 import net.minecraft.block.BlockSand;
@@ -32,6 +33,7 @@ public class HugeCavernConfig
 	public static int dimensionId;
 	public static int worldHeight;
 	public static ConfigBiomeType biomeType = new ConfigBiomeType();
+	public static ConfigItems triggerItems = new ConfigItems();
 
 	public static boolean generateCaves;
 	public static boolean generateLakes;
@@ -98,6 +100,16 @@ public class HugeCavernConfig
 		prop.setComment(comment);
 		propOrder.add(prop.getName());
 		biomeType.setValue(prop.getInt(biomeType.getValue()));
+
+		prop = config.get(category, "triggerItems", new String[0]);
+		prop.setConfigEntryClass(CaveConfigEntries.selectBlocksAndItems);
+		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
+		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
+		comment += Configuration.NEW_LINE;
+		comment += "Note: If multiplayer, server-side only.";
+		prop.setComment(comment);
+		propOrder.add(prop.getName());
+		triggerItems.setValues(prop.getStringList());
 
 		prop = config.get(category, "generateCaves", true);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
@@ -257,5 +269,13 @@ public class HugeCavernConfig
 		}
 
 		Config.saveConfig(veinManager.config);
+	}
+
+	public static void refreshTriggerItems()
+	{
+		if (triggerItems != null)
+		{
+			triggerItems.refreshItems();
+		}
 	}
 }

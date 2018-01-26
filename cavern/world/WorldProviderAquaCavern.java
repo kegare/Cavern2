@@ -28,7 +28,7 @@ public class WorldProviderAquaCavern extends WorldProviderCavern
 	@Override
 	public ConfigBiomeType.Type getBiomeType()
 	{
-		return ConfigBiomeType.Type.NATURAL;
+		return AquaCavernConfig.biomeType.getType();
 	}
 
 	@Override

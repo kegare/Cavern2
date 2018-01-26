@@ -26,8 +26,8 @@ import cavern.config.HugeCavernConfig;
 import cavern.config.MiningAssistConfig;
 import cavern.config.MirageWorldsConfig;
 import cavern.core.Cavern;
-import cavern.item.ItemBowIce;
 import cavern.item.ItemBowCavenic;
+import cavern.item.ItemBowIce;
 import cavern.miningassist.MiningAssist;
 import cavern.stats.MinerRank;
 import cavern.stats.MinerStats;
@@ -183,18 +183,26 @@ public class ClientEventHooks
 
 					if (event.isWorldRunning())
 					{
+						CavernConfig.refreshTriggerItems();
 						CavernConfig.refreshDungeonMobs();
 					}
 
 					break;
 				case "dimension.hugeCavern":
 					HugeCavernConfig.syncConfig();
+
+					if (event.isWorldRunning())
+					{
+						HugeCavernConfig.refreshTriggerItems();
+					}
+
 					break;
 				case "dimension.aquaCavern":
 					AquaCavernConfig.syncConfig();
 
 					if (event.isWorldRunning())
 					{
+						AquaCavernConfig.refreshTriggerItems();
 						AquaCavernConfig.refreshDungeonMobs();
 					}
 

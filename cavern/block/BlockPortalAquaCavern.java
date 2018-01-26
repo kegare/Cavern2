@@ -1,6 +1,7 @@
 package cavern.block;
 
 import cavern.api.CavernAPI;
+import cavern.config.AquaCavernConfig;
 import cavern.item.CaveItems;
 import cavern.item.ItemCave;
 import cavern.stats.MinerRank;
@@ -34,6 +35,11 @@ public class BlockPortalAquaCavern extends BlockPortalCavern
 	@Override
 	public boolean isTriggerItem(ItemStack stack)
 	{
+		if (!AquaCavernConfig.triggerItems.isEmpty())
+		{
+			return AquaCavernConfig.triggerItems.hasItemStack(stack);
+		}
+
 		if (!stack.isEmpty() && stack.getItem() == CaveItems.CAVE_ITEM && stack.getMetadata() == ItemCave.EnumType.AQUAMARINE.getMetadata())
 		{
 			return true;

@@ -1,6 +1,7 @@
 package cavern.block;
 
 import cavern.api.CavernAPI;
+import cavern.config.HugeCavernConfig;
 import cavern.stats.MinerRank;
 import cavern.util.CaveUtils;
 import cavern.world.CaveDimensions;
@@ -33,6 +34,11 @@ public class BlockPortalHugeCavern extends BlockPortalCavern
 	@Override
 	public boolean isTriggerItem(ItemStack stack)
 	{
+		if (!HugeCavernConfig.triggerItems.isEmpty())
+		{
+			return HugeCavernConfig.triggerItems.hasItemStack(stack);
+		}
+
 		if (!stack.isEmpty() && stack.getItem() == Items.DIAMOND)
 		{
 			return true;

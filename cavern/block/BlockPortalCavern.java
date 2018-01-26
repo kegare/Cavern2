@@ -10,6 +10,7 @@ import cavern.api.CavernAPI;
 import cavern.api.IPortalCache;
 import cavern.client.gui.GuiMiningRecords;
 import cavern.client.gui.GuiRegeneration;
+import cavern.config.CavernConfig;
 import cavern.config.GeneralConfig;
 import cavern.core.CaveSounds;
 import cavern.core.Cavern;
@@ -212,6 +213,11 @@ public class BlockPortalCavern extends BlockPortal
 
 	public boolean isTriggerItem(ItemStack stack)
 	{
+		if (!CavernConfig.triggerItems.isEmpty())
+		{
+			return CavernConfig.triggerItems.hasItemStack(stack);
+		}
+
 		if (!stack.isEmpty() && stack.getItem() == Items.EMERALD)
 		{
 			return true;

@@ -317,7 +317,12 @@ public class Cavern
 		MiningAssistConfig.refreshEffectiveItems();
 		MiningAssistConfig.refreshTargetBlocks();
 
+		CavernConfig.refreshTriggerItems();
 		CavernConfig.refreshDungeonMobs();
+
+		HugeCavernConfig.refreshTriggerItems();
+
+		AquaCavernConfig.refreshTriggerItems();
 		AquaCavernConfig.refreshDungeonMobs();
 	}
 }
