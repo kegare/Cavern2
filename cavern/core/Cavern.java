@@ -310,19 +310,24 @@ public class Cavern
 
 		event.registerServerCommand(new CommandCavern());
 
-		GeneralConfig.refreshMiningPointItems();
-		GeneralConfig.refreshMiningPoints();
-		GeneralConfig.refreshCavebornBonusItems();
+		GeneralConfig.miningPointItems.refreshItems();
+		GeneralConfig.miningPoints.refreshPoints();
+		GeneralConfig.cavebornBonusItems.refreshItems();
+		GeneralConfig.randomiteExcludeItems.refreshItems();
 
-		MiningAssistConfig.refreshEffectiveItems();
-		MiningAssistConfig.refreshTargetBlocks();
+		MiningAssistConfig.effectiveItems.refreshItems();
+		MiningAssistConfig.quickTargetBlocks.refreshBlocks();
+		MiningAssistConfig.rangedTargetBlocks.refreshBlocks();
+		MiningAssistConfig.aditTargetBlocks.refreshBlocks();
 
-		CavernConfig.refreshTriggerItems();
-		CavernConfig.refreshDungeonMobs();
+		CavernConfig.triggerItems.refreshItems();
+		CavernConfig.dungeonMobs.refreshEntities();
+		CavernConfig.towerDungeonMobs.refreshEntities();
 
-		HugeCavernConfig.refreshTriggerItems();
+		HugeCavernConfig.triggerItems.refreshItems();
 
-		AquaCavernConfig.refreshTriggerItems();
-		AquaCavernConfig.refreshDungeonMobs();
+		AquaCavernConfig.triggerItems.refreshItems();
+		AquaCavernConfig.dungeonMobs.refreshEntities();
+		AquaCavernConfig.towerDungeonMobs.refreshEntities();
 	}
 }

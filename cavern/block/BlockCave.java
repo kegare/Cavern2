@@ -10,6 +10,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import com.google.common.collect.Lists;
 
 import cavern.block.event.FissureBreakEvent;
+import cavern.config.GeneralConfig;
 import cavern.core.Cavern;
 import cavern.item.CaveItems;
 import cavern.item.ItemCave;
@@ -183,12 +184,19 @@ public class BlockCave extends Block
 			stack = WeightedRandom.getRandomItem(RANDOM, RANDOMITE_ITEMS).getItemStack();
 		}
 
-		if (stack.isEmpty() || RANDOM.nextDouble() <= 0.015D * MathHelper.clamp(fortune, 1, 3))
+		if (stack.isEmpty())
 		{
-			Item item = Item.REGISTRY.getRandomObject(RANDOM);
-
-			if (item != null && item != Items.AIR)
+			for (int i = 0; i < 20; ++i)
 			{
+				Item item = Item.REGISTRY.getRandomObject(RANDOM);
+
+				if (item == null || item == Items.AIR)
+				{
+					continue;
+				}
+
+				stack = ItemStack.EMPTY;
+
 				if (item.getHasSubtypes())
 				{
 					NonNullList<ItemStack> items = NonNullList.create();
@@ -201,6 +209,11 @@ public class BlockCave extends Block
 				if (stack.isEmpty())
 				{
 					stack = new ItemStack(item);
+				}
+
+				if (GeneralConfig.randomiteExcludeItems.isEmpty() || !GeneralConfig.randomiteExcludeItems.hasItemStack(stack))
+				{
+					break;
 				}
 			}
 		}

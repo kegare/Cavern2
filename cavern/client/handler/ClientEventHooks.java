@@ -159,9 +159,10 @@ public class ClientEventHooks
 
 					if (event.isWorldRunning())
 					{
-						GeneralConfig.refreshMiningPointItems();
-						GeneralConfig.refreshMiningPoints();
-						GeneralConfig.refreshCavebornBonusItems();
+						GeneralConfig.miningPointItems.refreshItems();
+						GeneralConfig.miningPoints.refreshPoints();
+						GeneralConfig.cavebornBonusItems.refreshItems();
+						GeneralConfig.randomiteExcludeItems.refreshItems();
 					}
 
 					break;
@@ -173,8 +174,10 @@ public class ClientEventHooks
 
 					if (event.isWorldRunning())
 					{
-						MiningAssistConfig.refreshEffectiveItems();
-						MiningAssistConfig.refreshTargetBlocks();
+						MiningAssistConfig.effectiveItems.refreshItems();
+						MiningAssistConfig.quickTargetBlocks.refreshBlocks();
+						MiningAssistConfig.rangedTargetBlocks.refreshBlocks();
+						MiningAssistConfig.aditTargetBlocks.refreshBlocks();
 					}
 
 					break;
@@ -183,8 +186,9 @@ public class ClientEventHooks
 
 					if (event.isWorldRunning())
 					{
-						CavernConfig.refreshTriggerItems();
-						CavernConfig.refreshDungeonMobs();
+						CavernConfig.triggerItems.refreshItems();
+						CavernConfig.dungeonMobs.refreshEntities();
+						CavernConfig.towerDungeonMobs.refreshEntities();
 					}
 
 					break;
@@ -193,7 +197,7 @@ public class ClientEventHooks
 
 					if (event.isWorldRunning())
 					{
-						HugeCavernConfig.refreshTriggerItems();
+						HugeCavernConfig.triggerItems.refreshItems();
 					}
 
 					break;
@@ -202,8 +206,9 @@ public class ClientEventHooks
 
 					if (event.isWorldRunning())
 					{
-						AquaCavernConfig.refreshTriggerItems();
-						AquaCavernConfig.refreshDungeonMobs();
+						AquaCavernConfig.triggerItems.refreshItems();
+						AquaCavernConfig.dungeonMobs.refreshEntities();
+						AquaCavernConfig.towerDungeonMobs.refreshEntities();
 					}
 
 					break;

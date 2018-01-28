@@ -170,17 +170,9 @@ public class MiningAssistConfig
 		Config.saveConfig(config);
 	}
 
-	public static void refreshEffectiveItems()
-	{
-		if (effectiveItems != null)
-		{
-			effectiveItems.refreshItems();
-		}
-	}
-
 	public static boolean isEffectiveItem(ItemStack stack)
 	{
-		if (effectiveItems == null || stack.isEmpty())
+		if (stack.isEmpty())
 		{
 			return false;
 		}
@@ -196,36 +188,5 @@ public class MiningAssistConfig
 		}
 
 		return false;
-	}
-
-	public static void refreshTargetBlocks()
-	{
-		refreshQuickTargetBlocks();
-		refreshRangedTargetBlocks();
-		refreshAditTargetBlocks();
-	}
-
-	public static void refreshQuickTargetBlocks()
-	{
-		if (quickTargetBlocks != null)
-		{
-			quickTargetBlocks.refreshBlocks();
-		}
-	}
-
-	public static void refreshRangedTargetBlocks()
-	{
-		if (rangedTargetBlocks != null)
-		{
-			rangedTargetBlocks.refreshBlocks();
-		}
-	}
-
-	public static void refreshAditTargetBlocks()
-	{
-		if (aditTargetBlocks != null)
-		{
-			aditTargetBlocks.refreshBlocks();
-		}
 	}
 }

@@ -36,6 +36,8 @@ public class GeneralConfig
 	public static boolean portalCache;
 	public static boolean portalMenu;
 
+	public static ConfigItems randomiteExcludeItems = new ConfigItems();
+
 	public static int sleepWaitTime;
 	public static boolean sleepRefresh;
 
@@ -164,6 +166,21 @@ public class GeneralConfig
 		propOrder.add(prop.getName());
 		portalMenu = prop.getBoolean(portalMenu);
 
+		items = NonNullList.create();
+
+		items.add(new ItemStack(Blocks.BEDROCK));
+		items.add(new ItemStack(Blocks.MOB_SPAWNER));
+
+		prop = config.get(category, "randomiteExcludeItems", randomiteExcludeItems.createValues(items));
+		prop.setConfigEntryClass(CaveConfigEntries.selectBlocksAndItems);
+		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
+		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
+		comment += Configuration.NEW_LINE;
+		comment += "Note: If multiplayer, server-side only.";
+		prop.setComment(comment);
+		propOrder.add(prop.getName());
+		randomiteExcludeItems.setValues(prop.getStringList());
+
 		prop = config.get(category, "sleepWaitTime", 300);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
 		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
@@ -189,17 +206,9 @@ public class GeneralConfig
 		Config.saveConfig(config);
 	}
 
-	public static void refreshMiningPointItems()
-	{
-		if (miningPointItems != null)
-		{
-			miningPointItems.refreshItems();
-		}
-	}
-
 	public static boolean isMiningPointItem(ItemStack stack)
 	{
-		if (miningPointItems == null || stack.isEmpty())
+		if (stack.isEmpty())
 		{
 			return false;
 		}
@@ -215,21 +224,5 @@ public class GeneralConfig
 		}
 
 		return false;
-	}
-
-	public static void refreshMiningPoints()
-	{
-		if (miningPoints != null)
-		{
-			miningPoints.refreshPoints();
-		}
-	}
-
-	public static void refreshCavebornBonusItems()
-	{
-		if (cavebornBonusItems != null)
-		{
-			cavebornBonusItems.refreshItems();
-		}
 	}
 }

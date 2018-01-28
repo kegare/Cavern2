@@ -336,25 +336,4 @@ public class AquaCavernConfig
 
 		Config.saveConfig(veinManager.config);
 	}
-
-	public static void refreshTriggerItems()
-	{
-		if (triggerItems != null)
-		{
-			triggerItems.refreshItems();
-		}
-	}
-
-	public static void refreshDungeonMobs()
-	{
-		if (dungeonMobs != null)
-		{
-			dungeonMobs.refreshEntities();
-		}
-
-		if (towerDungeonMobs != null)
-		{
-			towerDungeonMobs.refreshEntities();
-		}
-	}
 }

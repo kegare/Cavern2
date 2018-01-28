@@ -42,10 +42,10 @@ import cavern.world.ICustomSeed;
 import cavern.world.mirage.WorldProviderCaveland;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayer.SleepResult;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -320,42 +320,42 @@ public class CaveEventHooks
 	@SubscribeEvent
 	public void onBreakSpeed(BreakSpeed event)
 	{
-		float original = event.getOriginalSpeed();
 		EntityPlayer player = event.getEntityPlayer();
-		ItemStack held = player.getHeldItemMainhand();
-		boolean miner = CavernAPI.dimension.isInCaveDimensions(player) && CaveUtils.isItemPickaxe(held);
+		ItemStack stack = player.getHeldItemMainhand();
 
-		if (!held.isEmpty() && player.isInsideOfMaterial(Material.WATER))
+		if (stack.isEmpty())
 		{
-			if (miner && MinerStats.get(player).getRank() >= MinerRank.AQUA_MINER.getRank())
-			{
-				if (player.onGround)
-				{
-					event.setNewSpeed(original * 10.0F);
-				}
-				else
-				{
-					event.setNewSpeed(original * 7.0F);
-				}
-			}
-			else if (held.getItem() instanceof IAquaTool)
-			{
-				IAquaTool tool = (IAquaTool)held.getItem();
-				float speed = tool.getAquaBreakSpeed(held, player, event.getPos(), event.getState(), original);
-
-				if (speed > 0.0F)
-				{
-					event.setNewSpeed(speed);
-				}
-			}
+			return;
 		}
 
-		if (miner)
+		float original = event.getOriginalSpeed();
+		boolean flag = EnchantmentHelper.getAquaAffinityModifier(player);
+
+		if (player.isInWater() && stack.getItem() instanceof IAquaTool)
+		{
+			IAquaTool tool = (IAquaTool)stack.getItem();
+			float speed = tool.getAquaBreakSpeed(stack, player, event.getPos(), event.getState(), original);
+
+			if (flag)
+			{
+				speed *= 0.5F;
+			}
+
+			event.setNewSpeed(speed);
+
+			flag = true;
+		}
+
+		if (CavernAPI.dimension.isInCaveDimensions(player) && CaveUtils.isItemPickaxe(stack))
 		{
 			int rank = MinerStats.get(player).getRank();
-			float boost = MinerRank.get(rank).getBoost();
 
-			event.setNewSpeed(event.getNewSpeed() * boost);
+			if (!flag && player.isInWater() && rank >= MinerRank.AQUA_MINER.getRank())
+			{
+				event.setNewSpeed(original * 5.0F);
+			}
+
+			event.setNewSpeed(event.getNewSpeed() * MinerRank.get(rank).getBoost());
 		}
 	}
 
@@ -428,41 +428,63 @@ public class CaveEventHooks
 
 		EntityPlayer player = (EntityPlayer)entity;
 
-		if (CavernAPI.dimension.isInCaveDimensions(entity))
+		if (!player.isInWater() || !CavernAPI.dimension.isInCaveDimensions(player))
 		{
-			if (player.isInsideOfMaterial(Material.WATER))
-			{
-				IMinerStats stats = MinerStats.get(player);
+			return;
+		}
 
-				if (stats.getRank() < MinerRank.AQUA_MINER.getRank())
-				{
-					return;
-				}
+		IMinerStats stats = MinerStats.get(player);
 
-				if (!player.canBreatheUnderwater() && !player.isPotionActive(MobEffects.WATER_BREATHING) && player.ticksExisted % 20 == 0)
-				{
-					player.setAir(300);
-				}
+		if (stats.getRank() < MinerRank.AQUA_MINER.getRank())
+		{
+			return;
+		}
 
-				if (!player.capabilities.isFlying && EnchantmentHelper.getDepthStriderModifier(player) <= 1)
-				{
-					double posY = player.posY;
-					float motion = 1.165F;
+		if (!player.canBreatheUnderwater() && !player.isPotionActive(MobEffects.WATER_BREATHING) && player.ticksExisted % 20 == 0)
+		{
+			player.setAir(300);
+		}
 
-					player.motionX *= motion;
-					player.motionZ *= motion;
+		if (player.capabilities.isFlying || EnchantmentHelper.getDepthStriderModifier(player) > 0)
+		{
+			return;
+		}
 
-					if (player.collidedHorizontally && player.isOffsetPositionInLiquid(player.motionX, player.motionY + 0.6000000238418579D - player.posY + posY, player.motionZ))
-					{
-						player.motionY = 0.30000001192092896D;
-					}
+		double prevY = player.posY;
+		float vec1 = 0.6F;
+		float vec2 = 0.01F;
+		float vec3 = 0.4F;
 
-					if (player.isSneaking())
-					{
-						player.motionY = 0.0D;
-					}
-				}
-			}
+		if (!player.onGround)
+		{
+			vec3 *= 0.5F;
+		}
+
+		if (player.getTotalArmorValue() > 2)
+		{
+			vec3 *= 0.5F;
+		}
+
+		if (vec3 > 0.0F)
+		{
+			vec1 += (0.54600006F - vec1) * vec3 / 3.0F;
+			vec2 += (player.getAIMoveSpeed() - vec2) * vec3 / 3.0F;
+		}
+
+		player.moveRelative(player.moveStrafing, player.moveVertical, player.moveForward, vec2);
+		player.move(MoverType.SELF, player.motionX, player.motionY, player.motionZ);
+		player.motionX *= vec1;
+		player.motionY *= 0.800000011920929D;
+		player.motionZ *= vec1;
+
+		if (player.collidedHorizontally && player.isOffsetPositionInLiquid(player.motionX, player.motionY + 0.6000000238418579D - player.posY + prevY, player.motionZ))
+		{
+			player.motionY = 0.30000001192092896D;
+		}
+
+		if (player.isSwingInProgress || player.isSneaking())
+		{
+			player.motionY *= 0.3D;
 		}
 	}
 
