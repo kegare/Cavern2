@@ -9,21 +9,20 @@ import cavern.config.GeneralConfig;
 import cavern.config.property.ConfigCaveborn;
 import cavern.util.CaveUtils;
 import cavern.util.ItemMeta;
+import cavern.world.CaveDimensions;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 public class CavebornEventHooks
 {
@@ -42,6 +41,24 @@ public class CavebornEventHooks
 			}
 		}
 
+		ConfigCaveborn.Type caveborn = GeneralConfig.caveborn.getType();
+
+		if (caveborn == ConfigCaveborn.Type.DISABLED)
+		{
+			return;
+		}
+
+		BlockPortalCavern portal = caveborn.getPortalBlock();
+
+		if (portal == null || portal.getDimension() == null)
+		{
+			return;
+		}
+
+		EntityPlayer player = event.getEntityPlayer();
+
+		player.dimension = portal.getDimension().getId();
+
 		FIRST_PLAYERS.add(uuid);
 	}
 
@@ -54,54 +71,52 @@ public class CavebornEventHooks
 		}
 
 		EntityPlayerMP player = (EntityPlayerMP)event.player;
-		ConfigCaveborn.Type caveborn = GeneralConfig.caveborn.getType();
 
-		if (caveborn == ConfigCaveborn.Type.DISABLED || !FIRST_PLAYERS.contains(player.getCachedUniqueIdString()))
+		if (!FIRST_PLAYERS.contains(player.getCachedUniqueIdString()))
 		{
 			return;
 		}
 
-		MinecraftServer server = player.mcServer;
+		WorldServer world = player.getServerWorld();
+		ConfigCaveborn.Type caveborn = GeneralConfig.caveborn.getType();
 		BlockPortalCavern portal = caveborn.getPortalBlock();
 
-		if (portal != null && portal.getDimension() != null)
+		player.timeUntilPortal = player.getPortalCooldown();
+
+		portal.getTeleporter(world).placeInPortal(player, player.rotationYaw);
+
+		FIRST_PLAYERS.remove(event.player.getCachedUniqueIdString());
+
+		DimensionType type = portal.getDimension();
+
+		if (type == CaveDimensions.CAVERN)
 		{
-			DimensionType type = portal.getDimension();
-			Teleporter teleporter = portal.getTeleporter(server.getWorld(type.getId()));
+			CaveUtils.grantCriterion(player, "root", "entered_cavern");
+		}
+		else
+		{
+			String name = type.getName();
 
-			boolean force = player.forceSpawn;
-
-			player.forceSpawn = true;
-			player.timeUntilPortal = player.getPortalCooldown();
-
-			CaveUtils.transferPlayerToDimension(player, type, teleporter);
-
-			player.forceSpawn = force;
-
-			WorldServer world = player.getServerWorld();
-			BlockPos pos = player.getPosition();
-
-			for (BlockPos blockpos : BlockPos.getAllInBoxMutable(pos.add(-1, -1, -1), pos.add(1, 1, 1)))
-			{
-				if (world.getBlockState(blockpos).getBlock() == portal)
-				{
-					world.setBlockToAir(blockpos);
-
-					break;
-				}
-			}
-
-			double x = player.posX;
-			double y = player.posY + player.getEyeHeight();
-			double z = player.posZ;
-
-			world.playSound(null, x, y, z, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1.0F, 0.65F);
+			CaveUtils.grantCriterion(player, "enter_the_" + name, "entered_" + name);
 		}
 
-		WorldServer world = player.getServerWorld();
+		BlockPos pos = player.getPosition();
+
+		for (BlockPos blockpos : BlockPos.getAllInBoxMutable(pos.add(-1, -1, -1), pos.add(1, 1, 1)))
+		{
+			if (world.getBlockState(blockpos).getBlock() == portal)
+			{
+				world.setBlockToAir(blockpos);
+
+				break;
+			}
+		}
+
 		double x = player.posX;
 		double y = player.posY + 0.25D;
 		double z = player.posZ;
+
+		world.playSound(null, x, y, z, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1.0F, 0.65F);
 
 		for (ItemMeta itemMeta : GeneralConfig.cavebornBonusItems.getItems())
 		{
@@ -114,11 +129,5 @@ public class CavebornEventHooks
 
 			InventoryHelper.spawnItemStack(world, x, y, z, stack);
 		}
-	}
-
-	@SubscribeEvent
-	public void onPlayerLoggedOut(PlayerLoggedOutEvent event)
-	{
-		FIRST_PLAYERS.remove(event.player.getCachedUniqueIdString());
 	}
 }
