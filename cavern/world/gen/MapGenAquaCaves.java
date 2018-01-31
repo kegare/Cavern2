@@ -2,6 +2,7 @@ package cavern.world.gen;
 
 import java.util.Random;
 
+import cavern.config.AquaCavernConfig;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -126,34 +127,34 @@ public class MapGenAquaCaves extends MapGenCavernCaves
 	protected void recursiveGenerate(World world, int chunkX, int chunkZ, int x, int z, ChunkPrimer primer)
 	{
 		int worldHeight = world.provider.getActualHeight();
-		int chance = rand.nextInt(rand.nextInt(rand.nextInt(18) + 1) + 1);
+		int chance = rand.nextInt(rand.nextInt(rand.nextInt(15) + 1) + 1);
 
 		for (int i = 0; i < chance; ++i)
 		{
 			double blockX = chunkX * 16 + rand.nextInt(16);
-			double blockY = rand.nextInt(rand.nextInt(worldHeight - 80) + 80);
+			double blockY = rand.nextInt(worldHeight - 30) + rand.nextInt(15) + rand.nextInt(15);
 			double blockZ = chunkZ * 16 + rand.nextInt(16);
 			int count = 1;
 
-			if (rand.nextInt(5) == 0)
+			if (rand.nextInt(3) == 0)
 			{
 				addRoom(rand.nextLong(), x, z, primer, blockX, blockY, blockZ);
 
-				count += rand.nextInt(8);
+				count += rand.nextInt(5);
 			}
 
 			for (int j = 0; j < count; ++j)
 			{
-				float leftRightRadian = rand.nextFloat() * (float)Math.PI * 5.0F;
+				float leftRightRadian = rand.nextFloat() * (float)Math.PI * 3.0F;
 				float upDownRadian = (rand.nextFloat() - 0.5F) * 3.0F / 8.0F;
-				float scale = rand.nextFloat() * 3.25F + rand.nextFloat();
+				float scale = rand.nextFloat() * 8.0F + rand.nextFloat();
 
 				if (rand.nextInt(5) == 0)
 				{
-					scale *= rand.nextFloat() * rand.nextFloat() * 3.5F + 1.0F;
+					scale *= rand.nextFloat() * rand.nextFloat() * 3.0F + 1.0F;
 				}
 
-				addTunnel(rand.nextLong(), x, z, primer, blockX, blockY, blockZ, scale * 2.75F, leftRightRadian, upDownRadian, 0, 0, 1.2D);
+				addTunnel(rand.nextLong(), x, z, primer, blockX, blockY, blockZ, scale, leftRightRadian, upDownRadian, 0, 0, 1.5D);
 			}
 		}
 	}
@@ -161,9 +162,16 @@ public class MapGenAquaCaves extends MapGenCavernCaves
 	@Override
 	protected void digBlock(ChunkPrimer data, int x, int y, int z, int chunkX, int chunkZ, boolean foundTop, IBlockState state, IBlockState up)
 	{
-		if (y < 2 || y > world.getActualHeight() - 3)
+		int height = world.getActualHeight();
+		double depth = AquaCavernConfig.floodDepth;
+
+		if (y < 2 || y > height - 3)
 		{
 			data.setBlockState(x, y, z, BLK_STONE);
+		}
+		else if (depth <= 0.0D || depth < 1.0D && y >= MathHelper.floor(height * depth))
+		{
+			data.setBlockState(x, y, z, BLK_AIR);
 		}
 		else
 		{

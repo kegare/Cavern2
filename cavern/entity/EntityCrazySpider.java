@@ -120,10 +120,13 @@ public class EntityCrazySpider extends EntityCavenicSpider
 		if (!world.isRemote)
 		{
 			boolean canSee = false;
+			double distance = -1.0F;
 
 			for (EntityPlayerMP player : bossInfo.getPlayers())
 			{
-				if (canEntityBeSeen(player))
+				distance = getDistance(player);
+
+				if (canEntityBeSeen(player) || distance <= 32.0D)
 				{
 					canSee = true;
 
@@ -131,6 +134,7 @@ public class EntityCrazySpider extends EntityCavenicSpider
 				}
 			}
 
+			bossInfo.setDarkenSky(!canSee || distance <= 50.0D);
 			bossInfo.setVisible(canSee);
 		}
 

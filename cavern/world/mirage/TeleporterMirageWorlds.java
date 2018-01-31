@@ -71,7 +71,7 @@ public class TeleporterMirageWorlds extends Teleporter
 	{
 		int count = 0;
 
-		while (++count < 50)
+		outside: while (++count < 50)
 		{
 			int x = MathHelper.floor(entity.posX) + random.nextInt(64) - 32;
 			int z = MathHelper.floor(entity.posZ) + random.nextInt(64) - 32;
@@ -94,7 +94,7 @@ public class TeleporterMirageWorlds extends Teleporter
 				{
 					if (world.getBlockState(around).getMaterial().isLiquid())
 					{
-						return false;
+						continue outside;
 					}
 				}
 

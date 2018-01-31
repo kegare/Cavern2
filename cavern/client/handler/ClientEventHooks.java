@@ -37,7 +37,6 @@ import cavern.world.CaveDimensions;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
 import net.minecraft.client.gui.GuiDownloadTerrain;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
@@ -51,7 +50,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -62,7 +60,6 @@ import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -306,18 +303,6 @@ public class ClientEventHooks
 			{
 				event.setGui(new GuiDownloadCaveTerrain());
 			}
-		}
-	}
-
-	@SubscribeEvent
-	public void onPlaySound(PlaySoundEvent event)
-	{
-		Minecraft mc = FMLClientHandler.instance().getClient();
-		ISound sound = event.getSound();
-
-		if (sound != null && sound.getCategory() == SoundCategory.MUSIC && CavernAPI.dimension.isInCaves(mc.player))
-		{
-			event.setResultSound(null);
 		}
 	}
 

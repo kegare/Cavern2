@@ -49,6 +49,8 @@ public class AquaCavernConfig
 	public static ConfigBiomeType biomeType = new ConfigBiomeType();
 	public static ConfigItems triggerItems = new ConfigItems();
 
+	public static double floodDepth;
+
 	public static boolean generateCaves;
 	public static boolean generateRavine;
 	public static boolean generateDungeons;
@@ -128,6 +130,17 @@ public class AquaCavernConfig
 		prop.setComment(comment);
 		propOrder.add(prop.getName());
 		triggerItems.setValues(prop.getStringList());
+
+		prop = config.get(category, "floodDepth", 1.0D);
+		prop.setMinValue(0.0D).setMaxValue(1.0D);
+		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
+		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
+		comment += " [default: " + prop.getDefault() + "]";
+		comment += Configuration.NEW_LINE;
+		comment += "Note: If multiplayer, server-side only.";
+		prop.setComment(comment);
+		propOrder.add(prop.getName());
+		floodDepth = prop.getDouble(floodDepth);
 
 		prop = config.get(category, "generateCaves", true);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());

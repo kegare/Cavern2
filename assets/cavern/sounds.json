@@ -1,60 +1,60 @@
 {
-  "cavemusic.cave": {
-    "category": "master",
+  "music.caves": {
+    "category": "music",
     "sounds": [
       {
-        "name": "cavern:cavemusic/cave",
+        "name": "cavern:music/cave",
+        "volume": 0.5,
+        "stream": true
+      },
+      {
+        "name": "cavern:music/unrest",
         "volume": 0.5,
         "stream": true
       }
     ]
   },
-  "cavemusic.unrest": {
-    "category": "master",
+  "music.aqua_caves": {
+    "category": "music",
     "sounds": [
       {
-        "name": "cavern:cavemusic/unrest",
+        "name": "cavern:music/aqua",
+        "volume": 0.5,
+        "stream": true
+      },
+      {
+        "name": "cavern:music/unrest",
         "volume": 0.5,
         "stream": true
       }
     ]
   },
-  "cavemusic.aqua": {
-    "category": "master",
+  "music.caveland": {
+    "category": "music",
     "sounds": [
       {
-        "name": "cavern:cavemusic/aqua",
+        "name": "cavern:music/hope",
+        "volume": 0.5,
+        "stream": true
+      },
+      {
+        "name": "cavern:music/cave",
         "volume": 0.5,
         "stream": true
       }
     ]
   },
-  "cavemusic.hope": {
-    "category": "master",
+  "music.cavenia": {
+    "category": "music",
     "sounds": [
       {
-        "name": "cavern:cavemusic/hope",
+        "name": "cavern:music/cavenia1",
         "volume": 0.5,
         "stream": true
-      }
-    ]
-  },
-  "cavemusic.cavenia1": {
-    "category": "master",
-    "sounds": [
+      },
       {
-        "name": "cavern:cavemusic/cavenia1",
-        "volume": 0.4,
-        "stream": true
-      }
-    ]
-  },
-  "cavemusic.cavenia2": {
-    "category": "master",
-    "sounds": [
-      {
-        "name": "cavern:cavemusic/cavenia2",
-        "volume": 0.4,
+        "name": "cavern:music/cavenia2",
+        "volume": 0.5,
         "stream": true
       }
     ]
@@ -62,13 +62,19 @@
   "cave_portal": {
     "category": "block",
     "sounds": [
-      "cavern:cave_portal"
+      {
+        "name": "cavern:cave_portal",
+        "volume": 0.75
+      }
     ]
   },
   "rank.promote": {
     "category": "player",
     "sounds": [
-      "cavern:promote"
+      {
+        "name": "cavern:promote",
+        "volume": 0.75
+      }
     ]
   }
 }

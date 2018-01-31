@@ -11,6 +11,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -22,6 +23,7 @@ import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraft.world.gen.structure.MapGenVillage;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -53,6 +55,7 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 	private double[] depthRegion;
 
 	private MapGenBase caveGenerator = new MapGenFrostCaves();
+	private MapGenVillage villageGenerator = new MapGenVillage();
 
 	public ChunkGeneratorWideDesert(World world)
 	{
@@ -342,6 +345,7 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 		replaceBiomeBlocks(x, z, primer);
 
 		caveGenerator.generate(world, x, z, primer);
+		villageGenerator.generate(world, x, z, primer);
 
 		Chunk chunk = new Chunk(this.world, primer, x, z);
 		byte[] biomes = chunk.getBiomeArray();
@@ -368,10 +372,14 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 		long xSeed = rand.nextLong() / 2L * 2L + 1L;
 		long zSeed = rand.nextLong() / 2L * 2L + 1L;
 		rand.setSeed(x * xSeed + z * zSeed ^ world.getSeed());
+		boolean flag = false;
+		ChunkPos chunkpos = new ChunkPos(x, z);
 
-		ForgeEventFactory.onChunkPopulate(true, this, world, rand, x, z, false);
+		ForgeEventFactory.onChunkPopulate(true, this, world, rand, x, z, flag);
 
-		if (rand.nextInt(50) == 0 && TerrainGen.populate(this, world, rand, x, z, false, PopulateChunkEvent.Populate.EventType.LAKE))
+		flag = villageGenerator.generateStructure(this.world, this.rand, chunkpos);
+
+		if (rand.nextInt(50) == 0 && TerrainGen.populate(this, world, rand, x, z, flag, PopulateChunkEvent.Populate.EventType.LAKE))
 		{
 			int i1 = rand.nextInt(16) + 8;
 			int j1 = rand.nextInt(128);
@@ -382,7 +390,7 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 
 		Biomes.DESERT.decorate(world, rand, new BlockPos(blockX, 0, blockY));
 
-		ForgeEventFactory.onChunkPopulate(false, this, world, rand, x, z, false);
+		ForgeEventFactory.onChunkPopulate(false, this, world, rand, x, z, flag);
 
 		BlockFalling.fallInstantly = false;
 	}
@@ -404,15 +412,28 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 	@Override
 	public boolean isInsideStructure(World world, String structureName, BlockPos pos)
 	{
+		if ("Village".equals(structureName) && villageGenerator != null)
+		{
+			return villageGenerator.isInsideStructure(pos);
+		}
+
 		return false;
 	}
 
 	@Override
 	public BlockPos getNearestStructurePos(World world, String structureName, BlockPos pos, boolean findUnexplored)
 	{
+		if ("Village".equals(structureName) && villageGenerator != null)
+		{
+			return villageGenerator.getNearestStructurePos(world, pos, findUnexplored);
+		}
+
 		return null;
 	}
 
 	@Override
-	public void recreateStructures(Chunk chunk, int x, int z) {}
+	public void recreateStructures(Chunk chunk, int x, int z)
+	{
+		villageGenerator.generate(world, x, z, null);
+	}
 }

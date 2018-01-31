@@ -6,6 +6,7 @@ import cavern.api.CavernAPI;
 import cavern.block.CaveBlocks;
 import cavern.capability.CaveCapabilities;
 import cavern.client.CaveKeyBindings;
+import cavern.client.CaveMusics;
 import cavern.client.CaveRenderingRegistry;
 import cavern.client.config.CaveConfigEntries;
 import cavern.client.handler.ClientEventHooks;
@@ -254,6 +255,11 @@ public class Cavern
 		MirageWorldsConfig.syncConfig();
 
 		CaveDimensions.registerDimensions();
+
+		if (event.getSide().isClient())
+		{
+			CaveMusics.registerMusics();
+		}
 	}
 
 	@EventHandler

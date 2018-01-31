@@ -1,6 +1,6 @@
 package cavern.entity;
 
-import java.util.List;
+import java.util.Collection;
 
 import cavern.core.Cavern;
 import cavern.util.CaveUtils;
@@ -59,7 +59,7 @@ public class CaveEntityRegistry
 
 	public static void addSpawns()
 	{
-		List<Biome> biomes = ForgeRegistries.BIOMES.getValues();
+		Collection<Biome> biomes = ForgeRegistries.BIOMES.getValuesCollection();
 		Biome[] biomeArray = biomes.toArray(new Biome[biomes.size()]);
 
 		EntityRegistry.addSpawn(EntityCavenicSkeleton.class, 20, 1, 1, EnumCreatureType.MONSTER, biomeArray);

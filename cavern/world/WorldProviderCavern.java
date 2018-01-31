@@ -4,20 +4,18 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import cavern.client.CaveMusics;
 import cavern.client.renderer.EmptyRenderer;
 import cavern.config.CavernConfig;
 import cavern.config.manager.CaveBiomeManager;
 import cavern.config.property.ConfigBiomeType;
-import cavern.core.CaveSounds;
-import cavern.network.CaveNetworkRegistry;
-import cavern.network.client.CaveMusicMessage;
 import cavern.world.CaveEntitySpawner.IWorldEntitySpawner;
+import net.minecraft.client.audio.MusicTicker.MusicType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
@@ -34,8 +32,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class WorldProviderCavern extends WorldProviderSurface implements ICustomSeed, IWorldEntitySpawner
 {
 	protected static final Random RANDOM = new Random();
-
-	protected int musicTime = 0;
 
 	private CustomSeedData seedData;
 	private CustomHeightData heightData;
@@ -142,18 +138,6 @@ public class WorldProviderCavern extends WorldProviderSurface implements ICustom
 		return CavernConfig.caveBrightness;
 	}
 
-	public SoundEvent getMusicSound()
-	{
-		if (world.rand.nextInt(3) == 0)
-		{
-			return CaveSounds.MUSIC_CAVE;
-		}
-		else
-		{
-			return CaveSounds.MUSIC_UNREST;
-		}
-	}
-
 	@Override
 	protected void generateLightBrightnessTable()
 	{
@@ -177,6 +161,13 @@ public class WorldProviderCavern extends WorldProviderSurface implements ICustom
 	public boolean canCoordinateBeSpawn(int x, int z)
 	{
 		return true;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public MusicType getMusicType()
+	{
+		return CaveMusics.CAVES;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -271,29 +262,6 @@ public class WorldProviderCavern extends WorldProviderSurface implements ICustom
 	public boolean isDaytime()
 	{
 		return false;
-	}
-
-	@Override
-	public void calculateInitialWeather()
-	{
-		if (!world.isRemote)
-		{
-			musicTime = world.rand.nextInt(4000) + 8000;
-		}
-	}
-
-	@Override
-	public void updateWeather()
-	{
-		if (!world.isRemote)
-		{
-			if (--musicTime <= 0)
-			{
-				musicTime = world.rand.nextInt(5000) + 10000;
-
-				CaveNetworkRegistry.sendToDimension(new CaveMusicMessage(getMusicSound(), false), getDimension());
-			}
-		}
 	}
 
 	@Override

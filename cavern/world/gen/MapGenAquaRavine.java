@@ -1,5 +1,7 @@
 package cavern.world.gen;
 
+import cavern.config.AquaCavernConfig;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
 
@@ -8,7 +10,7 @@ public class MapGenAquaRavine extends MapGenCavernRavine
 	@Override
 	protected void recursiveGenerate(World world, int chunkX, int chunkZ, int x, int z, ChunkPrimer primer)
 	{
-		if (rand.nextInt(500) == 0)
+		if (rand.nextInt(350) == 0)
 		{
 			double blockX = chunkX * 16 + rand.nextInt(16);
 			double blockY = rand.nextInt(rand.nextInt(10) + world.provider.getAverageGroundLevel());
@@ -28,13 +30,20 @@ public class MapGenAquaRavine extends MapGenCavernRavine
 	@Override
 	protected void digBlock(ChunkPrimer data, int x, int y, int z, int chunkX, int chunkZ, boolean foundTop)
 	{
-		if (y < 2 || y > world.getActualHeight() - 3)
+		int height = world.getActualHeight();
+		double depth = AquaCavernConfig.floodDepth;
+
+		if (y < 2 || y > height - 3)
 		{
 			data.setBlockState(x, y, z, BLK_STONE);
 		}
+		else if (depth <= 0.0D || depth < 1.0D && y >= MathHelper.floor(height * depth))
+		{
+			data.setBlockState(x, y, z, BLK_AIR);
+		}
 		else
 		{
-			data.setBlockState(x, y, z, FLOWING_WATER);
+			data.setBlockState(x, y, z, BLK_WATER);
 		}
 	}
 }

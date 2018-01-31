@@ -13,6 +13,8 @@ public class MapGenCavernRavine extends MapGenRavine
 {
 	protected static final IBlockState FLOWING_WATER = Blocks.FLOWING_WATER.getDefaultState();
 
+	protected static final IBlockState BLK_AIR = Blocks.AIR.getDefaultState();
+	protected static final IBlockState BLK_WATER = Blocks.WATER.getDefaultState();
 	protected static final IBlockState BLK_STONE = Blocks.STONE.getDefaultState();
 	protected static final IBlockState BLK_GRAVEL = Blocks.GRAVEL.getDefaultState();
 	protected static final IBlockState BLK_ICE = Blocks.ICE.getDefaultState();

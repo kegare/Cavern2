@@ -4,16 +4,18 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import cavern.client.CaveMusics;
 import cavern.config.CavelandConfig;
 import cavern.config.manager.CaveBiomeManager;
 import cavern.config.property.ConfigBiomeType;
-import cavern.core.CaveSounds;
 import cavern.util.WeightedItemStack;
 import cavern.world.CaveDimensions;
 import cavern.world.WorldProviderCavern;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.client.audio.MusicTicker.MusicType;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldProviderCaveland extends WorldProviderCavern
 {
@@ -61,9 +63,10 @@ public class WorldProviderCaveland extends WorldProviderCavern
 		return CavelandConfig.caveBrightness;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public SoundEvent getMusicSound()
+	public MusicType getMusicType()
 	{
-		return CaveSounds.MUSIC_HOPE;
+		return CaveMusics.CAVELAND;
 	}
 }

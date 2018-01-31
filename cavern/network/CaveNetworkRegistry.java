@@ -1,7 +1,6 @@
 package cavern.network;
 
 import cavern.core.Cavern;
-import cavern.network.client.CaveMusicMessage;
 import cavern.network.client.CustomSeedMessage;
 import cavern.network.client.MinerStatsAdjustMessage;
 import cavern.network.client.MiningRecordMessage;
@@ -57,7 +56,6 @@ public class CaveNetworkRegistry
 		registerMessage(CustomSeedMessage.class, CustomSeedMessage.class, Side.CLIENT);
 		registerMessage(MinerStatsAdjustMessage.class, MinerStatsAdjustMessage.class, Side.CLIENT);
 		registerMessage(MiningRecordMessage.class, MiningRecordMessage.class, Side.CLIENT);
-		registerMessage(CaveMusicMessage.class, CaveMusicMessage.class, Side.CLIENT);
 		registerMessage(RegenerationGuiMessage.class, RegenerationGuiMessage.class, Side.CLIENT);
 		registerMessage(MiningRecordsGuiMessage.class, MiningRecordsGuiMessage.class, Side.CLIENT);
 		registerMessage(ToastMessage.class, ToastMessage.class, Side.CLIENT);

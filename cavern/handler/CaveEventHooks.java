@@ -22,12 +22,10 @@ import cavern.block.BlockPortalCavern;
 import cavern.block.BlockSaplingPerverted;
 import cavern.block.CaveBlocks;
 import cavern.config.GeneralConfig;
-import cavern.core.CaveSounds;
 import cavern.item.CaveItems;
 import cavern.item.IAquaTool;
 import cavern.item.ItemCave;
 import cavern.network.CaveNetworkRegistry;
-import cavern.network.client.CaveMusicMessage;
 import cavern.network.client.CustomSeedMessage;
 import cavern.network.client.MiningRecordMessage;
 import cavern.stats.MinerRank;
@@ -56,7 +54,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -130,43 +127,8 @@ public class CaveEventHooks
 
 		if (CavernAPI.dimension.isInCaves(player))
 		{
-			IPlayerData playerData = PlayerData.get(player);
 			WorldServer world = player.getServerWorld();
 			DimensionType type = world.provider.getDimensionType();
-			long time = playerData.getLastTeleportTime(type);
-
-			if (time <= 0L || time + 18000L < world.getTotalWorldTime())
-			{
-				SoundEvent music = null;
-
-				if (CavernAPI.dimension.isInCavern(player) || CavernAPI.dimension.isInHugeCavern(player))
-				{
-					if (world.rand.nextInt(2) == 0)
-					{
-						music = CaveSounds.MUSIC_CAVE;
-					}
-					else
-					{
-						music = CaveSounds.MUSIC_UNREST;
-					}
-				}
-				else if (CavernAPI.dimension.isInAquaCavern(player))
-				{
-					music = CaveSounds.MUSIC_AQUA;
-				}
-				else if (CavernAPI.dimension.isInCaveland(player))
-				{
-					music = CaveSounds.MUSIC_HOPE;
-				}
-				else if (CavernAPI.dimension.isInCavenia(player))
-				{
-					music = CaveSounds.MUSIC_UNREST;
-				}
-
-				CaveNetworkRegistry.sendToDimension(new CaveMusicMessage(music, true), type.getId());
-			}
-
-			playerData.setLastTeleportTime(type, world.getTotalWorldTime());
 
 			if (type != CaveDimensions.CAVERN)
 			{
@@ -529,57 +491,59 @@ public class CaveEventHooks
 	{
 		EntityPlayer player = event.getEntityPlayer();
 
-		if (CavernAPI.dimension.isInCaves(player))
+		if (!CavernAPI.dimension.isInCaveDimensions(player))
 		{
-			SleepResult result = null;
-			World world = player.world;
-
-			if (!world.isRemote)
-			{
-				IPlayerData playerData = PlayerData.get(player);
-				long worldTime = world.getTotalWorldTime();
-				long sleepTime = playerData.getLastSleepTime();
-
-				if (sleepTime <= 0L)
-				{
-					sleepTime = worldTime;
-
-					playerData.setLastSleepTime(sleepTime);
-				}
-
-				long requireTime = GeneralConfig.sleepWaitTime * 20;
-
-				if (sleepTime + requireTime > worldTime)
-				{
-					result = SleepResult.OTHER_PROBLEM;
-
-					long remainTime = requireTime - (worldTime - sleepTime);
-					int min = MathHelper.ceil(remainTime / 20 / 60 + 1);
-
-					player.sendStatusMessage(new TextComponentTranslation("cavern.message.sleep.still", min), true);
-				}
-			}
-
-			if (result == null)
-			{
-				result = CaveUtils.trySleep(player, event.getPos());
-			}
-
-			if (!world.isRemote && result == SleepResult.OK)
-			{
-				if (GeneralConfig.sleepRefresh)
-				{
-					if (player.shouldHeal())
-					{
-						player.heal(player.getMaxHealth() * 0.5F);
-					}
-				}
-
-				PlayerData.get(player).setLastSleepTime(world.getTotalWorldTime());
-			}
-
-			event.setResult(result);
+			return;
 		}
+
+		SleepResult result = null;
+		World world = player.world;
+
+		if (!world.isRemote)
+		{
+			IPlayerData playerData = PlayerData.get(player);
+			long worldTime = world.getTotalWorldTime();
+			long sleepTime = playerData.getLastSleepTime();
+
+			if (sleepTime <= 0L)
+			{
+				sleepTime = worldTime;
+
+				playerData.setLastSleepTime(sleepTime);
+			}
+
+			long requireTime = GeneralConfig.sleepWaitTime * 20;
+
+			if (sleepTime + requireTime > worldTime)
+			{
+				result = SleepResult.OTHER_PROBLEM;
+
+				long remainTime = requireTime - (worldTime - sleepTime);
+				int min = MathHelper.ceil(remainTime / 20 / 60 + 1);
+
+				player.sendStatusMessage(new TextComponentTranslation("cavern.message.sleep.still", min), true);
+			}
+		}
+
+		if (result == null)
+		{
+			result = CaveUtils.trySleep(player, event.getPos());
+		}
+
+		if (!world.isRemote && result == SleepResult.OK)
+		{
+			if (GeneralConfig.sleepRefresh)
+			{
+				if (player.shouldHeal())
+				{
+					player.heal(player.getMaxHealth() * 0.5F);
+				}
+			}
+
+			PlayerData.get(player).setLastSleepTime(world.getTotalWorldTime());
+		}
+
+		event.setResult(result);
 	}
 
 	@SubscribeEvent

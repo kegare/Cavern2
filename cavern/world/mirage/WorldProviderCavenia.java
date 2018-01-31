@@ -1,20 +1,23 @@
 package cavern.world.mirage;
 
+import cavern.client.CaveMusics;
 import cavern.config.CaveniaConfig;
 import cavern.config.manager.CaveBiomeManager;
 import cavern.config.property.ConfigBiomeType;
-import cavern.core.CaveSounds;
-import cavern.network.CaveNetworkRegistry;
-import cavern.network.client.CaveMusicMessage;
 import cavern.world.CaveDimensions;
 import cavern.world.WorldProviderCavern;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.MusicTicker.MusicType;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldProviderCavenia extends WorldProviderCavern
 {
-	private int musicType;
+	@SideOnly(Side.CLIENT)
+	private int musicCounter;
 
 	@Override
 	public IChunkGenerator createChunkGenerator()
@@ -58,45 +61,24 @@ public class WorldProviderCavenia extends WorldProviderCavern
 		return CaveniaConfig.caveBrightness;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public SoundEvent getMusicSound()
+	public MusicType getMusicType()
 	{
-		if (++musicType > 2)
-		{
-			musicType = 0;
-		}
+		Minecraft mc = FMLClientHandler.instance().getClient();
 
-		switch (musicType)
+		if (mc.ingameGUI.getBossOverlay().shouldDarkenSky())
 		{
-			case 0:
-				return CaveSounds.MUSIC_CAVENIA1;
-			case 2:
-				return CaveSounds.MUSIC_CAVENIA2;
-		}
-
-		return super.getMusicSound();
-	}
-
-	@Override
-	public void calculateInitialWeather()
-	{
-		if (!world.isRemote)
-		{
-			musicTime = 1200;
-		}
-	}
-
-	@Override
-	public void updateWeather()
-	{
-		if (!world.isRemote)
-		{
-			if (--musicTime <= 0)
+			if (++musicCounter < 200)
 			{
-				musicTime = world.rand.nextInt(1000) + 3000;
-
-				CaveNetworkRegistry.sendToDimension(new CaveMusicMessage(getMusicSound(), false), getDimension());
+				return super.getMusicType();
 			}
+
+			return CaveMusics.CAVENIA;
 		}
+
+		musicCounter = 0;
+
+		return super.getMusicType();
 	}
 }

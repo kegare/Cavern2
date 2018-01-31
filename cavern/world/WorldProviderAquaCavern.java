@@ -1,15 +1,17 @@
 package cavern.world;
 
+import cavern.client.CaveMusics;
 import cavern.config.AquaCavernConfig;
 import cavern.config.manager.CaveBiomeManager;
 import cavern.config.property.ConfigBiomeType;
-import cavern.core.CaveSounds;
+import net.minecraft.client.audio.MusicTicker.MusicType;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldProviderAquaCavern extends WorldProviderCavern
 {
@@ -55,10 +57,11 @@ public class WorldProviderAquaCavern extends WorldProviderCavern
 		return AquaCavernConfig.caveBrightness;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public SoundEvent getMusicSound()
+	public MusicType getMusicType()
 	{
-		return CaveSounds.MUSIC_AQUA;
+		return CaveMusics.AQUA_CAVES;
 	}
 
 	@Override

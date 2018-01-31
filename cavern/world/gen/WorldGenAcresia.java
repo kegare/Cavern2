@@ -3,6 +3,7 @@ package cavern.world.gen;
 import java.util.Random;
 
 import cavern.block.CaveBlocks;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -36,7 +37,12 @@ public class WorldGenAcresia extends WorldGenerator
 
 				if (CaveBlocks.ACRESIA.canBlockStay(world, blockpos, state))
 				{
-					world.setBlockState(blockpos, state, 2);
+					Material material = world.getBlockState(blockpos.down()).getMaterial();
+
+					if (material == Material.GRASS || material == Material.GROUND)
+					{
+						world.setBlockState(blockpos, state, 2);
+					}
 				}
 			}
 		}
