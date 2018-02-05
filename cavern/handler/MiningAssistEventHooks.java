@@ -115,6 +115,12 @@ public class MiningAssistEventHooks
 		}
 
 		EntityPlayer player = event.getPlayer();
+
+		if (player == null || player instanceof FakePlayer)
+		{
+			return;
+		}
+
 		BlockPos pos = event.getPos();
 		MiningAssistUnit assist = MiningAssistUnit.get(player);
 

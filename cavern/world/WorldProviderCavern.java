@@ -204,6 +204,12 @@ public class WorldProviderCavern extends WorldProviderSurface implements ICustom
 		return 10;
 	}
 
+	@Override
+	public boolean shouldClientCheckLighting()
+	{
+		return false;
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IRenderHandler getSkyRenderer()

@@ -26,6 +26,9 @@ public class EntityRapidArrow extends EntityTippedArrow
 	{
 		super.arrowHit(living);
 
-		living.hurtResistantTime = 0;
+		if (living.getTotalArmorValue() < 20)
+		{
+			living.hurtResistantTime = 0;
+		}
 	}
 }

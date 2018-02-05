@@ -51,6 +51,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -64,6 +65,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -197,7 +199,7 @@ public class CaveEventHooks
 	{
 		EntityPlayer entityPlayer = event.getPlayer();
 
-		if (entityPlayer == null || !(entityPlayer instanceof EntityPlayerMP))
+		if (entityPlayer == null || entityPlayer instanceof FakePlayer || !(entityPlayer instanceof EntityPlayerMP))
 		{
 			return;
 		}
@@ -329,9 +331,16 @@ public class CaveEventHooks
 			return;
 		}
 
+		World world = event.getWorld();
+
+		if (world.isRemote)
+		{
+			return;
+		}
+
 		EntityPlayer player = event.getHarvester();
 
-		if (player == null || !CavernAPI.dimension.isInCaveDimensions(player))
+		if (player == null || player instanceof FakePlayer || !CavernAPI.dimension.isInCaveDimensions(player))
 		{
 			return;
 		}
@@ -353,11 +362,12 @@ public class CaveEventHooks
 
 		f = (f - 1.0F) * 0.625F;
 
+		List<ItemStack> originalDrops = event.getDrops();
 		List<ItemStack> drops = Lists.newArrayList();
 
-		for (ItemStack stack : event.getDrops())
+		for (ItemStack stack : originalDrops)
 		{
-			if (!stack.isEmpty() && RANDOM.nextFloat() <= f)
+			if (!stack.isEmpty() && !(stack.getItem() instanceof ItemBlock) && RANDOM.nextFloat() <= f)
 			{
 				drops.add(stack.copy());
 			}
@@ -365,7 +375,7 @@ public class CaveEventHooks
 
 		if (!drops.isEmpty())
 		{
-			CriticalMiningEvent criticalEvent = new CriticalMiningEvent(event, drops);
+			CriticalMiningEvent criticalEvent = new CriticalMiningEvent(world, event.getPos(), state, player, event.getFortuneLevel(), originalDrops, drops);
 
 			if (MinecraftForge.EVENT_BUS.post(criticalEvent))
 			{
@@ -374,7 +384,7 @@ public class CaveEventHooks
 
 			player.sendStatusMessage(new TextComponentTranslation("cavern.message.mining.critical"), true);
 
-			event.getDrops().addAll(criticalEvent.getBonusDrops());
+			originalDrops.addAll(criticalEvent.getBonusDrops());
 		}
 	}
 
@@ -422,7 +432,7 @@ public class CaveEventHooks
 			vec3 *= 0.5F;
 		}
 
-		if (player.getTotalArmorValue() > 2)
+		if (player.getArmorVisibility() >= 0.75F)
 		{
 			vec3 *= 0.5F;
 		}

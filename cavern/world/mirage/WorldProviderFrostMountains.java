@@ -71,6 +71,12 @@ public class WorldProviderFrostMountains extends WorldProvider implements ICusto
 		}
 	}
 
+	@Override
+	public boolean shouldClientCheckLighting()
+	{
+		return false;
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public float getSunBrightness(float ticks)

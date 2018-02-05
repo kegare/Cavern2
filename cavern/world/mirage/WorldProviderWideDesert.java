@@ -70,6 +70,12 @@ public class WorldProviderWideDesert extends WorldProvider implements ICustomSee
 		}
 	}
 
+	@Override
+	public boolean shouldClientCheckLighting()
+	{
+		return false;
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public float getSunBrightness(float ticks)

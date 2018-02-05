@@ -181,8 +181,6 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 			biomeArray[i] = (byte)Biome.getIdForBiome(biomesForGeneration[i]);
 		}
 
-		chunk.resetRelightChecks();
-
 		return chunk;
 	}
 

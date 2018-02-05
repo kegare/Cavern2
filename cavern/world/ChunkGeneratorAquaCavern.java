@@ -147,8 +147,6 @@ public class ChunkGeneratorAquaCavern implements IChunkGenerator
 			biomeArray[i] = (byte)Biome.getIdForBiome(biomesForGeneration[i]);
 		}
 
-		chunk.resetRelightChecks();
-
 		return chunk;
 	}
 
@@ -183,7 +181,7 @@ public class ChunkGeneratorAquaCavern implements IChunkGenerator
 			if (rand.nextDouble() < 0.0035D)
 			{
 				x = rand.nextInt(16) + 8;
-				y = rand.nextInt(16) + 8;
+				y = rand.nextInt(16) + 4;
 				z = rand.nextInt(16) + 8;
 
 				towerDungeonGen.generate(world, rand, blockPos.add(x, y, z));

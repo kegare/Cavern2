@@ -41,6 +41,12 @@ public class WorldProviderVoid extends WorldProvider
 		return false;
 	}
 
+	@Override
+	public boolean shouldClientCheckLighting()
+	{
+		return false;
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks)

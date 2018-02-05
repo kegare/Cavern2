@@ -411,7 +411,7 @@ public class MinerStats implements IMinerStats
 		{
 			Block block = Block.getBlockFromItem(stack.getItem());
 
-			if (block != Blocks.AIR)
+			if (block != null && block != Blocks.AIR)
 			{
 				setPointAmount(block, stack.getMetadata(), amount);
 			}

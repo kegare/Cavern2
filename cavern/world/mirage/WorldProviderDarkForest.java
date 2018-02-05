@@ -69,6 +69,12 @@ public class WorldProviderDarkForest extends WorldProviderSurface implements ICu
 		return true;
 	}
 
+	@Override
+	public boolean shouldClientCheckLighting()
+	{
+		return false;
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public float getSunBrightness(float ticks)

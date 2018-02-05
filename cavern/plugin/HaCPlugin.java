@@ -19,8 +19,8 @@ import defeatedcrow.hac.api.recipe.RecipeAPI;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.Optional.Method;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class HaCPlugin
 {
@@ -45,12 +45,19 @@ public class HaCPlugin
 		{
 			int dim = CaveDimensions.FROST_MOUNTAINS.getId();
 
-			for (Biome biome : ForgeRegistries.BIOMES)
+			for (Biome biome : BiomeDictionary.getBiomes(BiomeDictionary.Type.COLD))
 			{
-				if (biome != null && biome.isSnowyBiome())
-				{
-					ClimateAPI.register.addBiomeClimate(biome, dim, DCHeatTier.FROSTBITE, DCHumidity.WET, DCAirflow.NORMAL);
-				}
+				ClimateAPI.register.addBiomeClimate(biome, dim, DCHeatTier.FROSTBITE, DCHumidity.WET, DCAirflow.NORMAL);
+			}
+		}
+
+		if (CaveDimensions.WIDE_DESERT != null)
+		{
+			int dim = CaveDimensions.WIDE_DESERT.getId();
+
+			for (Biome biome : BiomeDictionary.getBiomes(BiomeDictionary.Type.SANDY))
+			{
+				ClimateAPI.register.addBiomeClimate(biome, dim, DCHeatTier.HOT, DCHumidity.DRY, DCAirflow.NORMAL);
 			}
 		}
 	}

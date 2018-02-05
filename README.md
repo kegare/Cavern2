@@ -3,7 +3,7 @@ Minecraft mod. Adds new various dimension!
 
 ----
 ## Requires
-* [Minecraft Forge](http://files.minecraftforge.net/) 14.23.1.2599
+* [Minecraft Forge](http://files.minecraftforge.net/) 14.23.1.2610
 
 ----
 ## License

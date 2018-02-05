@@ -532,7 +532,7 @@ public class ClientEventHooks
 		{
 			IIceEquipment equip = (IIceEquipment)stack.getItem();
 
-			if (!equip.isHiddenTooltip())
+			if (!equip.isHiddenTooltip() || event.getFlags().isAdvanced())
 			{
 				event.getToolTip().add(Cavern.proxy.translateFormat("tooltip.iceEquipment.charge", equip.getCharge(stack)));
 			}

@@ -9,6 +9,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +29,7 @@ public class EntityCrazySkeleton extends EntityCavenicSkeleton
 	{
 		super(world);
 		this.experienceValue = 50;
+		this.setDropChance(EntityEquipmentSlot.MAINHAND, 1.0F);
 	}
 
 	@Override
@@ -67,7 +69,11 @@ public class EntityCrazySkeleton extends EntityCavenicSkeleton
 	{
 		super.setEquipmentBasedOnDifficulty(difficulty);
 
-		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(CaveItems.CAVENIC_BOW));
+		ItemStack stack = new ItemStack(CaveItems.CAVENIC_BOW);
+
+		stack.addEnchantment(Enchantments.INFINITY, 1);
+
+		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
 	}
 
 	@Override
