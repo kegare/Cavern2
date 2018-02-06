@@ -1,5 +1,5 @@
 {
-    "type": "minecraft:crafting_shaped",
+    "type": "forge:ore_shaped",
     "pattern": [
         " # ",
         "#X#",
@@ -7,8 +7,8 @@
     ],
     "key": {
         "#": {
-            "item": "cavern:cave_item",
-            "data": 4
+            "type": "forge:ore_dict",
+            "ore": "orbMiner"
         },
         "X": {
             "item": "minecraft:compass"

@@ -193,6 +193,11 @@ public class CaveUtils
 			return nullDefault;
 		}
 
+		if (list.size() == 1)
+		{
+			return list.get(0);
+		}
+
 		return list.get(MathHelper.floor(Math.random() * list.size()));
 	}
 

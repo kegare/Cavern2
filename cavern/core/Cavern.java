@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Level;
 
 import cavern.api.CavernAPI;
 import cavern.block.CaveBlocks;
+import cavern.block.RandomiteHelper;
 import cavern.capability.CaveCapabilities;
 import cavern.client.CaveKeyBindings;
 import cavern.client.CaveMusics;
@@ -131,7 +132,6 @@ public class Cavern
 		CaveCapabilities.registerCapabilities();
 
 		CavernAPIHandler.registerItems(CavernAPI.apiHandler);
-		CavernAPIHandler.registerEvents(CavernAPI.apiHandler);
 
 		MiningAssistConfig.syncConfig();
 
@@ -335,5 +335,7 @@ public class Cavern
 		AquaCavernConfig.triggerItems.refreshItems();
 		AquaCavernConfig.dungeonMobs.refreshEntities();
 		AquaCavernConfig.towerDungeonMobs.refreshEntities();
+
+		RandomiteHelper.refreshItems();
 	}
 }

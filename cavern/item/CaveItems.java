@@ -206,6 +206,8 @@ public class CaveItems
 		OreDictionary.registerOre("ingotMagnite", ItemCave.EnumType.MAGNITE_INGOT.getItemStack());
 		OreDictionary.registerOre("gemHexcite", ItemCave.EnumType.HEXCITE.getItemStack());
 		OreDictionary.registerOre("stickIce", ItemCave.EnumType.ICE_STICK.getItemStack());
+		OreDictionary.registerOre("orbMiner", ItemCave.EnumType.MINER_ORB.getItemStack());
+		OreDictionary.registerOre("orbCavenic", ItemCave.EnumType.CAVENIC_ORB.getItemStack());
 	}
 
 	public static void registerEquipments()

@@ -1,21 +1,12 @@
 package cavern.block;
 
-import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.ObjectUtils;
-
-import com.google.common.collect.Lists;
-
-import cavern.block.event.FissureBreakEvent;
-import cavern.config.GeneralConfig;
+import cavern.api.event.RandomiteDropEvent;
 import cavern.core.Cavern;
 import cavern.item.CaveItems;
 import cavern.item.ItemCave;
 import cavern.util.CaveUtils;
-import cavern.util.WeightedItemStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -26,30 +17,26 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCave extends Block
 {
 	public static final PropertyEnum<EnumType> VARIANT = PropertyEnum.create("variant", EnumType.class);
-
-	public static final List<WeightedItemStack> RANDOMITE_ITEMS = Lists.newArrayList();
-	public static final List<FissureBreakEvent> FISSURE_EVENTS = Lists.newArrayList();
 
 	public BlockCave()
 	{
@@ -146,105 +133,104 @@ public class BlockCave extends Block
 	}
 
 	@Override
-	public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune)
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
-		super.dropBlockAsItemWithChance(world, pos, state, chance, fortune);
-
-		if (world.restoringBlockSnapshots)
+		if (getType(state) == EnumType.RANDOMITE_ORE)
 		{
+			ItemStack drop = ItemStack.EMPTY;
+
+			if (fortune > 0)
+			{
+				double d = fortune / Enchantments.FORTUNE.getMaxLevel();
+
+				if (d >= 1.0D || RANDOM.nextDouble() < d)
+				{
+					drop = RandomiteHelper.getRandomItem();
+				}
+			}
+
+			if (drop.isEmpty())
+			{
+				ItemStack stack = RandomiteHelper.getDropItem();
+
+				if (!stack.isEmpty())
+				{
+					if (fortune > 0 && stack.isStackable())
+					{
+						stack.grow(RANDOM.nextInt(fortune) + 1);
+					}
+
+					drop = stack;
+				}
+			}
+
+			RandomiteDropEvent event = new RandomiteDropEvent(world, pos, state, drop);
+
+			MinecraftForge.EVENT_BUS.post(event);
+
+			if (!event.getDropItem().isEmpty())
+			{
+				drops.add(event.getDropItem());
+			}
+
 			return;
 		}
 
-		EntityPlayer player = harvesters.get();
+		super.getDrops(drops, world, pos, state, fortune);
+	}
+
+	@Override
+	public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune)
+	{
+		if (!world.isRemote && !world.restoringBlockSnapshots)
+		{
+			EnumType type = getType(state);
+
+			if (type == EnumType.FISSURED_STONE || type == EnumType.FISSURED_PACKED_ICE)
+			{
+				EntityPlayer player = harvesters.get();
+
+				if (fortune > 0 && player != null)
+				{
+					FissureHelper.fireIntensiveEffect(player, fortune);
+				}
+				else if (RANDOM.nextDouble() < 0.1D)
+				{
+					FissureHelper.fireExplosion(world, pos);
+				}
+				else
+				{
+					FissureHelper.fireAreaEffect(world, pos, player);
+				}
+
+				return;
+			}
+		}
+
+		super.dropBlockAsItemWithChance(world, pos, state, chance, fortune);
+	}
+
+	@Override
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player)
+	{
+		super.onBlockHarvested(world, pos, state, player);
+
+		if (world.isRemote || player.capabilities.isCreativeMode)
+		{
+			return;
+		}
 
 		switch (getType(state))
 		{
 			case RANDOMITE_ORE:
-				onRandomiteDestroyed(world, player, pos, state, chance, fortune);
+				CaveUtils.grantAdvancement(player, "mine_randomite");
 				break;
 			case FISSURED_STONE:
 			case FISSURED_PACKED_ICE:
-				onFissureBlockDestroyed(world, player, pos, state, chance, fortune);
+				CaveUtils.grantAdvancement(player, "mine_fissure");
 				break;
 			default:
 		}
-	}
-
-	public void onRandomiteDestroyed(World world, @Nullable EntityPlayer player, BlockPos pos, IBlockState state, float chance, int fortune)
-	{
-		if (world.isRemote)
-		{
-			return;
-		}
-
-		ItemStack stack = ItemStack.EMPTY;
-
-		if (!RANDOMITE_ITEMS.isEmpty())
-		{
-			stack = WeightedRandom.getRandomItem(RANDOM, RANDOMITE_ITEMS).getItemStack();
-		}
-
-		if (stack.isEmpty())
-		{
-			for (int i = 0; i < 20; ++i)
-			{
-				Item item = Item.REGISTRY.getRandomObject(RANDOM);
-
-				if (item == null || item == Items.AIR)
-				{
-					continue;
-				}
-
-				stack = ItemStack.EMPTY;
-
-				if (item.getHasSubtypes())
-				{
-					NonNullList<ItemStack> items = NonNullList.create();
-
-					item.getSubItems(ObjectUtils.defaultIfNull(item.getCreativeTab(), CreativeTabs.SEARCH), items);
-
-					stack = CaveUtils.getRandomObject(items, ItemStack.EMPTY);
-				}
-
-				if (stack.isEmpty())
-				{
-					stack = new ItemStack(item);
-				}
-
-				if (GeneralConfig.randomiteExcludeItems.isEmpty() || !GeneralConfig.randomiteExcludeItems.hasItemStack(stack))
-				{
-					break;
-				}
-			}
-		}
-
-		if (player != null && (stack.isEmpty() || RANDOM.nextInt(30) == 0))
-		{
-			player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 20 * 90, 0, false, false));
-		}
-		else
-		{
-			spawnAsEntity(world, pos, stack);
-		}
-
-		CaveUtils.grantAdvancement(player, "mine_randomite");
-	}
-
-	public void onFissureBlockDestroyed(World world, @Nullable EntityPlayer player, BlockPos pos, IBlockState state, float chance, int fortune)
-	{
-		int i = FISSURE_EVENTS.size();
-
-		while (--i > 0)
-		{
-			FissureBreakEvent event = WeightedRandom.getRandomItem(RANDOM, FISSURE_EVENTS);
-
-			if (event.get().onBreakBlock(world, pos, state, chance, fortune, player, RANDOM))
-			{
-				break;
-			}
-		}
-
-		CaveUtils.grantAdvancement(player, "mine_fissure");
 	}
 
 	@Override

@@ -15,12 +15,12 @@ import cavern.api.IIceEquipment;
 import cavern.api.IMinerStats;
 import cavern.api.IPlayerData;
 import cavern.api.event.CriticalMiningEvent;
-import cavern.block.BlockCave;
 import cavern.block.BlockLeavesPerverted;
 import cavern.block.BlockLogPerverted;
 import cavern.block.BlockPortalCavern;
 import cavern.block.BlockSaplingPerverted;
 import cavern.block.CaveBlocks;
+import cavern.block.RandomiteHelper;
 import cavern.config.GeneralConfig;
 import cavern.item.CaveItems;
 import cavern.item.IAquaTool;
@@ -269,9 +269,7 @@ public class CaveEventHooks
 				}
 				else if (RANDOM.nextDouble() < 0.0085D)
 				{
-					WeightedItemStack randomItem = WeightedRandom.getRandomItem(RANDOM, BlockCave.RANDOMITE_ITEMS);
-
-					Block.spawnAsEntity(world, pos, randomItem.getItemStack());
+					Block.spawnAsEntity(world, pos, RandomiteHelper.getDropItem());
 				}
 				else if (heldMain.getItem() instanceof IIceEquipment && RANDOM.nextDouble() < 0.03D || RANDOM.nextDouble() < 0.01D)
 				{

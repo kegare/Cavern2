@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 
 import cavern.api.CavernAPI;
 import cavern.api.IIceEquipment;
+import cavern.block.RandomiteHelper;
 import cavern.client.CaveKeyBindings;
 import cavern.client.gui.GuiDownloadCaveTerrain;
 import cavern.client.gui.GuiLoadCaveTerrain;
@@ -160,6 +161,8 @@ public class ClientEventHooks
 						GeneralConfig.miningPoints.refreshPoints();
 						GeneralConfig.cavebornBonusItems.refreshItems();
 						GeneralConfig.randomiteExcludeItems.refreshItems();
+
+						RandomiteHelper.refreshItems();
 					}
 
 					break;

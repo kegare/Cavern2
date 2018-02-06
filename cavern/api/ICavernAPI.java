@@ -17,16 +17,6 @@ public interface ICavernAPI
 
 	void addMineBonus(IMineBonus bonus);
 
-	void addRandomiteItem(ItemStack item, int weight);
-
-	void addRandomiteItem(Item item, int weight);
-
-	void addRandomiteItem(Item item, int amount, int weight);
-
-	void addRandomiteItem(Block block, int weight);
-
-	void addRandomiteItem(Block block, int amount, int weight);
-
 	void addHibernateItem(ItemStack item, int weight);
 
 	void addHibernateItem(Item item, int weight);
@@ -36,6 +26,4 @@ public interface ICavernAPI
 	void addHibernateItem(Block block, int weight);
 
 	void addHibernateItem(Block block, int amount, int weight);
-
-	void addFissureBreakEvent(IFissureBreakEvent event, int weight);
 }
