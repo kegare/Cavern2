@@ -259,8 +259,8 @@ public class AquaCavernConfig
 			biomes.add(new CaveBiome(Biomes.JUNGLE_HILLS, 10));
 			biomes.add(new CaveBiome(Biomes.SWAMPLAND, 30));
 			biomes.add(new CaveBiome(Biomes.EXTREME_HILLS, 20));
-			biomes.add(new CaveBiome(Biomes.ICE_PLAINS, 80, new BlockMeta(Blocks.PACKED_ICE.getDefaultState())));
-			biomes.add(new CaveBiome(Biomes.ICE_MOUNTAINS, 10, new BlockMeta(Blocks.PACKED_ICE.getDefaultState())));
+			biomes.add(new CaveBiome(Biomes.ICE_PLAINS, 80));
+			biomes.add(new CaveBiome(Biomes.ICE_MOUNTAINS, 10));
 			biomes.add(new CaveBiome(Biomes.SAVANNA, 50));
 			biomes.add(new CaveBiome(Biomes.MESA, 30, new BlockMeta(Blocks.RED_SANDSTONE.getDefaultState())));
 

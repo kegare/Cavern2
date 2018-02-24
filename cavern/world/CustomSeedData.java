@@ -1,16 +1,13 @@
 package cavern.world;
 
-import java.util.Random;
-
 import javax.annotation.Nullable;
 
+import cavern.handler.CaveEventHooks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class CustomSeedData
 {
-	private static final Random RANDOM = new Random();
-
 	private Long seed;
 
 	public CustomSeedData() {}
@@ -42,7 +39,7 @@ public class CustomSeedData
 
 	public long getSeed()
 	{
-		return getSeed(RANDOM.nextLong());
+		return getSeed(CaveEventHooks.RANDOM.nextLong());
 	}
 
 	public long getSeed(long customSeed)

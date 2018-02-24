@@ -52,7 +52,14 @@ public class CaveEntityRegistry
 		registerMob(EntityCrazySpider.class, "crazy_spider", "CrazySpider", 0x909090, 0x811F1F);
 		registerMob(EntityCaveman.class, "caveman", "Caveman", 0xAAAAAA, 0xCCCCCC);
 
+		registerMob(EntitySummonZombie.class, "summon_zombie", "Zombie");
+		registerMob(EntitySummonSkeleton.class, "summon_skeleton", "Skeleton");
+		registerMob(EntitySummonCavenicZombie.class, "summon_cavenic_zombie", "CavenicZombie");
+		registerMob(EntitySummonCavenicSkeleton.class, "summon_cavenic_skeleton", "CavenicSkeleton");
+
 		registerEntity(EntityAquaSquid.class, "squid", "Squid", 64, 3, true);
+
+		registerEntity(EntityMagicTorcher.class, "magic_torcher", "MagicTorcher", 16, 3, false);
 
 		EntitySpawnPlacementRegistry.setPlacementType(EntityAquaSquid.class, SpawnPlacementType.IN_WATER);
 	}

@@ -5,6 +5,8 @@ import cavern.world.ICustomSeed;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CustomSeedMessage implements IClientMessage<CustomSeedMessage, IMessage>
 {
@@ -29,6 +31,7 @@ public class CustomSeedMessage implements IClientMessage<CustomSeedMessage, IMes
 		buf.writeLong(seed);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public IMessage process(Minecraft mc)
 	{

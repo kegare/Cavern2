@@ -15,6 +15,15 @@ public class CaveSounds
 	public static final CaveSoundEvent MUSIC_CAVELAND = new CaveSoundEvent("music.caveland");
 	public static final CaveSoundEvent MUSIC_CAVENIA = new CaveSoundEvent("music.cavenia");
 
+	public static final CaveSoundEvent MAGIC_SPELLING = new CaveSoundEvent("magic.spelling");
+	public static final CaveSoundEvent MAGIC_CLOSE_BOOK  = new CaveSoundEvent("magic.close_book");
+	public static final CaveSoundEvent MAGIC_SUCCESS_BUFF  = new CaveSoundEvent("magic.success_buff");
+	public static final CaveSoundEvent MAGIC_SUCCESS_MISC  = new CaveSoundEvent("magic.success_misc");
+	public static final CaveSoundEvent MAGIC_SUCCESS_STRONG  = new CaveSoundEvent("magic.success_strong");
+	public static final CaveSoundEvent MAGIC_BREAK  = new CaveSoundEvent("magic.break");
+	public static final CaveSoundEvent MAGIC_REVERSE  = new CaveSoundEvent("magic.reverse");
+	public static final CaveSoundEvent MAGIC_BLAZE  = new CaveSoundEvent("magic.blaze");
+
 	public static void registerSounds(IForgeRegistry<SoundEvent> registry)
 	{
 		registry.register(CAVE_PORTAL);
@@ -24,6 +33,15 @@ public class CaveSounds
 		registry.register(MUSIC_AQUA_CAVES);
 		registry.register(MUSIC_CAVELAND);
 		registry.register(MUSIC_CAVENIA);
+
+		registry.register(MAGIC_SPELLING);
+		registry.register(MAGIC_CLOSE_BOOK);
+		registry.register(MAGIC_SUCCESS_BUFF);
+		registry.register(MAGIC_SUCCESS_MISC);
+		registry.register(MAGIC_SUCCESS_STRONG);
+		registry.register(MAGIC_BREAK);
+		registry.register(MAGIC_REVERSE);
+		registry.register(MAGIC_BLAZE);
 	}
 
 	public static class CaveSoundEvent extends SoundEvent

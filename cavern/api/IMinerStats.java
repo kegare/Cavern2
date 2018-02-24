@@ -37,8 +37,6 @@ public interface IMinerStats
 
 	Map<BlockMeta, Integer> getMiningRecords();
 
-	boolean isClientAdjusted();
-
 	void adjustData();
 
 	void writeToNBT(NBTTagCompound nbt);

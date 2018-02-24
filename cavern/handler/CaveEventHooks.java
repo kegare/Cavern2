@@ -13,6 +13,7 @@ import cavern.api.CavernAPI;
 import cavern.api.ICavenicMob;
 import cavern.api.IIceEquipment;
 import cavern.api.IMinerStats;
+import cavern.api.IMiningData;
 import cavern.api.IPlayerData;
 import cavern.api.event.CriticalMiningEvent;
 import cavern.block.BlockLeavesPerverted;
@@ -25,37 +26,42 @@ import cavern.config.GeneralConfig;
 import cavern.item.CaveItems;
 import cavern.item.IAquaTool;
 import cavern.item.ItemCave;
+import cavern.magic.Magic;
+import cavern.magic.MagicBook;
+import cavern.magic.MagicInvisible;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.CustomSeedMessage;
-import cavern.network.client.MiningRecordMessage;
+import cavern.network.client.MiningMessage;
 import cavern.stats.MinerRank;
 import cavern.stats.MinerStats;
+import cavern.stats.MiningData;
 import cavern.stats.PlayerData;
 import cavern.util.BlockMeta;
 import cavern.util.CaveUtils;
-import cavern.util.WeightedItemStack;
 import cavern.world.CaveDimensions;
 import cavern.world.CustomSeedData;
 import cavern.world.ICustomSeed;
-import cavern.world.mirage.WorldProviderCaveland;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayer.SleepResult;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -69,6 +75,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -80,40 +87,41 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 public class CaveEventHooks
 {
-	protected static final Random RANDOM = new Random();
+	public static final Random RANDOM = new Random();
 
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event)
 	{
-		if (event.getEntity() instanceof EntityPlayerMP)
+		World world = event.getWorld();
+
+		if (!world.isRemote && world.provider instanceof ICustomSeed)
 		{
-			World world = event.getWorld();
-			EntityPlayerMP player = (EntityPlayerMP)event.getEntity();
+			CustomSeedData data = ((ICustomSeed)world.provider).getSeedData();
 
-			adjustPlayerStats(player);
-
-			if (world.provider instanceof ICustomSeed)
+			if (data == null)
 			{
-				CustomSeedData data = ((ICustomSeed)world.provider).getSeedData();
+				return;
+			}
 
-				if (data != null)
-				{
-					CaveNetworkRegistry.sendTo(new CustomSeedMessage(data.getSeedValue(world.getWorldInfo().getSeed())), player);
-				}
+			if (event.getEntity() instanceof EntityPlayerMP)
+			{
+				CaveNetworkRegistry.sendTo(new CustomSeedMessage(data.getSeedValue(world.getWorldInfo().getSeed())), (EntityPlayerMP)event.getEntity());
 			}
 		}
 	}
 
-	public static void adjustPlayerStats(EntityPlayer player)
+	@SubscribeEvent
+	public void onPlayerLoggedIn(PlayerLoggedInEvent event)
 	{
-		IMinerStats minerStats = MinerStats.get(player, true);
-
-		if (minerStats != null)
+		if (event.player instanceof EntityPlayerMP)
 		{
-			minerStats.adjustData();
+			EntityPlayerMP player = (EntityPlayerMP)event.player;
+
+			MinerStats.adjustData(player);
 		}
 	}
 
@@ -211,40 +219,63 @@ public class CaveEventHooks
 			return;
 		}
 
-		ItemStack heldMain = player.getHeldItemMainhand();
+		World world = event.getWorld();
+		IBlockState state = event.getState();
+		ItemStack stack = player.getHeldItemMainhand();
 
-		if (GeneralConfig.isMiningPointItem(heldMain))
+		if (GeneralConfig.isMiningPointItem(stack))
 		{
-			IBlockState state = event.getState();
-			int amount = MinerStats.getPointAmount(state);
+			int point = MinerStats.getPointAmount(state);
 
-			if (amount != 0)
+			if (point != 0)
 			{
 				IMinerStats stats = MinerStats.get(player);
+				IMiningData data = MiningData.get(player);
 
 				if (player.inventory.hasItemStack(ItemCave.EnumType.MINER_ORB.getItemStack()))
 				{
-					if (RANDOM.nextDouble() < 0.3D)
+					if (RANDOM.nextDouble() < 0.15D)
 					{
-						amount += Math.max(amount / 2, 1);
+						point += Math.max(point / 2, 1);
 					}
 				}
 
-				stats.addPoint(amount);
+				stats.addPoint(point);
 				stats.addMiningRecord(new BlockMeta(state));
 
-				CaveNetworkRegistry.sendTo(new MiningRecordMessage(state, amount), player);
+				data.notifyMining(state, point);
+
+				int combo = data.getMiningCombo();
+
+				if (combo > 0 && combo % 10 == 0)
+				{
+					world.playSound(null, player.posX, player.posY + 0.25D, player.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
+						SoundCategory.PLAYERS, 0.1F, 0.5F * ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.7F + 1.8F));
+
+					player.addExperience(combo / 10);
+				}
+
+				if (combo >= 50)
+				{
+					CaveUtils.grantAdvancement(player, "good_mine");
+				}
+
+				CaveNetworkRegistry.sendTo(new MiningMessage(state, point), player);
 			}
 		}
 
-		if (CavernAPI.dimension.isInCaveland(player) || CavernAPI.dimension.isInFrostMountains(player))
+		if (CavernAPI.dimension.isInFrostMountains(player))
 		{
 			if (player.capabilities.isCreativeMode)
 			{
 				return;
 			}
 
-			World world = event.getWorld();
+			if (state.getBlock() != Blocks.PACKED_ICE || EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0)
+			{
+				return;
+			}
+
 			BlockPos pos = event.getPos();
 			Biome biome = world.getBiome(pos);
 
@@ -253,28 +284,17 @@ public class CaveEventHooks
 				return;
 			}
 
-			IBlockState state = event.getState();
-
-			if (state.getBlock() == Blocks.PACKED_ICE)
+			if (RANDOM.nextDouble() < 0.05D)
 			{
-				if (RANDOM.nextDouble() < 0.05D)
-				{
-					Block.spawnAsEntity(world, pos, new ItemStack(Blocks.ICE));
-				}
-				else if (RANDOM.nextDouble() < 0.0325D)
-				{
-					WeightedItemStack randomItem = WeightedRandom.getRandomItem(RANDOM, WorldProviderCaveland.HIBERNATE_ITEMS);
-
-					Block.spawnAsEntity(world, pos, randomItem.getItemStack());
-				}
-				else if (RANDOM.nextDouble() < 0.0085D)
-				{
-					Block.spawnAsEntity(world, pos, RandomiteHelper.getDropItem());
-				}
-				else if (heldMain.getItem() instanceof IIceEquipment && RANDOM.nextDouble() < 0.03D || RANDOM.nextDouble() < 0.01D)
-				{
-					Block.spawnAsEntity(world, pos, new ItemStack(Blocks.PACKED_ICE));
-				}
+				Block.spawnAsEntity(world, pos, new ItemStack(Blocks.ICE));
+			}
+			else if (RANDOM.nextDouble() < 0.005D)
+			{
+				Block.spawnAsEntity(world, pos, RandomiteHelper.getDropItem());
+			}
+			else if (stack.getItem() instanceof IIceEquipment && RANDOM.nextDouble() < 0.03D || RANDOM.nextDouble() < 0.01D)
+			{
+				Block.spawnAsEntity(world, pos, new ItemStack(Blocks.PACKED_ICE));
 			}
 		}
 	}
@@ -391,12 +411,14 @@ public class CaveEventHooks
 	{
 		EntityLivingBase entity = event.getEntityLiving();
 
-		if (!(entity instanceof EntityPlayer))
+		if (!(entity instanceof EntityPlayer) || entity instanceof FakePlayer)
 		{
 			return;
 		}
 
 		EntityPlayer player = (EntityPlayer)entity;
+
+		MiningData.get(player).onUpdate();
 
 		if (!player.isInWater() || !CavernAPI.dimension.isInCaveDimensions(player))
 		{
@@ -495,6 +517,34 @@ public class CaveEventHooks
 	}
 
 	@SubscribeEvent
+	public void onLivingSetAttackTarget(LivingSetAttackTargetEvent event)
+	{
+		EntityLivingBase target = event.getTarget();
+
+		if (target == null || !(target instanceof EntityPlayer))
+		{
+			return;
+		}
+
+		EntityPlayer player = (EntityPlayer)target;
+		Magic magic = MagicBook.get(player).getSpellingMagic();
+
+		if (magic == null || !(magic instanceof MagicInvisible))
+		{
+			return;
+		}
+
+		EntityLivingBase entity = event.getEntityLiving();
+
+		entity.setRevengeTarget(null);
+
+		if (entity instanceof EntityLiving)
+		{
+			((EntityLiving)entity).setAttackTarget(null);
+		}
+	}
+
+	@SubscribeEvent
 	public void onSleepInBed(PlayerSleepInBedEvent event)
 	{
 		EntityPlayer player = event.getEntityPlayer();
@@ -509,15 +559,15 @@ public class CaveEventHooks
 
 		if (!world.isRemote)
 		{
-			IPlayerData playerData = PlayerData.get(player);
+			IPlayerData data = PlayerData.get(player);
 			long worldTime = world.getTotalWorldTime();
-			long sleepTime = playerData.getLastSleepTime();
+			long sleepTime = data.getLastSleepTime();
 
 			if (sleepTime <= 0L)
 			{
 				sleepTime = worldTime;
 
-				playerData.setLastSleepTime(sleepTime);
+				data.setLastSleepTime(sleepTime);
 			}
 
 			long requireTime = GeneralConfig.sleepWaitTime * 20;

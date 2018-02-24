@@ -1,18 +1,14 @@
 package cavern.stats;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.lang3.ObjectUtils;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
-import cavern.api.IMineBonus;
 import cavern.api.IMinerStats;
 import cavern.api.event.MinerStatsEvent;
 import cavern.capability.CaveCapabilities;
@@ -20,10 +16,8 @@ import cavern.config.MiningAssistConfig;
 import cavern.core.CaveSounds;
 import cavern.miningassist.MiningAssist;
 import cavern.network.CaveNetworkRegistry;
-import cavern.network.client.MinerStatsAdjustMessage;
-import cavern.stats.bonus.MineBonusExperience;
-import cavern.stats.bonus.MineBonusHaste;
-import cavern.stats.bonus.MineBonusResistance;
+import cavern.network.client.MinerDataMessage;
+import cavern.network.client.MiningRecordsMessage;
 import cavern.util.BlockMeta;
 import cavern.util.CaveUtils;
 import net.minecraft.block.Block;
@@ -42,23 +36,11 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.NBT;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class MinerStats implements IMinerStats
 {
 	public static final Table<Block, Integer, Integer> MINING_POINTS = HashBasedTable.create();
-	public static final Set<IMineBonus> MINE_BONUS = Sets.newHashSet();
-
-	@SideOnly(Side.CLIENT)
-	public static BlockMeta lastMine;
-	@SideOnly(Side.CLIENT)
-	public static int lastMinePoint;
-	@SideOnly(Side.CLIENT)
-	public static long lastMineTime;
-	@SideOnly(Side.CLIENT)
-	public static int mineCombo;
 
 	private final EntityPlayer entityPlayer;
 
@@ -66,9 +48,7 @@ public class MinerStats implements IMinerStats
 	private int rank;
 	private int miningAssist;
 
-	private final HashMap<BlockMeta, Integer> records = Maps.newHashMap();
-
-	private boolean clientAdjusted;
+	private final Map<BlockMeta, Integer> records = Maps.newHashMap();
 
 	public MinerStats(EntityPlayer player)
 	{
@@ -94,17 +74,9 @@ public class MinerStats implements IMinerStats
 
 		point = Math.max(value, 0);
 
-		if (point != prev)
+		if (point != prev && adjust)
 		{
-			if (adjust)
-			{
-				adjustData();
-			}
-
-			if (entityPlayer != null && entityPlayer.world.isRemote)
-			{
-				clientAdjusted = true;
-			}
+			adjustData();
 		}
 	}
 
@@ -223,17 +195,9 @@ public class MinerStats implements IMinerStats
 
 		rank = MinerRank.get(value).getRank();
 
-		if (rank != prev)
+		if (rank != prev && adjust)
 		{
-			if (adjust)
-			{
-				adjustData();
-			}
-
-			if (entityPlayer != null && entityPlayer.world.isRemote)
-			{
-				clientAdjusted = true;
-			}
+			adjustData();
 		}
 	}
 
@@ -256,17 +220,9 @@ public class MinerStats implements IMinerStats
 
 		miningAssist = MiningAssist.get(type).getType();
 
-		if (miningAssist != prev)
+		if (miningAssist != prev && adjust)
 		{
-			if (adjust)
-			{
-				adjustData();
-			}
-
-			if (entityPlayer != null && entityPlayer.world.isRemote)
-			{
-				clientAdjusted = true;
-			}
+			adjustData();
 		}
 	}
 
@@ -297,17 +253,11 @@ public class MinerStats implements IMinerStats
 	}
 
 	@Override
-	public boolean isClientAdjusted()
-	{
-		return clientAdjusted;
-	}
-
-	@Override
 	public void adjustData()
 	{
 		if (entityPlayer != null && entityPlayer instanceof EntityPlayerMP)
 		{
-			CaveNetworkRegistry.sendTo(new MinerStatsAdjustMessage(this), (EntityPlayerMP)entityPlayer);
+			CaveNetworkRegistry.sendTo(new MinerDataMessage(this), (EntityPlayerMP)entityPlayer);
 		}
 	}
 
@@ -359,6 +309,18 @@ public class MinerStats implements IMinerStats
 	public static IMinerStats get(EntityPlayer player, boolean nullable)
 	{
 		return ObjectUtils.defaultIfNull(CaveCapabilities.getCapability(player, CaveCapabilities.MINER_STATS), nullable ? null : new MinerStats(player));
+	}
+
+	public static void adjustData(EntityPlayerMP player)
+	{
+		IMinerStats stats = MinerStats.get(player, true);
+
+		if (stats != null)
+		{
+			stats.adjustData();
+
+			CaveNetworkRegistry.sendTo(new MiningRecordsMessage(stats), player);
+		}
 	}
 
 	public static int getPointAmount(Block block, int meta)
@@ -416,19 +378,5 @@ public class MinerStats implements IMinerStats
 				setPointAmount(block, stack.getMetadata(), amount);
 			}
 		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static void setLastMine(BlockMeta blockMeta, int point)
-	{
-		lastMine = blockMeta;
-		lastMinePoint = point;
-	}
-
-	public static void registerMineBonus()
-	{
-		MINE_BONUS.add(new MineBonusExperience());
-		MINE_BONUS.add(new MineBonusHaste());
-		MINE_BONUS.add(new MineBonusResistance());
 	}
 }

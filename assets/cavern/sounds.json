@@ -76,5 +76,73 @@
         "volume": 0.75
       }
     ]
+  },
+  "magic.spelling": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "cavern:magic/spelling"
+      }
+    ]
+  },
+  "magic.close_book": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "cavern:magic/close_book"
+      }
+    ]
+  },
+  "magic.success_buff": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "cavern:magic/success_buff"
+      }
+    ]
+  },
+  "magic.success_misc": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "cavern:magic/success_misc"
+      }
+    ]
+  },
+  "magic.success_strong": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "cavern:magic/success_strong",
+        "volume": 0.75
+      }
+    ]
+  },
+  "magic.break": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "cavern:magic/break",
+        "volume": 0.5
+      }
+    ]
+  },
+  "magic.reverse": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "cavern:magic/reverse",
+        "volume": 0.5
+      }
+    ]
+  },
+  "magic.blaze": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "cavern:magic/blaze",
+        "volume": 0.5
+      }
+    ]
   }
 }

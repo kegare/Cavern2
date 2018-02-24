@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import cavern.api.CavernAPI;
 import cavern.api.IPortalCache;
 import cavern.core.Cavern;
+import cavern.handler.CaveEventHooks;
 import cavern.stats.PlayerData;
 import cavern.stats.PortalCache;
 import cavern.util.CaveUtils;
@@ -24,6 +25,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
@@ -43,7 +45,7 @@ public class ItemMirageBook extends Item
 	@Override
 	public String getUnlocalizedName(ItemStack stack)
 	{
-		return "item.mirageBook." + EnumType.byItemStack(stack).getUnlocalizedName();
+		return getUnlocalizedName() + "." + EnumType.byItemStack(stack).getUnlocalizedName();
 	}
 
 	@Override
@@ -164,6 +166,19 @@ public class ItemMirageBook extends Item
 		return true;
 	}
 
+	public static ItemStack getRandomBook()
+	{
+		int i = MathHelper.floor(CaveEventHooks.RANDOM.nextDouble() * EnumType.VALUES.length);
+		EnumType type = EnumType.VALUES[i];
+
+		if (type.getDimension() != null)
+		{
+			return type.getItemStack();
+		}
+
+		return ItemStack.EMPTY;
+	}
+
 	public enum EnumType
 	{
 		CAVELAND(0, "caveland"),
@@ -218,12 +233,7 @@ public class ItemMirageBook extends Item
 
 		public ItemStack getItemStack()
 		{
-			return getItemStack(1);
-		}
-
-		public ItemStack getItemStack(int amount)
-		{
-			return new ItemStack(CaveItems.MIRAGE_BOOK, amount, getMetadata());
+			return new ItemStack(CaveItems.MIRAGE_BOOK, 1, getMetadata());
 		}
 
 		public static EnumType byMetadata(int meta)

@@ -25,8 +25,8 @@ import com.google.common.collect.Maps;
 import cavern.core.Cavern;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.ToastMessage;
+import cavern.stats.MinerStats;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -157,19 +157,6 @@ public class CaveUtils
 		return stateA.getBlock() == stateB.getBlock() && stateA.getBlock().getMetaFromState(stateA) == stateB.getBlock().getMetaFromState(stateB);
 	}
 
-	@Nullable
-	public static IBlockState getBlockStateFromMeta(Block block, int meta)
-	{
-		try
-		{
-			return block.getStateFromMeta(meta);
-		}
-		catch (IllegalArgumentException e)
-		{
-			return null;
-		}
-	}
-
 	public static boolean isItemEqual(ItemStack target, ItemStack input)
 	{
 		if (target.getHasSubtypes())
@@ -283,6 +270,8 @@ public class CaveUtils
 
 		player.mcServer.getPlayerList().transferPlayerToDimension(player, type.getId(), teleporter);
 		player.addExperienceLevel(0);
+
+		MinerStats.adjustData(player);
 	}
 
 	public static SleepResult trySleep(EntityPlayer player, BlockPos pos)

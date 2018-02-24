@@ -17,6 +17,7 @@ import cavern.client.renderer.RenderCrazyCreeper;
 import cavern.client.renderer.RenderCrazySkeleton;
 import cavern.client.renderer.RenderCrazySpider;
 import cavern.client.renderer.RenderCrazyZombie;
+import cavern.client.renderer.RenderMagicTorcher;
 import cavern.entity.EntityCaveman;
 import cavern.entity.EntityCavenicBear;
 import cavern.entity.EntityCavenicCreeper;
@@ -28,6 +29,7 @@ import cavern.entity.EntityCrazyCreeper;
 import cavern.entity.EntityCrazySkeleton;
 import cavern.entity.EntityCrazySpider;
 import cavern.entity.EntityCrazyZombie;
+import cavern.entity.EntityMagicTorcher;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -52,6 +54,8 @@ public class CaveRenderingRegistry
 		RenderingRegistry.registerEntityRenderingHandler(EntityCrazySpider.class, RenderCrazySpider::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCavenicBear.class, RenderCavenicBear::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCaveman.class, RenderCaveman::new);
+
+		RenderingRegistry.registerEntityRenderingHandler(EntityMagicTorcher.class, RenderMagicTorcher::new);
 	}
 
 	public static void registerRenderBlocks()

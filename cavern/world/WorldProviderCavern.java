@@ -1,7 +1,5 @@
 package cavern.world;
 
-import java.util.Random;
-
 import javax.annotation.Nullable;
 
 import cavern.client.CaveMusics;
@@ -31,8 +29,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldProviderCavern extends WorldProviderSurface implements ICustomSeed, IWorldEntitySpawner
 {
-	protected static final Random RANDOM = new Random();
-
 	private CustomSeedData seedData;
 	private CustomHeightData heightData;
 

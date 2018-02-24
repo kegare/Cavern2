@@ -11,6 +11,7 @@ import cavern.client.CaveMusics;
 import cavern.client.CaveRenderingRegistry;
 import cavern.client.config.CaveConfigEntries;
 import cavern.client.handler.ClientEventHooks;
+import cavern.client.handler.MagicEventHooks;
 import cavern.client.handler.MinerStatsHUDEventHooks;
 import cavern.config.AquaCavernConfig;
 import cavern.config.CavelandConfig;
@@ -24,16 +25,15 @@ import cavern.config.MiningAssistConfig;
 import cavern.config.MirageWorldsConfig;
 import cavern.entity.CaveEntityRegistry;
 import cavern.handler.CaveEventHooks;
+import cavern.handler.CaveGuiHandler;
 import cavern.handler.CavebornEventHooks;
 import cavern.handler.MiningAssistEventHooks;
-import cavern.handler.api.CavernAPIHandler;
 import cavern.handler.api.DimensionHandler;
-import cavern.handler.api.StatsHandler;
+import cavern.handler.api.EntityDataHandler;
 import cavern.item.CaveItems;
 import cavern.network.CaveNetworkRegistry;
 import cavern.plugin.HaCPlugin;
 import cavern.plugin.MCEPlugin;
-import cavern.stats.MinerStats;
 import cavern.util.CaveLog;
 import cavern.util.Version;
 import cavern.world.CaveDimensions;
@@ -64,6 +64,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -72,6 +73,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 @Mod
 (
 	modid = Cavern.MODID,
+	dependencies = "required:forge@[14.23.1.2610,);",
 	guiFactory = "cavern.client.config.CaveGuiFactory",
 	updateJSON = "https://raw.githubusercontent.com/kegare/Cavern2/master/cavern2.json"
 )
@@ -95,9 +97,8 @@ public class Cavern
 	{
 		Version.initVersion();
 
-		CavernAPI.apiHandler = new CavernAPIHandler();
 		CavernAPI.dimension = new DimensionHandler();
-		CavernAPI.stats = new StatsHandler();
+		CavernAPI.data = new EntityDataHandler();
 
 		if (event.getSide().isClient())
 		{
@@ -131,11 +132,7 @@ public class Cavern
 
 		CaveCapabilities.registerCapabilities();
 
-		CavernAPIHandler.registerItems(CavernAPI.apiHandler);
-
 		MiningAssistConfig.syncConfig();
-
-		MinerStats.registerMineBonus();
 
 		if (event.getSide().isClient())
 		{
@@ -148,11 +145,14 @@ public class Cavern
 
 			MinecraftForge.EVENT_BUS.register(new ClientEventHooks());
 			MinecraftForge.EVENT_BUS.register(new MinerStatsHUDEventHooks());
+			MinecraftForge.EVENT_BUS.register(new MagicEventHooks());
 		}
 
 		MinecraftForge.EVENT_BUS.register(new CaveEventHooks());
 		MinecraftForge.EVENT_BUS.register(new CavebornEventHooks());
 		MinecraftForge.EVENT_BUS.register(new MiningAssistEventHooks());
+
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new CaveGuiHandler());
 	}
 
 	@SubscribeEvent

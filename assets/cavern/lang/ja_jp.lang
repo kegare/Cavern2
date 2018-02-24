@@ -350,6 +350,26 @@ item.mirageBook.theVoid.name=虚無の空間
 item.mirageBook.darkForest.name=薄暗い森
 item.mirageBook.portal=使用するにはポータルが必要です。
 item.mirageBook.fail=ここでは使用できません。
+item.magicBook.name=魔術書: %s
+item.magicBook.fail.time=まだ使用できません。
+item.magicBook.fail.place=ここでは使用できません。
+item.magicBook.finish=%sの魔法効果が満了しました。
+item.magicBook.storage.name=ストレージ
+item.magicBook.heal.name=ヒール
+item.magicBook.warp.name=ワープ
+item.magicBook.warp.set=ワープ地点が設定されました。
+item.magicBook.warp.far=ワープ地点が遠すぎます。
+item.magicBook.teleport.name=テレポート
+item.magicBook.torch.name=トーチ
+item.magicBook.torch.none=松明を持っていなければなりません。
+item.magicBook.torch.exist=トーチの魔法は既に実行されています。
+item.magicBook.torch.dead=トーチの魔法が消滅しました。
+item.magicBook.invisible.name=インビジブル
+item.magicBook.summon.name=サモン
+item.magicBook.explosion.name=エクスプロージョン
+item.magicBook.thunderbolt.name=サンダーボルト
+item.magicBook.infinity.name=インフィニティ
+item.magicBook.overload.name=オーバーロード
 
 entity.CavenicSkeleton.name=ケイブニックスケルトン
 entity.CavenicCreeper.name=ケイブニッククリーパー
@@ -362,6 +382,7 @@ entity.CrazySpider.name=クレイジースパイダー
 entity.CavenicBear.name=ケイブニックベア
 entity.CavenicWitch.name=ケイブニックウィッチ
 entity.Caveman.name=ケイブマン
+entity.summon.name=召喚された%s
 
 dimension.cavern.name=大洞窟
 dimension.hugeCavern.name=果てなき洞窟
@@ -429,6 +450,7 @@ advancements.cavern.mirage_trip.description=幻の世界の書を手に入れる
 
 key.cavern.miningAssist=採掘アシストの切り替え
 key.cavern.miningRecords=採掘の記録の表示
+key.cavern.magicBook=魔術書の詠唱
 
 cavern.miningassist.name=採掘アシスト
 cavern.miningassist.disabled=無効

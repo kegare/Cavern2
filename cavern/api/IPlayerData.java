@@ -5,15 +5,15 @@ import net.minecraft.world.DimensionType;
 
 public interface IPlayerData
 {
-	public long getLastTeleportTime(DimensionType type);
+	long getLastTeleportTime(DimensionType type);
 
-	public void setLastTeleportTime(DimensionType type, long time);
+	void setLastTeleportTime(DimensionType type, long time);
 
-	public long getLastSleepTime();
+	long getLastSleepTime();
 
-	public void setLastSleepTime(long time);
+	void setLastSleepTime(long time);
 
-	public void writeToNBT(NBTTagCompound nbt);
+	void writeToNBT(NBTTagCompound nbt);
 
-	public void readFromNBT(NBTTagCompound nbt);
+	void readFromNBT(NBTTagCompound nbt);
 }

@@ -1,7 +1,8 @@
 package cavern.block;
 
 import cavern.core.Cavern;
-import cavern.item.ItemMirageBook.EnumType;
+import cavern.item.ItemMagicBook;
+import cavern.item.ItemMirageBook;
 import net.minecraft.block.BlockBookshelf;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -9,7 +10,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 
 public class BlockMirageBookshelf extends BlockBookshelf
@@ -30,13 +30,16 @@ public class BlockMirageBookshelf extends BlockBookshelf
 
 		if (RANDOM.nextDouble() < 0.05D)
 		{
-			int i = MathHelper.floor(RANDOM.nextDouble() * EnumType.VALUES.length);
-			EnumType type = EnumType.VALUES[i];
+			ItemStack stack = ItemMirageBook.getRandomBook();
 
-			if (type.getDimension() != null)
+			if (!stack.isEmpty())
 			{
-				drops.add(type.getItemStack());
+				drops.add(stack);
 			}
+		}
+		else if (RANDOM.nextDouble() < 0.03D)
+		{
+			drops.add(ItemMagicBook.getRandomBook());
 		}
 	}
 

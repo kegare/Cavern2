@@ -2,15 +2,17 @@ package cavern.client.handler;
 
 import cavern.api.CavernAPI;
 import cavern.api.IMinerStats;
+import cavern.api.IMiningData;
 import cavern.client.CaveRenderingRegistry;
 import cavern.config.DisplayConfig;
 import cavern.config.GeneralConfig;
 import cavern.config.MiningAssistConfig;
 import cavern.config.property.ConfigDisplayPos;
 import cavern.miningassist.MiningAssist;
-import cavern.network.server.StatsAdjustRequestMessage;
 import cavern.stats.MinerRank;
 import cavern.stats.MinerStats;
+import cavern.stats.MiningData;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
@@ -168,10 +170,8 @@ public class MinerStatsHUDEventHooks
 		ScaledResolution resolution = event.getResolution();
 		IMinerStats stats = MinerStats.get(mc.player, true);
 
-		if (stats == null || !stats.isClientAdjusted())
+		if (stats == null || stats.getPoint() < 0)
 		{
-			StatsAdjustRequestMessage.request();
-
 			return;
 		}
 
@@ -194,15 +194,18 @@ public class MinerStatsHUDEventHooks
 		RenderItem renderItem = mc.getRenderItem();
 		FontRenderer renderer = mc.fontRenderer;
 		boolean flag = false;
-		long processTime = Minecraft.getSystemTime() - MinerStats.lastMineTime;
 
-		if (MinerStats.lastMineTime > 0 && processTime < 2000L && MinerStats.lastMine != null && MinerStats.lastMinePoint != 0)
+		IMiningData data = MiningData.get(mc.player);
+		long processTime = mc.world.getTotalWorldTime() - data.getLastMiningTime();
+
+		if (data.getLastMiningTime() > 0L && processTime < 50 && data.getLastMiningBlock() != null && data.getLastMiningPoint() != 0)
 		{
-			ItemStack item = new ItemStack(CaveRenderingRegistry.getRenderBlock(MinerStats.lastMine.getBlock()), 1, MinerStats.lastMine.getMeta());
+			IBlockState state = data.getLastMiningBlock();
+			ItemStack stack = new ItemStack(CaveRenderingRegistry.getRenderBlock(state.getBlock()), 1, state.getBlock().getMetaFromState(state));
 
 			RenderHelper.enableGUIStandardItemLighting();
-			renderItem.renderItemIntoGUI(item, x, y);
-			renderItem.renderItemOverlayIntoGUI(renderer, item, x, y, Integer.toString(MinerStats.lastMinePoint));
+			renderItem.renderItemIntoGUI(stack, x, y);
+			renderItem.renderItemOverlayIntoGUI(renderer, stack, x, y, Integer.toString(data.getLastMiningPoint()));
 			RenderHelper.disableStandardItemLighting();
 
 			flag = true;
@@ -236,24 +239,20 @@ public class MinerStatsHUDEventHooks
 
 		String combo = null;
 
-		if (processTime > 15000L)
-		{
-			MinerStats.mineCombo = 0;
-		}
-		else if (MinerStats.mineCombo > 0)
+		if (data.getMiningCombo() > 0)
 		{
 			TextFormatting format = TextFormatting.WHITE;
 
-			if (processTime < 3000L)
+			if (processTime < 3 * 20)
 			{
 				format = TextFormatting.BOLD;
 			}
-			else if (processTime > 12000L)
+			else if (processTime > 12 * 20)
 			{
 				format = TextFormatting.GRAY;
 			}
 
-			combo = format + String.format("%d COMBO!", MinerStats.mineCombo) + TextFormatting.RESET;
+			combo = format + String.format("%d COMBO!", data.getMiningCombo()) + TextFormatting.RESET;
 		}
 
 		boolean showRank = DisplayConfig.showMinerRank;

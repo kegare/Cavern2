@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import cavern.api.CavernAPI;
 import cavern.api.ICavenicMob;
 import cavern.item.ItemCave;
+import cavern.item.ItemMagicBook;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -51,6 +52,10 @@ public class EntityCavenicWitch extends EntityWitch implements ICavenicMob
 		if (rand.nextInt(5) == 0)
 		{
 			entityDropItem(ItemCave.EnumType.CAVENIC_ORB.getItemStack(), 0.5F);
+		}
+		else if (rand.nextInt(5) == 0)
+		{
+			entityDropItem(ItemMagicBook.getRandomBook(), 0.25F);
 		}
 	}
 

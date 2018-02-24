@@ -1,14 +1,9 @@
 package cavern.world.mirage;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import cavern.client.CaveMusics;
 import cavern.config.CavelandConfig;
 import cavern.config.manager.CaveBiomeManager;
 import cavern.config.property.ConfigBiomeType;
-import cavern.util.WeightedItemStack;
 import cavern.world.CaveDimensions;
 import cavern.world.WorldProviderCavern;
 import net.minecraft.client.audio.MusicTicker.MusicType;
@@ -19,8 +14,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldProviderCaveland extends WorldProviderCavern
 {
-	public static final List<WeightedItemStack> HIBERNATE_ITEMS = Lists.newArrayList();
-
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{

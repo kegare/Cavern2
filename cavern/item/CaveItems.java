@@ -3,6 +3,10 @@ package cavern.item;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.ObjectUtils;
+
 import com.google.common.collect.Lists;
 
 import cavern.recipe.RecipeChargeIceEquipment;
@@ -67,6 +71,7 @@ public class CaveItems
 	public static final ItemBowCavenic CAVENIC_BOW = new ItemBowCavenic();
 	public static final ItemOreCompass ORE_COMPASS = new ItemOreCompass();
 	public static final ItemMirageBook MIRAGE_BOOK = new ItemMirageBook();
+	public static final ItemMagicBook MAGIC_BOOK = new ItemMagicBook();
 
 	public static List<Item> getItems()
 	{
@@ -110,6 +115,7 @@ public class CaveItems
 		registerItem(registry, CAVENIC_BOW.setRegistryName("cavenic_bow"));
 		registerItem(registry, ORE_COMPASS.setRegistryName("ore_compass"));
 		registerItem(registry, MIRAGE_BOOK.setRegistryName("mirage_book"));
+		registerItem(registry, MAGIC_BOOK.setRegistryName("magic_book"));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -142,8 +148,8 @@ public class CaveItems
 		registerModel(CAVENIC_AXE);
 		registerModel(CAVENIC_BOW);
 		registerModel(ORE_COMPASS);
-		registerModels(MIRAGE_BOOK, "mirage_book_caveland", "mirage_book_cavenia", "mirage_book_frost_mountains", "mirage_book_wide_desert",
-			"mirage_book_the_void", "mirage_book_dark_forest");
+		registerModels("mirage_book_", MIRAGE_BOOK, "caveland", "cavenia", "frost_mountains", "wide_desert", "the_void", "dark_forest");
+		registerModels("magic_book_", MAGIC_BOOK, "storage", "heal", "warp", "teleport", "torch", "invisible", "summon", "explosion", "thunderbolt", "infinity", "overload");
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -161,11 +167,17 @@ public class CaveItems
 	@SideOnly(Side.CLIENT)
 	public static void registerModels(Item item, String... modelNames)
 	{
+		registerModels(null, item, modelNames);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void registerModels(@Nullable String prefix, Item item, String... modelNames)
+	{
 		List<ModelResourceLocation> models = Lists.newArrayList();
 
 		for (String model : modelNames)
 		{
-			models.add(new ModelResourceLocation(CaveUtils.getKey(model), "inventory"));
+			models.add(new ModelResourceLocation(CaveUtils.getKey(ObjectUtils.defaultIfNull(prefix, "") + model), "inventory"));
 		}
 
 		ModelBakery.registerItemVariants(item, models.toArray(new ResourceLocation[models.size()]));
