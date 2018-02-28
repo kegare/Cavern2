@@ -3,7 +3,6 @@ package cavern.magic;
 import javax.annotation.Nullable;
 
 import cavern.core.CaveSounds;
-import cavern.core.Cavern;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -65,7 +64,7 @@ public abstract class SpecialMagic extends Magic
 	{
 		if (world.isRemote)
 		{
-			return new TextComponentTranslation("item.magicBook.finish", Cavern.proxy.translate("item.magicBook." + getMagicType().getUnlocalizedName() + ".name"));
+			return new TextComponentTranslation("item.magicBook.finish", new TextComponentTranslation("item.magicBook." + getMagicType().getUnlocalizedName() + ".name"));
 		}
 
 		return null;

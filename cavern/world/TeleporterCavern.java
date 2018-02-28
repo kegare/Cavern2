@@ -6,9 +6,9 @@ import cavern.block.BlockPortalCavern;
 import cavern.block.CaveBlocks;
 import cavern.config.GeneralConfig;
 import cavern.stats.PortalCache;
-import cavern.util.CaveUtils;
 import net.minecraft.block.BlockPortal;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.pattern.BlockPattern;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -64,7 +64,16 @@ public class TeleporterCavern extends Teleporter
 
 			if (cache.hasLastPos(key, type))
 			{
-				CaveUtils.setPositionAndUpdate(entity, cache.getLastPos(key, type));
+				BlockPos pos = cache.getLastPos(key, type);
+
+				if (entity instanceof EntityPlayerMP)
+				{
+					((EntityPlayerMP)entity).connection.setPlayerLocation(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+				}
+				else
+				{
+					entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+				}
 
 				if (placeInExistingPortal(entity, rotationYaw))
 				{
@@ -159,105 +168,68 @@ public class TeleporterCavern extends Teleporter
 				destinationCoordinateCache.put(coord, new PortalPosition(pos, world.getTotalWorldTime()));
 			}
 
+			IPortalCache cache = PortalCache.get(entity);
 			double posX = pos.getX() + 0.5D;
-			double posY = pos.getY() + 0.5D;
 			double posZ = pos.getZ() + 0.5D;
-			EnumFacing face = null;
+			BlockPattern.PatternHelper pattern = portal.createPatternHelper(world, pos);
+			boolean flag1 = pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE;
+			double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
+			double posY = pattern.getFrontTopLeft().getY() + 1 - cache.getLastPortalVec().y * pattern.getHeight();
 
-			if (isPortalBlock(world.getBlockState(pos.west())))
+			if (flag1)
 			{
-				face = EnumFacing.NORTH;
+				++d1;
 			}
 
-			if (isPortalBlock(world.getBlockState(pos.east())))
+			if (pattern.getForwards().getAxis() == EnumFacing.Axis.X)
 			{
-				face = EnumFacing.SOUTH;
+				posZ = d1 + (1.0D - cache.getLastPortalVec().x) * pattern.getWidth() * pattern.getForwards().rotateY().getAxisDirection().getOffset();
+			}
+			else
+			{
+				posX = d1 + (1.0D - cache.getLastPortalVec().x) * pattern.getWidth() * pattern.getForwards().rotateY().getAxisDirection().getOffset();
 			}
 
-			if (isPortalBlock(world.getBlockState(pos.north())))
+			float f = 0.0F;
+			float f1 = 0.0F;
+			float f2 = 0.0F;
+			float f3 = 0.0F;
+
+			if (pattern.getForwards().getOpposite() == cache.getTeleportDirection())
 			{
-				face = EnumFacing.EAST;
+				f = 1.0F;
+				f1 = 1.0F;
+			}
+			else if (pattern.getForwards().getOpposite() == cache.getTeleportDirection().getOpposite())
+			{
+				f = -1.0F;
+				f1 = -1.0F;
+			}
+			else if (pattern.getForwards().getOpposite() == cache.getTeleportDirection().rotateY())
+			{
+				f2 = 1.0F;
+				f3 = -1.0F;
+			}
+			else
+			{
+				f2 = -1.0F;
+				f3 = 1.0F;
 			}
 
-			if (isPortalBlock(world.getBlockState(pos.south())))
+			double d3 = entity.motionX;
+			double d4 = entity.motionZ;
+			entity.motionX = d3 * f + d4 * f3;
+			entity.motionZ = d3 * f2 + d4 * f1;
+			entity.rotationYaw = rotationYaw - cache.getTeleportDirection().getOpposite().getHorizontalIndex() * 90 + pattern.getForwards().getHorizontalIndex() * 90;
+
+			if (entity instanceof EntityPlayerMP)
 			{
-				face = EnumFacing.WEST;
+				((EntityPlayerMP)entity).connection.setPlayerLocation(posX, posY, posZ, entity.rotationYaw, entity.rotationPitch);
 			}
-
-			EnumFacing face0 = EnumFacing.getHorizontal(0);
-
-			if (face != null)
+			else
 			{
-				EnumFacing face1 = face.rotateYCCW();
-				BlockPos pos1 = pos.offset(face);
-				boolean flag1 = isNotAir(pos1);
-				boolean flag2 = isNotAir(pos1.offset(face1));
-
-				if (flag2 && flag1)
-				{
-					pos = pos.offset(face1);
-					face = face.getOpposite();
-					face1 = face1.getOpposite();
-					BlockPos blockpos3 = pos.offset(face);
-					flag1 = isNotAir(blockpos3);
-					flag2 = isNotAir(blockpos3.offset(face1));
-				}
-
-				float f0 = 0.5F;
-				float f1 = 0.5F;
-
-				if (!flag2 && flag1)
-				{
-					f0 = 1.0F;
-				}
-				else if (flag2 && !flag1)
-				{
-					f0 = 0.0F;
-				}
-				else if (flag2)
-				{
-					f1 = 0.0F;
-				}
-
-				posX = pos.getX() + 0.5D;
-				posY = pos.getY() + 0.5D;
-				posZ = pos.getZ() + 0.5D;
-				posX += face1.getFrontOffsetX() * f0 + face.getFrontOffsetX() * f1;
-				posZ += face1.getFrontOffsetZ() * f0 + face.getFrontOffsetZ() * f1;
-				float f2 = 0.0F;
-				float f3 = 0.0F;
-				float f4 = 0.0F;
-				float f5 = 0.0F;
-
-				if (face == face0)
-				{
-					f2 = 1.0F;
-					f3 = 1.0F;
-				}
-				else if (face == face0.getOpposite())
-				{
-					f2 = -1.0F;
-					f3 = -1.0F;
-				}
-				else if (face == face0.rotateY())
-				{
-					f4 = 1.0F;
-					f5 = -1.0F;
-				}
-				else
-				{
-					f4 = -1.0F;
-					f5 = 1.0F;
-				}
-
-				double d2 = entity.motionX;
-				double d3 = entity.motionZ;
-				entity.motionX = d2 * f2 + d3 * f5;
-				entity.motionZ = d2 * f4 + d3 * f3;
-				entity.rotationYaw = rotationYaw - face0.getHorizontalIndex() * 90 + face.getHorizontalIndex() * 90;
+				entity.setLocationAndAngles(posX, posY, posZ, entity.rotationYaw, entity.rotationPitch);
 			}
-
-			entity.setPositionAndUpdate(posX, posY, posZ);
 
 			return true;
 		}

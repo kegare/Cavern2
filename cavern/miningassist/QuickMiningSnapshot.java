@@ -34,6 +34,8 @@ public class QuickMiningSnapshot extends MiningSnapshot
 		miningTargets = Sets.newTreeSet(this);
 
 		checkChain();
+
+		super.checkForMining();
 	}
 
 	protected void checkChain()

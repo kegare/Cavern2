@@ -16,8 +16,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.util.Constants.NBT;
 
@@ -25,6 +27,9 @@ public class PortalCache implements IPortalCache
 {
 	private final Map<ResourceLocation, DimensionType> lastDim = Maps.newHashMap();
 	private final Table<ResourceLocation, DimensionType, BlockPos> lastPos = HashBasedTable.create();
+
+	private Vec3d lastPortalVec;
+	private EnumFacing teleportDirection;
 
 	@Override
 	public DimensionType getLastDim(ResourceLocation key)
@@ -85,6 +90,30 @@ public class PortalCache implements IPortalCache
 				lastPos.remove(entry.getRowKey(), entry.getColumnKey());
 			}
 		}
+	}
+
+	@Override
+	public Vec3d getLastPortalVec()
+	{
+		return lastPortalVec;
+	}
+
+	@Override
+	public void setLastPortalVec(Vec3d vec)
+	{
+		lastPortalVec = vec;
+	}
+
+	@Override
+	public EnumFacing getTeleportDirection()
+	{
+		return teleportDirection;
+	}
+
+	@Override
+	public void setTeleportDirection(EnumFacing direction)
+	{
+		teleportDirection = direction;
 	}
 
 	@Override

@@ -55,6 +55,8 @@ public class RangedMiningSnapshot extends MiningSnapshot
 				checkZ();
 				break;
 		}
+
+		super.checkForMining();
 	}
 
 	protected void checkX()

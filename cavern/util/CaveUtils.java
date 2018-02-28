@@ -248,14 +248,6 @@ public class CaveUtils
 		return motionX * motionX + motionY * motionY + motionZ * motionZ > 0.01D;
 	}
 
-	public static void setPositionAndUpdate(@Nullable Entity entity, @Nullable BlockPos pos)
-	{
-		if (entity != null && pos != null)
-		{
-			entity.setPositionAndUpdate(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
-		}
-	}
-
 	public static void setDimensionChange(EntityPlayerMP player)
 	{
 		if (!player.capabilities.isCreativeMode)

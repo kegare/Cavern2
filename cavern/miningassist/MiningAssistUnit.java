@@ -73,6 +73,11 @@ public class MiningAssistUnit
 		snapshot = null;
 	}
 
+	public float getBreakSpeed(MiningSnapshot snapshot)
+	{
+		return snapshot.getBreakSpeed();
+	}
+
 	public boolean getCaptureDrops()
 	{
 		return captureDrops;

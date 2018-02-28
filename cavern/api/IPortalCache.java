@@ -3,8 +3,10 @@ package cavern.api;
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 
 public interface IPortalCache
@@ -25,6 +27,14 @@ public interface IPortalCache
 	void setLastPos(ResourceLocation key, DimensionType type, @Nullable BlockPos pos);
 
 	void clearLastPos(@Nullable ResourceLocation key, DimensionType type);
+
+	Vec3d getLastPortalVec();
+
+	void setLastPortalVec(Vec3d vec);
+
+	EnumFacing getTeleportDirection();
+
+	void setTeleportDirection(EnumFacing direction);
 
 	void writeToNBT(NBTTagCompound nbt);
 

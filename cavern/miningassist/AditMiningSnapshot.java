@@ -46,5 +46,7 @@ public class AditMiningSnapshot extends MiningSnapshot
 		{
 			offer(originPos.down());
 		}
+
+		super.checkForMining();
 	}
 }

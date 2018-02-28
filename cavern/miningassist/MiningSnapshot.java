@@ -12,6 +12,7 @@ import cavern.config.property.ConfigBlocks;
 import cavern.util.CaveUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -24,6 +25,7 @@ public abstract class MiningSnapshot implements Comparator<BlockPos>
 	protected EntityLivingBase miner;
 
 	protected Set<BlockPos> miningTargets;
+	protected float breakSpeed;
 
 	public MiningSnapshot(World world, BlockPos pos, IBlockState state)
 	{
@@ -100,7 +102,53 @@ public abstract class MiningSnapshot implements Comparator<BlockPos>
 		return getValidTargetBlocks() != null && !getValidTargetBlocks().isEmpty();
 	}
 
-	public abstract void checkForMining();
+	public void checkForMining()
+	{
+		breakSpeed = 0.0F;
+
+		if (miningTargets != null && miner != null && miner instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer)miner;
+			int count = miningTargets.size();
+
+			breakSpeed = player.getDigSpeed(originState, originPos);
+
+			if (count <= 1)
+			{
+				return;
+			}
+
+			float origin = world.getBlockState(originPos).getBlockHardness(world, originPos);
+			float max = origin;
+			float total = 0.0F;
+
+			for (BlockPos pos : miningTargets)
+			{
+				float hardness = world.getBlockState(pos).getBlockHardness(world, pos);
+
+				if (hardness > max)
+				{
+					max = hardness;
+				}
+
+				total += hardness;
+			}
+
+			breakSpeed /= total * 0.25F;
+
+			float dist = max - origin;
+
+			if (dist >= 5.0F)
+			{
+				breakSpeed /= dist * 0.05F;
+			}
+		}
+	}
+
+	public float getBreakSpeed()
+	{
+		return breakSpeed;
+	}
 
 	public boolean offer(BlockPos pos)
 	{

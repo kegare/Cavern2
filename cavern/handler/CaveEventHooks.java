@@ -43,6 +43,7 @@ import cavern.world.CustomSeedData;
 import cavern.world.ICustomSeed;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
@@ -366,6 +367,11 @@ public class CaveEventHooks
 		IBlockState state = event.getState();
 
 		if (MinerStats.getPointAmount(state) <= 0)
+		{
+			return;
+		}
+
+		if (state.getMaterial() != Material.ROCK)
 		{
 			return;
 		}

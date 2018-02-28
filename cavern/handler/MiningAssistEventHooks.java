@@ -16,7 +16,6 @@ import cavern.miningassist.MiningAssistUnit;
 import cavern.miningassist.MiningSnapshot;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.server.MiningAssistMessage;
-import cavern.stats.MinerRank;
 import cavern.stats.MinerStats;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -43,6 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class MiningAssistEventHooks
 {
 	private boolean breaking;
+	private boolean checking;
 
 	private boolean isActive(EntityPlayer player, IBlockState state)
 	{
@@ -78,6 +78,11 @@ public class MiningAssistEventHooks
 			return;
 		}
 
+		if (checking)
+		{
+			return;
+		}
+
 		EntityPlayer player = event.getEntityPlayer();
 		IBlockState state = event.getState();
 
@@ -89,19 +94,17 @@ public class MiningAssistEventHooks
 		MiningAssistUnit assist = MiningAssistUnit.get(player);
 		MiningAssist type = MiningAssist.byPlayer(player);
 		BlockPos pos = event.getPos();
+
+		checking = true;
+
 		MiningSnapshot snapshot = assist.getSnapshot(type, pos, state);
 
-		if (snapshot.isEmpty())
+		if (!snapshot.isEmpty())
 		{
-			return;
+			event.setNewSpeed(assist.getBreakSpeed(snapshot));
 		}
 
-		MinerRank rank = MinerRank.get(MinerStats.get(player).getRank());
-		float speed = event.getNewSpeed();
-		float power = rank.getBoost() * 1.7145F;
-		float newSpeed = Math.min(speed / (snapshot.getTargetCount() * (0.5F - power * 0.1245F)), speed);
-
-		event.setNewSpeed(newSpeed);
+		checking = false;
 	}
 
 	@SubscribeEvent

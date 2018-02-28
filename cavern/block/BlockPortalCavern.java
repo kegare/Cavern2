@@ -48,6 +48,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.Teleporter;
@@ -62,6 +64,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockPortalCavern extends BlockPortal
 {
+	private boolean teleporting;
+
 	public BlockPortalCavern()
 	{
 		super();
@@ -247,7 +251,7 @@ public class BlockPortalCavern extends BlockPortal
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
 	{
-		if (world.isRemote || getDimension() == null)
+		if (world.isRemote || getDimension() == null || teleporting)
 		{
 			return;
 		}
@@ -269,7 +273,7 @@ public class BlockPortalCavern extends BlockPortal
 			Teleporter teleporter = getTeleporter(worldNew);
 			BlockPos prevPos = entity.getPosition();
 
-			entity.timeUntilPortal = entity.getPortalCooldown();
+			entity.timeUntilPortal = Math.max(entity.getPortalCooldown(), 100);
 
 			if (entity instanceof EntityPlayerMP)
 			{
@@ -279,13 +283,24 @@ public class BlockPortalCavern extends BlockPortal
 				{
 					if (MinerStats.get(player).getRank() < getMinerRank().getRank())
 					{
-						player.sendStatusMessage(new TextComponentTranslation("cavern.message.portal.rank", Cavern.proxy.translate(getMinerRank().getUnlocalizedName())), true);
+						player.sendStatusMessage(new TextComponentTranslation("cavern.message.portal.rank", new TextComponentTranslation(getMinerRank().getUnlocalizedName())), true);
 
 						return;
 					}
 
+					teleporting = true;
+
 					cache.setLastDim(key, dimOld);
 					cache.setLastPos(key, dimOld, prevPos);
+
+					PatternHelper pattern = createPatternHelper(world, pos);
+					double d0 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
+					double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? entity.posZ : entity.posX;
+					d1 = Math.abs(MathHelper.pct(d1 - (pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - pattern.getWidth()));
+					double d2 = MathHelper.pct(entity.posY - 1.0D, pattern.getFrontTopLeft().getY(), pattern.getFrontTopLeft().getY() - pattern.getHeight());
+
+					cache.setLastPortalVec(new Vec3d(d1, d2, 0.0D));
+					cache.setTeleportDirection(pattern.getForwards());
 
 					double x = player.posX;
 					double y = player.posY + player.getEyeHeight();
@@ -304,8 +319,19 @@ public class BlockPortalCavern extends BlockPortal
 			}
 			else
 			{
+				teleporting = true;
+
 				cache.setLastDim(key, dimOld);
 				cache.setLastPos(key, dimOld, prevPos);
+
+				PatternHelper pattern = createPatternHelper(world, pos);
+				double d0 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
+				double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? entity.posZ : entity.posX;
+				d1 = Math.abs(MathHelper.pct(d1 - (pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - pattern.getWidth()));
+				double d2 = MathHelper.pct(entity.posY - 1.0D, pattern.getFrontTopLeft().getY(), pattern.getFrontTopLeft().getY() - pattern.getHeight());
+
+				cache.setLastPortalVec(new Vec3d(d1, d2, 0.0D));
+				cache.setTeleportDirection(pattern.getForwards());
 
 				double x = entity.posX;
 				double y = entity.posY + entity.getEyeHeight();
@@ -326,10 +352,12 @@ public class BlockPortalCavern extends BlockPortal
 
 				worldNew.playSound(null, x, y, z, CaveSounds.CAVE_PORTAL, SoundCategory.BLOCKS, 0.5F, 1.15F);
 			}
+
+			teleporting = false;
 		}
 		else
 		{
-			entity.timeUntilPortal = entity.getPortalCooldown();
+			entity.timeUntilPortal = Math.max(entity.getPortalCooldown(), 100);
 		}
 	}
 

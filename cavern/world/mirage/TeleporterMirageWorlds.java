@@ -6,6 +6,7 @@ import cavern.stats.PortalCache;
 import cavern.util.CaveUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -56,7 +57,7 @@ public class TeleporterMirageWorlds extends Teleporter
 
 			if (world.getBlockState(pos.down()).getMaterial().isSolid() && world.getBlockState(pos).getBlock().canSpawnInBlock() && world.getBlockState(pos.up()).getBlock().canSpawnInBlock())
 			{
-				CaveUtils.setPositionAndUpdate(entity, pos);
+				teleportTo(entity, pos);
 
 				return true;
 			}
@@ -98,7 +99,7 @@ public class TeleporterMirageWorlds extends Teleporter
 					}
 				}
 
-				CaveUtils.setPositionAndUpdate(entity, pos);
+				teleportTo(entity, pos);
 
 				return true;
 			}
@@ -120,9 +121,21 @@ public class TeleporterMirageWorlds extends Teleporter
 
 		BlockPos.getAllInBoxMutable(from, to).forEach(blockPos -> world.setBlockState(blockPos, Blocks.MOSSY_COBBLESTONE.getDefaultState(), 2));
 
-		CaveUtils.setPositionAndUpdate(entity, pos.up());
+		teleportTo(entity, pos.up());
 
 		return true;
+	}
+
+	protected void teleportTo(Entity entity, BlockPos pos)
+	{
+		if (entity instanceof EntityPlayerMP)
+		{
+			((EntityPlayerMP)entity).connection.setPlayerLocation(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+		}
+		else
+		{
+			entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+		}
 	}
 
 	@Override
