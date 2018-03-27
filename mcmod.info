@@ -2,7 +2,7 @@
   "modid": "cavern",
   "name": "Cavern II",
   "description": "Adds the cave dimensions.",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "logoFile": "logo.png",
   "url": "https://minecraft.curseforge.com/projects/cavern2",
   "authorList": ["kegare"],

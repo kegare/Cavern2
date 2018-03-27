@@ -4,20 +4,25 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
+import cavern.api.IPortalCache;
 import cavern.block.BlockPortalCavern;
 import cavern.config.GeneralConfig;
 import cavern.config.property.ConfigCaveborn;
+import cavern.stats.PortalCache;
 import cavern.util.CaveUtils;
 import cavern.util.ItemMeta;
 import cavern.world.CaveDimensions;
+import net.minecraft.block.state.pattern.BlockPattern.PatternHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -80,6 +85,16 @@ public class CavebornEventHooks
 		WorldServer world = player.getServerWorld();
 		ConfigCaveborn.Type caveborn = GeneralConfig.caveborn.getType();
 		BlockPortalCavern portal = caveborn.getPortalBlock();
+		BlockPos pos = player.getPosition();
+		IPortalCache cache = PortalCache.get(player);
+		PatternHelper pattern = portal.createPatternHelper(world, pos);
+		double d0 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
+		double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? player.posZ : player.posX;
+		d1 = Math.abs(MathHelper.pct(d1 - (pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - pattern.getWidth()));
+		double d2 = MathHelper.pct(player.posY - 1.0D, pattern.getFrontTopLeft().getY(), pattern.getFrontTopLeft().getY() - pattern.getHeight());
+
+		cache.setLastPortalVec(new Vec3d(d1, d2, 0.0D));
+		cache.setTeleportDirection(pattern.getForwards());
 
 		player.timeUntilPortal = player.getPortalCooldown();
 
@@ -100,7 +115,7 @@ public class CavebornEventHooks
 			CaveUtils.grantCriterion(player, "enter_the_" + name, "entered_" + name);
 		}
 
-		BlockPos pos = player.getPosition();
+		pos = player.getPosition();
 
 		for (BlockPos blockpos : BlockPos.getAllInBoxMutable(pos.add(-1, -1, -1), pos.add(1, 1, 1)))
 		{

@@ -384,7 +384,24 @@ public class CaveEventHooks
 			return;
 		}
 
-		f = (f - 1.0F) * 0.625F;
+		f = (f - 1.0F) * 0.3F;
+
+		ItemStack held = player.getHeldItemMainhand();
+		String tool = state.getBlock().getHarvestTool(state);
+
+		if (held.isEmpty() || tool == null)
+		{
+			return;
+		}
+
+		int toolLevel = held.getItem().getHarvestLevel(held, tool, player, state);
+
+		if (toolLevel <= 0)
+		{
+			return;
+		}
+
+		f *= 1.0F + toolLevel * 0.1F;
 
 		List<ItemStack> originalDrops = event.getDrops();
 		List<ItemStack> drops = Lists.newArrayList();

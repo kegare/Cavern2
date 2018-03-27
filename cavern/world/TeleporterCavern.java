@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
@@ -169,12 +170,14 @@ public class TeleporterCavern extends Teleporter
 			}
 
 			IPortalCache cache = PortalCache.get(entity);
+			Vec3d portalVec = cache.getLastPortalVec();
+			EnumFacing teleportDirection = cache.getTeleportDirection();
 			double posX = pos.getX() + 0.5D;
 			double posZ = pos.getZ() + 0.5D;
 			BlockPattern.PatternHelper pattern = portal.createPatternHelper(world, pos);
 			boolean flag1 = pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE;
 			double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
-			double posY = pattern.getFrontTopLeft().getY() + 1 - cache.getLastPortalVec().y * pattern.getHeight();
+			double posY = pattern.getFrontTopLeft().getY() + 1 - portalVec.y * pattern.getHeight();
 
 			if (flag1)
 			{
@@ -183,11 +186,11 @@ public class TeleporterCavern extends Teleporter
 
 			if (pattern.getForwards().getAxis() == EnumFacing.Axis.X)
 			{
-				posZ = d1 + (1.0D - cache.getLastPortalVec().x) * pattern.getWidth() * pattern.getForwards().rotateY().getAxisDirection().getOffset();
+				posZ = d1 + (1.0D - portalVec.x) * pattern.getWidth() * pattern.getForwards().rotateY().getAxisDirection().getOffset();
 			}
 			else
 			{
-				posX = d1 + (1.0D - cache.getLastPortalVec().x) * pattern.getWidth() * pattern.getForwards().rotateY().getAxisDirection().getOffset();
+				posX = d1 + (1.0D - portalVec.x) * pattern.getWidth() * pattern.getForwards().rotateY().getAxisDirection().getOffset();
 			}
 
 			float f = 0.0F;
@@ -195,17 +198,17 @@ public class TeleporterCavern extends Teleporter
 			float f2 = 0.0F;
 			float f3 = 0.0F;
 
-			if (pattern.getForwards().getOpposite() == cache.getTeleportDirection())
+			if (pattern.getForwards().getOpposite() == teleportDirection)
 			{
 				f = 1.0F;
 				f1 = 1.0F;
 			}
-			else if (pattern.getForwards().getOpposite() == cache.getTeleportDirection().getOpposite())
+			else if (pattern.getForwards().getOpposite() == teleportDirection.getOpposite())
 			{
 				f = -1.0F;
 				f1 = -1.0F;
 			}
-			else if (pattern.getForwards().getOpposite() == cache.getTeleportDirection().rotateY())
+			else if (pattern.getForwards().getOpposite() == teleportDirection.rotateY())
 			{
 				f2 = 1.0F;
 				f3 = -1.0F;
@@ -220,7 +223,7 @@ public class TeleporterCavern extends Teleporter
 			double d4 = entity.motionZ;
 			entity.motionX = d3 * f + d4 * f3;
 			entity.motionZ = d3 * f2 + d4 * f1;
-			entity.rotationYaw = rotationYaw - cache.getTeleportDirection().getOpposite().getHorizontalIndex() * 90 + pattern.getForwards().getHorizontalIndex() * 90;
+			entity.rotationYaw = rotationYaw - teleportDirection.getOpposite().getHorizontalIndex() * 90 + pattern.getForwards().getHorizontalIndex() * 90;
 
 			if (entity instanceof EntityPlayerMP)
 			{
