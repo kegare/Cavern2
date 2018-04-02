@@ -10,28 +10,29 @@ import cavern.stats.PlayerData;
 import cavern.stats.PortalCache;
 import cavern.util.CaveUtils;
 import cavern.world.CaveDimensions;
-import cavern.world.WorldCachedData;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.ITeleporter;
 
-public class ItemMirageBook extends Item
+public class ItemMirageBook extends Item implements ITeleporter
 {
 	public ItemMirageBook()
 	{
@@ -119,7 +120,6 @@ public class ItemMirageBook extends Item
 		EntityPlayerMP player = (EntityPlayerMP)entityPlayer;
 		ResourceLocation key = CaveUtils.getKey("mirage_worlds");
 		IPortalCache cache = PortalCache.get(player);
-		MinecraftServer server = player.mcServer;
 		DimensionType dimOld = player.world.provider.getDimensionType();
 
 		if (dimNew == null)
@@ -132,8 +132,6 @@ public class ItemMirageBook extends Item
 			return false;
 		}
 
-		WorldServer worldNew = server.getWorld(dimNew.getId());
-
 		if (CavernAPI.dimension.isMirageWorlds(dimNew))
 		{
 			cache.setLastDim(key, dimOld);
@@ -143,20 +141,7 @@ public class ItemMirageBook extends Item
 
 		player.timeUntilPortal = player.getPortalCooldown();
 
-		double x = player.posX;
-		double y = player.posY + player.getEyeHeight();
-		double z = player.posZ;
-
-		CaveUtils.transferPlayerToDimension(player, dimNew, WorldCachedData.get(worldNew).getMirageTeleporter());
-
-		x = player.posX;
-		y = player.posY + player.getEyeHeight();
-		z = player.posZ;
-
-		BlockPos pos = player.getPosition().down();
-		IBlockState state = worldNew.getBlockState(pos);
-
-		worldNew.playSound(null, x, y, z, state.getBlock().getSoundType(state, worldNew, pos, player).getFallSound(), SoundCategory.BLOCKS, 0.75F, 1.0F);
+		player.changeDimension(dimNew.getId(), this);
 
 		if (player.getBedLocation(dimNew.getId()) == null)
 		{
@@ -164,6 +149,115 @@ public class ItemMirageBook extends Item
 		}
 
 		return true;
+	}
+
+	@Override
+	public void placeEntity(World world, Entity entity, float rotationYaw)
+	{
+		if (attemptToLastPos(world, entity) || attemptRandomly(world, entity) || attemptToVoid(world, entity))
+		{
+			entity.motionX = 0.0D;
+			entity.motionY = 0.0D;
+			entity.motionZ = 0.0D;
+
+			if (entity instanceof EntityLivingBase)
+			{
+				((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 25, 0, false, false));
+			}
+		}
+	}
+
+	protected boolean attemptToLastPos(World world, Entity entity)
+	{
+		IPortalCache cache = PortalCache.get(entity);
+		ResourceLocation key = CaveUtils.getKey("mirage_worlds");
+		DimensionType type = world.provider.getDimensionType();
+
+		if (cache.hasLastPos(key, type))
+		{
+			BlockPos pos = cache.getLastPos(key, type);
+
+			if (world.getBlockState(pos.down()).getMaterial().isSolid() && world.getBlockState(pos).getBlock().canSpawnInBlock() && world.getBlockState(pos.up()).getBlock().canSpawnInBlock())
+			{
+				teleportTo(entity, pos);
+
+				return true;
+			}
+
+			cache.setLastPos(key, type, null);
+		}
+
+		return false;
+	}
+
+	protected boolean attemptRandomly(World world, Entity entity)
+	{
+		int count = 0;
+
+		outside: while (++count < 50)
+		{
+			int x = MathHelper.floor(entity.posX) + itemRand.nextInt(64) - 32;
+			int z = MathHelper.floor(entity.posZ) + itemRand.nextInt(64) - 32;
+			int y = CavernAPI.dimension.isInCaves(entity) ? itemRand.nextInt(30) + 20 : itemRand.nextInt(20) + 60;
+			BlockPos pos = new BlockPos(x, y, z);
+
+			while (pos.getY() > 1 && world.isAirBlock(pos))
+			{
+				pos = pos.down();
+			}
+
+			while (pos.getY() < world.getActualHeight() - 3 && !world.isAirBlock(pos))
+			{
+				pos = pos.up();
+			}
+
+			if (world.getBlockState(pos.down()).getMaterial().isSolid() && world.getBlockState(pos).getBlock().canSpawnInBlock() && world.getBlockState(pos.up()).getBlock().canSpawnInBlock())
+			{
+				for (BlockPos around : BlockPos.getAllInBoxMutable(pos.add(-4, 0, -4), pos.add(4, 0, 4)))
+				{
+					if (world.getBlockState(around).getMaterial().isLiquid())
+					{
+						continue outside;
+					}
+				}
+
+				teleportTo(entity, pos);
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	protected boolean attemptToVoid(World world, Entity entity)
+	{
+		if (!CavernAPI.dimension.isInTheVoid(entity))
+		{
+			return false;
+		}
+
+		BlockPos pos = new BlockPos(entity.posX, 0.0D, entity.posZ);
+		BlockPos from = pos.add(-1, 0, -1);
+		BlockPos to = pos.add(1, 0, 1);
+
+		BlockPos.getAllInBoxMutable(from, to).forEach(blockPos -> world.setBlockState(blockPos, Blocks.MOSSY_COBBLESTONE.getDefaultState(), 2));
+
+		teleportTo(entity, pos.up());
+
+		return true;
+	}
+
+	protected void teleportTo(Entity entity, BlockPos pos)
+	{
+		if (entity instanceof EntityPlayerMP)
+		{
+			((EntityPlayerMP)entity).connection.setPlayerLocation(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+		}
+		else
+		{
+			entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+		}
 	}
 
 	public static ItemStack getRandomBook()

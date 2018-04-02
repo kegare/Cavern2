@@ -10,11 +10,8 @@ import net.minecraft.block.BlockPortal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockPattern;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -67,14 +64,7 @@ public class TeleporterCavern extends Teleporter
 			{
 				BlockPos pos = cache.getLastPos(key, type);
 
-				if (entity instanceof EntityPlayerMP)
-				{
-					((EntityPlayerMP)entity).connection.setPlayerLocation(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
-				}
-				else
-				{
-					entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
-				}
+				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
 
 				if (placeInExistingPortal(entity, rotationYaw))
 				{
@@ -82,7 +72,7 @@ public class TeleporterCavern extends Teleporter
 				}
 				else
 				{
-					entity.setPositionAndUpdate(posX, posY, posZ);
+					entity.setLocationAndAngles(posX, posY, posZ, entity.rotationYaw, entity.rotationPitch);
 				}
 			}
 		}
@@ -92,11 +82,6 @@ public class TeleporterCavern extends Teleporter
 			makePortal(entity);
 
 			placeInExistingPortal(entity, rotationYaw);
-		}
-
-		if (!flag && entity instanceof EntityLivingBase)
-		{
-			((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 25, 0, false, false));
 		}
 
 		if (entity instanceof EntityPlayerMP)
@@ -113,7 +98,7 @@ public class TeleporterCavern extends Teleporter
 	@Override
 	public boolean placeInExistingPortal(Entity entity, float rotationYaw)
 	{
-		double d0 = -1.0D;
+		double portalDist = -1.0D;
 		int x = MathHelper.floor(entity.posX);
 		int z = MathHelper.floor(entity.posZ);
 		boolean flag = true;
@@ -122,10 +107,10 @@ public class TeleporterCavern extends Teleporter
 
 		if (destinationCoordinateCache.containsKey(coord))
 		{
-			PortalPosition portalpos = destinationCoordinateCache.get(coord);
-			d0 = 0.0D;
-			pos = portalpos;
-			portalpos.lastUpdateTime = world.getTotalWorldTime();
+			PortalPosition portalPos = destinationCoordinateCache.get(coord);
+			portalDist = 0.0D;
+			pos = portalPos;
+			portalPos.lastUpdateTime = world.getTotalWorldTime();
 			flag = false;
 		}
 		else
@@ -142,18 +127,18 @@ public class TeleporterCavern extends Teleporter
 					{
 						current = blockpos.down();
 
-						if (isPortalBlock(world.getBlockState(blockpos)))
+						if (world.getBlockState(blockpos).getBlock() == portal)
 						{
-							while (isPortalBlock(world.getBlockState(current = blockpos.down())))
+							while (world.getBlockState(current = blockpos.down()).getBlock() == portal)
 							{
 								blockpos = current;
 							}
 
 							double dist = blockpos.distanceSq(origin);
 
-							if (d0 < 0.0D || dist < d0)
+							if (portalDist < 0.0D || dist < portalDist)
 							{
-								d0 = dist;
+								portalDist = dist;
 								pos = blockpos;
 							}
 						}
@@ -162,7 +147,7 @@ public class TeleporterCavern extends Teleporter
 			}
 		}
 
-		if (d0 >= 0.0D)
+		if (portalDist >= 0.0D)
 		{
 			if (flag)
 			{
@@ -193,36 +178,36 @@ public class TeleporterCavern extends Teleporter
 				posX = d1 + (1.0D - portalVec.x) * pattern.getWidth() * pattern.getForwards().rotateY().getAxisDirection().getOffset();
 			}
 
-			float f = 0.0F;
 			float f1 = 0.0F;
 			float f2 = 0.0F;
 			float f3 = 0.0F;
+			float f4 = 0.0F;
 
 			if (pattern.getForwards().getOpposite() == teleportDirection)
 			{
-				f = 1.0F;
 				f1 = 1.0F;
+				f2 = 1.0F;
 			}
 			else if (pattern.getForwards().getOpposite() == teleportDirection.getOpposite())
 			{
-				f = -1.0F;
 				f1 = -1.0F;
+				f2 = -1.0F;
 			}
 			else if (pattern.getForwards().getOpposite() == teleportDirection.rotateY())
 			{
-				f2 = 1.0F;
-				f3 = -1.0F;
+				f3 = 1.0F;
+				f4 = -1.0F;
 			}
 			else
 			{
-				f2 = -1.0F;
-				f3 = 1.0F;
+				f3 = -1.0F;
+				f4 = 1.0F;
 			}
 
-			double d3 = entity.motionX;
-			double d4 = entity.motionZ;
-			entity.motionX = d3 * f + d4 * f3;
-			entity.motionZ = d3 * f2 + d4 * f1;
+			double d2 = entity.motionX;
+			double d3 = entity.motionZ;
+			entity.motionX = d2 * f1 + d3 * f4;
+			entity.motionZ = d2 * f3 + d3 * f2;
 			entity.rotationYaw = rotationYaw - teleportDirection.getOpposite().getHorizontalIndex() * 90 + pattern.getForwards().getHorizontalIndex() * 90;
 
 			if (entity instanceof EntityPlayerMP)
@@ -240,21 +225,11 @@ public class TeleporterCavern extends Teleporter
 		return false;
 	}
 
-	protected boolean isNotAir(BlockPos pos)
-	{
-		return !world.isAirBlock(pos) || !world.isAirBlock(pos.up());
-	}
-
-	protected boolean isPortalBlock(IBlockState state)
-	{
-		return state.getBlock() == portal;
-	}
-
 	@Override
 	public boolean makePortal(Entity entity)
 	{
 		int range = 16;
-		double d0 = -1.0D;
+		double portalDist = -1.0D;
 		int x = MathHelper.floor(entity.posX);
 		int y = MathHelper.floor(entity.posY);
 		int z = MathHelper.floor(entity.posZ);
@@ -316,9 +291,9 @@ public class TeleporterCavern extends Teleporter
 							double ySize = py + 0.5D - entity.posY;
 							double size = xSize * xSize + ySize * ySize + zSize * zSize;
 
-							if (d0 < 0.0D || size < d0)
+							if (portalDist < 0.0D || size < portalDist)
 							{
-								d0 = size;
+								portalDist = size;
 								x1 = px;
 								y1 = py;
 								z1 = pz;
@@ -330,7 +305,7 @@ public class TeleporterCavern extends Teleporter
 			}
 		}
 
-		if (d0 < 0.0D)
+		if (portalDist < 0.0D)
 		{
 			for (int px = x - range; px <= x + range; ++px)
 			{
@@ -374,9 +349,9 @@ public class TeleporterCavern extends Teleporter
 								double ySize = py + 0.5D - entity.posY;
 								double size = xSize * xSize + ySize * ySize + zSize * zSize;
 
-								if (d0 < 0.0D || size < d0)
+								if (portalDist < 0.0D || size < portalDist)
 								{
-									d0 = size;
+									portalDist = size;
 									x1 = px;
 									y1 = py;
 									z1 = pz;
@@ -401,7 +376,7 @@ public class TeleporterCavern extends Teleporter
 			j1 = -j1;
 		}
 
-		if (d0 < 0.0D)
+		if (portalDist < 0.0D)
 		{
 			y1 = MathHelper.clamp(y1, CavernAPI.dimension.isInCaves(entity) ? 10 : 70, world.getActualHeight() - 10);
 			y2 = y1;

@@ -38,6 +38,7 @@ import cavern.stats.MiningData;
 import cavern.stats.PlayerData;
 import cavern.util.BlockMeta;
 import cavern.util.CaveUtils;
+import cavern.util.PlayerHelper;
 import cavern.world.CaveDimensions;
 import cavern.world.CustomSeedData;
 import cavern.world.ICustomSeed;
@@ -81,6 +82,7 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
@@ -145,9 +147,11 @@ public class CaveEventHooks
 			{
 				String name = type.getName();
 
-				CaveUtils.grantCriterion(player, "enter_the_" + name, "entered_" + name);
+				PlayerHelper.grantCriterion(player, "enter_the_" + name, "entered_" + name);
 			}
 		}
+
+		MinerStats.adjustData(player);
 	}
 
 	@SubscribeEvent
@@ -258,7 +262,7 @@ public class CaveEventHooks
 
 				if (combo >= 50)
 				{
-					CaveUtils.grantAdvancement(player, "good_mine");
+					PlayerHelper.grantAdvancement(player, "good_mine");
 				}
 
 				CaveNetworkRegistry.sendTo(new MiningMessage(state, point), player);
@@ -568,7 +572,7 @@ public class CaveEventHooks
 	}
 
 	@SubscribeEvent
-	public void onSleepInBed(PlayerSleepInBedEvent event)
+	public void onPlayerSleepInBed(PlayerSleepInBedEvent event)
 	{
 		EntityPlayer player = event.getEntityPlayer();
 
@@ -608,23 +612,37 @@ public class CaveEventHooks
 
 		if (result == null)
 		{
-			result = CaveUtils.trySleep(player, event.getPos());
+			result = PlayerHelper.trySleep(player, event.getPos());
 		}
 
 		if (!world.isRemote && result == SleepResult.OK)
 		{
-			if (GeneralConfig.sleepRefresh)
-			{
-				if (player.shouldHeal())
-				{
-					player.heal(player.getMaxHealth() * 0.5F);
-				}
-			}
-
 			PlayerData.get(player).setLastSleepTime(world.getTotalWorldTime());
 		}
 
 		event.setResult(result);
+	}
+
+	@SubscribeEvent
+	public void onPlayerWakeUp(PlayerWakeUpEvent event)
+	{
+		if (!GeneralConfig.sleepRefresh)
+		{
+			return;
+		}
+
+		EntityPlayer player = event.getEntityPlayer();
+		World world = player.world;
+
+		if (world.isRemote || !player.shouldHeal())
+		{
+			return;
+		}
+
+		if (CavernAPI.dimension.isInCaveDimensions(player))
+		{
+			player.heal(player.getMaxHealth() * 0.5F);
+		}
 	}
 
 	@SubscribeEvent
@@ -642,7 +660,7 @@ public class CaveEventHooks
 
 				if (charge > 0 && stack.getTagCompound().getBoolean("AfterIceCharge"))
 				{
-					CaveUtils.grantAdvancement(player, "ice_charge");
+					PlayerHelper.grantAdvancement(player, "ice_charge");
 
 					stack.getTagCompound().removeTag("AfterIceCharge");
 				}

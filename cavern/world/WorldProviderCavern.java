@@ -11,6 +11,7 @@ import cavern.world.CaveEntitySpawner.IWorldEntitySpawner;
 import net.minecraft.client.audio.MusicTicker.MusicType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
@@ -270,6 +271,12 @@ public class WorldProviderCavern extends WorldProviderSurface implements ICustom
 	public double getHorizon()
 	{
 		return getActualHeight();
+	}
+
+	@Override
+	public WorldSleepResult canSleepAt(EntityPlayer player, BlockPos pos)
+	{
+		return WorldSleepResult.ALLOW;
 	}
 
 	@Override

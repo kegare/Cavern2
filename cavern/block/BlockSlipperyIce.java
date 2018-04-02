@@ -2,7 +2,7 @@ package cavern.block;
 
 import cavern.core.Cavern;
 import cavern.plugin.HaCPlugin;
-import cavern.util.CaveUtils;
+import cavern.util.PlayerHelper;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IHeatTile;
@@ -43,7 +43,7 @@ public class BlockSlipperyIce extends BlockPackedIce implements IHeatTile, IHumi
 
 		if (!world.isRemote && entity.ticksExisted % 20 == 0 && entity instanceof EntityPlayer)
 		{
-			CaveUtils.grantAdvancement((EntityPlayer)entity, "slip_ice");
+			PlayerHelper.grantAdvancement((EntityPlayer)entity, "slip_ice");
 		}
 	}
 

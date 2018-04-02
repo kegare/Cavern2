@@ -6,13 +6,12 @@ import cavern.world.ICustomSeed;
 import net.minecraft.init.Biomes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.WorldProviderSurface;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WorldProviderDarkForest extends WorldProviderSurface implements ICustomSeed
+public class WorldProviderDarkForest extends WorldProviderMirageWorld implements ICustomSeed
 {
 	private CustomSeedData seedData;
 
@@ -61,18 +60,6 @@ public class WorldProviderDarkForest extends WorldProviderSurface implements ICu
 
 			world.getWorldInfo().setDimensionData(getDimension(), seedData.getCompound(nbt));
 		}
-	}
-
-	@Override
-	public boolean canDropChunk(int x, int z)
-	{
-		return true;
-	}
-
-	@Override
-	public boolean shouldClientCheckLighting()
-	{
-		return false;
 	}
 
 	@SideOnly(Side.CLIENT)

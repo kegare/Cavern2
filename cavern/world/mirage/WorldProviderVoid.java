@@ -6,7 +6,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -14,7 +13,7 @@ import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WorldProviderVoid extends WorldProvider
+public class WorldProviderVoid extends WorldProviderMirageWorld
 {
 	@Override
 	protected void init()
@@ -37,12 +36,6 @@ public class WorldProviderVoid extends WorldProvider
 
 	@Override
 	public boolean isSurfaceWorld()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean shouldClientCheckLighting()
 	{
 		return false;
 	}

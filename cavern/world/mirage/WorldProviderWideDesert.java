@@ -6,14 +6,13 @@ import cavern.world.ICustomSeed;
 import net.minecraft.init.Biomes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WorldProviderWideDesert extends WorldProvider implements ICustomSeed
+public class WorldProviderWideDesert extends WorldProviderMirageWorld implements ICustomSeed
 {
 	private CustomSeedData seedData;
 
@@ -68,12 +67,6 @@ public class WorldProviderWideDesert extends WorldProvider implements ICustomSee
 
 			world.getWorldInfo().setDimensionData(getDimension(), seedData.getCompound(nbt));
 		}
-	}
-
-	@Override
-	public boolean shouldClientCheckLighting()
-	{
-		return false;
 	}
 
 	@SideOnly(Side.CLIENT)

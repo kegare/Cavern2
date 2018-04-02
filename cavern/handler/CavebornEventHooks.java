@@ -9,8 +9,8 @@ import cavern.block.BlockPortalCavern;
 import cavern.config.GeneralConfig;
 import cavern.config.property.ConfigCaveborn;
 import cavern.stats.PortalCache;
-import cavern.util.CaveUtils;
 import cavern.util.ItemMeta;
+import cavern.util.PlayerHelper;
 import cavern.world.CaveDimensions;
 import net.minecraft.block.state.pattern.BlockPattern.PatternHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -106,13 +106,13 @@ public class CavebornEventHooks
 
 		if (type == CaveDimensions.CAVERN)
 		{
-			CaveUtils.grantCriterion(player, "root", "entered_cavern");
+			PlayerHelper.grantCriterion(player, "root", "entered_cavern");
 		}
 		else
 		{
 			String name = type.getName();
 
-			CaveUtils.grantCriterion(player, "enter_the_" + name, "entered_" + name);
+			PlayerHelper.grantCriterion(player, "enter_the_" + name, "entered_" + name);
 		}
 
 		pos = player.getPosition();

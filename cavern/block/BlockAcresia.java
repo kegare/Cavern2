@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 
 import cavern.core.Cavern;
 import cavern.item.ItemAcresia;
-import cavern.util.CaveUtils;
+import cavern.util.PlayerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockFarmland;
@@ -225,7 +225,7 @@ public class BlockAcresia extends BlockCrops
 
 					drop.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.25F);
 
-					CaveUtils.grantAdvancement(player, "harvest_acresia");
+					PlayerHelper.grantAdvancement(player, "harvest_acresia");
 				}
 
 				return true;

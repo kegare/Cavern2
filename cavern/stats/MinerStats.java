@@ -19,7 +19,7 @@ import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.MinerDataMessage;
 import cavern.network.client.MiningRecordsMessage;
 import cavern.util.BlockMeta;
-import cavern.util.CaveUtils;
+import cavern.util.PlayerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -152,23 +152,23 @@ public class MinerStats implements IMinerStats
 				switch (current)
 				{
 					case IRON_MINER:
-						CaveUtils.grantAdvancement(player, "iron_miner");
+						PlayerHelper.grantAdvancement(player, "iron_miner");
 						break;
 					case GOLD_MINER:
-						CaveUtils.grantAdvancement(player, "gold_miner");
+						PlayerHelper.grantAdvancement(player, "gold_miner");
 						break;
 					case HEXCITE_MINER:
-						CaveUtils.grantAdvancement(player, "hexcite_miner");
+						PlayerHelper.grantAdvancement(player, "hexcite_miner");
 						break;
 					case DIAMOND_MINER:
-						CaveUtils.grantAdvancement(player, "diamond_miner");
+						PlayerHelper.grantAdvancement(player, "diamond_miner");
 						break;
 					default:
 				}
 
 				if (current.getRank() >= MiningAssistConfig.minerRank.getValue())
 				{
-					CaveUtils.grantToast(player, "mining_assist");
+					PlayerHelper.grantToast(player, "mining_assist");
 				}
 			}
 

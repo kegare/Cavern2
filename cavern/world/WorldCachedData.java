@@ -8,8 +8,6 @@ import com.google.common.collect.Maps;
 
 import cavern.block.BlockPortalCavern;
 import cavern.capability.CaveCapabilities;
-import cavern.util.CaveUtils;
-import cavern.world.mirage.TeleporterMirageWorlds;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
@@ -44,11 +42,6 @@ public class WorldCachedData
 	public Teleporter getPortalTeleporter(BlockPortalCavern portal)
 	{
 		return getCachedTeleporter(portal.getRegistryName(), new TeleporterCavern(worldServer, portal));
-	}
-
-	public Teleporter getMirageTeleporter()
-	{
-		return getCachedTeleporter(CaveUtils.getKey("mirage_worlds"), new TeleporterMirageWorlds(worldServer));
 	}
 
 	public static WorldCachedData get(WorldServer world)

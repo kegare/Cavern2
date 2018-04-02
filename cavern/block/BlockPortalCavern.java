@@ -12,7 +12,6 @@ import cavern.client.gui.GuiMiningRecords;
 import cavern.client.gui.GuiRegeneration;
 import cavern.config.CavernConfig;
 import cavern.config.GeneralConfig;
-import cavern.core.CaveSounds;
 import cavern.core.Cavern;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.RegenerationGuiMessage;
@@ -39,14 +38,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -256,7 +253,7 @@ public class BlockPortalCavern extends BlockPortal
 			return;
 		}
 
-		if (entity.isDead || entity.isRiding() || entity.isBeingRidden() || !entity.isNonBoss() || entity instanceof IProjectile)
+		if (entity.isDead || entity.isSneaking() || entity.isRiding() || entity.isBeingRidden() || !entity.isNonBoss() || entity instanceof IProjectile)
 		{
 			return;
 		}
@@ -268,90 +265,39 @@ public class BlockPortalCavern extends BlockPortal
 			MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 			DimensionType dimOld = world.provider.getDimensionType();
 			DimensionType dimNew = isEntityInCave(entity) ? cache.getLastDim(key) : getDimension();
-			WorldServer worldOld = server.getWorld(dimOld.getId());
 			WorldServer worldNew = server.getWorld(dimNew.getId());
 			Teleporter teleporter = getTeleporter(worldNew);
 			BlockPos prevPos = entity.getPosition();
 
 			entity.timeUntilPortal = Math.max(entity.getPortalCooldown(), 100);
 
-			if (entity instanceof EntityPlayerMP)
+			if (entity instanceof EntityPlayer)
 			{
-				EntityPlayerMP player = (EntityPlayerMP)entity;
+				EntityPlayer player = (EntityPlayer)entity;
 
-				if (!player.isSneaking() && !player.isPotionActive(MobEffects.BLINDNESS))
+				if (MinerStats.get(player).getRank() < getMinerRank().getRank())
 				{
-					if (MinerStats.get(player).getRank() < getMinerRank().getRank())
-					{
-						player.sendStatusMessage(new TextComponentTranslation("cavern.message.portal.rank", new TextComponentTranslation(getMinerRank().getUnlocalizedName())), true);
+					player.sendStatusMessage(new TextComponentTranslation("cavern.message.portal.rank", new TextComponentTranslation(getMinerRank().getUnlocalizedName())), true);
 
-						return;
-					}
-
-					teleporting = true;
-
-					cache.setLastDim(key, dimOld);
-					cache.setLastPos(key, dimOld, prevPos);
-
-					PatternHelper pattern = createPatternHelper(world, pos);
-					double d0 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
-					double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? entity.posZ : entity.posX;
-					d1 = Math.abs(MathHelper.pct(d1 - (pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - pattern.getWidth()));
-					double d2 = MathHelper.pct(entity.posY - 1.0D, pattern.getFrontTopLeft().getY(), pattern.getFrontTopLeft().getY() - pattern.getHeight());
-
-					cache.setLastPortalVec(new Vec3d(d1, d2, 0.0D));
-					cache.setTeleportDirection(pattern.getForwards());
-
-					double x = player.posX;
-					double y = player.posY + player.getEyeHeight();
-					double z = player.posZ;
-
-					worldOld.playSound(player, x, y, z, CaveSounds.CAVE_PORTAL, SoundCategory.BLOCKS, 0.5F, 1.0F);
-
-					CaveUtils.transferPlayerToDimension(player, dimNew, teleporter);
-
-					x = player.posX;
-					y = player.posY + player.getEyeHeight();
-					z = player.posZ;
-
-					worldNew.playSound(null, x, y, z, CaveSounds.CAVE_PORTAL, SoundCategory.BLOCKS, 0.75F, 1.0F);
+					return;
 				}
 			}
-			else
-			{
-				teleporting = true;
 
-				cache.setLastDim(key, dimOld);
-				cache.setLastPos(key, dimOld, prevPos);
+			teleporting = true;
 
-				PatternHelper pattern = createPatternHelper(world, pos);
-				double d0 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
-				double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? entity.posZ : entity.posX;
-				d1 = Math.abs(MathHelper.pct(d1 - (pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - pattern.getWidth()));
-				double d2 = MathHelper.pct(entity.posY - 1.0D, pattern.getFrontTopLeft().getY(), pattern.getFrontTopLeft().getY() - pattern.getHeight());
+			cache.setLastDim(key, dimOld);
+			cache.setLastPos(key, dimOld, prevPos);
 
-				cache.setLastPortalVec(new Vec3d(d1, d2, 0.0D));
-				cache.setTeleportDirection(pattern.getForwards());
+			PatternHelper pattern = createPatternHelper(world, pos);
+			double d0 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
+			double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? entity.posZ : entity.posX;
+			d1 = Math.abs(MathHelper.pct(d1 - (pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - pattern.getWidth()));
+			double d2 = MathHelper.pct(entity.posY - 1.0D, pattern.getFrontTopLeft().getY(), pattern.getFrontTopLeft().getY() - pattern.getHeight());
 
-				double x = entity.posX;
-				double y = entity.posY + entity.getEyeHeight();
-				double z = entity.posZ;
+			cache.setLastPortalVec(new Vec3d(d1, d2, 0.0D));
+			cache.setTeleportDirection(pattern.getForwards());
 
-				worldOld.playSound(null, x, y, z, CaveSounds.CAVE_PORTAL, SoundCategory.BLOCKS, 0.25F, 1.15F);
-
-				entity.dimension = dimNew.getId();
-				world.removeEntityDangerously(entity);
-
-				entity.isDead = false;
-
-				server.getPlayerList().transferEntityToWorld(entity, dimOld.getId(), worldOld, worldNew, teleporter);
-
-				x = entity.posX;
-				y = entity.posY + entity.getEyeHeight();
-				z = entity.posZ;
-
-				worldNew.playSound(null, x, y, z, CaveSounds.CAVE_PORTAL, SoundCategory.BLOCKS, 0.5F, 1.15F);
-			}
+			entity.changeDimension(dimNew.getId(), teleporter);
 
 			teleporting = false;
 		}

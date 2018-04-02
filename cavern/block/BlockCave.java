@@ -6,7 +6,7 @@ import cavern.api.event.RandomiteDropEvent;
 import cavern.core.Cavern;
 import cavern.item.CaveItems;
 import cavern.item.ItemCave;
-import cavern.util.CaveUtils;
+import cavern.util.PlayerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -223,11 +223,11 @@ public class BlockCave extends Block
 		switch (getType(state))
 		{
 			case RANDOMITE_ORE:
-				CaveUtils.grantAdvancement(player, "mine_randomite");
+				PlayerHelper.grantAdvancement(player, "mine_randomite");
 				break;
 			case FISSURED_STONE:
 			case FISSURED_PACKED_ICE:
-				CaveUtils.grantAdvancement(player, "mine_fissure");
+				PlayerHelper.grantAdvancement(player, "mine_fissure");
 				break;
 			default:
 		}
