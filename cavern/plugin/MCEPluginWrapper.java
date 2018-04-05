@@ -55,7 +55,6 @@ public class MCEPluginWrapper
 		MCEconomyAPI.addPurchaseItem(BlockCave.EnumType.HEXCITE_ORE.getItemStack(), 2200);
 		MCEconomyAPI.addPurchaseItem(BlockCave.EnumType.HEXCITE_BLOCK.getItemStack(), 9900);
 		MCEconomyAPI.addPurchaseItem(BlockCave.EnumType.FISSURED_STONE.getItemStack(), 75);
-		MCEconomyAPI.addPurchaseItem(BlockCave.EnumType.FISSURED_PACKED_ICE.getItemStack(), 75);
 		MCEconomyAPI.addPurchaseItem(ItemAcresia.EnumType.SEEDS.getItemStack(), 0);
 		MCEconomyAPI.addPurchaseItem(ItemAcresia.EnumType.FRUITS.getItemStack(), 1);
 		MCEconomyAPI.addPurchaseItem(new ItemStack(CaveBlocks.PERVERTED_LOG, 1, OreDictionary.WILDCARD_VALUE), 1);

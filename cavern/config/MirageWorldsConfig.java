@@ -16,6 +16,7 @@ public class MirageWorldsConfig
 	public static int wideDesert;
 	public static int theVoid;
 	public static int darkForest;
+	public static int crownCliffs;
 
 	public static void syncConfig()
 	{
@@ -64,6 +65,15 @@ public class MirageWorldsConfig
 		prop.setComment(comment);
 		propOrder.add(prop.getName());
 		darkForest = prop.getInt(darkForest);
+
+		prop = config.get(category, "crownCliffs", -59);
+		prop.setRequiresMcRestart(true);
+		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
+		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
+		comment += " [default: " + prop.getDefault() + "]";
+		prop.setComment(comment);
+		propOrder.add(prop.getName());
+		crownCliffs = prop.getInt(crownCliffs);
 
 		config.setCategoryPropertyOrder(category, propOrder);
 

@@ -33,7 +33,7 @@ public class GuiRegeneration extends GuiScreen
 	protected GuiButton cancelButton;
 
 	protected GuiCheckBox backupCheckBox, cavernCheckBox, hugeCavernCheckBox, aquaCavernCheckBox,
-		cavelandCheckBox, caveniaCheckBox, frostMountainsCheckBox, wideDesertCheckBox, theVoidCheckBox, darkForestCheckBox;
+		cavelandCheckBox, caveniaCheckBox, frostMountainsCheckBox, wideDesertCheckBox, theVoidCheckBox, darkForestCheckBox, crownCliffsCheckBox;
 
 	private HoverChecker backupHoverChecker;
 
@@ -171,7 +171,7 @@ public class GuiRegeneration extends GuiScreen
 
 		if (darkForestCheckBox == null)
 		{
-			darkForestCheckBox = new GuiCheckBox(10, 10, before.y + before.height + 5, I18n.format(mirage + ".darkForest.name"), dimensions.contains(CaveDimensions.DARK_FOREST));
+			darkForestCheckBox = new GuiCheckBox(11, 10, before.y + before.height + 5, I18n.format(mirage + ".darkForest.name"), dimensions.contains(CaveDimensions.DARK_FOREST));
 		}
 
 		if (CaveDimensions.DARK_FOREST == null)
@@ -181,6 +181,19 @@ public class GuiRegeneration extends GuiScreen
 		}
 
 		before = darkForestCheckBox;
+
+		if (crownCliffsCheckBox == null)
+		{
+			crownCliffsCheckBox = new GuiCheckBox(12, 10, before.y + before.height + 5, I18n.format(mirage + ".crownCliffs.name"), dimensions.contains(CaveDimensions.CROWN_CLIFFS));
+		}
+
+		if (CaveDimensions.CROWN_CLIFFS == null)
+		{
+			crownCliffsCheckBox.enabled = false;
+			crownCliffsCheckBox.setIsChecked(false);
+		}
+
+		before = crownCliffsCheckBox;
 
 		buttonList.clear();
 		buttonList.add(regenButton);
@@ -195,6 +208,7 @@ public class GuiRegeneration extends GuiScreen
 		buttonList.add(wideDesertCheckBox);
 		buttonList.add(theVoidCheckBox);
 		buttonList.add(darkForestCheckBox);
+		buttonList.add(crownCliffsCheckBox);
 
 		if (backupHoverChecker == null)
 		{
@@ -267,6 +281,11 @@ public class GuiRegeneration extends GuiScreen
 					if (darkForestCheckBox.isChecked())
 					{
 						message.dimensions.add(CaveDimensions.DARK_FOREST);
+					}
+
+					if (crownCliffsCheckBox.isChecked())
+					{
+						message.dimensions.add(CaveDimensions.CROWN_CLIFFS);
 					}
 
 					if (!message.dimensions.isEmpty())

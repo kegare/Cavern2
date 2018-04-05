@@ -44,14 +44,14 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 
 	private Biome[] biomesForGeneration;
 
-	private MapGenBase caveGenerator = new MapGenHugeCaves();
+	private final MapGenBase caveGenerator = new MapGenHugeCaves();
 
-	private VeinGenerator veinGenerator = new VeinGenerator(HugeCavernConfig.veinManager.getCaveVeins());
+	private final VeinGenerator veinGenerator = new VeinGenerator(HugeCavernConfig.veinManager.getCaveVeins());
 
-	private WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
-	private WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
-	private WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
-	private WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
+	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
+	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
+	private final WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
+	private final WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
 
 	public ChunkGeneratorHugeCavern(World world)
 	{

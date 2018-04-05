@@ -52,6 +52,11 @@ public interface IDimension
 
 	boolean isInDarkForest(@Nullable Entity entity);
 
+	@Nullable
+	DimensionType getCrownCliffs();
+
+	boolean isInCrownCliffs(@Nullable Entity entity);
+
 	boolean isInCaveDimensions(@Nullable Entity entity);
 
 	boolean isCaveDimensions(@Nullable DimensionType type);

@@ -2,9 +2,7 @@ package cavern.world.mirage;
 
 import cavern.world.CaveDimensions;
 import cavern.world.CustomSeedData;
-import cavern.world.ICustomSeed;
 import net.minecraft.init.Biomes;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeProviderSingle;
@@ -12,10 +10,8 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WorldProviderWideDesert extends WorldProviderMirageWorld implements ICustomSeed
+public class WorldProviderWideDesert extends WorldProviderMirageWorld
 {
-	private CustomSeedData seedData;
-
 	@Override
 	protected void init()
 	{
@@ -34,39 +30,6 @@ public class WorldProviderWideDesert extends WorldProviderMirageWorld implements
 	public DimensionType getDimensionType()
 	{
 		return CaveDimensions.WIDE_DESERT;
-	}
-
-	@Override
-	public CustomSeedData getSeedData()
-	{
-		return seedData;
-	}
-
-	@Override
-	public long getSeed()
-	{
-		if (seedData != null)
-		{
-			if (world instanceof WorldServer)
-			{
-				return seedData.getSeed();
-			}
-
-			return seedData.getSeedValue(world.getWorldInfo().getSeed());
-		}
-
-		return super.getSeed();
-	}
-
-	@Override
-	public void onWorldSave()
-	{
-		if (seedData != null)
-		{
-			NBTTagCompound nbt = world.getWorldInfo().getDimensionData(getDimension());
-
-			world.getWorldInfo().setDimensionData(getDimension(), seedData.getCompound(nbt));
-		}
 	}
 
 	@SideOnly(Side.CLIENT)

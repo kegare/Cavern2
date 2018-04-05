@@ -52,21 +52,21 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 
 	private Biome[] biomesForGeneration;
 
-	private MapGenBase caveGenerator = new MapGenCavernCaves();
-	private MapGenBase ravineGenerator = new MapGenCavernRavine();
-	private MapGenBase extremeCaveGenerator = new MapGenExtremeCaves();
-	private MapGenBase extremeRavineGenerator = new MapGenExtremeRavine();
-	private MapGenMineshaft mineshaftGenerator = new MapGenMineshaft();
+	private final MapGenBase caveGenerator = new MapGenCavernCaves();
+	private final MapGenBase ravineGenerator = new MapGenCavernRavine();
+	private final MapGenBase extremeCaveGenerator = new MapGenExtremeCaves();
+	private final MapGenBase extremeRavineGenerator = new MapGenExtremeRavine();
+	private final MapGenMineshaft mineshaftGenerator = new MapGenMineshaft();
 
-	private VeinGenerator veinGenerator = new VeinGenerator(CavernConfig.veinManager.getCaveVeins());
+	private final VeinGenerator veinGenerator = new VeinGenerator(CavernConfig.veinManager.getCaveVeins());
 
-	private WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
-	private WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
-	private WorldGenerator dungeonGen = new WorldGenCaveDungeons(CavernConfig.dungeonMobs.getKeys());
-	private WorldGenerator towerDungeonGen = new WorldGenTowerDungeons(CavernConfig.towerDungeonMobs.getKeys());
-	private WorldGenerator mirageLibraryGen = new WorldGenMirageLibrary();
-	private WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
-	private WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
+	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
+	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
+	private final WorldGenerator dungeonGen = new WorldGenCaveDungeons(CavernConfig.dungeonMobs.getKeys());
+	private final WorldGenerator towerDungeonGen = new WorldGenTowerDungeons(CavernConfig.towerDungeonMobs.getKeys());
+	private final WorldGenerator mirageLibraryGen = new WorldGenMirageLibrary();
+	private final WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
+	private final WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
 
 	public ChunkGeneratorCavern(World world)
 	{

@@ -112,12 +112,18 @@ public class RandomiteHelper
 			return false;
 		}
 
-		return DROP_ITEMS.add(new WeightedItemStack(stack, weight));
+		return DROP_ITEMS.add(new WeightedItemStack(stack, Math.max(weight, 1)));
 	}
 
 	public static ItemStack getDropItem()
 	{
-		WeightedItemStack item = WeightedRandom.getRandomItem(RANDOM, DROP_ITEMS);
+		if (DROP_ITEMS.isEmpty())
+		{
+			return ItemStack.EMPTY;
+		}
+
+		int totalWeight = WeightedRandom.getTotalWeight(DROP_ITEMS);
+		WeightedItemStack item = WeightedRandom.getRandomItem(DROP_ITEMS, RANDOM.nextInt(totalWeight));
 
 		return item != null ? item.getItemStack() : ItemStack.EMPTY;
 	}

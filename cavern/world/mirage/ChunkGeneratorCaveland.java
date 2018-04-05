@@ -55,14 +55,14 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 	private final MapGenBase caveGenerator = new MapGenCavelandCaves();
 	private final MapGenBase ravineGenerator = new MapGenCavelandRavine();
 
-	private VeinGenerator veinGenerator = new VeinGenerator(CavelandConfig.veinManager.getCaveVeins());
+	private final VeinGenerator veinGenerator = new VeinGenerator(CavelandConfig.veinManager.getCaveVeins());
 
-	private WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
-	private WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
-	private WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
-	private WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
-	private WorldGenerator deadBushGen = new WorldGenDeadBush();
-	private WorldGenerator acresiaGen = new WorldGenAcresia();
+	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
+	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
+	private final WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
+	private final WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
+	private final WorldGenerator deadBushGen = new WorldGenDeadBush();
+	private final WorldGenerator acresiaGen = new WorldGenAcresia();
 
 	public ChunkGeneratorCaveland(World world)
 	{

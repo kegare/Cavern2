@@ -3,39 +3,37 @@ package cavern.world.mirage;
 import java.util.List;
 import java.util.Random;
 
-import cavern.block.CaveBlocks;
-import cavern.world.gen.MapGenFrostCaves;
 import net.minecraft.block.BlockFalling;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenBase;
+import net.minecraft.world.gen.MapGenCaves;
+import net.minecraft.world.gen.MapGenRavine;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
-public class ChunkGeneratorFrostMountains implements IChunkGenerator
+public class ChunkGeneratorCrownCliffs implements IChunkGenerator
 {
-	protected static final IBlockState AIR = Blocks.AIR.getDefaultState();
 	protected static final IBlockState STONE = Blocks.STONE.getDefaultState();
-	protected static final IBlockState BEDROCK = Blocks.BEDROCK.getDefaultState();
 	protected static final IBlockState WATER = Blocks.WATER.getDefaultState();
-	protected static final IBlockState ICE = Blocks.ICE.getDefaultState();
-	protected static final IBlockState PACKED_ICE = Blocks.PACKED_ICE.getDefaultState();
-	protected static final IBlockState GRAVEL = Blocks.GRAVEL.getDefaultState();
 
 	private final World world;
 	private final Random rand;
@@ -55,9 +53,17 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 	private double[] maxLimitRegion;
 	private double[] depthRegion;
 
-	private final MapGenBase caveGenerator = new MapGenFrostCaves();
+	private Biome[] biomesForGeneration;
 
-	public ChunkGeneratorFrostMountains(World world)
+	private final MapGenBase caveGenerator = new MapGenCaves();
+	private final MapGenBase ravineGenerator = new MapGenRavine();
+	private final MapGenMineshaft mineshaftGenerator = new MapGenMineshaft();
+
+	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
+	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
+	private final WorldGenerator dungeonGen = new WorldGenDungeons();
+
+	public ChunkGeneratorCrownCliffs(World world)
 	{
 		this.world = world;
 		this.rand = new Random(world.getSeed());
@@ -82,6 +88,8 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 
 	public void setBlocksInChunk(int x, int z, ChunkPrimer primer)
 	{
+		biomesForGeneration = world.getBiomeProvider().getBiomesForGeneration(biomesForGeneration, x * 4 - 2, z * 4 - 2, 10, 10);
+
 		generateHeightmap(x * 4, 0, z * 4);
 
 		for (int i = 0; i < 4; ++i)
@@ -145,7 +153,7 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 		}
 	}
 
-	public void replaceBiomeBlocks(int x, int z, ChunkPrimer primer)
+	public void replaceBiomeBlocks(int x, int z, ChunkPrimer primer, Biome[] biomesIn)
 	{
 		depthBuffer = surfaceNoise.getRegion(depthBuffer, x * 16, z * 16, 16, 16, 0.0625D, 0.0625D, 1.0D);
 
@@ -153,98 +161,47 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 		{
 			for (int j = 0; j < 16; ++j)
 			{
-				generateTerrain(world, rand, primer, x * 16 + i, z * 16 + j, depthBuffer[j + i * 16]);
+				Biome biome = biomesIn[j + i * 16];
+
+				biome.genTerrainBlocks(world, rand, primer, x * 16 + i, z * 16 + j, depthBuffer[j + i * 16]);
 			}
 		}
 	}
 
-	public void generateTerrain(World world, Random rand, ChunkPrimer primer, int x, int z, double noiseVal)
+	@Override
+	public Chunk generateChunk(int chunkX, int chunkZ)
 	{
-		int i = world.getSeaLevel();
-		IBlockState top = ICE;
-		IBlockState fillter = CaveBlocks.SLIPPERY_ICE.getDefaultState();
-		int j = -1;
-		int k = (int)(noiseVal / 3.0D + 3.0D + rand.nextDouble() * 0.25D);
-		int l = x & 15;
-		int m = z & 15;
-		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		rand.setSeed(chunkX * 341873128712L + chunkZ * 132897987541L);
+		ChunkPrimer primer = new ChunkPrimer();
+		setBlocksInChunk(chunkX, chunkZ, primer);
+		biomesForGeneration = world.getBiomeProvider().getBiomes(biomesForGeneration, chunkX * 16, chunkZ * 16, 16, 16);
+		replaceBiomeBlocks(chunkX, chunkZ, primer, biomesForGeneration);
 
-		for (int y = 255; y >= 0; --y)
+		caveGenerator.generate(world, chunkX, chunkZ, primer);
+		ravineGenerator.generate(world, chunkX, chunkZ, primer);
+		mineshaftGenerator.generate(world, chunkX, chunkZ, primer);
+
+		Chunk chunk = new Chunk(world, primer, chunkX, chunkZ);
+		byte[] biomes = chunk.getBiomeArray();
+
+		for (int i = 0; i < biomes.length; ++i)
 		{
-			if (y <= rand.nextInt(5))
-			{
-				primer.setBlockState(m, y, l, BEDROCK);
-			}
-			else
-			{
-				IBlockState state = primer.getBlockState(m, y, l);
-
-				if (state.getMaterial() == Material.AIR)
-				{
-					j = -1;
-				}
-				else if (state.getBlock() == Blocks.STONE)
-				{
-					if (j == -1)
-					{
-						if (k <= 0)
-						{
-							top = AIR;
-							fillter = STONE;
-						}
-						else if (y >= i - 4 && y <= i + 1)
-						{
-							top = ICE;
-							fillter = PACKED_ICE;
-						}
-
-						if (y < i && (top == null || top.getMaterial() == Material.AIR))
-						{
-							if (Biomes.ICE_MOUNTAINS.getTemperature(pos.setPos(x, y, z)) < 0.15F)
-							{
-								top = ICE;
-							}
-							else
-							{
-								top = WATER;
-							}
-						}
-
-						j = k;
-
-						if (y >= i - 1)
-						{
-							primer.setBlockState(m, y, l, top);
-						}
-						else if (y < i - 7 - k)
-						{
-							top = AIR;
-							fillter = STONE;
-
-							primer.setBlockState(m, y, l, GRAVEL);
-						}
-						else
-						{
-							primer.setBlockState(m, y, l, fillter);
-						}
-					}
-					else if (j > 0)
-					{
-						--j;
-
-						primer.setBlockState(m, y, l, fillter);
-					}
-				}
-			}
+			biomes[i] = (byte)Biome.getIdForBiome(biomesForGeneration[i]);
 		}
+
+		chunk.generateSkylightMap();
+
+		return chunk;
 	}
 
 	private void generateHeightmap(int posX, int posY, int posZ)
 	{
-		depthRegion = depthNoise.generateNoiseOctaves(depthRegion, posX, posZ, 5, 5, 200.0D, 200.0D, 0.5D);
-		mainNoiseRegion = mainPerlinNoise.generateNoiseOctaves(mainNoiseRegion, posX, posY, posZ, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
-		minLimitRegion = minLimitPerlinNoise.generateNoiseOctaves(minLimitRegion, posX, posY, posZ, 5, 33, 5, 684.412D, 684.412D, 684.412D);
-		maxLimitRegion = maxLimitPerlinNoise.generateNoiseOctaves(maxLimitRegion, posX, posY, posZ, 5, 33, 5, 684.412D, 684.412D, 684.412D);
+		this.depthRegion = depthNoise.generateNoiseOctaves(depthRegion, posX, posZ, 5, 5, 200.0F, 200.0F, 0.5F);
+		float f = 684.412F;
+		float f1 = 684.412F;
+		mainNoiseRegion = mainPerlinNoise.generateNoiseOctaves(mainNoiseRegion, posX, posY, posZ, 5, 33, 5, f / 80.0F, f1 / 160.0F, f / 80.0F);
+		minLimitRegion = minLimitPerlinNoise.generateNoiseOctaves(minLimitRegion, posX, posY, posZ, 5, 33, 5, f, f1, f);
+		maxLimitRegion = maxLimitPerlinNoise.generateNoiseOctaves(maxLimitRegion, posX, posY, posZ, 5, 33, 5, f, f1, f);
 		int i = 0;
 		int j = 0;
 
@@ -255,14 +212,28 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 				float f2 = 0.0F;
 				float f3 = 0.0F;
 				float f4 = 0.0F;
+				Biome biome = biomesForGeneration[k + 2 + (l + 2) * 10];
 
 				for (int j1 = -2; j1 <= 2; ++j1)
 				{
 					for (int k1 = -2; k1 <= 2; ++k1)
 					{
-						float f5 = 0.6F;
-						float f6 = 0.85F;
+						Biome biome1 = biomesForGeneration[k + j1 + 2 + (l + k1 + 2) * 10];
+						float f5 = biome1.getBaseHeight();
+						float f6 = biome1.getHeightVariation();
+
+						if (f5 > 0.0F)
+						{
+							f5 = 1.0F + f5 * 2.0F;
+							f6 = 1.0F + f6 * 6.5F;
+						}
+
 						float f7 = biomeWeights[j1 + 2 + (k1 + 2) * 5] / (f5 + 2.0F);
+
+						if (biome1.getBaseHeight() > biome.getBaseHeight())
+						{
+							f7 /= 1.5F;
+						}
 
 						f2 += f6 * f7;
 						f3 += f5 * f7;
@@ -274,7 +245,6 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 				f3 = f3 / f4;
 				f2 = f2 * 0.9F + 0.1F;
 				f3 = (f3 * 4.0F - 1.0F) / 8.0F;
-
 				double d7 = depthRegion[j] / 8000.0D;
 
 				if (d7 < 0.0D)
@@ -307,6 +277,7 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 				}
 
 				++j;
+
 				double d8 = f3;
 				double d9 = f2;
 				d8 = d8 + d7 * 0.2D;
@@ -335,6 +306,7 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 					}
 
 					heightMap[i] = d5;
+
 					++i;
 				}
 			}
@@ -342,70 +314,85 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 	}
 
 	@Override
-	public Chunk generateChunk(int x, int z)
-	{
-		rand.setSeed(x * 341873128712L + z * 132897987541L);
-
-		ChunkPrimer primer = new ChunkPrimer();
-
-		setBlocksInChunk(x, z, primer);
-		replaceBiomeBlocks(x, z, primer);
-
-		caveGenerator.generate(world, x, z, primer);
-
-		Chunk chunk = new Chunk(this.world, primer, x, z);
-		byte[] biomes = chunk.getBiomeArray();
-
-		for (int i = 0; i < biomes.length; ++i)
-		{
-			biomes[i] = (byte)Biome.getIdForBiome(Biomes.ICE_MOUNTAINS);
-		}
-
-		chunk.generateSkylightMap();
-
-		return chunk;
-	}
-
-	@Override
-	public void populate(int x, int z)
+	public void populate(int chunkX, int chunkZ)
 	{
 		BlockFalling.fallInstantly = true;
 
-		int blockX = x * 16;
-		int blockY = z * 16;
-		BlockPos blockpos = new BlockPos(blockX, 0, blockY);
+		int x = chunkX * 16;
+		int z = chunkZ * 16;
+		BlockPos blockpos = new BlockPos(x, 0, z);
+		Biome biome = world.getBiome(blockpos.add(16, 0, 16));
 		rand.setSeed(world.getSeed());
-		long xSeed = rand.nextLong() / 2L * 2L + 1L;
-		long zSeed = rand.nextLong() / 2L * 2L + 1L;
-		rand.setSeed(x * xSeed + z * zSeed ^ world.getSeed());
+		long seedX = rand.nextLong() / 2L * 2L + 1L;
+		long seedZ = rand.nextLong() / 2L * 2L + 1L;
+		rand.setSeed(chunkX * seedX + chunkZ * seedZ ^ world.getSeed());
 
-		ForgeEventFactory.onChunkPopulate(true, this, world, rand, x, z, false);
+		ForgeEventFactory.onChunkPopulate(true, this, world, rand, chunkX, chunkZ, false);
 
-		if (TerrainGen.populate(this, world, rand, x, z, false, PopulateChunkEvent.Populate.EventType.LAKE))
+		ChunkPos coord = new ChunkPos(chunkX, chunkZ);
+
+		mineshaftGenerator.generateStructure(world, rand, coord);
+
+		if (biome != Biomes.DESERT && biome != Biomes.DESERT_HILLS && rand.nextInt(10) == 0)
 		{
-			int i1 = rand.nextInt(16) + 8;
-			int j1 = rand.nextInt(128);
-			int k1 = rand.nextInt(16) + 8;
+			if (TerrainGen.populate(this, world, rand, chunkX, chunkZ, false, PopulateChunkEvent.Populate.EventType.LAKE))
+			{
+				int genX = rand.nextInt(16) + 8;
+				int genY = rand.nextInt(256);
+				int genZ = rand.nextInt(16) + 8;
 
-			new WorldGenLakes(Blocks.WATER).generate(world, rand, blockpos.add(i1, j1, k1));
+				lakeWaterGen.generate(world, rand, blockpos.add(genX, genY, genZ));
+			}
 		}
 
-		Biomes.ICE_MOUNTAINS.decorate(world, rand, new BlockPos(blockX, 0, blockY));
+		if (rand.nextInt(30) == 0)
+		{
+			if (TerrainGen.populate(this, world, rand, chunkX, chunkZ, false, PopulateChunkEvent.Populate.EventType.LAVA))
+			{
+				int genX = rand.nextInt(16) + 8;
+				int genY = rand.nextInt(rand.nextInt(248) + 8);
+				int genZ = rand.nextInt(16) + 8;
+
+				if (genY < world.getSeaLevel() || rand.nextInt(20) == 0)
+				{
+					lakeLavaGen.generate(world, rand, blockpos.add(genX, genY, genZ));
+				}
+			}
+		}
+
+		if (TerrainGen.populate(this, world, rand, chunkX, chunkZ, false, PopulateChunkEvent.Populate.EventType.DUNGEON))
+		{
+			for (int i = 0; i < 6; ++i)
+			{
+				int genX = rand.nextInt(16) + 8;
+				int genY = rand.nextInt(256);
+				int genZ = rand.nextInt(16) + 8;
+
+				dungeonGen.generate(world, rand, blockpos.add(genX, genY, genZ));
+			}
+		}
+
+		biome.decorate(world, rand, new BlockPos(x, 0, z));
+
+		if (TerrainGen.populate(this, world, rand, chunkX, chunkZ, false, PopulateChunkEvent.Populate.EventType.ANIMALS))
+		{
+			WorldEntitySpawner.performWorldGenSpawning(world, biome, x + 8, z + 8, 16, 16, rand);
+		}
 
 		blockpos = blockpos.add(8, 0, 8);
 
-		if (TerrainGen.populate(this, world, rand, x, z, false, PopulateChunkEvent.Populate.EventType.ICE))
+		if (TerrainGen.populate(this, world, rand, chunkX, chunkZ, false, PopulateChunkEvent.Populate.EventType.ICE))
 		{
 			for (int i = 0; i < 16; ++i)
 			{
 				for (int j = 0; j < 16; ++j)
 				{
 					BlockPos top = world.getPrecipitationHeight(blockpos.add(i, 0, j));
-					BlockPos pos = top.down();
+					BlockPos under = top.down();
 
-					if (world.canBlockFreezeWater(pos))
+					if (world.canBlockFreezeWater(under))
 					{
-						world.setBlockState(pos, ICE, 2);
+						world.setBlockState(under, Blocks.ICE.getDefaultState(), 2);
 					}
 
 					if (world.canSnowAt(top, true))
@@ -416,7 +403,7 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 			}
 		}
 
-		ForgeEventFactory.onChunkPopulate(false, this, world, rand, x, z, false);
+		ForgeEventFactory.onChunkPopulate(false, this, world, rand, chunkX, chunkZ, false);
 
 		BlockFalling.fallInstantly = false;
 	}
@@ -428,7 +415,7 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 	}
 
 	@Override
-	public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
+	public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
 	{
 		Biome biome = world.getBiome(pos);
 
@@ -438,15 +425,28 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 	@Override
 	public boolean isInsideStructure(World world, String structureName, BlockPos pos)
 	{
+		if ("Mineshaft".equals(structureName) && mineshaftGenerator != null)
+		{
+			return mineshaftGenerator.isInsideStructure(pos);
+		}
+
 		return false;
 	}
 
 	@Override
 	public BlockPos getNearestStructurePos(World world, String structureName, BlockPos pos, boolean findUnexplored)
 	{
+		if ("Mineshaft".equals(structureName) && mineshaftGenerator != null)
+		{
+			return mineshaftGenerator.getNearestStructurePos(world, pos, findUnexplored);
+		}
+
 		return null;
 	}
 
 	@Override
-	public void recreateStructures(Chunk chunk, int x, int z) {}
+	public void recreateStructures(Chunk chunk, int x, int z)
+	{
+		mineshaftGenerator.generate(world, x, z, null);
+	}
 }

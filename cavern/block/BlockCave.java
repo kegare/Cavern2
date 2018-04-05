@@ -137,6 +137,11 @@ public class BlockCave extends Block
 	{
 		if (getType(state) == EnumType.RANDOMITE_ORE)
 		{
+			if (world instanceof World && ((World)world).isRemote)
+			{
+				return;
+			}
+
 			ItemStack drop = ItemStack.EMPTY;
 
 			if (fortune > 0)
@@ -186,7 +191,7 @@ public class BlockCave extends Block
 		{
 			EnumType type = getType(state);
 
-			if (type == EnumType.FISSURED_STONE || type == EnumType.FISSURED_PACKED_ICE)
+			if (type == EnumType.FISSURED_STONE)
 			{
 				EntityPlayer player = harvesters.get();
 
@@ -226,7 +231,6 @@ public class BlockCave extends Block
 				PlayerHelper.grantAdvancement(player, "mine_randomite");
 				break;
 			case FISSURED_STONE:
-			case FISSURED_PACKED_ICE:
 				PlayerHelper.grantAdvancement(player, "mine_fissure");
 				break;
 			default:
@@ -243,7 +247,6 @@ public class BlockCave extends Block
 				return CaveItems.CAVE_ITEM;
 			case RANDOMITE_ORE:
 			case FISSURED_STONE:
-			case FISSURED_PACKED_ICE:
 				return Items.AIR;
 			default:
 		}
@@ -283,7 +286,6 @@ public class BlockCave extends Block
 				break;
 			case RANDOMITE_ORE:
 			case FISSURED_STONE:
-			case FISSURED_PACKED_ICE:
 				return 0;
 			default:
 		}
@@ -301,7 +303,6 @@ public class BlockCave extends Block
 				return MathHelper.getInt(RANDOM, 1, 3);
 			case HEXCITE_ORE:
 			case FISSURED_STONE:
-			case FISSURED_PACKED_ICE:
 				return MathHelper.getInt(RANDOM, 3, 5);
 			default:
 		}
@@ -324,8 +325,7 @@ public class BlockCave extends Block
 		RANDOMITE_ORE(4, "randomite_ore", "oreRandomite", MapColor.PURPLE, Material.ROCK, SoundType.STONE, 4.0F, 1),
 		HEXCITE_ORE(5, "hexcite_ore", "oreHexcite", MapColor.SNOW, Material.ROCK, SoundType.STONE, 3.0F, 2),
 		HEXCITE_BLOCK(6, "hexcite_block", "blockHexcite", MapColor.SNOW, Material.IRON, SoundType.METAL, 3.5F, 2),
-		FISSURED_STONE(7, "fissured_stone", "stone.stone", MapColor.STONE, Material.ROCK, SoundType.STONE, 1.0F, 0),
-		FISSURED_PACKED_ICE(8, "fissured_packed_ice", "icePacked", MapColor.ICE, Material.ICE, SoundType.GLASS, 1.0F, 0);
+		FISSURED_STONE(7, "fissured_stone", "stone.stone", MapColor.STONE, Material.ROCK, SoundType.STONE, 1.0F, 0);
 
 		public static final EnumType[] VALUES = new EnumType[values().length];
 

@@ -33,12 +33,9 @@ public class ItemBlockCave extends ItemBlock
 	{
 		String name = super.getItemStackDisplayName(stack);
 
-		switch (EnumType.byItemStack(stack))
+		if (EnumType.byItemStack(stack) == EnumType.FISSURED_STONE)
 		{
-			case FISSURED_STONE:
-			case FISSURED_PACKED_ICE:
-				return ("" + Cavern.proxy.translateFormat("tile.fissured.name", name)).trim();
-			default:
+			return ("" + Cavern.proxy.translateFormat("tile.fissured.name", name)).trim();
 		}
 
 		return name;

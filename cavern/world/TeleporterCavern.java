@@ -56,15 +56,13 @@ public class TeleporterCavern extends Teleporter
 		{
 			IPortalCache cache = PortalCache.get(entity);
 			ResourceLocation key = getKey();
-			double posX = entity.posX;
-			double posY = entity.posY;
-			double posZ = entity.posZ;
+			BlockPos prevPos = entity.getPosition();
 
 			if (cache.hasLastPos(key, type))
 			{
 				BlockPos pos = cache.getLastPos(key, type);
 
-				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+				entity.moveToBlockPosAndAngles(pos, entity.rotationYaw, entity.rotationPitch);
 
 				if (placeInExistingPortal(entity, rotationYaw))
 				{
@@ -72,7 +70,7 @@ public class TeleporterCavern extends Teleporter
 				}
 				else
 				{
-					entity.setLocationAndAngles(posX, posY, posZ, entity.rotationYaw, entity.rotationPitch);
+					entity.moveToBlockPosAndAngles(prevPos, entity.rotationYaw, entity.rotationPitch);
 				}
 			}
 		}

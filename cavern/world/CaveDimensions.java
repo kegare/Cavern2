@@ -15,6 +15,7 @@ import cavern.core.Cavern;
 import cavern.item.CaveItems;
 import cavern.world.mirage.WorldProviderCaveland;
 import cavern.world.mirage.WorldProviderCavenia;
+import cavern.world.mirage.WorldProviderCrownCliffs;
 import cavern.world.mirage.WorldProviderDarkForest;
 import cavern.world.mirage.WorldProviderFrostMountains;
 import cavern.world.mirage.WorldProviderVoid;
@@ -35,6 +36,7 @@ public class CaveDimensions
 	public static DimensionType WIDE_DESERT;
 	public static DimensionType THE_VOID;
 	public static DimensionType DARK_FOREST;
+	public static DimensionType CROWN_CLIFFS;
 
 	public static DimensionType register(String name, int id, Class<? extends WorldProvider> provider)
 	{
@@ -62,6 +64,7 @@ public class CaveDimensions
 		WIDE_DESERT = register("wide_desert", MirageWorldsConfig.wideDesert, WorldProviderWideDesert.class);
 		THE_VOID = register("the_void", MirageWorldsConfig.theVoid, WorldProviderVoid.class);
 		DARK_FOREST = register("dark_forest", MirageWorldsConfig.darkForest, WorldProviderDarkForest.class);
+		CROWN_CLIFFS = register("crown_cliffs", MirageWorldsConfig.crownCliffs, WorldProviderCrownCliffs.class);
 	}
 
 	public static String getLocalizedName(@Nullable DimensionType type)
@@ -116,6 +119,11 @@ public class CaveDimensions
 		if (type == DARK_FOREST)
 		{
 			return Cavern.proxy.translate(suffix + ".darkForest.name");
+		}
+
+		if (type == CROWN_CLIFFS)
+		{
+			return Cavern.proxy.translate(suffix + ".crownCliffs.name");
 		}
 
 		if (CavernAPI.dimension.isMirageWorlds(type))

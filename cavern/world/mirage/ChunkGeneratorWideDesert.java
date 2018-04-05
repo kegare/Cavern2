@@ -3,7 +3,6 @@ package cavern.world.mirage;
 import java.util.List;
 import java.util.Random;
 
-import cavern.world.gen.MapGenFrostCaves;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -20,6 +19,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenBase;
+import net.minecraft.world.gen.MapGenCaves;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenLakes;
@@ -54,8 +54,8 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 	private double[] maxLimitRegion;
 	private double[] depthRegion;
 
-	private MapGenBase caveGenerator = new MapGenFrostCaves();
-	private MapGenVillage villageGenerator = new MapGenVillage();
+	private final MapGenBase caveGenerator = new MapGenCaves();
+	private final MapGenVillage villageGenerator = new MapGenVillage();
 
 	public ChunkGeneratorWideDesert(World world)
 	{
@@ -157,7 +157,6 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 			}
 		}
 	}
-
 
 	public void generateTerrain(World world, Random rand, ChunkPrimer primer, int x, int z, double noiseVal)
 	{
@@ -300,6 +299,7 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 				}
 
 				++j;
+
 				double d8 = f3;
 				double d9 = f2;
 				d8 = d8 + d7 * 0.2D;
@@ -328,6 +328,7 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 					}
 
 					heightMap[i] = d5;
+
 					++i;
 				}
 			}
@@ -366,8 +367,8 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 		BlockFalling.fallInstantly = true;
 
 		int blockX = x * 16;
-		int blockY = z * 16;
-		BlockPos blockpos = new BlockPos(blockX, 0, blockY);
+		int blockZ = z * 16;
+		BlockPos blockpos = new BlockPos(blockX, 0, blockZ);
 		rand.setSeed(world.getSeed());
 		long xSeed = rand.nextLong() / 2L * 2L + 1L;
 		long zSeed = rand.nextLong() / 2L * 2L + 1L;
@@ -377,18 +378,18 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 
 		ForgeEventFactory.onChunkPopulate(true, this, world, rand, x, z, flag);
 
-		flag = villageGenerator.generateStructure(this.world, this.rand, chunkpos);
+		flag = villageGenerator.generateStructure(world, rand, chunkpos);
 
 		if (rand.nextInt(50) == 0 && TerrainGen.populate(this, world, rand, x, z, flag, PopulateChunkEvent.Populate.EventType.LAKE))
 		{
-			int i1 = rand.nextInt(16) + 8;
-			int j1 = rand.nextInt(128);
-			int k1 = rand.nextInt(16) + 8;
+			int genX = rand.nextInt(16) + 8;
+			int genY = rand.nextInt(128);
+			int genZ = rand.nextInt(16) + 8;
 
-			new WorldGenLakes(Blocks.WATER).generate(world, rand, blockpos.add(i1, j1, k1));
+			new WorldGenLakes(Blocks.WATER).generate(world, rand, blockpos.add(genX, genY, genZ));
 		}
 
-		Biomes.DESERT.decorate(world, rand, new BlockPos(blockX, 0, blockY));
+		Biomes.DESERT.decorate(world, rand, blockpos);
 
 		ForgeEventFactory.onChunkPopulate(false, this, world, rand, x, z, flag);
 

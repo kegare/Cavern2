@@ -16,6 +16,7 @@ import cavern.util.Version;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -50,7 +51,7 @@ public class CommandCavern extends CommandBase
 	{
 		if (args.length <= 0)
 		{
-			return;
+			throw new WrongUsageException(getUsage(sender));
 		}
 
 		boolean isPlayer = sender instanceof EntityPlayerMP;

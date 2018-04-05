@@ -106,7 +106,6 @@ public class ConfigMiningPoints
 		entries.add(new PointEntry("oreRandomite", 2));
 		entries.add(new PointEntry("oreHexcite", 4));
 		entries.add(new PointEntry(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.FISSURED_STONE.getMetadata()), 3));
-		entries.add(new PointEntry(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.FISSURED_PACKED_ICE.getMetadata()), 3));
 
 		ConfigCategory category = GeneralConfig.config.getCategory(Configuration.CATEGORY_GENERAL);
 		Property prop = category.get("miningPoints");

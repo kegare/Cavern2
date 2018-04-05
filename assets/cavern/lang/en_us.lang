@@ -177,6 +177,8 @@ cavern.config.dimension.theVoid=The Void
 cavern.config.dimension.theVoid.tooltip=Specify the dimension id of the The Void. When you specify 0, this dimension is disabled.
 cavern.config.dimension.darkForest=Dark Forest
 cavern.config.dimension.darkForest.tooltip=Specify the dimension id of the Dark Forest. When you specify 0, this dimension is disabled.
+cavern.config.dimension.crownCliffs=Crown Cliffs
+cavern.config.dimension.crownCliffs.tooltip=Specify the dimension id of the Crown Cliffs. When you specify 0, this dimension is disabled.
 
 cavern.config.biomes=Biomes Customize
 cavern.config.biomes.tooltip=Change the biome generation settings of the dimension.
@@ -346,6 +348,7 @@ item.mirageBook.frostMountains.name=Frost Mountains
 item.mirageBook.wideDesert.name=Wide Desert
 item.mirageBook.theVoid.name=The Void
 item.mirageBook.darkForest.name=Dark Forest
+item.mirageBook.crownCliffs.name=Crown Cliffs
 item.mirageBook.portal=You need a portal for travel. 
 item.mirageBook.fail=You cannot use it here.
 item.magicBook.name=Magic Book: %s

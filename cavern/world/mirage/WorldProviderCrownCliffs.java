@@ -2,40 +2,39 @@ package cavern.world.mirage;
 
 import cavern.world.CaveDimensions;
 import cavern.world.CustomSeedData;
-import net.minecraft.init.Biomes;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.biome.BiomeProviderSingle;
+import net.minecraft.world.biome.BiomeProvider;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WorldProviderDarkForest extends WorldProviderMirageWorld
+public class WorldProviderCrownCliffs extends WorldProviderMirageWorld
 {
 	@Override
 	protected void init()
 	{
 		hasSkyLight = true;
-		biomeProvider = new BiomeProviderSingle(Biomes.ROOFED_FOREST);
+		biomeProvider = new BiomeProvider(world.getWorldInfo());
 		seedData = world instanceof WorldServer ? new CustomSeedData(world.getWorldInfo().getDimensionData(getDimension())) : new CustomSeedData();
+	}
+
+	@Override
+	public IChunkGenerator createChunkGenerator()
+	{
+		return new ChunkGeneratorCrownCliffs(world);
 	}
 
 	@Override
 	public DimensionType getDimensionType()
 	{
-		return CaveDimensions.DARK_FOREST;
+		return CaveDimensions.CROWN_CLIFFS;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public float getSunBrightness(float ticks)
+	public float getCloudHeight()
 	{
-		return super.getSunBrightness(ticks) * 0.8F;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public float getStarBrightness(float ticks)
-	{
-		return super.getStarBrightness(ticks) * 1.5F;
+		return 180.0F;
 	}
 }

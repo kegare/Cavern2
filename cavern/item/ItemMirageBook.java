@@ -12,14 +12,11 @@ import cavern.util.CaveUtils;
 import cavern.world.CaveDimensions;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -154,17 +151,17 @@ public class ItemMirageBook extends Item implements ITeleporter
 	@Override
 	public void placeEntity(World world, Entity entity, float rotationYaw)
 	{
-		if (attemptToLastPos(world, entity) || attemptRandomly(world, entity) || attemptToVoid(world, entity))
+		if (attemptToLastPos(world, entity))
 		{
-			entity.motionX = 0.0D;
-			entity.motionY = 0.0D;
-			entity.motionZ = 0.0D;
-
-			if (entity instanceof EntityLivingBase)
-			{
-				((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 25, 0, false, false));
-			}
+			return;
 		}
+
+		if (attemptRandomly(world, entity))
+		{
+			return;
+		}
+
+		attemptToVoid(world, entity);
 	}
 
 	protected boolean attemptToLastPos(World world, Entity entity)
@@ -179,7 +176,7 @@ public class ItemMirageBook extends Item implements ITeleporter
 
 			if (world.getBlockState(pos.down()).getMaterial().isSolid() && world.getBlockState(pos).getBlock().canSpawnInBlock() && world.getBlockState(pos.up()).getBlock().canSpawnInBlock())
 			{
-				teleportTo(entity, pos);
+				entity.moveToBlockPosAndAngles(pos, entity.rotationYaw, entity.rotationPitch);
 
 				return true;
 			}
@@ -221,7 +218,7 @@ public class ItemMirageBook extends Item implements ITeleporter
 					}
 				}
 
-				teleportTo(entity, pos);
+				entity.moveToBlockPosAndAngles(pos, entity.rotationYaw, entity.rotationPitch);
 
 				return true;
 			}
@@ -243,21 +240,9 @@ public class ItemMirageBook extends Item implements ITeleporter
 
 		BlockPos.getAllInBoxMutable(from, to).forEach(blockPos -> world.setBlockState(blockPos, Blocks.MOSSY_COBBLESTONE.getDefaultState(), 2));
 
-		teleportTo(entity, pos.up());
+		entity.moveToBlockPosAndAngles(pos.up(), entity.rotationYaw, entity.rotationPitch);
 
 		return true;
-	}
-
-	protected void teleportTo(Entity entity, BlockPos pos)
-	{
-		if (entity instanceof EntityPlayerMP)
-		{
-			((EntityPlayerMP)entity).connection.setPlayerLocation(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
-		}
-		else
-		{
-			entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
-		}
 	}
 
 	public static ItemStack getRandomBook()
@@ -280,7 +265,8 @@ public class ItemMirageBook extends Item implements ITeleporter
 		FROST_MOUNTAINS(2, "frostMountains"),
 		WIDE_DESERT(3, "wideDesert"),
 		THE_VOID(4, "theVoid"),
-		DARK_FOREST(5, "darkForest");
+		DARK_FOREST(5, "darkForest"),
+		CROWN_CLIFFS(6, "crownCliffs");
 
 		public static final EnumType[] VALUES = new EnumType[values().length];
 
@@ -320,6 +306,8 @@ public class ItemMirageBook extends Item implements ITeleporter
 					return CaveDimensions.THE_VOID;
 				case DARK_FOREST:
 					return CaveDimensions.DARK_FOREST;
+				case CROWN_CLIFFS:
+					return CaveDimensions.CROWN_CLIFFS;
 			}
 
 			return null;

@@ -44,10 +44,10 @@ public class ChunkGeneratorAquaCavern implements IChunkGenerator
 	private final MapGenBase caveGenerator = new MapGenAquaCaves();
 	private final MapGenBase ravineGenerator = new MapGenAquaRavine();
 
-	private VeinGenerator veinGenerator = new VeinGenerator(AquaCavernConfig.veinManager.getCaveVeins());
+	private final VeinGenerator veinGenerator = new VeinGenerator(AquaCavernConfig.veinManager.getCaveVeins());
 
-	private WorldGenerator dungeonGen = new WorldGenCaveDungeons(AquaCavernConfig.dungeonMobs.getKeys());
-	private WorldGenerator towerDungeonGen = new WorldGenTowerDungeons(AquaCavernConfig.towerDungeonMobs.getKeys());
+	private final WorldGenerator dungeonGen = new WorldGenCaveDungeons(AquaCavernConfig.dungeonMobs.getKeys());
+	private final WorldGenerator towerDungeonGen = new WorldGenTowerDungeons(AquaCavernConfig.towerDungeonMobs.getKeys());
 
 	public ChunkGeneratorAquaCavern(World world)
 	{

@@ -177,6 +177,8 @@ cavern.config.dimension.theVoid=虚無の空間
 cavern.config.dimension.theVoid.tooltip=虚無の空間のディメンションIDを指定します。0を指定すると、このディメンションは無効になります。
 cavern.config.dimension.darkForest=薄暗い森
 cavern.config.dimension.darkForest.tooltip=薄暗い森のディメンションIDを指定します。0を指定すると、このディメンションは無効になります。
+cavern.config.dimension.crownCliffs=そびえ立つ絶壁
+cavern.config.dimension.crownCliffs.tooltip=そびえ立つ絶壁のディメンションIDを指定します。0を指定すると、このディメンションは無効になります。
 
 cavern.config.biomes=バイオームのカスタマイズ
 cavern.config.biomes.tooltip=ディメンションのバイオームの生成設定を変更できます。
@@ -348,6 +350,7 @@ item.mirageBook.frostMountains.name=凍える山岳
 item.mirageBook.wideDesert.name=大砂漠
 item.mirageBook.theVoid.name=虚無の空間
 item.mirageBook.darkForest.name=薄暗い森
+item.mirageBook.crownCliffs.name=そびえ立つ絶壁
 item.mirageBook.portal=使用するにはポータルが必要です。
 item.mirageBook.fail=ここでは使用できません。
 item.magicBook.name=魔術書: %s
