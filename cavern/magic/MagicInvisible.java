@@ -3,6 +3,7 @@ package cavern.magic;
 import cavern.item.ItemMagicBook;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.server.MagicInvisibleMessage;
+import cavern.util.PlayerHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -66,6 +67,8 @@ public class MagicInvisible extends Magic
 			{
 				player.setHeldItem(getSpellingHand(), new ItemStack(Items.BOOK));
 			}
+
+			PlayerHelper.grantAdvancement(player, "magic_invisible");
 		}
 	}
 }

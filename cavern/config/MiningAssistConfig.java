@@ -26,6 +26,7 @@ public class MiningAssistConfig
 	public static ConfigBlocks quickTargetBlocks = new ConfigBlocks();
 	public static ConfigBlocks rangedTargetBlocks = new ConfigBlocks();
 	public static ConfigBlocks aditTargetBlocks = new ConfigBlocks();
+	public static boolean priorityQuickMining;
 	public static int quickMiningLimit;
 	public static int rangedMining;
 	public static boolean modifiedHardness;
@@ -123,6 +124,14 @@ public class MiningAssistConfig
 		prop.setComment(comment);
 		propOrder.add(prop.getName());
 		aditTargetBlocks.setValues(prop.getStringList());
+
+		prop = config.get(category, "priorityQuickMining", false);
+		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
+		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
+		comment += " [default: " + prop.getDefault() + "]";
+		prop.setComment(comment);
+		propOrder.add(prop.getName());
+		priorityQuickMining = prop.getBoolean(priorityQuickMining);
 
 		prop = config.get(category, "quickMiningLimit", 30);
 		prop.setMinValue(1).setMaxValue(100);

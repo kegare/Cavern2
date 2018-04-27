@@ -7,6 +7,7 @@ import cavern.entity.EntitySummonCavenicZombie;
 import cavern.entity.EntitySummonSkeleton;
 import cavern.entity.EntitySummonZombie;
 import cavern.handler.CaveEventHooks;
+import cavern.util.PlayerHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -52,7 +53,14 @@ public class MagicSummon extends Magic
 				}
 			}
 
-			return new ActionResult<>(count > 0 ? EnumActionResult.SUCCESS : EnumActionResult.FAIL, null);
+			if (count <= 0)
+			{
+				return new ActionResult<>(EnumActionResult.FAIL, null);
+			}
+
+			PlayerHelper.grantAdvancement(player, "magic_summon");
+
+			return new ActionResult<>(EnumActionResult.SUCCESS, null);
 		}
 
 		return new ActionResult<>(EnumActionResult.PASS, null);

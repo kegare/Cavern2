@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:magic_book",
+            "data": 7
+        },
+        "title": {
+            "translate": "advancements.cavern.magic_explosion.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.magic_explosion.description"
+        }
+    },
+    "parent": "cavern:magic_summon",
+    "criteria": {
+        "magic_explosion": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "rewards": {
+        "experience": 10
+    }
+}

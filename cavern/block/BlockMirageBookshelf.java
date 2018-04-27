@@ -28,7 +28,9 @@ public class BlockMirageBookshelf extends BlockBookshelf
 	{
 		super.getDrops(drops, world, pos, state, fortune);
 
-		if (RANDOM.nextDouble() < 0.05D)
+		double bonus = fortune * 0.01D;
+
+		if (RANDOM.nextDouble() < 0.05D + bonus)
 		{
 			ItemStack stack = ItemMirageBook.getRandomBook();
 
@@ -37,7 +39,7 @@ public class BlockMirageBookshelf extends BlockBookshelf
 				drops.add(stack);
 			}
 		}
-		else if (RANDOM.nextDouble() < 0.03D)
+		else if (RANDOM.nextDouble() < 0.03D + bonus)
 		{
 			drops.add(ItemMagicBook.getRandomBook());
 		}

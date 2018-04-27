@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import cavern.util.PlayerHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -75,6 +76,8 @@ public class MagicWarp extends Magic
 			warp = true;
 
 			setWarpPoint(stack, null, type);
+
+			PlayerHelper.grantAdvancement(player, "magic_warp");
 
 			return new ActionResult<>(EnumActionResult.SUCCESS, null);
 		}

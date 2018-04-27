@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:mirage_book",
+            "data": 5
+        },
+        "title": {
+            "translate": "advancements.cavern.enter_the_dark_forest.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.enter_the_dark_forest.description"
+        }
+    },
+    "parent": "cavern:enter_the_void",
+    "criteria": {
+        "entered_dark_forest": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

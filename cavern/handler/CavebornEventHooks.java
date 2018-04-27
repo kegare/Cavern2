@@ -104,11 +104,9 @@ public class CavebornEventHooks
 
 		DimensionType type = portal.getDimension();
 
-		if (type == CaveDimensions.CAVERN)
-		{
-			PlayerHelper.grantCriterion(player, "root", "entered_cavern");
-		}
-		else
+		PlayerHelper.grantCriterion(player, "root", "entered_cavern");
+
+		if (type != CaveDimensions.CAVERN)
 		{
 			String name = type.getName();
 

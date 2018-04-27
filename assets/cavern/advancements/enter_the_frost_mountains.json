@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:mirage_book",
+            "data": 2
+        },
+        "title": {
+            "translate": "advancements.cavern.enter_the_frost_mountains.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.enter_the_frost_mountains.description"
+        }
+    },
+    "parent": "cavern:mirage_trip",
+    "criteria": {
+        "entered_frost_mountains": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

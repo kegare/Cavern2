@@ -59,6 +59,6 @@ public class BlockPortalAquaCavern extends BlockPortalCavern
 	@Override
 	public MinerRank getMinerRank()
 	{
-		return MinerRank.AQUA_MINER;
+		return CaveDimensions.CAVERN == null && CaveDimensions.HUGE_CAVERN == null ? MinerRank.BEGINNER : MinerRank.AQUA_MINER;
 	}
 }

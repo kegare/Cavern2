@@ -13,10 +13,7 @@
     },
     "criteria": {
         "entered_cavern": {
-            "trigger": "minecraft:changed_dimension",
-            "conditions": {
-                "to": "cavern"
-            }
+            "trigger": "minecraft:impossible"
         }
     }
 }

@@ -3,6 +3,7 @@ package cavern.magic;
 import com.google.common.base.Predicate;
 
 import cavern.api.ISummonMob;
+import cavern.util.PlayerHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -83,47 +84,47 @@ public class MagicThunderbolt extends Magic implements Predicate<Entity>
 						spawnThunderbolt(entity.posX, entity.posY, entity.posZ, true);
 					}
 				}
-
-				return new ActionResult<>(EnumActionResult.SUCCESS, null);
 			}
-
-			EnumFacing front = player.getHorizontalFacing();
-			BlockPos pos = player.getPosition().up();
-			int i = 0;
-
-			do
+			else
 			{
-				pos = pos.offset(front);
+				EnumFacing front = player.getHorizontalFacing();
+				BlockPos pos = player.getPosition().up();
+				int i = 0;
 
-				++i;
-			}
-			while (i < 8 && world.isAirBlock(pos));
-
-			pos = pos.offset(front.getOpposite());
-
-			while (world.isAirBlock(pos) && pos.getY() > 0)
-			{
-				pos = pos.down();
-			}
-
-			int range = Math.max(5, i);
-
-			for (Entity entity : world.getEntitiesInAABBexcluding(player, new AxisAlignedBB(pos.add(-range, -range, -range), pos.add(range, range, range)), this))
-			{
-				if (++targetCount > 3)
+				do
 				{
-					break;
+					pos = pos.offset(front);
+
+					++i;
+				}
+				while (i < 8 && world.isAirBlock(pos));
+
+				pos = pos.offset(front.getOpposite());
+
+				while (world.isAirBlock(pos) && pos.getY() > 0)
+				{
+					pos = pos.down();
 				}
 
-				spawnThunderbolt(entity.posX, entity.posY, entity.posZ, true);
+				int range = Math.max(5, i);
+
+				for (Entity entity : world.getEntitiesInAABBexcluding(player, new AxisAlignedBB(pos.add(-range, -range, -range), pos.add(range, range, range)), this))
+				{
+					if (++targetCount > 3)
+					{
+						break;
+					}
+
+					spawnThunderbolt(entity.posX, entity.posY, entity.posZ, true);
+				}
+
+				if (targetCount <= 0)
+				{
+					spawnThunderbolt(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, false);
+				}
 			}
 
-			if (targetCount > 0)
-			{
-				return new ActionResult<>(EnumActionResult.SUCCESS, null);
-			}
-
-			spawnThunderbolt(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, false);
+			PlayerHelper.grantAdvancement(player, "magic_thunderbolt");
 
 			return new ActionResult<>(EnumActionResult.SUCCESS, null);
 		}

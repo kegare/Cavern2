@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:magic_book",
+            "data": 8
+        },
+        "title": {
+            "translate": "advancements.cavern.magic_thunderbolt.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.magic_thunderbolt.description"
+        }
+    },
+    "parent": "cavern:magic_explosion",
+    "criteria": {
+        "magic_thunderbolt": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "rewards": {
+        "experience": 10
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:magic_book",
+            "data": 10
+        },
+        "title": {
+            "translate": "advancements.cavern.magic_overload.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.magic_overload.description"
+        },
+        "frame": "goal"
+    },
+    "parent": "cavern:magic_infinity",
+    "criteria": {
+        "magic_overload": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "rewards": {
+        "experience": 20
+    }
+}

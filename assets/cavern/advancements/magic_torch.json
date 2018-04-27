@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:magic_book",
+            "data": 4
+        },
+        "title": {
+            "translate": "advancements.cavern.magic_torch.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.magic_torch.description"
+        }
+    },
+    "parent": "cavern:magic_warp",
+    "criteria": {
+        "magic_torch": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "rewards": {
+        "experience": 10
+    }
+}

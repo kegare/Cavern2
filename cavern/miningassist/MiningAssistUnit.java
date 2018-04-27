@@ -9,6 +9,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import com.google.common.collect.Maps;
 
 import cavern.capability.CaveCapabilities;
+import cavern.config.MiningAssistConfig;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -39,7 +40,11 @@ public class MiningAssistUnit
 	{
 		if (snapshot == null || refresh && !snapshot.equals(player.world, pos))
 		{
-			switch (type)
+			if (MiningAssistConfig.priorityQuickMining && MiningAssist.QUICK.isEffectiveTarget(player.getHeldItemMainhand(), state))
+			{
+				snapshot = new QuickMiningSnapshot(player.world, pos, state, player);
+			}
+			else switch (type)
 			{
 				case QUICK:
 					snapshot = new QuickMiningSnapshot(player.world, pos, state, player);

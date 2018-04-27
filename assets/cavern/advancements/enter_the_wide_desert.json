@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:mirage_book",
+            "data": 3
+        },
+        "title": {
+            "translate": "advancements.cavern.enter_the_wide_desert.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.enter_the_wide_desert.description"
+        }
+    },
+    "parent": "cavern:enter_the_frost_mountains",
+    "criteria": {
+        "entered_wide_desert": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

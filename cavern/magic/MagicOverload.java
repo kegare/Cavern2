@@ -1,10 +1,14 @@
 package cavern.magic;
 
 import cavern.core.CaveSounds;
+import cavern.util.PlayerHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 public class MagicOverload extends SpecialMagic
@@ -36,6 +40,19 @@ public class MagicOverload extends SpecialMagic
 	public long getEffectTime()
 	{
 		return 60000L;
+	}
+
+	@Override
+	public ActionResult<ITextComponent> fireMagic()
+	{
+		ActionResult<ITextComponent> result = super.fireMagic();
+
+		if (result.getType() == EnumActionResult.SUCCESS)
+		{
+			PlayerHelper.grantAdvancement(player, "magic_overload");
+		}
+
+		return result;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package cavern.magic;
 
 import cavern.entity.EntityMagicTorcher;
+import cavern.util.PlayerHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -63,6 +64,8 @@ public class MagicTorch extends Magic
 		torcher.setTracking(tracking);
 
 		world.spawnEntity(torcher);
+
+		PlayerHelper.grantAdvancement(player, "magic_torch");
 
 		return new ActionResult<>(EnumActionResult.SUCCESS, null);
 	}

@@ -4,6 +4,7 @@ import cavern.api.ISummonMob;
 import cavern.core.CaveSounds;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.ExplosionMessage;
+import cavern.util.PlayerHelper;
 import cavern.world.CustomExplosion;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityOwnable;
@@ -54,23 +55,25 @@ public class MagicExplosion extends Magic
 			if (hitVec != null)
 			{
 				doExplosion(new BlockPos(hitVec));
-
-				return new ActionResult<>(EnumActionResult.SUCCESS, null);
 			}
-
-			EnumFacing front = player.getHorizontalFacing();
-			BlockPos pos = player.getPosition().up();
-			int i = 0;
-
-			do
+			else
 			{
-				pos = pos.offset(front);
+				EnumFacing front = player.getHorizontalFacing();
+				BlockPos pos = player.getPosition().up();
+				int i = 0;
 
-				++i;
+				do
+				{
+					pos = pos.offset(front);
+
+					++i;
+				}
+				while (i < 6 && world.isAirBlock(pos));
+
+				doExplosion(pos);
 			}
-			while (i < 6 && world.isAirBlock(pos));
 
-			doExplosion(pos);
+			PlayerHelper.grantAdvancement(player, "magic_explosion");
 
 			return new ActionResult<>(EnumActionResult.SUCCESS, null);
 		}

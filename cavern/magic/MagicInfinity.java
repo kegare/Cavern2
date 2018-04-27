@@ -1,7 +1,11 @@
 package cavern.magic;
 
+import cavern.util.PlayerHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 public class MagicInfinity extends SpecialMagic
@@ -21,6 +25,19 @@ public class MagicInfinity extends SpecialMagic
 	public long getEffectTime()
 	{
 		return 30000L;
+	}
+
+	@Override
+	public ActionResult<ITextComponent> fireMagic()
+	{
+		ActionResult<ITextComponent> result = super.fireMagic();
+
+		if (result.getType() == EnumActionResult.SUCCESS)
+		{
+			PlayerHelper.grantAdvancement(player, "magic_infinity");
+		}
+
+		return result;
 	}
 
 	@Override

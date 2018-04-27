@@ -1,23 +1,24 @@
 {
     "display": {
         "icon": {
-            "item": "cavern:mirage_portal"
+            "item": "cavern:magic_book",
+            "data": 3
         },
         "title": {
-            "translate": "advancements.cavern.mirage_trip.title"
+            "translate": "advancements.cavern.get_magic_book.title"
         },
         "description": {
-            "translate": "advancements.cavern.mirage_trip.description"
+            "translate": "advancements.cavern.get_magic_book.description"
         }
     },
     "parent": "cavern:root",
     "criteria": {
-        "mirage_book": {
+        "magic_book": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "cavern:mirage_book"
+                        "item": "cavern:magic_book"
                     }
                 ]
             }

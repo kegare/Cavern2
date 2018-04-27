@@ -1,0 +1,24 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:magic_book",
+            "data": 9
+        },
+        "title": {
+            "translate": "advancements.cavern.magic_infinity.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.magic_infinity.description"
+        },
+        "frame": "goal"
+    },
+    "parent": "cavern:get_magic_book",
+    "criteria": {
+        "magic_infinity": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "rewards": {
+        "experience": 20
+    }
+}

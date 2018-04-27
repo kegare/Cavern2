@@ -138,14 +138,24 @@ public class CaveEventHooks
 
 		EntityPlayerMP player = (EntityPlayerMP)event.player;
 
-		if (CavernAPI.dimension.isInCaves(player))
+		if (CavernAPI.dimension.isInCaveDimensions(player))
 		{
 			WorldServer world = player.getServerWorld();
 			DimensionType type = world.provider.getDimensionType();
 
+			if (CavernAPI.dimension.isCaves(type))
+			{
+				PlayerHelper.grantCriterion(player, "root", "entered_cavern");
+			}
+
 			if (type != CaveDimensions.CAVERN)
 			{
 				String name = type.getName();
+
+				if (name.startsWith("the_"))
+				{
+					name = name.substring(4);
+				}
 
 				PlayerHelper.grantCriterion(player, "enter_the_" + name, "entered_" + name);
 			}

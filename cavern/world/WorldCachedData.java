@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import com.google.common.collect.Maps;
 
 import cavern.block.BlockPortalCavern;
@@ -48,11 +50,6 @@ public class WorldCachedData
 	{
 		WorldCachedData data = CaveCapabilities.getCapability(world, CaveCapabilities.WORLD_CACHED_DATA);
 
-		if (data == null)
-		{
-			return new WorldCachedData(world);
-		}
-
-		return data;
+		return ObjectUtils.defaultIfNull(data, new WorldCachedData(world));
 	}
 }

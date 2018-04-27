@@ -58,6 +58,6 @@ public class BlockPortalHugeCavern extends BlockPortalCavern
 	@Override
 	public MinerRank getMinerRank()
 	{
-		return MinerRank.IRON_MINER;
+		return CaveDimensions.CAVERN == null ? MinerRank.BEGINNER : MinerRank.IRON_MINER;
 	}
 }

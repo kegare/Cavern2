@@ -2,18 +2,18 @@
     "display": {
         "icon": {
             "item": "cavern:mirage_book",
-            "data": 1
+            "data": 4
         },
         "title": {
-            "translate": "advancements.cavern.enter_the_cavenia.title"
+            "translate": "advancements.cavern.enter_the_void.title"
         },
         "description": {
-            "translate": "advancements.cavern.enter_the_cavenia.description"
+            "translate": "advancements.cavern.enter_the_void.description"
         }
     },
-    "parent": "cavern:enter_the_caveland",
+    "parent": "cavern:enter_the_wide_desert",
     "criteria": {
-        "entered_cavenia": {
+        "entered_void": {
             "trigger": "minecraft:impossible"
         }
     }

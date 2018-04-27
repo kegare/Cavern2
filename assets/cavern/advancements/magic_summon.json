@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:magic_book",
+            "data": 6
+        },
+        "title": {
+            "translate": "advancements.cavern.magic_summon.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.magic_summon.description"
+        }
+    },
+    "parent": "cavern:get_magic_book",
+    "criteria": {
+        "magic_summon": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "rewards": {
+        "experience": 10
+    }
+}
