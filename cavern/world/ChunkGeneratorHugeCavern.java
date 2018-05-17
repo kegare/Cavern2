@@ -12,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
@@ -157,6 +158,7 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 		int worldX = chunkX * 16;
 		int worldZ = chunkZ * 16;
 		BlockPos blockPos = new BlockPos(worldX, 0, worldZ);
+		ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
 		Biome biome = world.getBiome(blockPos.add(16, 0, 16));
 		BiomeDecorator decorator = biome.decorator;
 		int worldHeight = world.provider.getActualHeight();
@@ -200,11 +202,11 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 			}
 		}
 
-		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(world, rand, blockPos));
+		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(world, rand, chunkPos));
 
 		MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Post(world, rand, blockPos));
 
-		if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.SHROOM))
+		if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.SHROOM))
 		{
 			int i = 0;
 
@@ -240,7 +242,7 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 		{
 			if (BiomeDictionary.hasType(biome, Type.NETHER))
 			{
-				if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.LAKE_LAVA))
+				if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.LAKE_LAVA))
 				{
 					for (int i = 0; i < 70; ++i)
 					{
@@ -254,7 +256,7 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 			}
 			else if (BiomeDictionary.hasType(biome, Type.WATER))
 			{
-				if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.LAKE_WATER))
+				if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.LAKE_WATER))
 				{
 					for (int i = 0; i < 50; ++i)
 					{
@@ -268,7 +270,7 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 			}
 			else if (!BiomeDictionary.hasType(biome, Type.END))
 			{
-				if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.LAKE_WATER))
+				if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.LAKE_WATER))
 				{
 					for (int i = 0; i < 50; ++i)
 					{
@@ -280,7 +282,7 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 					}
 				}
 
-				if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.LAKE_LAVA))
+				if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.LAKE_LAVA))
 				{
 					for (int i = 0; i < 50; ++i)
 					{
@@ -294,7 +296,7 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 			}
 		}
 
-		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, rand, blockPos));
+		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, rand, chunkPos));
 
 		ForgeEventFactory.onChunkPopulate(false, this, world, rand, chunkX, chunkZ, false);
 

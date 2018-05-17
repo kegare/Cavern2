@@ -11,7 +11,7 @@ import cavern.world.gen.MapGenExtremeCaves;
 import cavern.world.gen.MapGenExtremeRavine;
 import cavern.world.gen.VeinGenerator;
 import cavern.world.gen.WorldGenCaveDungeons;
-import cavern.world.gen.WorldGenMirageLibrary;
+import cavern.world.gen.WorldGenMirageRemnant;
 import cavern.world.gen.WorldGenTowerDungeons;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
@@ -64,7 +64,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
 	private final WorldGenerator dungeonGen = new WorldGenCaveDungeons(CavernConfig.dungeonMobs.getKeys());
 	private final WorldGenerator towerDungeonGen = new WorldGenTowerDungeons(CavernConfig.towerDungeonMobs.getKeys());
-	private final WorldGenerator mirageLibraryGen = new WorldGenMirageLibrary();
+	private final WorldGenerator mirageRemnantGen = new WorldGenMirageRemnant();
 	private final WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
 	private final WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
 
@@ -192,6 +192,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 		int worldX = chunkX * 16;
 		int worldZ = chunkZ * 16;
 		BlockPos blockPos = new BlockPos(worldX, 0, worldZ);
+		ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
 		Biome biome = world.getBiome(blockPos.add(16, 0, 16));
 		BiomeDecorator decorator = biome.decorator;
 		int worldHeight = world.provider.getActualHeight();
@@ -255,7 +256,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 
 		if (CavernConfig.generateTowerDungeons && TerrainGen.populate(this, world, rand, chunkX, chunkZ, false, EventType.DUNGEON))
 		{
-			if (rand.nextDouble() < 0.007D)
+			if (rand.nextInt(100) == 0)
 			{
 				x = rand.nextInt(16) + 8;
 				y = rand.nextInt(16) + 8;
@@ -267,21 +268,21 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 
 		if (CavernConfig.generateMirageLibrary)
 		{
-			if (rand.nextDouble() < 0.01D)
+			if (rand.nextInt(50) == 0)
 			{
 				x = rand.nextInt(16) + 8;
-				y = rand.nextInt(16) + 32;
+				y = rand.nextInt(32) + 8;
 				z = rand.nextInt(16) + 8;
 
-				mirageLibraryGen.generate(world, rand, blockPos.add(x, y, z));
+				mirageRemnantGen.generate(world, rand, blockPos.add(x, y, z));
 			}
 		}
 
-		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(world, rand, blockPos));
+		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(world, rand, chunkPos));
 
 		MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Post(world, rand, blockPos));
 
-		if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.SHROOM))
+		if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.SHROOM))
 		{
 			int i = 0;
 
@@ -317,7 +318,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 		{
 			if (BiomeDictionary.hasType(biome, Type.NETHER))
 			{
-				if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.LAKE_LAVA))
+				if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.LAKE_LAVA))
 				{
 					for (int i = 0; i < 40; ++i)
 					{
@@ -331,7 +332,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 			}
 			else if (BiomeDictionary.hasType(biome, Type.WATER))
 			{
-				if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.LAKE_WATER))
+				if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.LAKE_WATER))
 				{
 					for (int i = 0; i < 65; ++i)
 					{
@@ -345,7 +346,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 			}
 			else if (!BiomeDictionary.hasType(biome, Type.END))
 			{
-				if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.LAKE_WATER))
+				if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.LAKE_WATER))
 				{
 					for (int i = 0; i < 50; ++i)
 					{
@@ -357,7 +358,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 					}
 				}
 
-				if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.LAKE_LAVA))
+				if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.LAKE_LAVA))
 				{
 					for (int i = 0; i < 20; ++i)
 					{
@@ -371,7 +372,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 			}
 		}
 
-		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, rand, blockPos));
+		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, rand, chunkPos));
 
 		ForgeEventFactory.onChunkPopulate(false, this, world, rand, chunkX, chunkZ, false);
 

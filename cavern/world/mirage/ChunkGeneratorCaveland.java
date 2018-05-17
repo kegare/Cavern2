@@ -9,6 +9,7 @@ import cavern.world.gen.MapGenCavelandRavine;
 import cavern.world.gen.VeinGenerator;
 import cavern.world.gen.WorldGenAcresia;
 import cavern.world.gen.WorldGenBirchTreePerverted;
+import cavern.world.gen.WorldGenRuinedHouse;
 import cavern.world.gen.WorldGenSpruceTreePerverted;
 import cavern.world.gen.WorldGenTreesPerverted;
 import net.minecraft.block.BlockFalling;
@@ -17,6 +18,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
@@ -63,6 +65,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 	private final WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
 	private final WorldGenerator deadBushGen = new WorldGenDeadBush();
 	private final WorldGenerator acresiaGen = new WorldGenAcresia();
+	private final WorldGenerator ruinedHouseGen = new WorldGenRuinedHouse();
 
 	public ChunkGeneratorCaveland(World world)
 	{
@@ -182,6 +185,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 		int worldX = chunkX * 16;
 		int worldZ = chunkZ * 16;
 		BlockPos blockPos = new BlockPos(worldX, 0, worldZ);
+		ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
 		Biome biome = world.getBiome(blockPos.add(16, 0, 16));
 		BiomeDecorator decorator = biome.decorator;
 		int worldHeight = world.provider.getActualHeight();
@@ -211,7 +215,16 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 			}
 		}
 
-		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(world, rand, blockPos));
+		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(world, rand, chunkPos));
+
+		if (rand.nextInt(30) == 0 && BiomeDictionary.hasType(biome, Type.FOREST))
+		{
+			x = rand.nextInt(16) + 8;
+			y = rand.nextInt(worldHeight / 2);
+			z = rand.nextInt(16) + 8;
+
+			ruinedHouseGen.generate(world, rand, blockPos.add(x, y, z));
+		}
 
 		MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Post(world, rand, blockPos));
 
@@ -233,7 +246,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 			acresiaGen.generate(world, rand, blockPos.add(x, y, z));
 		}
 
-		if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.SHROOM))
+		if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.SHROOM))
 		{
 			for (int i = 0; i < 5; ++i)
 			{
@@ -256,7 +269,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 
 		if (BiomeDictionary.hasType(biome, Type.SANDY))
 		{
-			if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.CACTUS))
+			if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.CACTUS))
 			{
 				for (int i = 0; i < 80; ++i)
 				{
@@ -268,7 +281,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 				}
 			}
 
-			if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.DEAD_BUSH))
+			if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.DEAD_BUSH))
 			{
 				for (int i = 0; i < 10; ++i)
 				{
@@ -282,7 +295,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 		}
 		else
 		{
-			if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.FLOWERS))
+			if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.FLOWERS))
 			{
 				for (int i = 0; i < 8; ++i)
 				{
@@ -303,7 +316,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 				biome.getRandomWorldGenForGrass(rand).generate(world, rand, blockPos.add(x, y, z));
 			}
 
-			if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.TREE))
+			if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.TREE))
 			{
 				WorldGenAbstractTree treeGen = null;
 
@@ -363,7 +376,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 			{
 				if (BiomeDictionary.hasType(biome, Type.WATER))
 				{
-					if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.LAKE_WATER))
+					if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.LAKE_WATER))
 					{
 						for (int i = 0; i < 150; ++i)
 						{
@@ -377,7 +390,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 				}
 				else
 				{
-					if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.LAKE_WATER))
+					if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.LAKE_WATER))
 					{
 						for (int i = 0; i < 100; ++i)
 						{
@@ -389,7 +402,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 						}
 					}
 
-					if (TerrainGen.decorate(world, rand, blockPos, Decorate.EventType.LAKE_LAVA))
+					if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.LAKE_LAVA))
 					{
 						for (int i = 0; i < 20; ++i)
 						{
@@ -404,7 +417,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 			}
 		}
 
-		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, rand, blockPos));
+		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, rand, chunkPos));
 
 		ForgeEventFactory.onChunkPopulate(false, this, world, rand, chunkX, chunkZ, false);
 

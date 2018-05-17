@@ -42,6 +42,7 @@ import cavern.util.PlayerHelper;
 import cavern.world.CaveDimensions;
 import cavern.world.CustomSeedData;
 import cavern.world.ICustomSeed;
+import cavern.world.gen.WorldGenDarkLibrary;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.material.Material;
@@ -65,6 +66,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -84,8 +86,10 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+import net.minecraftforge.event.world.BlockEvent.PortalSpawnEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -444,6 +448,17 @@ public class CaveEventHooks
 	}
 
 	@SubscribeEvent
+	public void onPortalSpawn(PortalSpawnEvent event)
+	{
+		World world = event.getWorld();
+
+		if (CavernAPI.dimension.isCaveDimensions(world.provider.getDimensionType()))
+		{
+			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event)
 	{
 		EntityLivingBase entity = event.getEntityLiving();
@@ -696,6 +711,27 @@ public class CaveEventHooks
 		else if (block instanceof BlockLeavesPerverted || block instanceof BlockSaplingPerverted)
 		{
 			event.setBurnTime(35);
+		}
+	}
+
+	@SubscribeEvent
+	public void onDecorateBiome(DecorateBiomeEvent.Pre event)
+	{
+		World world = event.getWorld();
+		Random rand = event.getRand();
+		ChunkPos chunkPos = event.getChunkPos();
+
+		if (world.provider.getDimensionType() == CaveDimensions.DARK_FOREST && rand.nextInt(50) == 0)
+		{
+			int x = rand.nextInt(16) + 8;
+			int z = rand.nextInt(16) + 8;
+			int top = world.getHeight(chunkPos.getXStart() + x, chunkPos.getZStart() + z);
+			int seaLevel = world.getSeaLevel();
+
+			if (top >= seaLevel && top - seaLevel < 6)
+			{
+				new WorldGenDarkLibrary().generate(world, rand, new BlockPos(chunkPos.getXStart() + x, seaLevel, chunkPos.getZStart() + z));
+			}
 		}
 	}
 }

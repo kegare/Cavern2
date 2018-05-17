@@ -3,6 +3,7 @@ package cavern.world.mirage;
 import java.util.List;
 import java.util.Random;
 
+import cavern.world.gen.WorldGenSandHouse;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -23,6 +24,7 @@ import net.minecraft.world.gen.MapGenCaves;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.MapGenVillage;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
@@ -56,6 +58,9 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 
 	private final MapGenBase caveGenerator = new MapGenCaves();
 	private final MapGenVillage villageGenerator = new MapGenVillage();
+
+	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
+	private final WorldGenerator sandHouseGen = new WorldGenSandHouse();
 
 	public ChunkGeneratorWideDesert(World world)
 	{
@@ -368,7 +373,7 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 
 		int blockX = x * 16;
 		int blockZ = z * 16;
-		BlockPos blockpos = new BlockPos(blockX, 0, blockZ);
+		BlockPos blockPos = new BlockPos(blockX, 0, blockZ);
 		rand.setSeed(world.getSeed());
 		long xSeed = rand.nextLong() / 2L * 2L + 1L;
 		long zSeed = rand.nextLong() / 2L * 2L + 1L;
@@ -380,16 +385,24 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 
 		flag = villageGenerator.generateStructure(world, rand, chunkpos);
 
-		if (rand.nextInt(50) == 0 && TerrainGen.populate(this, world, rand, x, z, flag, PopulateChunkEvent.Populate.EventType.LAKE))
+		if (rand.nextInt(50) == 0 && TerrainGen.populate(this, world, rand, x, z, flag, PopulateChunkEvent.Populate.EventType.LAVA))
 		{
 			int genX = rand.nextInt(16) + 8;
 			int genY = rand.nextInt(128);
 			int genZ = rand.nextInt(16) + 8;
 
-			new WorldGenLakes(Blocks.WATER).generate(world, rand, blockpos.add(genX, genY, genZ));
+			lakeLavaGen.generate(world, rand, blockPos.add(genX, genY, genZ));
 		}
 
-		Biomes.DESERT.decorate(world, rand, blockpos);
+		if (rand.nextInt(30) == 0)
+		{
+			int genX = rand.nextInt(16) + 8;
+			int genZ = rand.nextInt(16) + 8;
+
+			sandHouseGen.generate(world, rand, world.getTopSolidOrLiquidBlock(blockPos.add(genX, 0, genZ)));
+		}
+
+		Biomes.DESERT.decorate(world, rand, blockPos);
 
 		ForgeEventFactory.onChunkPopulate(false, this, world, rand, x, z, flag);
 
