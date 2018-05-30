@@ -3,6 +3,7 @@ package cavern.block;
 import java.util.Random;
 
 import cavern.api.event.RandomiteDropEvent;
+import cavern.config.GeneralConfig;
 import cavern.core.Cavern;
 import cavern.item.CaveItems;
 import cavern.item.ItemCave;
@@ -144,7 +145,7 @@ public class BlockCave extends Block
 
 			ItemStack drop = ItemStack.EMPTY;
 
-			if (fortune > 0)
+			if (GeneralConfig.generousRandomite && fortune > 0)
 			{
 				double d = fortune / Enchantments.FORTUNE.getMaxLevel();
 

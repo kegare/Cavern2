@@ -12,13 +12,10 @@ import cavern.util.WeightedItemStack;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.WeightedRandom;
 import net.minecraftforge.oredict.OreDictionary;
@@ -93,10 +90,10 @@ public class RandomiteHelper
 
 				for (ItemStack stack : list)
 				{
-					addItem(stack, 15);
+					addItem(stack, 10);
 				}
 			}
-			else if (item instanceof ItemTool || item instanceof ItemArmor || item instanceof ItemSword || item instanceof ItemBow)
+			else if (item instanceof ItemArrow)
 			{
 				addItem(new ItemStack(item), 5);
 			}

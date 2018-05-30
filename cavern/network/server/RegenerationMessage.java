@@ -135,6 +135,8 @@ public class RegenerationMessage implements ISimpleMessage<RegenerationMessage, 
 				if (player != null)
 				{
 					PortalCache.get(player).clearLastPos(null, type);
+
+					player.setSpawnChunk(null, false, type.getId());
 				}
 			}
 

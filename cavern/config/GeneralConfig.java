@@ -36,6 +36,7 @@ public class GeneralConfig
 	public static boolean portalCache;
 	public static boolean portalMenu;
 
+	public static boolean generousRandomite;
 	public static ConfigItems randomiteExcludeItems = new ConfigItems();
 
 	public static int sleepWaitTime;
@@ -165,6 +166,16 @@ public class GeneralConfig
 		prop.setComment(comment);
 		propOrder.add(prop.getName());
 		portalMenu = prop.getBoolean(portalMenu);
+
+		prop = config.get(category, "generousRandomite", false);
+		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
+		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
+		comment += " [default: " + prop.getDefault() + "]";
+		comment += Configuration.NEW_LINE;
+		comment += "Note: If multiplayer, server-side only.";
+		prop.setComment(comment);
+		propOrder.add(prop.getName());
+		generousRandomite = prop.getBoolean(generousRandomite);
 
 		items = NonNullList.create();
 

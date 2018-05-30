@@ -95,6 +95,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 
 public class CaveEventHooks
 {
@@ -166,6 +167,35 @@ public class CaveEventHooks
 		}
 
 		MinerStats.adjustData(player);
+	}
+
+	@SubscribeEvent
+	public void onPlayerRespawn(PlayerRespawnEvent event)
+	{
+		if (!(event.player instanceof EntityPlayerMP))
+		{
+			return;
+		}
+
+		EntityPlayerMP player = (EntityPlayerMP)event.player;
+
+		if (CavernAPI.dimension.isInCaveDimensions(player))
+		{
+			WorldServer world = player.getServerWorld();
+			BlockPos pos = player.getPosition().down();
+
+			if (world.getBlockState(pos).getBlockHardness(world, pos) < 0.0F)
+			{
+				pos = new BlockPos(pos.getX(), 50, pos.getZ());
+
+				world.setBlockState(pos.up(2), Blocks.STONE.getDefaultState(), 2);
+				world.setBlockState(pos.up(), Blocks.AIR.getDefaultState(), 2);
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+				world.setBlockState(pos.down(), Blocks.STONE.getDefaultState(), 2);
+
+				player.moveToBlockPosAndAngles(pos, player.rotationYaw, player.rotationPitch);
+			}
+		}
 	}
 
 	@SubscribeEvent
@@ -614,17 +644,17 @@ public class CaveEventHooks
 			IPlayerData data = PlayerData.get(player);
 			long worldTime = world.getTotalWorldTime();
 			long sleepTime = data.getLastSleepTime();
+			long requireTime = GeneralConfig.sleepWaitTime * 20;
 
 			if (sleepTime <= 0L)
 			{
 				sleepTime = worldTime;
+				requireTime = 0L;
 
 				data.setLastSleepTime(sleepTime);
 			}
 
-			long requireTime = GeneralConfig.sleepWaitTime * 20;
-
-			if (sleepTime + requireTime > worldTime)
+			if (requireTime > 0L && sleepTime + requireTime > worldTime)
 			{
 				result = SleepResult.OTHER_PROBLEM;
 
