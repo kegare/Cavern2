@@ -24,12 +24,8 @@ public class RandomiteHelper
 {
 	private static final Random RANDOM = new Random();
 
-	private static final NonNullList<WeightedItemStack> DROP_ITEMS = NonNullList.create();
-
 	public static void refreshItems()
 	{
-		DROP_ITEMS.clear();
-
 		Set<String> oreNames = Sets.newTreeSet();
 		String[] targetNames = {"treeSapling", "sugarcane", "vine", "slimeball", "enderpearl", "bone", "gunpowder", "string", "torch"};
 		String[] targetPrefixes = {"gem", "ingot", "nugget", "dust", "crop"};
@@ -53,6 +49,8 @@ public class RandomiteHelper
 			}
 		}
 
+		Category.COMMON.getItems().clear();
+
 		for (String name : oreNames)
 		{
 			for (ItemStack stack : OreDictionary.getOres(name, false))
@@ -65,15 +63,17 @@ public class RandomiteHelper
 
 					for (ItemStack subStack : list)
 					{
-						addItem(subStack, 50);
+						addItem(Category.COMMON, subStack, 50);
 					}
 				}
 				else
 				{
-					addItem(stack, 50);
+					addItem(Category.COMMON, stack, 50);
 				}
 			}
 		}
+
+		Category.FOOD.getItems().clear();
 
 		for (Item item : Item.REGISTRY)
 		{
@@ -90,37 +90,39 @@ public class RandomiteHelper
 
 				for (ItemStack stack : list)
 				{
-					addItem(stack, 10);
+					addItem(Category.FOOD, stack, 10);
 				}
 			}
 			else if (item instanceof ItemArrow)
 			{
-				addItem(new ItemStack(item), 5);
+				addItem(Category.COMMON, new ItemStack(item), 5);
 			}
 		}
 
-		addItem(ItemCave.EnumType.MINER_ORB.getItemStack(), 1);
+		addItem(Category.COMMON, ItemCave.EnumType.MINER_ORB.getItemStack(), 1);
 	}
 
-	public static boolean addItem(ItemStack stack, int weight)
+	public static boolean addItem(Category category, ItemStack stack, int weight)
 	{
 		if (stack.isEmpty() || GeneralConfig.randomiteExcludeItems.hasItemStack(stack))
 		{
 			return false;
 		}
 
-		return DROP_ITEMS.add(new WeightedItemStack(stack, Math.max(weight, 1)));
+		return category.getItems().add(new WeightedItemStack(stack, Math.max(weight, 1)));
 	}
 
-	public static ItemStack getDropItem()
+	public static ItemStack getDropItem(Category category)
 	{
-		if (DROP_ITEMS.isEmpty())
+		NonNullList<WeightedItemStack> items = category.getItems();
+
+		if (items.isEmpty())
 		{
 			return ItemStack.EMPTY;
 		}
 
-		int totalWeight = WeightedRandom.getTotalWeight(DROP_ITEMS);
-		WeightedItemStack item = WeightedRandom.getRandomItem(DROP_ITEMS, RANDOM.nextInt(totalWeight));
+		int totalWeight = WeightedRandom.getTotalWeight(items);
+		WeightedItemStack item = WeightedRandom.getRandomItem(items, RANDOM.nextInt(totalWeight));
 
 		return item != null ? item.getItemStack() : ItemStack.EMPTY;
 	}
@@ -151,5 +153,23 @@ public class RandomiteHelper
 		}
 
 		return ItemStack.EMPTY;
+	}
+
+	public enum Category
+	{
+		COMMON,
+		FOOD;
+
+		private final NonNullList<WeightedItemStack> items;
+
+		private Category()
+		{
+			this.items = NonNullList.create();
+		}
+
+		public NonNullList<WeightedItemStack> getItems()
+		{
+			return items;
+		}
 	}
 }

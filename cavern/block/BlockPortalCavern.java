@@ -61,8 +61,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockPortalCavern extends BlockPortal
 {
-	private boolean teleporting;
-
 	public BlockPortalCavern()
 	{
 		super();
@@ -248,7 +246,7 @@ public class BlockPortalCavern extends BlockPortal
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
 	{
-		if (world.isRemote || getDimension() == null || teleporting)
+		if (world.isRemote || getDimension() == null)
 		{
 			return;
 		}
@@ -283,8 +281,6 @@ public class BlockPortalCavern extends BlockPortal
 				}
 			}
 
-			teleporting = true;
-
 			cache.setLastDim(key, dimOld);
 			cache.setLastPos(key, dimOld, prevPos);
 
@@ -298,8 +294,6 @@ public class BlockPortalCavern extends BlockPortal
 			cache.setTeleportDirection(pattern.getForwards());
 
 			entity.changeDimension(dimNew.getId(), teleporter);
-
-			teleporting = false;
 		}
 		else
 		{

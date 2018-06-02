@@ -22,6 +22,7 @@ import cavern.block.BlockPortalCavern;
 import cavern.block.BlockSaplingPerverted;
 import cavern.block.CaveBlocks;
 import cavern.block.RandomiteHelper;
+import cavern.block.RandomiteHelper.Category;
 import cavern.config.GeneralConfig;
 import cavern.item.CaveItems;
 import cavern.item.IAquaTool;
@@ -339,7 +340,14 @@ public class CaveEventHooks
 			}
 			else if (RANDOM.nextDouble() < 0.005D)
 			{
-				Block.spawnAsEntity(world, pos, RandomiteHelper.getDropItem());
+				Category category = Category.COMMON;
+
+				if (RANDOM.nextInt(5) == 0)
+				{
+					category = Category.FOOD;
+				}
+
+				Block.spawnAsEntity(world, pos, RandomiteHelper.getDropItem(category));
 			}
 			else if (stack.getItem() instanceof IIceEquipment && RANDOM.nextDouble() < 0.03D || RANDOM.nextDouble() < 0.01D)
 			{

@@ -3,6 +3,7 @@ package cavern.block;
 import java.util.Random;
 
 import cavern.api.event.RandomiteDropEvent;
+import cavern.block.RandomiteHelper.Category;
 import cavern.config.GeneralConfig;
 import cavern.core.Cavern;
 import cavern.item.CaveItems;
@@ -157,7 +158,14 @@ public class BlockCave extends Block
 
 			if (drop.isEmpty())
 			{
-				ItemStack stack = RandomiteHelper.getDropItem();
+				Category category = Category.COMMON;
+
+				if (RANDOM.nextInt(20) == 0)
+				{
+					category = Category.FOOD;
+				}
+
+				ItemStack stack = RandomiteHelper.getDropItem(category);
 
 				if (!stack.isEmpty())
 				{
