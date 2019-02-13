@@ -42,7 +42,7 @@ public class RandomiteHelper
 		{
 			for (String prefix : targetPrefixes)
 			{
-				if (name.startsWith(prefix) && Character.isUpperCase(name.charAt(prefix.length())))
+				if (name.startsWith(prefix) && name.length() != prefix.length() && Character.isUpperCase(name.charAt(prefix.length())))
 				{
 					oreNames.add(name);
 				}
@@ -53,6 +53,17 @@ public class RandomiteHelper
 
 		for (String name : oreNames)
 		{
+			int weight = 30;
+
+			if (name.startsWith("gem") || name.startsWith("ingot") || name.startsWith("nugget") || name.startsWith("dust"))
+			{
+				weight = 50;
+			}
+			else if (name.equals("treeSapling"))
+			{
+				weight = 10;
+			}
+
 			for (ItemStack stack : OreDictionary.getOres(name, false))
 			{
 				if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE)
@@ -63,12 +74,12 @@ public class RandomiteHelper
 
 					for (ItemStack subStack : list)
 					{
-						addItem(Category.COMMON, subStack, 50);
+						addItem(Category.COMMON, subStack, weight);
 					}
 				}
 				else
 				{
-					addItem(Category.COMMON, stack, 50);
+					addItem(Category.COMMON, stack, weight);
 				}
 			}
 		}
@@ -95,7 +106,7 @@ public class RandomiteHelper
 			}
 			else if (item instanceof ItemArrow)
 			{
-				addItem(Category.COMMON, new ItemStack(item), 5);
+				addItem(Category.COMMON, new ItemStack(item), 10);
 			}
 		}
 

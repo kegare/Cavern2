@@ -60,13 +60,13 @@ public class BlockSlipperyIce extends BlockPackedIce implements IHeatTile, IHumi
 	}
 
 	@Override
-	public DCHeatTier getHeatTier(World world, BlockPos to, BlockPos from)
+	public DCHeatTier getHeatTier(World world, BlockPos target, BlockPos pos)
 	{
 		return DCHeatTier.COLD;
 	}
 
 	@Override
-	public DCHumidity getHumdiity(World world, BlockPos to, BlockPos from)
+	public DCHumidity getHumdiity(World world, BlockPos target, BlockPos pos)
 	{
 		return DCHumidity.WET;
 	}

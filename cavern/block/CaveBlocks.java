@@ -109,7 +109,7 @@ public class CaveBlocks
 		registerModel(AQUA_CAVERN_PORTAL);
 		registerModel(MIRAGE_PORTAL);
 		registerModels(CAVE_BLOCK, "aquamarine_ore", "aquamarine_block", "magnite_ore", "magnite_block", "randomite_ore",
-			"hexcite_ore", "hexcite_block", "fissured_stone", "fissured_packed_ice");
+			"hexcite_ore", "hexcite_block", "fissured_stone");
 		registerModels(ACRESIA, "acresia_seeds", "acresia_fruits");
 		registerVanillaModels(PERVERTED_LOG, "oak_log", "spruce_log", "birch_log", "jungle_log");
 		registerVanillaModels(PERVERTED_LEAVES, "oak_leaves", "spruce_leaves", "birch_leaves", "jungle_leaves");

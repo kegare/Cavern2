@@ -34,7 +34,7 @@ public class BlockLeavesPerverted extends BlockOldLeaf implements IAirflowTile
 	protected void dropApple(World worldIn, BlockPos pos, IBlockState state, int chance) {}
 
 	@Override
-	public DCAirflow getAirflow(World world, BlockPos to, BlockPos from)
+	public DCAirflow getAirflow(World world, BlockPos target, BlockPos pos)
 	{
 		return DCAirflow.TIGHT;
 	}
