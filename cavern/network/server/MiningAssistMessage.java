@@ -20,7 +20,7 @@ public class MiningAssistMessage implements IPlayerMessage<MiningAssistMessage, 
 
 		if (stats.getRank() < MiningAssistConfig.minerRank.getValue())
 		{
-			ITextComponent component = new TextComponentTranslation(MinerRank.get(MiningAssistConfig.minerRank.getValue()).getUnlocalizedName());
+			ITextComponent component = new TextComponentTranslation(MinerRank.get(MiningAssistConfig.minerRank.getValue()).getTranslationKey());
 			component.getStyle().setItalic(Boolean.valueOf(true));
 			component = new TextComponentTranslation("cavern.miningassist.toggle.failed.message", component);
 			component.getStyle().setColor(TextFormatting.RED);

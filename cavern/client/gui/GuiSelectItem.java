@@ -572,7 +572,7 @@ public class GuiSelectItem extends GuiScreen
 					name = itemMeta.getName();
 					break;
 				case 2:
-					name = stack.getUnlocalizedName();
+					name = stack.getTranslationKey();
 					name = name.substring(name.indexOf(".") + 1);
 					break;
 				default:

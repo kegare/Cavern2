@@ -34,7 +34,7 @@ public class PlayerHelper
 		}
 
 		EntityPlayerMP player = (EntityPlayerMP)entityPlayer;
-		Advancement advancement = player.mcServer.getAdvancementManager().getAdvancement(CaveUtils.getKey(key));
+		Advancement advancement = player.server.getAdvancementManager().getAdvancement(CaveUtils.getKey(key));
 
 		return advancement != null && player.getAdvancements().grantCriterion(advancement, criterion);
 	}
@@ -93,8 +93,8 @@ public class PlayerHelper
 
 		if (state != null && state.getBlock().isBed(state, world, pos, player))
 		{
-			float offsetX = 0.5F + facing.getFrontOffsetX() * 0.4F;
-			float offsetZ = 0.5F + facing.getFrontOffsetZ() * 0.4F;
+			float offsetX = 0.5F + facing.getXOffset() * 0.4F;
+			float offsetZ = 0.5F + facing.getZOffset() * 0.4F;
 
 			setRenderOffsetForSleep(player, facing);
 
@@ -171,7 +171,7 @@ public class PlayerHelper
 
 	public static void setRenderOffsetForSleep(EntityPlayer player, EnumFacing facing)
 	{
-		player.renderOffsetX = -1.8F * facing.getFrontOffsetX();
-		player.renderOffsetZ = -1.8F * facing.getFrontOffsetZ();
+		player.renderOffsetX = -1.8F * facing.getXOffset();
+		player.renderOffsetZ = -1.8F * facing.getZOffset();
 	}
 }

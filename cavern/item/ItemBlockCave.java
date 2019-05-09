@@ -23,9 +23,9 @@ public class ItemBlockCave extends ItemBlock
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack)
+	public String getTranslationKey(ItemStack stack)
 	{
-		return "tile." + EnumType.byItemStack(stack).getUnlocalizedName();
+		return "tile." + EnumType.byItemStack(stack).getTranslationKey();
 	}
 
 	@Override

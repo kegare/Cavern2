@@ -23,7 +23,7 @@ public class ItemAxeCavenic extends ItemAxeCave
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker)
 	{
 		World world = target.world;
-		int amount = 1;
+		int count = 1;
 
 		for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, target.getEntityBoundingBox().grow(2.5D)))
 		{
@@ -43,16 +43,16 @@ public class ItemAxeCavenic extends ItemAxeCave
 			entity.attackEntityFrom(DamageSource.causeMobDamage(attacker), 4.0F);
 			entity.addVelocity(vec.x, vec.y, vec.z);
 
-			++amount;
+			++count;
 		}
 
-		if (amount > 1)
+		if (count > 1)
 		{
 			world.playSound(null, target.posX, target.posY + 0.85D, target.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK,
 				SoundCategory.PLAYERS, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F) + 0.25F);
 		}
 
-		stack.damageItem(amount, attacker);
+		stack.damageItem(MathHelper.clamp(count / 2, 1, 3), attacker);
 
 		return true;
 	}

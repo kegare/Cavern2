@@ -30,7 +30,7 @@ public class BlockSlipperyIce extends BlockPackedIce implements IHeatTile, IHumi
 	public BlockSlipperyIce()
 	{
 		super();
-		this.setUnlocalizedName("slipperyIce");
+		this.setTranslationKey("slipperyIce");
 		this.setHardness(0.5F);
 		this.setSoundType(SoundType.GLASS);
 		this.setCreativeTab(Cavern.TAB_CAVERN);

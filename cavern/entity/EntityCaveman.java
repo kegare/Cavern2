@@ -2,6 +2,8 @@ package cavern.entity;
 
 import cavern.api.CavernAPI;
 import cavern.api.ICavenicMob;
+import cavern.item.ItemMagicBook;
+import cavern.item.ItemMirageBook;
 import cavern.util.CaveUtils;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -371,6 +373,21 @@ public class EntityCaveman extends EntityMob implements ICavenicMob
 
 		list.add(new ItemStack(Blocks.TORCH, MathHelper.getInt(rand, 3, 10)));
 		list.add(new ItemStack(Items.BREAD, MathHelper.getInt(rand, 1, 3)));
+
+		if (rand.nextDouble() < 0.05D)
+		{
+			ItemStack stack = ItemMirageBook.getRandomBook();
+
+			if (!stack.isEmpty())
+			{
+				list.add(stack);
+			}
+		}
+
+		if (rand.nextDouble() < 0.05D)
+		{
+			list.add(ItemMagicBook.getRandomBook());
+		}
 
 		return list;
 	}

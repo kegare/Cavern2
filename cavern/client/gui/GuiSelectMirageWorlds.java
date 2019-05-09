@@ -94,7 +94,7 @@ public class GuiSelectMirageWorlds extends GuiScreen
 	{
 		worldList.drawScreen(mouseX, mouseY, partialTicks);
 
-		drawCenteredString(fontRenderer, I18n.format(CaveBlocks.MIRAGE_PORTAL.getUnlocalizedName() + ".select"), width / 2, 15, 0xFFFFFF);
+		drawCenteredString(fontRenderer, I18n.format(CaveBlocks.MIRAGE_PORTAL.getTranslationKey() + ".select"), width / 2, 15, 0xFFFFFF);
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}

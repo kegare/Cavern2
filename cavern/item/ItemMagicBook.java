@@ -51,22 +51,22 @@ public class ItemMagicBook extends Item
 	public ItemMagicBook()
 	{
 		super();
-		this.setUnlocalizedName("magicBook");
+		this.setTranslationKey("magicBook");
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack)
+	public String getTranslationKey(ItemStack stack)
 	{
-		return getUnlocalizedName() + "." + EnumType.byItemStack(stack).getUnlocalizedName();
+		return getTranslationKey() + "." + EnumType.byItemStack(stack).getTranslationKey();
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
 	{
-		return Cavern.proxy.translateFormat(getUnlocalizedName() + ".name", super.getItemStackDisplayName(stack));
+		return Cavern.proxy.translateFormat(getTranslationKey() + ".name", super.getItemStackDisplayName(stack));
 	}
 
 	@Override
@@ -305,7 +305,7 @@ public class ItemMagicBook extends Item
 		OVERLOAD(10, "overload", 3, MagicOverload.class, 60 * 20);
 
 		private final int meta;
-		private final String unlocalizedName;
+		private final String translationKey;
 		private final int mana;
 		private final Class<? extends Magic> magicClass;
 		private final int coolTime;
@@ -315,7 +315,7 @@ public class ItemMagicBook extends Item
 		private EnumType(int meta, String name, int mana, Class<? extends Magic> magic, int coolTime)
 		{
 			this.meta = meta;
-			this.unlocalizedName = name;
+			this.translationKey = name;
 			this.mana = mana;
 			this.magicClass = magic;
 			this.coolTime = coolTime;
@@ -326,9 +326,9 @@ public class ItemMagicBook extends Item
 			return meta;
 		}
 
-		public String getUnlocalizedName()
+		public String getTranslationKey()
 		{
-			return unlocalizedName;
+			return translationKey;
 		}
 
 		public int getMana()

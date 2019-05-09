@@ -64,7 +64,7 @@ public abstract class SpecialMagic extends Magic
 	{
 		if (world.isRemote)
 		{
-			return new TextComponentTranslation("item.magicBook.finish", new TextComponentTranslation("item.magicBook." + getMagicType().getUnlocalizedName() + ".name"));
+			return new TextComponentTranslation("item.magicBook.finish", new TextComponentTranslation("item.magicBook." + getMagicType().getTranslationKey() + ".name"));
 		}
 
 		return null;

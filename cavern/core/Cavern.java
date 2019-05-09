@@ -73,7 +73,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 @Mod
 (
 	modid = Cavern.MODID,
-	dependencies = "required:forge@[14.23.4.2705,);",
+	dependencies = "required:forge@[14.23.5.2768,);",
 	guiFactory = "cavern.client.config.CaveGuiFactory",
 	updateJSON = "https://raw.githubusercontent.com/kegare/Cavern2/master/cavern2.json",
 	certificateFingerprint = "b78e30ad27c82f3e348f76edf497058678207299"

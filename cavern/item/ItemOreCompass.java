@@ -32,7 +32,7 @@ public class ItemOreCompass extends Item
 
 	public ItemOreCompass()
 	{
-		this.setUnlocalizedName("compassOre");
+		this.setTranslationKey("compassOre");
 		this.setMaxStackSize(1);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 		this.addPropertyOverride(new ResourceLocation("angle"), new IItemPropertyGetter()

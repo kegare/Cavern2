@@ -44,7 +44,7 @@ public class BlockCave extends Block
 	{
 		super(Material.ROCK);
 		this.setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumType.AQUAMARINE_ORE));
-		this.setUnlocalizedName("blockCave");
+		this.setTranslationKey("blockCave");
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}
 
@@ -120,7 +120,7 @@ public class BlockCave extends Block
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getBlockLayer()
+	public BlockRenderLayer getRenderLayer()
 	{
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
@@ -340,18 +340,18 @@ public class BlockCave extends Block
 
 		private final int meta;
 		private final String name;
-		private final String unlocalizedName;
+		private final String translationKey;
 		private final MapColor mapColor;
 		private final Material material;
 		private final SoundType soundType;
 		private final float blockHardness;
 		private final int harvestLevel;
 
-		private EnumType(int meta, String name, String unlocalizedName, MapColor color, Material material, SoundType soundType, float hardness, int harvestLevel)
+		private EnumType(int meta, String name, String key, MapColor color, Material material, SoundType soundType, float hardness, int harvestLevel)
 		{
 			this.meta = meta;
 			this.name = name;
-			this.unlocalizedName = unlocalizedName;
+			this.translationKey = key;
 			this.mapColor = color;
 			this.material = material;
 			this.soundType = soundType;
@@ -401,9 +401,9 @@ public class BlockCave extends Block
 			return name;
 		}
 
-		public String getUnlocalizedName()
+		public String getTranslationKey()
 		{
-			return unlocalizedName;
+			return translationKey;
 		}
 
 		public ItemStack getItemStack()

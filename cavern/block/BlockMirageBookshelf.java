@@ -17,7 +17,7 @@ public class BlockMirageBookshelf extends BlockBookshelf
 	public BlockMirageBookshelf()
 	{
 		super();
-		this.setUnlocalizedName("mirageBookshelf");
+		this.setTranslationKey("mirageBookshelf");
 		this.setHardness(1.5F);
 		this.setSoundType(SoundType.WOOD);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
@@ -39,7 +39,8 @@ public class BlockMirageBookshelf extends BlockBookshelf
 				drops.add(stack);
 			}
 		}
-		else if (RANDOM.nextDouble() < 0.03D + bonus)
+
+		if (RANDOM.nextDouble() < 0.05D + bonus)
 		{
 			drops.add(ItemMagicBook.getRandomBook());
 		}

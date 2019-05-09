@@ -179,7 +179,7 @@ public class MinerStatsHUDEventHooks
 		MiningAssist miningAssist = MiningAssist.get(stats.getMiningAssist());
 
 		String point = Integer.toString(stats.getPoint());
-		String rank = I18n.format(minerRank.getUnlocalizedName());
+		String rank = I18n.format(minerRank.getTranslationKey());
 
 		if (miningAssist != MiningAssist.DISABLED && stats.getRank() >= MiningAssistConfig.minerRank.getValue())
 		{

@@ -64,7 +64,7 @@ public class BlockPortalCavern extends BlockPortal
 	public BlockPortalCavern()
 	{
 		super();
-		this.setUnlocalizedName("portal.cavern");
+		this.setTranslationKey("portal.cavern");
 		this.setSoundType(SoundType.GLASS);
 		this.setTickRandomly(false);
 		this.setBlockUnbreakable();
@@ -91,18 +91,17 @@ public class BlockPortalCavern extends BlockPortal
 
 			return true;
 		}
-		else
+
+		size = new Size(world, pos, EnumFacing.Axis.Z);
+
+		if (size.isValid() && size.portalBlockCount == 0)
 		{
-			Size size1 = new Size(world, pos, EnumFacing.Axis.Z);
+			size.placePortalBlocks();
 
-			if (size1.isValid() && size1.portalBlockCount == 0)
-			{
-				size1.placePortalBlocks();
-
-				return true;
-			}
-			else return false;
+			return true;
 		}
+
+		return false;
 	}
 
 	@Override
@@ -162,7 +161,7 @@ public class BlockPortalCavern extends BlockPortal
 		{
 			EntityPlayerMP playerMP = (EntityPlayerMP)player;
 
-			if (playerMP.mcServer.getPlayerList().canSendCommands(playerMP.getGameProfile()))
+			if (playerMP.server.getPlayerList().canSendCommands(playerMP.getGameProfile()))
 			{
 				CaveNetworkRegistry.sendTo(new RegenerationGuiMessage(RegenerationGuiMessage.EnumType.OPEN), playerMP);
 			}
@@ -244,7 +243,7 @@ public class BlockPortalCavern extends BlockPortal
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity)
 	{
 		if (world.isRemote || getDimension() == null)
 		{
@@ -267,7 +266,7 @@ public class BlockPortalCavern extends BlockPortal
 			Teleporter teleporter = getTeleporter(worldNew);
 			BlockPos prevPos = entity.getPosition();
 
-			entity.timeUntilPortal = Math.max(entity.getPortalCooldown(), 100);
+			entity.timeUntilPortal = entity.getPortalCooldown();
 
 			if (entity instanceof EntityPlayer)
 			{
@@ -275,7 +274,7 @@ public class BlockPortalCavern extends BlockPortal
 
 				if (MinerStats.get(player).getRank() < getMinerRank().getRank())
 				{
-					player.sendStatusMessage(new TextComponentTranslation("cavern.message.portal.rank", new TextComponentTranslation(getMinerRank().getUnlocalizedName())), true);
+					player.sendStatusMessage(new TextComponentTranslation("cavern.message.portal.rank", new TextComponentTranslation(getMinerRank().getTranslationKey())), true);
 
 					return;
 				}
@@ -297,7 +296,7 @@ public class BlockPortalCavern extends BlockPortal
 		}
 		else
 		{
-			entity.timeUntilPortal = Math.max(entity.getPortalCooldown(), 100);
+			entity.timeUntilPortal = entity.getPortalCooldown();
 		}
 	}
 

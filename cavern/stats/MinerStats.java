@@ -133,9 +133,9 @@ public class MinerStats implements IMinerStats
 			if (entityPlayer != null && entityPlayer instanceof EntityPlayerMP)
 			{
 				EntityPlayerMP player = (EntityPlayerMP)entityPlayer;
-				MinecraftServer server = player.mcServer;
+				MinecraftServer server = player.server;
 
-				ITextComponent name = new TextComponentTranslation(current.getUnlocalizedName());
+				ITextComponent name = new TextComponentTranslation(current.getTranslationKey());
 				name.getStyle().setBold(true);
 
 				ITextComponent component = new TextComponentTranslation("cavern.minerrank.promoted", player.getDisplayName(), name);

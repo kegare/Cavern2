@@ -34,22 +34,22 @@ public class ItemMirageBook extends Item implements ITeleporter
 	public ItemMirageBook()
 	{
 		super();
-		this.setUnlocalizedName("mirageBook");
+		this.setTranslationKey("mirageBook");
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack)
+	public String getTranslationKey(ItemStack stack)
 	{
-		return getUnlocalizedName() + "." + EnumType.byItemStack(stack).getUnlocalizedName();
+		return getTranslationKey() + "." + EnumType.byItemStack(stack).getTranslationKey();
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
 	{
-		return Cavern.proxy.translateFormat(getUnlocalizedName() + ".name", super.getItemStackDisplayName(stack));
+		return Cavern.proxy.translateFormat(getTranslationKey() + ".name", super.getItemStackDisplayName(stack));
 	}
 
 	@Override
@@ -96,11 +96,11 @@ public class ItemMirageBook extends Item implements ITeleporter
 		{
 			if (CavernAPI.dimension.isInMirageWorlds(player))
 			{
-				player.sendStatusMessage(new TextComponentTranslation(getUnlocalizedName() + ".fail"), true);
+				player.sendStatusMessage(new TextComponentTranslation(getTranslationKey() + ".fail"), true);
 			}
 			else
 			{
-				player.sendStatusMessage(new TextComponentTranslation(getUnlocalizedName() + ".portal"), true);
+				player.sendStatusMessage(new TextComponentTranslation(getTranslationKey() + ".portal"), true);
 			}
 		}
 
@@ -271,12 +271,12 @@ public class ItemMirageBook extends Item implements ITeleporter
 		public static final EnumType[] VALUES = new EnumType[values().length];
 
 		private final int meta;
-		private final String unlocalizedName;
+		private final String translationKey;
 
 		private EnumType(int meta, String name)
 		{
 			this.meta = meta;
-			this.unlocalizedName = name;
+			this.translationKey = name;
 		}
 
 		public int getMetadata()
@@ -284,9 +284,9 @@ public class ItemMirageBook extends Item implements ITeleporter
 			return meta;
 		}
 
-		public String getUnlocalizedName()
+		public String getTranslationKey()
 		{
-			return unlocalizedName;
+			return translationKey;
 		}
 
 		@Nullable

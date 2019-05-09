@@ -219,7 +219,7 @@ public class WorldGenTreesPerverted extends WorldGenTrees
 									{
 										EnumFacing side = face.getOpposite();
 
-										setCocoa(world, rand.nextInt(3), pos.add(side.getFrontOffsetX(), treeHeight - 5 + k, side.getFrontOffsetZ()), face);
+										setCocoa(world, rand.nextInt(3), pos.add(side.getXOffset(), treeHeight - 5 + k, side.getZOffset()), face);
 									}
 								}
 							}

@@ -43,7 +43,7 @@ public class ItemBowCavenic extends ItemBow
 	public ItemBowCavenic()
 	{
 		super();
-		this.setUnlocalizedName("bowCavenic");
+		this.setTranslationKey("bowCavenic");
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter()
 		{
@@ -99,7 +99,7 @@ public class ItemBowCavenic extends ItemBow
 	{
 		BowMode mode = BowMode.byItemStack(stack);
 		ITextComponent name = new TextComponentTranslation(mode.getUnlocalizedName(stack));
-		ITextComponent title = new TextComponentTranslation(stack.getUnlocalizedName() + ".mode");
+		ITextComponent title = new TextComponentTranslation(stack.getTranslationKey() + ".mode");
 
 		return title.appendText(": ").appendSibling(name);
 	}
@@ -364,7 +364,7 @@ public class ItemBowCavenic extends ItemBow
 
 		public String getUnlocalizedName(ItemStack stack)
 		{
-			return stack.getUnlocalizedName() + "." + modeName;
+			return stack.getTranslationKey() + "." + modeName;
 		}
 
 		public double getAttackPower()

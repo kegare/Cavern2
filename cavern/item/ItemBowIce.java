@@ -21,7 +21,7 @@ public class ItemBowIce extends ItemBow implements IIceEquipment
 	public ItemBowIce()
 	{
 		super();
-		this.setUnlocalizedName("bowIce");
+		this.setTranslationKey("bowIce");
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter()
 		{

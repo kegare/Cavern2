@@ -321,7 +321,7 @@ public class BlockMeta implements Comparable<BlockMeta>
 
 	public static String getMetaName(Block block, int meta)
 	{
-		if (block.getRegistryName().getResourceDomain().equals("minecraft"))
+		if (block.getRegistryName().getNamespace().equals("minecraft"))
 		{
 			return META_STRING_CACHE.getUnchecked(Pair.of(block, meta));
 		}

@@ -19,7 +19,7 @@ public class BlockLeavesPerverted extends BlockOldLeaf implements IAirflowTile
 	public BlockLeavesPerverted()
 	{
 		super();
-		this.setUnlocalizedName("pervertedLeaves");
+		this.setTranslationKey("pervertedLeaves");
 		this.setHardness(0.05F);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}

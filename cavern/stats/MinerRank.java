@@ -54,7 +54,7 @@ public enum MinerRank
 		return name;
 	}
 
-	public String getUnlocalizedName()
+	public String getTranslationKey()
 	{
 		return "cavern.minerrank." + name;
 	}

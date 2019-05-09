@@ -20,19 +20,15 @@ public class ItemSwordCavenic extends ItemSwordCave
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker)
 	{
-		int amount = 1;
-
 		if (target.hurtResistantTime > 0)
 		{
 			target.hurtResistantTime = 0;
 
 			target.world.playSound(null, target.posX, target.posY + 0.85D, target.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP,
 				SoundCategory.PLAYERS, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F) + 0.25F);
-
-			++amount;
 		}
 
-		stack.damageItem(amount, attacker);
+		stack.damageItem(1, attacker);
 
 		return true;
 	}

@@ -11,15 +11,15 @@ public class ItemCave extends Item
 	public ItemCave()
 	{
 		super();
-		this.setUnlocalizedName("itemCave");
+		this.setTranslationKey("itemCave");
 		this.setHasSubtypes(true);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack)
+	public String getTranslationKey(ItemStack stack)
 	{
-		return "item." + EnumType.byItemStack(stack).getUnlocalizedName();
+		return "item." + EnumType.byItemStack(stack).getTranslationKey();
 	}
 
 	@Override
@@ -48,12 +48,12 @@ public class ItemCave extends Item
 		public static final EnumType[] VALUES = new EnumType[values().length];
 
 		private final int meta;
-		private final String unlocalizedName;
+		private final String translationKey;
 
 		private EnumType(int meta, String name)
 		{
 			this.meta = meta;
-			this.unlocalizedName = name;
+			this.translationKey = name;
 		}
 
 		public int getMetadata()
@@ -61,9 +61,9 @@ public class ItemCave extends Item
 			return meta;
 		}
 
-		public String getUnlocalizedName()
+		public String getTranslationKey()
 		{
-			return unlocalizedName;
+			return translationKey;
 		}
 
 		public ItemStack getItemStack()

@@ -846,7 +846,7 @@ public class GuiMiningPointsEditor extends GuiScreen
 					switch (nameType)
 					{
 						case 2:
-							text = stack.getUnlocalizedName();
+							text = stack.getTranslationKey();
 							text = text.substring(text.indexOf(".") + 1);
 							break;
 						default:
@@ -857,7 +857,7 @@ public class GuiMiningPointsEditor extends GuiScreen
 				else switch (nameType)
 				{
 					case 2:
-						text = block.getUnlocalizedName();
+						text = block.getTranslationKey();
 						text = text.substring(text.indexOf(".") + 1);
 						break;
 					default:
