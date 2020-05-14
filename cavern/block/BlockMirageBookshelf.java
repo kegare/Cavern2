@@ -17,7 +17,7 @@ public class BlockMirageBookshelf extends BlockBookshelf
 	public BlockMirageBookshelf()
 	{
 		super();
-		this.setTranslationKey("mirageBookshelf");
+		this.setUnlocalizedName("mirageBookshelf");
 		this.setHardness(1.5F);
 		this.setSoundType(SoundType.WOOD);
 		this.setCreativeTab(Cavern.TAB_CAVERN);

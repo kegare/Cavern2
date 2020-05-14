@@ -102,7 +102,7 @@ public class GuiRegeneration extends GuiScreen
 
 		before = aquaCavernCheckBox;
 
-		String mirage = CaveItems.MIRAGE_BOOK.getTranslationKey();
+		String mirage = CaveItems.MIRAGE_BOOK.getUnlocalizedName();
 
 		if (cavelandCheckBox == null)
 		{

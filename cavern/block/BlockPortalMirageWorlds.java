@@ -35,7 +35,7 @@ public class BlockPortalMirageWorlds extends BlockPortalCavern
 	public BlockPortalMirageWorlds()
 	{
 		super();
-		this.setTranslationKey("portal.mirageWorlds");
+		this.setUnlocalizedName("portal.mirageWorlds");
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -71,7 +71,7 @@ public class BlockPortalMirageWorlds extends BlockPortalCavern
 	}
 
 	@Override
-	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity)
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
 	{
 		if (world.isRemote || entity.isDead || entity.isRiding() || entity.isBeingRidden() || !(entity instanceof EntityPlayerMP))
 		{

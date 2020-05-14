@@ -12,6 +12,7 @@ import cavern.stats.PortalCache;
 import cavern.util.ItemMeta;
 import cavern.util.PlayerHelper;
 import cavern.world.CaveDimensions;
+import cavern.world.TeleporterCavern;
 import net.minecraft.block.state.pattern.BlockPattern.PatternHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -98,7 +99,7 @@ public class CavebornEventHooks
 
 		player.timeUntilPortal = player.getPortalCooldown();
 
-		portal.getTeleporter(world).placeInPortal(player, player.rotationYaw);
+		new TeleporterCavern(world, portal).placeEntity(world, player, player.rotationYaw);
 
 		FIRST_PLAYERS.remove(event.player.getCachedUniqueIdString());
 

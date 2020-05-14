@@ -37,7 +37,7 @@ public class BlockAcresia extends BlockCrops
 	public BlockAcresia()
 	{
 		super();
-		this.setTranslationKey("acresia");
+		this.setUnlocalizedName("acresia");
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}
 

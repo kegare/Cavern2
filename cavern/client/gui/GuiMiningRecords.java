@@ -235,7 +235,7 @@ public class GuiMiningRecords extends GuiScreen
 				switch (nameType)
 				{
 					case 2:
-						name = stack.getTranslationKey();
+						name = stack.getUnlocalizedName();
 						name = name.substring(name.indexOf(".") + 1);
 						break;
 					default:
@@ -246,7 +246,7 @@ public class GuiMiningRecords extends GuiScreen
 			else switch (nameType)
 			{
 				case 2:
-					name = blockMeta.getBlock().getTranslationKey();
+					name = blockMeta.getBlock().getUnlocalizedName();
 					name = name.substring(name.indexOf(".") + 1);
 					break;
 				default:

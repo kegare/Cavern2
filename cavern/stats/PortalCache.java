@@ -12,7 +12,6 @@ import com.google.common.collect.Table.Cell;
 
 import cavern.api.IPortalCache;
 import cavern.capability.CaveCapabilities;
-import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
@@ -21,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class PortalCache implements IPortalCache
@@ -212,8 +212,8 @@ public class PortalCache implements IPortalCache
 		}
 	}
 
-	public static IPortalCache get(Entity entity)
+	public static IPortalCache get(ICapabilityProvider provider)
 	{
-		return ObjectUtils.defaultIfNull(CaveCapabilities.getCapability(entity, CaveCapabilities.PORTAL_CACHE), new PortalCache());
+		return ObjectUtils.defaultIfNull(CaveCapabilities.getCapability(provider, CaveCapabilities.PORTAL_CACHE), new PortalCache());
 	}
 }

@@ -20,7 +20,7 @@ public class CreativeTabCavern extends CreativeTabs
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public ItemStack createIcon()
+	public ItemStack getTabIconItem()
 	{
 		return new ItemStack(CaveBlocks.CAVERN_PORTAL);
 	}

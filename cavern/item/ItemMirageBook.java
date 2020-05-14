@@ -34,22 +34,22 @@ public class ItemMirageBook extends Item implements ITeleporter
 	public ItemMirageBook()
 	{
 		super();
-		this.setTranslationKey("mirageBook");
+		this.setUnlocalizedName("mirageBook");
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack stack)
+	public String getUnlocalizedName(ItemStack stack)
 	{
-		return getTranslationKey() + "." + EnumType.byItemStack(stack).getTranslationKey();
+		return getUnlocalizedName() + "." + EnumType.byItemStack(stack).getTranslationKey();
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
 	{
-		return Cavern.proxy.translateFormat(getTranslationKey() + ".name", super.getItemStackDisplayName(stack));
+		return Cavern.proxy.translateFormat(getUnlocalizedName() + ".name", super.getItemStackDisplayName(stack));
 	}
 
 	@Override
@@ -96,11 +96,11 @@ public class ItemMirageBook extends Item implements ITeleporter
 		{
 			if (CavernAPI.dimension.isInMirageWorlds(player))
 			{
-				player.sendStatusMessage(new TextComponentTranslation(getTranslationKey() + ".fail"), true);
+				player.sendStatusMessage(new TextComponentTranslation(getUnlocalizedName() + ".fail"), true);
 			}
 			else
 			{
-				player.sendStatusMessage(new TextComponentTranslation(getTranslationKey() + ".portal"), true);
+				player.sendStatusMessage(new TextComponentTranslation(getUnlocalizedName() + ".portal"), true);
 			}
 		}
 

@@ -1195,7 +1195,7 @@ public class GuiVeinsEditor extends GuiScreen
 				switch (nameType)
 				{
 					case 2:
-						text = stack.getTranslationKey();
+						text = stack.getUnlocalizedName();
 						text = text.substring(text.indexOf(".") + 1);
 						break;
 					default:
@@ -1206,7 +1206,7 @@ public class GuiVeinsEditor extends GuiScreen
 			else switch (nameType)
 			{
 				case 2:
-					text = block.getTranslationKey();
+					text = block.getUnlocalizedName();
 					text = text.substring(text.indexOf(".") + 1);
 					break;
 				default:

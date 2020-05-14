@@ -145,7 +145,7 @@ public class EntityCavenicWitch extends EntityWitch implements ICavenicMob
 
 	public int getAttackPotionCount()
 	{
-		return world.getWorldInfo().getDifficulty().getId();
+		return world.getWorldInfo().getDifficulty().getDifficultyId();
 	}
 
 	@Override

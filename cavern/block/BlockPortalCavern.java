@@ -21,7 +21,7 @@ import cavern.stats.MinerStats;
 import cavern.stats.PortalCache;
 import cavern.util.CaveUtils;
 import cavern.world.CaveDimensions;
-import cavern.world.WorldCachedData;
+import cavern.world.TeleporterCavern;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPortal;
 import net.minecraft.block.BlockStoneBrick;
@@ -49,9 +49,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -64,7 +64,7 @@ public class BlockPortalCavern extends BlockPortal
 	public BlockPortalCavern()
 	{
 		super();
-		this.setTranslationKey("portal.cavern");
+		this.setUnlocalizedName("portal.cavern");
 		this.setSoundType(SoundType.GLASS);
 		this.setTickRandomly(false);
 		this.setBlockUnbreakable();
@@ -161,7 +161,7 @@ public class BlockPortalCavern extends BlockPortal
 		{
 			EntityPlayerMP playerMP = (EntityPlayerMP)player;
 
-			if (playerMP.server.getPlayerList().canSendCommands(playerMP.getGameProfile()))
+			if (playerMP.mcServer.getPlayerList().canSendCommands(playerMP.getGameProfile()))
 			{
 				CaveNetworkRegistry.sendTo(new RegenerationGuiMessage(RegenerationGuiMessage.EnumType.OPEN), playerMP);
 			}
@@ -232,18 +232,13 @@ public class BlockPortalCavern extends BlockPortal
 		return false;
 	}
 
-	public Teleporter getTeleporter(WorldServer world)
-	{
-		return WorldCachedData.get(world).getPortalTeleporter(this);
-	}
-
 	public MinerRank getMinerRank()
 	{
 		return MinerRank.BEGINNER;
 	}
 
 	@Override
-	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity)
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
 	{
 		if (world.isRemote || getDimension() == null)
 		{
@@ -263,7 +258,7 @@ public class BlockPortalCavern extends BlockPortal
 			DimensionType dimOld = world.provider.getDimensionType();
 			DimensionType dimNew = isEntityInCave(entity) ? cache.getLastDim(key) : getDimension();
 			WorldServer worldNew = server.getWorld(dimNew.getId());
-			Teleporter teleporter = getTeleporter(worldNew);
+			ITeleporter teleporter = new TeleporterCavern(worldNew, this);
 			BlockPos prevPos = entity.getPosition();
 
 			entity.timeUntilPortal = entity.getPortalCooldown();
@@ -272,7 +267,7 @@ public class BlockPortalCavern extends BlockPortal
 			{
 				EntityPlayer player = (EntityPlayer)entity;
 
-				if (MinerStats.get(player).getRank() < getMinerRank().getRank())
+				if (!player.capabilities.isCreativeMode && MinerStats.get(player).getRank() < getMinerRank().getRank())
 				{
 					player.sendStatusMessage(new TextComponentTranslation("cavern.message.portal.rank", new TextComponentTranslation(getMinerRank().getTranslationKey())), true);
 

@@ -30,12 +30,12 @@ public class ItemAcresia extends ItemBlock implements IPlantable
 	{
 		super(block);
 		this.setRegistryName(block.getRegistryName());
-		this.setTranslationKey("acresia");
+		this.setUnlocalizedName("acresia");
 		this.setHasSubtypes(true);
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack stack)
+	public String getUnlocalizedName(ItemStack stack)
 	{
 		return "item." + EnumType.byItemStack(stack).getTranslationKey();
 	}

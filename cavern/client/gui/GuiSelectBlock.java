@@ -61,7 +61,7 @@ public class GuiSelectBlock extends GuiScreen
 
 			list.clear();
 
-			block.getSubBlocks(ObjectUtils.defaultIfNull(block.getCreativeTab(), CreativeTabs.SEARCH), list);
+			block.getSubBlocks(ObjectUtils.defaultIfNull(block.getCreativeTabToDisplayOn(), CreativeTabs.SEARCH), list);
 
 			if (list.isEmpty())
 			{
@@ -689,7 +689,7 @@ public class GuiSelectBlock extends GuiScreen
 				switch (nameType)
 				{
 					case 2:
-						name = stack.getTranslationKey();
+						name = stack.getUnlocalizedName();
 						name = name.substring(name.indexOf(".") + 1);
 						break;
 					default:
@@ -700,7 +700,7 @@ public class GuiSelectBlock extends GuiScreen
 			else switch (nameType)
 			{
 				case 2:
-					name = blockMeta.getBlock().getTranslationKey();
+					name = blockMeta.getBlock().getUnlocalizedName();
 					name = name.substring(name.indexOf(".") + 1);
 					break;
 				default:

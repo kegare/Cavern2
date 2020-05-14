@@ -51,22 +51,22 @@ public class ItemMagicBook extends Item
 	public ItemMagicBook()
 	{
 		super();
-		this.setTranslationKey("magicBook");
+		this.setUnlocalizedName("magicBook");
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack stack)
+	public String getUnlocalizedName(ItemStack stack)
 	{
-		return getTranslationKey() + "." + EnumType.byItemStack(stack).getTranslationKey();
+		return getUnlocalizedName() + "." + EnumType.byItemStack(stack).getTranslationKey();
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
 	{
-		return Cavern.proxy.translateFormat(getTranslationKey() + ".name", super.getItemStackDisplayName(stack));
+		return Cavern.proxy.translateFormat(getUnlocalizedName() + ".name", super.getItemStackDisplayName(stack));
 	}
 
 	@Override

@@ -11,13 +11,13 @@ public class ItemCave extends Item
 	public ItemCave()
 	{
 		super();
-		this.setTranslationKey("itemCave");
+		this.setUnlocalizedName("itemCave");
 		this.setHasSubtypes(true);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack stack)
+	public String getUnlocalizedName(ItemStack stack)
 	{
 		return "item." + EnumType.byItemStack(stack).getTranslationKey();
 	}

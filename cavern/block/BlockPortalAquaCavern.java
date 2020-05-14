@@ -17,7 +17,7 @@ public class BlockPortalAquaCavern extends BlockPortalCavern
 	public BlockPortalAquaCavern()
 	{
 		super();
-		this.setTranslationKey("portal.aquaCavern");
+		this.setUnlocalizedName("portal.aquaCavern");
 	}
 
 	@Override

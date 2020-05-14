@@ -8,7 +8,7 @@ public class BlockLogPerverted extends BlockOldLog
 	public BlockLogPerverted()
 	{
 		super();
-		this.setTranslationKey("pervertedLog");
+		this.setUnlocalizedName("pervertedLog");
 		this.setHardness(1.2F);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}

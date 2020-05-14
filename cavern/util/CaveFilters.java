@@ -46,7 +46,7 @@ public class CaveFilters
 				return true;
 			}
 
-			if (StringUtils.containsIgnoreCase(block.getTranslationKey(), filter))
+			if (StringUtils.containsIgnoreCase(block.getUnlocalizedName(), filter))
 			{
 				return true;
 			}
@@ -58,7 +58,7 @@ public class CaveFilters
 				return true;
 			}
 
-			if (StringUtils.containsIgnoreCase(stack.getTranslationKey(), filter))
+			if (StringUtils.containsIgnoreCase(stack.getUnlocalizedName(), filter))
 			{
 				return true;
 			}
@@ -91,7 +91,7 @@ public class CaveFilters
 			return true;
 		}
 
-		if (StringUtils.containsIgnoreCase(stack.getTranslationKey(), filter))
+		if (StringUtils.containsIgnoreCase(stack.getUnlocalizedName(), filter))
 		{
 			return true;
 		}

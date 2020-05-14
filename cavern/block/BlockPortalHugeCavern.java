@@ -16,7 +16,7 @@ public class BlockPortalHugeCavern extends BlockPortalCavern
 	public BlockPortalHugeCavern()
 	{
 		super();
-		this.setTranslationKey("portal.hugeCavern");
+		this.setUnlocalizedName("portal.hugeCavern");
 	}
 
 	@Override

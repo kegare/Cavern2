@@ -89,7 +89,7 @@ public class CaveDimensions
 			return Cavern.proxy.translate("dimension.aquaCavern.name");
 		}
 
-		String suffix = CaveItems.MIRAGE_BOOK.getTranslationKey();
+		String suffix = CaveItems.MIRAGE_BOOK.getUnlocalizedName();
 
 		if (type == CAVELAND)
 		{

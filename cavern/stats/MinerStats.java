@@ -133,7 +133,7 @@ public class MinerStats implements IMinerStats
 			if (entityPlayer != null && entityPlayer instanceof EntityPlayerMP)
 			{
 				EntityPlayerMP player = (EntityPlayerMP)entityPlayer;
-				MinecraftServer server = player.server;
+				MinecraftServer server = player.mcServer;
 
 				ITextComponent name = new TextComponentTranslation(current.getTranslationKey());
 				name.getStyle().setBold(true);

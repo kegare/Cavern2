@@ -44,7 +44,7 @@ public class BlockCave extends Block
 	{
 		super(Material.ROCK);
 		this.setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumType.AQUAMARINE_ORE));
-		this.setTranslationKey("blockCave");
+		this.setUnlocalizedName("blockCave");
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}
 
@@ -120,7 +120,7 @@ public class BlockCave extends Block
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getRenderLayer()
+	public BlockRenderLayer getBlockLayer()
 	{
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}

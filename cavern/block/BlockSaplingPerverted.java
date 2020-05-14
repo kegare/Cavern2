@@ -26,7 +26,7 @@ public class BlockSaplingPerverted extends BlockSapling
 	public BlockSaplingPerverted()
 	{
 		super();
-		this.setTranslationKey("pervertedSapling");
+		this.setUnlocalizedName("pervertedSapling");
 		this.setHardness(0.0F);
 		this.setSoundType(SoundType.PLANT);
 		this.setCreativeTab(Cavern.TAB_CAVERN);

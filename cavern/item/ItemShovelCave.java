@@ -8,7 +8,7 @@ public class ItemShovelCave extends ItemSpade
 	public ItemShovelCave(ToolMaterial material, String name)
 	{
 		super(material);
-		this.setTranslationKey(name);
+		this.setUnlocalizedName(name);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 	}
 }

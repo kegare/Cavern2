@@ -13,7 +13,7 @@ public class ItemArmorCave extends ItemArmor
 	public ItemArmorCave(ArmorMaterial material, String name, String renderName, EntityEquipmentSlot slot)
 	{
 		super(material, 2, slot);
-		this.setTranslationKey(name);
+		this.setUnlocalizedName(name);
 		this.setCreativeTab(Cavern.TAB_CAVERN);
 		this.renderName = renderName;
 	}

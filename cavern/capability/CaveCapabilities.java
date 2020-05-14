@@ -12,13 +12,10 @@ import cavern.item.OreCompass;
 import cavern.magic.MagicBook;
 import cavern.miningassist.MiningAssistUnit;
 import cavern.util.CaveUtils;
-import cavern.world.WorldCachedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -41,8 +38,6 @@ public class CaveCapabilities
 	public static Capability<MiningAssistUnit> MINING_ASSIST = null;
 	@CapabilityInject(OreCompass.class)
 	public static Capability<OreCompass> ORE_COMPASS = null;
-	@CapabilityInject(WorldCachedData.class)
-	public static Capability<WorldCachedData> WORLD_CACHED_DATA = null;
 	@CapabilityInject(MagicBook.class)
 	public static Capability<MagicBook> MAGIC_BOOK = null;
 	@CapabilityInject(InventoryMagicStorage.class)
@@ -56,7 +51,6 @@ public class CaveCapabilities
 		CapabilityMiningData.register();
 		CapabilityMiningAssistUnit.register();
 		CapabilityOreCompass.register();
-		CapabilityWorldCachedData.register();
 		CapabilityMagicBook.register();
 		CapabilityMagicStorage.register();
 
@@ -93,19 +87,6 @@ public class CaveCapabilities
 			event.addCapability(CaveUtils.getKey("mining_data"), new CapabilityMiningData(player));
 			event.addCapability(CaveUtils.getKey("mining_assist"), new CapabilityMiningAssistUnit(player));
 			event.addCapability(CaveUtils.getKey("magic_book"), new CapabilityMagicBook());
-		}
-	}
-
-	@SubscribeEvent
-	public void onAttachWorldCapabilities(AttachCapabilitiesEvent<World> event)
-	{
-		World world = event.getObject();
-
-		if (world instanceof WorldServer)
-		{
-			WorldServer worldServer = (WorldServer)world;
-
-			event.addCapability(CaveUtils.getKey("world_cache"), new CapabilityWorldCachedData(worldServer));
 		}
 	}
 
