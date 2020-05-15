@@ -8,10 +8,10 @@ Minecraft mod. Adds new various dimension!
 ----
 ## License
 * Source code  
-[Minecraft Mod Public License Japanese Translation](https://dl.dropboxusercontent.com/u/51943112/MMPL_J.txt) (MMPL_J)
+[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.txt)
 * Image files and Audio files  
 [CC-BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/)
 
 ----
 ## Links
-* [Cavern II](http://minecraft.curseforge.com/projects/cavern2)
+* [Cavern II](https://www.curseforge.com/minecraft/mc-mods/cavern2)
