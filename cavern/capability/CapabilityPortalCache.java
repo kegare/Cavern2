@@ -1,7 +1,6 @@
 package cavern.capability;
 
-import cavern.api.IPortalCache;
-import cavern.stats.PortalCache;
+import cavern.data.PortalCache;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -11,7 +10,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 public class CapabilityPortalCache implements ICapabilitySerializable<NBTTagCompound>
 {
-	private final IPortalCache cache;
+	private final PortalCache cache;
 
 	public CapabilityPortalCache()
 	{
@@ -57,11 +56,11 @@ public class CapabilityPortalCache implements ICapabilitySerializable<NBTTagComp
 
 	public static void register()
 	{
-		CapabilityManager.INSTANCE.register(IPortalCache.class,
-			new Capability.IStorage<IPortalCache>()
+		CapabilityManager.INSTANCE.register(PortalCache.class,
+			new Capability.IStorage<PortalCache>()
 			{
 				@Override
-				public NBTBase writeNBT(Capability<IPortalCache> capability, IPortalCache instance, EnumFacing side)
+				public NBTBase writeNBT(Capability<PortalCache> capability, PortalCache instance, EnumFacing side)
 				{
 					NBTTagCompound nbt = new NBTTagCompound();
 
@@ -71,7 +70,7 @@ public class CapabilityPortalCache implements ICapabilitySerializable<NBTTagComp
 				}
 
 				@Override
-				public void readNBT(Capability<IPortalCache> capability, IPortalCache instance, EnumFacing side, NBTBase nbt)
+				public void readNBT(Capability<PortalCache> capability, PortalCache instance, EnumFacing side, NBTBase nbt)
 				{
 					instance.readFromNBT((NBTTagCompound)nbt);
 				}

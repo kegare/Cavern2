@@ -85,7 +85,7 @@ public class AquaCavernConfig
 		propOrder.add(prop.getName());
 		dimensionId = prop.getInt(dimensionId);
 
-		prop = config.get(category, "worldHeight", Config.highProfiles ? 256 : 128);
+		prop = config.get(category, "worldHeight", 256);
 		prop.setMinValue(64).setMaxValue(256);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
 		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
@@ -308,22 +308,18 @@ public class AquaCavernConfig
 			veins.add(new CaveVein(new BlockMeta(Blocks.GRAVEL, 0), 10, 20, 1, 127));
 			veins.add(new CaveVein(new BlockMeta(Blocks.CLAY, 0), 30, 20, 1, 127));
 			veins.add(new CaveVein(new BlockMeta(Blocks.SAND, BlockSand.EnumType.SAND.getMetadata()), 15, 20, 1, 127));
-
-			if (Config.highProfiles)
-			{
-				veins.add(new CaveVein(new BlockMeta(Blocks.COAL_ORE, 0), 35, 20, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.IRON_ORE, 0), 30, 12, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.GOLD_ORE, 0), 5, 8, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.LAPIS_ORE, 0), 4, 7, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.AQUAMARINE_ORE.getMetadata()), 12, 12, 128, 255, Type.COLD, Type.WATER, Type.WET));
-				veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.MAGNITE_ORE.getMetadata()), 30, 10, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.RANDOMITE_ORE.getMetadata()), 28, 4, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.HEXCITE_ORE.getMetadata()), 4, 5, 200, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.DIRT, 0), 20, 25, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.GRAVEL, 0), 10, 20, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.CLAY, 0), 30, 20, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.SAND, BlockSand.EnumType.SAND.getMetadata()), 10, 20, 128, 255, Type.SANDY));
-			}
+			veins.add(new CaveVein(new BlockMeta(Blocks.COAL_ORE, 0), 35, 20, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.IRON_ORE, 0), 30, 12, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.GOLD_ORE, 0), 5, 8, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.LAPIS_ORE, 0), 4, 7, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.AQUAMARINE_ORE.getMetadata()), 12, 12, 128, 255, Type.COLD, Type.WATER, Type.WET));
+			veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.MAGNITE_ORE.getMetadata()), 30, 10, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.RANDOMITE_ORE.getMetadata()), 28, 4, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.HEXCITE_ORE.getMetadata()), 4, 5, 200, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.DIRT, 0), 20, 25, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.GRAVEL, 0), 10, 20, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.CLAY, 0), 30, 20, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.SAND, BlockSand.EnumType.SAND.getMetadata()), 10, 20, 128, 255, Type.SANDY));
 
 			CavernConfig.generateVeinsConfig(veinManager, veins);
 		}

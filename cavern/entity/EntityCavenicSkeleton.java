@@ -3,8 +3,8 @@ package cavern.entity;
 import javax.annotation.Nullable;
 
 import cavern.api.CavernAPI;
-import cavern.api.ICavenicMob;
-import cavern.api.ISummonMob;
+import cavern.api.entity.ICavenicMob;
+import cavern.api.entity.IEntitySummonable;
 import cavern.entity.ai.EntityAIAttackCavenicBow;
 import cavern.item.CaveItems;
 import cavern.item.ItemCave;
@@ -151,7 +151,7 @@ public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
 
 	public boolean isFriends(@Nullable Entity entity)
 	{
-		return entity != null && entity instanceof EntityCavenicSkeleton && !(entity instanceof ISummonMob);
+		return entity != null && entity instanceof EntityCavenicSkeleton && !(entity instanceof IEntitySummonable);
 	}
 
 	@Override

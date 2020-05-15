@@ -12,7 +12,7 @@ import cavern.client.CaveRenderingRegistry;
 import cavern.client.config.CaveConfigEntries;
 import cavern.client.handler.ClientEventHooks;
 import cavern.client.handler.MagicEventHooks;
-import cavern.client.handler.MinerStatsHUDEventHooks;
+import cavern.client.handler.MinerHUDEventHooks;
 import cavern.config.AquaCavernConfig;
 import cavern.config.CavelandConfig;
 import cavern.config.CaveniaConfig;
@@ -29,7 +29,7 @@ import cavern.handler.CaveGuiHandler;
 import cavern.handler.CavebornEventHooks;
 import cavern.handler.MiningAssistEventHooks;
 import cavern.handler.api.DimensionHandler;
-import cavern.handler.api.EntityDataHandler;
+import cavern.handler.api.DataHandler;
 import cavern.item.CaveItems;
 import cavern.network.CaveNetworkRegistry;
 import cavern.plugin.HaCPlugin;
@@ -38,7 +38,6 @@ import cavern.util.CaveLog;
 import cavern.util.Version;
 import cavern.world.CaveDimensions;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
@@ -49,7 +48,6 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -98,7 +96,7 @@ public class Cavern
 		Version.initVersion();
 
 		CavernAPI.dimension = new DimensionHandler();
-		CavernAPI.data = new EntityDataHandler();
+		CavernAPI.data = new DataHandler();
 
 		if (event.getSide().isClient())
 		{
@@ -113,13 +111,6 @@ public class Cavern
 	@SideOnly(Side.CLIENT)
 	public void clientConstruct()
 	{
-		Minecraft mc = FMLClientHandler.instance().getClient();
-
-		if (mc.isJava64bit() && Runtime.getRuntime().maxMemory() >= 2000000000L)
-		{
-			Config.highProfiles = true;
-		}
-
 		CaveConfigEntries.initEntries();
 	}
 
@@ -144,7 +135,7 @@ public class Cavern
 			CaveKeyBindings.registerKeyBindings();
 
 			MinecraftForge.EVENT_BUS.register(new ClientEventHooks());
-			MinecraftForge.EVENT_BUS.register(new MinerStatsHUDEventHooks());
+			MinecraftForge.EVENT_BUS.register(new MinerHUDEventHooks());
 			MinecraftForge.EVENT_BUS.register(new MagicEventHooks());
 		}
 
@@ -158,9 +149,7 @@ public class Cavern
 	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event)
 	{
-		IForgeRegistry<Block> registry = event.getRegistry();
-
-		CaveBlocks.registerBlocks(registry);
+		CaveBlocks.registerBlocks(event.getRegistry());
 	}
 
 	@SubscribeEvent
@@ -183,32 +172,26 @@ public class Cavern
 	@SubscribeEvent
 	public void registerSounds(RegistryEvent.Register<SoundEvent> event)
 	{
-		IForgeRegistry<SoundEvent> registry = event.getRegistry();
-
-		CaveSounds.registerSounds(registry);
+		CaveSounds.registerSounds(event.getRegistry());
 	}
 
 	@SubscribeEvent
 	public void registerEntityEntries(RegistryEvent.Register<EntityEntry> event)
 	{
-		CaveEntityRegistry.registerEntities();
+		CaveEntityRegistry.registerEntities(event.getRegistry());
 	}
 
 	@SubscribeEvent
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event)
 	{
-		IForgeRegistry<IRecipe> registry = event.getRegistry();
-
-		CaveItems.registerRecipes(registry);
+		CaveItems.registerRecipes(event.getRegistry());
 	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void registerBlockColors(ColorHandlerEvent.Block event)
 	{
-		BlockColors colors = event.getBlockColors();
-
-		CaveBlocks.registerBlockColors(colors);
+		CaveBlocks.registerBlockColors(event.getBlockColors());
 	}
 
 	@SideOnly(Side.CLIENT)

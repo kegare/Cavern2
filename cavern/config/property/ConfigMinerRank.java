@@ -1,6 +1,6 @@
 package cavern.config.property;
 
-import cavern.stats.MinerRank;
+import cavern.data.MinerRank;
 
 public class ConfigMinerRank
 {

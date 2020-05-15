@@ -1,4 +1,4 @@
-package cavern.stats;
+package cavern.data;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,8 +9,8 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 
-import cavern.api.IMinerStats;
-import cavern.api.event.MinerStatsEvent;
+import cavern.api.data.IMiner;
+import cavern.api.event.MinerEvent;
 import cavern.capability.CaveCapabilities;
 import cavern.config.MiningAssistConfig;
 import cavern.core.CaveSounds;
@@ -38,7 +38,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class MinerStats implements IMinerStats
+public class Miner implements IMiner
 {
 	public static final Table<Block, Integer, Integer> MINING_POINTS = HashBasedTable.create();
 
@@ -50,7 +50,7 @@ public class MinerStats implements IMinerStats
 
 	private final Map<BlockMeta, Integer> records = Maps.newHashMap();
 
-	public MinerStats(EntityPlayer player)
+	public Miner(EntityPlayer player)
 	{
 		this.entityPlayer = player;
 	}
@@ -89,7 +89,7 @@ public class MinerStats implements IMinerStats
 	@Override
 	public void addPoint(int value, boolean adjust)
 	{
-		MinerStatsEvent.AddPoint event = new MinerStatsEvent.AddPoint(entityPlayer, this, value);
+		MinerEvent.AddPoint event = new MinerEvent.AddPoint(entityPlayer, this, value);
 
 		if (MinecraftForge.EVENT_BUS.post(event))
 		{
@@ -135,7 +135,7 @@ public class MinerStats implements IMinerStats
 				EntityPlayerMP player = (EntityPlayerMP)entityPlayer;
 				MinecraftServer server = player.mcServer;
 
-				ITextComponent name = new TextComponentTranslation(current.getTranslationKey());
+				ITextComponent name = new TextComponentTranslation(current.getUnlocalizedName());
 				name.getStyle().setBold(true);
 
 				ITextComponent component = new TextComponentTranslation("cavern.minerrank.promoted", player.getDisplayName(), name);
@@ -172,7 +172,7 @@ public class MinerStats implements IMinerStats
 				}
 			}
 
-			MinecraftForge.EVENT_BUS.post(new MinerStatsEvent.PromoteRank(entityPlayer, this));
+			MinecraftForge.EVENT_BUS.post(new MinerEvent.PromoteRank(entityPlayer, this));
 		}
 	}
 
@@ -301,19 +301,19 @@ public class MinerStats implements IMinerStats
 		}
 	}
 
-	public static IMinerStats get(EntityPlayer player)
+	public static IMiner get(EntityPlayer player)
 	{
 		return get(player, false);
 	}
 
-	public static IMinerStats get(EntityPlayer player, boolean nullable)
+	public static IMiner get(EntityPlayer player, boolean nullable)
 	{
-		return ObjectUtils.defaultIfNull(CaveCapabilities.getCapability(player, CaveCapabilities.MINER_STATS), nullable ? null : new MinerStats(player));
+		return ObjectUtils.defaultIfNull(CaveCapabilities.getCapability(player, CaveCapabilities.MINER), nullable ? null : new Miner(player));
 	}
 
 	public static void adjustData(EntityPlayerMP player)
 	{
-		IMinerStats stats = MinerStats.get(player, true);
+		IMiner stats = Miner.get(player, true);
 
 		if (stats != null)
 		{

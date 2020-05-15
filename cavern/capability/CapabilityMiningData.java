@@ -1,7 +1,7 @@
 package cavern.capability;
 
-import cavern.api.IMiningData;
-import cavern.stats.MiningData;
+import cavern.api.data.IMiningData;
+import cavern.data.MiningData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;

@@ -95,7 +95,7 @@ public class CavernConfig
 		propOrder.add(prop.getName());
 		dimensionId = prop.getInt(dimensionId);
 
-		prop = config.get(category, "worldHeight", Config.highProfiles ? 256 : 128);
+		prop = config.get(category, "worldHeight", 256);
 		prop.setMinValue(64).setMaxValue(256);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
 		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
@@ -161,7 +161,7 @@ public class CavernConfig
 		propOrder.add(prop.getName());
 		generateRavine = prop.getBoolean(generateRavine);
 
-		prop = config.get(category, "generateExtremeCaves", Config.highProfiles);
+		prop = config.get(category, "generateExtremeCaves", true);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
 		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
 		comment += " [default: " + prop.getDefault() + "]";
@@ -271,7 +271,7 @@ public class CavernConfig
 		propOrder.add(prop.getName());
 		towerDungeonMobs.setValues(prop.getStringList());
 
-		prop = config.get(category, "monsterSpawn", Config.highProfiles ? 200 : 0);
+		prop = config.get(category, "monsterSpawn", 200);
 		prop.setMinValue(0).setMaxValue(5000);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
 		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
@@ -369,21 +369,17 @@ public class CavernConfig
 			veins.add(new CaveVein(new BlockMeta(Blocks.DIRT, 0), 20, 25, 1, 127));
 			veins.add(new CaveVein(new BlockMeta(Blocks.GRAVEL, 0), 10, 20, 1, 127));
 			veins.add(new CaveVein(new BlockMeta(Blocks.SAND, BlockSand.EnumType.SAND.getMetadata()), 10, 20, 1, 127, Type.SANDY));
-
-			if (Config.highProfiles)
-			{
-				veins.add(new CaveVein(new BlockMeta(Blocks.COAL_ORE, 0), 35, 18, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.IRON_ORE, 0), 30, 10, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.GOLD_ORE, 0), 5, 7, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.LAPIS_ORE, 0), 4, 6, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.AQUAMARINE_ORE.getMetadata()), 12, 8, 128, 255, Type.COLD, Type.WATER, Type.WET));
-				veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.MAGNITE_ORE.getMetadata()), 30, 10, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.RANDOMITE_ORE.getMetadata()), 28, 2, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.HEXCITE_ORE.getMetadata()), 4, 5, 200, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.DIRT, 0), 20, 25, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.GRAVEL, 0), 10, 20, 128, 255));
-				veins.add(new CaveVein(new BlockMeta(Blocks.SAND, BlockSand.EnumType.SAND.getMetadata()), 10, 20, 128, 255, Type.SANDY));
-			}
+			veins.add(new CaveVein(new BlockMeta(Blocks.COAL_ORE, 0), 35, 18, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.IRON_ORE, 0), 30, 10, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.GOLD_ORE, 0), 5, 7, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.LAPIS_ORE, 0), 4, 6, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.AQUAMARINE_ORE.getMetadata()), 12, 8, 128, 255, Type.COLD, Type.WATER, Type.WET));
+			veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.MAGNITE_ORE.getMetadata()), 30, 10, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.RANDOMITE_ORE.getMetadata()), 28, 2, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.HEXCITE_ORE.getMetadata()), 4, 5, 200, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.DIRT, 0), 20, 25, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.GRAVEL, 0), 10, 20, 128, 255));
+			veins.add(new CaveVein(new BlockMeta(Blocks.SAND, BlockSand.EnumType.SAND.getMetadata()), 10, 20, 128, 255, Type.SANDY));
 
 			generateVeinsConfig(veinManager, veins);
 		}

@@ -1,6 +1,6 @@
 package cavern.recipe;
 
-import cavern.api.IIceEquipment;
+import cavern.api.item.IIceEquipment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockIce;
 import net.minecraft.block.BlockPackedIce;

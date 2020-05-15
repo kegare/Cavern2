@@ -3,7 +3,7 @@ package cavern.entity;
 import javax.annotation.Nullable;
 
 import cavern.api.CavernAPI;
-import cavern.api.ICavenicMob;
+import cavern.api.entity.ICavenicMob;
 import cavern.item.ItemCave;
 import cavern.item.ItemMagicBook;
 import net.minecraft.entity.Entity;

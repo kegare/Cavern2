@@ -1,7 +1,7 @@
 package cavern.entity;
 
 import cavern.api.CavernAPI;
-import cavern.api.ICavenicMob;
+import cavern.api.entity.ICavenicMob;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;

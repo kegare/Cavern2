@@ -26,8 +26,6 @@ public class Config
 
 	public static ConfigChecker configChecker;
 
-	public static boolean highProfiles;
-
 	public static boolean updateConfig()
 	{
 		if (configChecker == null)

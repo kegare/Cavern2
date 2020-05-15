@@ -10,7 +10,7 @@ import com.google.common.collect.Sets;
 import cavern.block.BlockCave;
 import cavern.block.CaveBlocks;
 import cavern.config.GeneralConfig;
-import cavern.stats.MinerStats;
+import cavern.data.Miner;
 import cavern.util.BlockMeta;
 import cavern.util.CaveUtils;
 import net.minecraft.block.Block;
@@ -122,7 +122,7 @@ public class ConfigMiningPoints
 
 	public void refreshPoints()
 	{
-		MinerStats.MINING_POINTS.clear();
+		Miner.MINING_POINTS.clear();
 
 		for (String value : values)
 		{
@@ -136,7 +136,7 @@ public class ConfigMiningPoints
 
 				if (OreDictionary.doesOreNameExist(str))
 				{
-					MinerStats.setPointAmount(str, point);
+					Miner.setPointAmount(str, point);
 				}
 				else
 				{
@@ -160,7 +160,7 @@ public class ConfigMiningPoints
 
 					if (blockMeta.isNotAir())
 					{
-						MinerStats.setPointAmount(blockMeta, point);
+						Miner.setPointAmount(blockMeta, point);
 					}
 				}
 			}

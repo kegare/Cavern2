@@ -1,4 +1,4 @@
-package cavern.item;
+package cavern.api.item;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

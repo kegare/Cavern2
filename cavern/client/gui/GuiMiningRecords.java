@@ -12,8 +12,8 @@ import com.google.common.base.Strings;
 import cavern.client.CaveKeyBindings;
 import cavern.client.config.CaveConfigGui;
 import cavern.config.Config;
-import cavern.stats.MinerRank;
-import cavern.stats.MinerStats;
+import cavern.data.MinerRank;
+import cavern.data.Miner;
 import cavern.util.ArrayListExtended;
 import cavern.util.BlockMeta;
 import cavern.util.PanoramaPaths;
@@ -174,7 +174,7 @@ public class GuiMiningRecords extends GuiScreen
 		{
 			super(GuiMiningRecords.this.mc, 0, 0, 0, 0, 18);
 
-			for (Entry<BlockMeta, Integer> entry : MinerStats.get(GuiMiningRecords.this.mc.player).getMiningRecords().entrySet())
+			for (Entry<BlockMeta, Integer> entry : Miner.get(GuiMiningRecords.this.mc.player).getMiningRecords().entrySet())
 			{
 				BlockMeta blockMeta = entry.getKey();
 				int count = entry.getValue().intValue();
@@ -183,7 +183,7 @@ public class GuiMiningRecords extends GuiScreen
 
 				totalCount += count;
 
-				int amount = MinerStats.getPointAmount(blockMeta.getBlock(), blockMeta.getMeta());
+				int amount = Miner.getPointAmount(blockMeta.getBlock(), blockMeta.getMeta());
 
 				if (count > 1)
 				{

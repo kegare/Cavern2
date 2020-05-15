@@ -2,10 +2,10 @@ package cavern.miningassist;
 
 import javax.annotation.Nullable;
 
-import cavern.api.IMinerStats;
+import cavern.api.data.IMiner;
 import cavern.config.MiningAssistConfig;
 import cavern.config.property.ConfigBlocks;
-import cavern.stats.MinerStats;
+import cavern.data.Miner;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockRedstoneOre;
 import net.minecraft.block.state.IBlockState;
@@ -73,7 +73,7 @@ public enum MiningAssist implements IStringSerializable
 			switch (this)
 			{
 				case QUICK:
-					return state.getBlock() instanceof BlockOre || state.getBlock() instanceof BlockRedstoneOre || MinerStats.getPointAmount(state) > 0;
+					return state.getBlock() instanceof BlockOre || state.getBlock() instanceof BlockRedstoneOre || Miner.getPointAmount(state) > 0;
 				default:
 					return stack.canHarvestBlock(state);
 			}
@@ -84,10 +84,10 @@ public enum MiningAssist implements IStringSerializable
 
 	public static MiningAssist byPlayer(EntityPlayer player)
 	{
-		return byMiner(MinerStats.get(player, true));
+		return byMiner(Miner.get(player, true));
 	}
 
-	public static MiningAssist byMiner(@Nullable IMinerStats stats)
+	public static MiningAssist byMiner(@Nullable IMiner stats)
 	{
 		return get(stats == null ? 0 : stats.getMiningAssist());
 	}

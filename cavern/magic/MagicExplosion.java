@@ -1,6 +1,6 @@
 package cavern.magic;
 
-import cavern.api.ISummonMob;
+import cavern.api.entity.IEntitySummonable;
 import cavern.core.CaveSounds;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.ExplosionMessage;
@@ -168,7 +168,7 @@ public class MagicExplosion extends Magic
 				return false;
 			}
 
-			if (entity instanceof ISummonMob)
+			if (entity instanceof IEntitySummonable)
 			{
 				return false;
 			}

@@ -2,8 +2,8 @@ package cavern.api;
 
 public final class CavernAPI
 {
-	public static final String API_VERSION = "2.1.4";
+	public static final String API_VERSION = "2.2.2";
 
-	public static IDimension dimension;
-	public static IEntityData data;
+	public static DimensionWrapper dimension;
+	public static DataWrapper data;
 }

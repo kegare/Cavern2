@@ -4,11 +4,10 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
-import cavern.api.IPortalCache;
 import cavern.block.BlockPortalCavern;
 import cavern.config.GeneralConfig;
 import cavern.config.property.ConfigCaveborn;
-import cavern.stats.PortalCache;
+import cavern.data.PortalCache;
 import cavern.util.ItemMeta;
 import cavern.util.PlayerHelper;
 import cavern.world.CaveDimensions;
@@ -87,7 +86,7 @@ public class CavebornEventHooks
 		ConfigCaveborn.Type caveborn = GeneralConfig.caveborn.getType();
 		BlockPortalCavern portal = caveborn.getPortalBlock();
 		BlockPos pos = player.getPosition();
-		IPortalCache cache = PortalCache.get(player);
+		PortalCache cache = PortalCache.get(player);
 		PatternHelper pattern = portal.createPatternHelper(world, pos);
 		double d0 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
 		double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? player.posZ : player.posX;
@@ -97,7 +96,7 @@ public class CavebornEventHooks
 		cache.setLastPortalVec(new Vec3d(d1, d2, 0.0D));
 		cache.setTeleportDirection(pattern.getForwards());
 
-		player.timeUntilPortal = player.getPortalCooldown();
+		player.timeUntilPortal = 200;
 
 		new TeleporterCavern(world, portal).placeEntity(world, player, player.rotationYaw);
 

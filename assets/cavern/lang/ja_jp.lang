@@ -48,6 +48,8 @@ cavern.config.general.caveborn.2=果てなき洞窟
 cavern.config.general.caveborn.3=水の洞窟
 cavern.config.general.cavebornBonusItems=ケイブボーンのボーナスアイテム
 cavern.config.general.cavebornBonusItems.tooltip=ケイブボーンのボーナスアイテムを指定します。
+cavern.config.general.findPortalRange=ポータルの探査範囲
+cavern.config.general.findPortalRange.tooltip=洞窟ポータルでの移動時に移動先のポータルを探す範囲を指定します。
 cavern.config.general.portalCache=ポータルキャッシュ
 cavern.config.general.portalCache.tooltip=洞窟ポータルでの移動時の座標のキャッシュを有効にします。
 cavern.config.general.portalMenu=ポータルメニュー
@@ -247,7 +249,7 @@ cavern.message.sleep.still=まだ疲れていません。少なくとも、%d分
 cavern.message.portal.rank=採掘ランクが足りません。%s以上でなければなりません。
 cavern.message.portal.mirage=幻の世界の書を持っていなければなりません。
 cavern.message.portal.wait=まだ再入場できません。
-cavern.message.mining.critical=採掘に大成功しました！
+cavern.message.mining.critical=採掘大成功！
 cavern.message.disconnect.unload=ディメンションがアンロードされました
 
 cavern.minerrank.beginner=初心者
@@ -377,6 +379,7 @@ item.magicBook.explosion.name=エクスプロージョン
 item.magicBook.thunderbolt.name=サンダーボルト
 item.magicBook.infinity.name=インフィニティ
 item.magicBook.overload.name=オーバーロード
+item.magicBook.physicalBoost.name=フィジカルブースト
 
 entity.CavenicSkeleton.name=ケイブニックスケルトン
 entity.CavenicCreeper.name=ケイブニッククリーパー

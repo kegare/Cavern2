@@ -47,6 +47,8 @@ cavern.config.general.caveborn.2=Huge Cavern
 cavern.config.general.caveborn.3=Aqua Cavern
 cavern.config.general.cavebornBonusItems=Caveborn Bonus Items
 cavern.config.general.cavebornBonusItems.tooltip=Extra starting items when starting as a caveborn.
+cavern.config.general.findPortalRange=Find Portal Range
+cavern.config.general.findPortalRange.tooltip=How far the portal must be found in the cave dimensions.
 cavern.config.general.portalCache=Portal Cache
 cavern.config.general.portalCache.tooltip=Whether to cache cave portal teleports.
 cavern.config.general.portalMenu=Portal Menu
@@ -375,6 +377,7 @@ item.magicBook.explosion.name=Explosion
 item.magicBook.thunderbolt.name=Thunderbolt
 item.magicBook.infinity.name=Infinity
 item.magicBook.overload.name=Overload
+item.magicBook.physicalBoost.name=Physical Boost
 
 entity.CavenicSkeleton.name=Cavenic Skeleton
 entity.CavenicCreeper.name=Cavenic Creeper

@@ -49,12 +49,6 @@ public class ItemOreCompass extends Item
 				{
 					boolean flag = living != null;
 					Entity entity = flag ? living : stack.getItemFrame();
-
-					if (world == null)
-					{
-						world = entity.world;
-					}
-
 					double dir;
 					OreCompass compass = OreCompass.get(stack);
 					BlockPos pos = compass.getOrePos();
@@ -73,7 +67,7 @@ public class ItemOreCompass extends Item
 
 					if (flag)
 					{
-						dir = compass.wobble(world, dir);
+						dir = compass.wobble(dir);
 					}
 
 					return MathHelper.positiveModulo((float)dir, 1.0F);

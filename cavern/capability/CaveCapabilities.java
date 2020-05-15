@@ -2,10 +2,10 @@ package cavern.capability;
 
 import javax.annotation.Nullable;
 
-import cavern.api.IMinerStats;
-import cavern.api.IMiningData;
-import cavern.api.IPlayerData;
-import cavern.api.IPortalCache;
+import cavern.api.data.IMiner;
+import cavern.api.data.IMiningData;
+import cavern.data.PlayerData;
+import cavern.data.PortalCache;
 import cavern.inventory.InventoryMagicStorage;
 import cavern.item.ItemMagicBook;
 import cavern.item.OreCompass;
@@ -26,12 +26,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class CaveCapabilities
 {
-	@CapabilityInject(IPortalCache.class)
-	public static Capability<IPortalCache> PORTAL_CACHE = null;
-	@CapabilityInject(IPlayerData.class)
-	public static Capability<IPlayerData> PLAYER_DATA = null;
-	@CapabilityInject(IMinerStats.class)
-	public static Capability<IMinerStats> MINER_STATS = null;
+	@CapabilityInject(PortalCache.class)
+	public static Capability<PortalCache> PORTAL_CACHE = null;
+	@CapabilityInject(PlayerData.class)
+	public static Capability<PlayerData> PLAYER_DATA = null;
+	@CapabilityInject(IMiner.class)
+	public static Capability<IMiner> MINER = null;
 	@CapabilityInject(IMiningData.class)
 	public static Capability<IMiningData> MINING_DATA = null;
 	@CapabilityInject(MiningAssistUnit.class)
@@ -47,7 +47,7 @@ public class CaveCapabilities
 	{
 		CapabilityPortalCache.register();
 		CapabilityPlayerData.register();
-		CapabilityMinerStats.register();
+		CapabilityMiner.register();
 		CapabilityMiningData.register();
 		CapabilityMiningAssistUnit.register();
 		CapabilityOreCompass.register();
@@ -83,7 +83,7 @@ public class CaveCapabilities
 			EntityPlayer player = (EntityPlayer)event.getObject();
 
 			event.addCapability(CaveUtils.getKey("player_data"), new CapabilityPlayerData());
-			event.addCapability(CaveUtils.getKey("miner_stats"), new CapabilityMinerStats(player));
+			event.addCapability(CaveUtils.getKey("miner_stats"), new CapabilityMiner(player));
 			event.addCapability(CaveUtils.getKey("mining_data"), new CapabilityMiningData(player));
 			event.addCapability(CaveUtils.getKey("mining_assist"), new CapabilityMiningAssistUnit(player));
 			event.addCapability(CaveUtils.getKey("magic_book"), new CapabilityMagicBook());
@@ -116,8 +116,8 @@ public class CaveCapabilities
 
 		EntityPlayer original = event.getOriginal();
 
-		IPortalCache originalPortalCache = getCapability(original, PORTAL_CACHE);
-		IPortalCache portalCache = getCapability(player, PORTAL_CACHE);
+		PortalCache originalPortalCache = getCapability(original, PORTAL_CACHE);
+		PortalCache portalCache = getCapability(player, PORTAL_CACHE);
 
 		if (originalPortalCache != null && portalCache != null)
 		{
@@ -127,8 +127,8 @@ public class CaveCapabilities
 			portalCache.readFromNBT(nbt);
 		}
 
-		IPlayerData originalPlayerData = getCapability(original, PLAYER_DATA);
-		IPlayerData playerData = getCapability(player, PLAYER_DATA);
+		PlayerData originalPlayerData = getCapability(original, PLAYER_DATA);
+		PlayerData playerData = getCapability(player, PLAYER_DATA);
 
 		if (originalPlayerData != null && playerData != null)
 		{
@@ -138,15 +138,15 @@ public class CaveCapabilities
 			playerData.readFromNBT(nbt);
 		}
 
-		IMinerStats originalMinerStats = getCapability(original, MINER_STATS);
-		IMinerStats minerStats = getCapability(player, MINER_STATS);
+		IMiner originalMiner = getCapability(original, MINER);
+		IMiner miner = getCapability(player, MINER);
 
-		if (originalMinerStats != null && minerStats != null)
+		if (originalMiner != null && miner != null)
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
 
-			originalMinerStats.writeToNBT(nbt);
-			minerStats.readFromNBT(nbt);
+			originalMiner.writeToNBT(nbt);
+			miner.readFromNBT(nbt);
 		}
 	}
 }

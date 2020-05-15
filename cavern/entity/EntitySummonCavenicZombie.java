@@ -1,6 +1,6 @@
 package cavern.entity;
 
-import cavern.api.ISummonMob;
+import cavern.api.entity.IEntitySummonable;
 import cavern.core.Cavern;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -21,7 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 
-public class EntitySummonCavenicZombie extends EntityCavenicZombie implements ISummonMob
+public class EntitySummonCavenicZombie extends EntityCavenicZombie implements IEntitySummonable
 {
 	private int lifeTime;
 	private EntityPlayer summoner;

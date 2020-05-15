@@ -1,7 +1,7 @@
 package cavern.network.client;
 
-import cavern.api.IMinerStats;
-import cavern.stats.MinerStats;
+import cavern.api.data.IMiner;
+import cavern.data.Miner;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -16,7 +16,7 @@ public class MinerDataMessage implements IPlayerMessage<MinerDataMessage, IMessa
 
 	public MinerDataMessage() {}
 
-	public MinerDataMessage(IMinerStats stats)
+	public MinerDataMessage(IMiner stats)
 	{
 		this.point = stats.getPoint();
 		this.rank = stats.getRank();
@@ -43,7 +43,7 @@ public class MinerDataMessage implements IPlayerMessage<MinerDataMessage, IMessa
 	@Override
 	public IMessage process(EntityPlayerSP player)
 	{
-		IMinerStats stats = MinerStats.get(player, true);
+		IMiner stats = Miner.get(player, true);
 
 		if (stats != null)
 		{

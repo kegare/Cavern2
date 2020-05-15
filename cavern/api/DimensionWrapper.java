@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.DimensionType;
 
-public interface IDimension
+public interface DimensionWrapper
 {
 	@Nullable
 	DimensionType getCavern();

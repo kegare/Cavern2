@@ -17,7 +17,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class PlayerHelper
 {
@@ -105,8 +104,8 @@ public class PlayerHelper
 			player.setPosition(pos.getX() + 0.5F, pos.getY() + 0.6875F, pos.getZ() + 0.5F);
 		}
 
-		ObfuscationReflectionHelper.setPrivateValue(EntityPlayer.class, player, true, "sleeping", "field_71083_bS");
-		ObfuscationReflectionHelper.setPrivateValue(EntityPlayer.class, player, 0, "sleepTimer", "field_71076_b");
+		CaveUtils.setPrivateValue(EntityPlayer.class, player, true, "sleeping", "field_71083_bS");
+		CaveUtils.setPrivateValue(EntityPlayer.class, player, 0, "sleepTimer", "field_71076_b");
 
 		player.bedLocation = pos;
 		player.motionX = 0.0D;
@@ -159,7 +158,7 @@ public class PlayerHelper
 
 			if (entity.width > f && !entity.world.isRemote)
 			{
-				boolean firstUpdate = ObfuscationReflectionHelper.getPrivateValue(Entity.class, entity, "firstUpdate", "field_70148_d");
+				boolean firstUpdate = CaveUtils.getPrivateValue(Entity.class, entity, "firstUpdate", "field_70148_d");
 
 				if (!firstUpdate)
 				{

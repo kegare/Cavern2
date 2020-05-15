@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import cavern.core.Cavern;
 import cavern.entity.EntityRapidArrow;
 import cavern.entity.EntityTorchArrow;
+import cavern.util.CaveUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.client.util.ITooltipFlag;
@@ -34,7 +35,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -301,7 +301,7 @@ public class ItemBowCavenic extends ItemBow
 			switch (mode)
 			{
 				case RAPID:
-					ObfuscationReflectionHelper.setPrivateValue(EntityLivingBase.class, player, 20, "activeItemStackUseCount", "field_184628_bn");
+					CaveUtils.setPrivateValue(EntityLivingBase.class, player, 20, "activeItemStackUseCount", "field_184628_bn");
 
 					player.stopActiveHand();
 					break;

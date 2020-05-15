@@ -5,13 +5,13 @@ import java.util.List;
 
 import com.google.common.base.Joiner;
 
-import cavern.api.IMinerStats;
+import cavern.data.MinerRank;
+import cavern.api.data.IMiner;
+import cavern.data.Miner;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.MiningRecordsGuiMessage;
 import cavern.network.client.RegenerationGuiMessage;
 import cavern.network.client.RegenerationGuiMessage.EnumType;
-import cavern.stats.MinerRank;
-import cavern.stats.MinerStats;
 import cavern.util.Version;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -72,7 +72,7 @@ public class CommandCavern extends CommandBase
 
 			if (server.isSinglePlayer() || server.getPlayerList().canSendCommands(player.getGameProfile()))
 			{
-				IMinerStats stats = MinerStats.get(player);
+				IMiner stats = Miner.get(player);
 
 				stats.setPoint(0, false);
 				stats.addPoint(MinerRank.get(stats.getRank() + 1).getPhase());

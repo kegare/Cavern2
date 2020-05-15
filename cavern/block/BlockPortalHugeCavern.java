@@ -1,11 +1,9 @@
 package cavern.block;
 
-import cavern.api.CavernAPI;
 import cavern.config.HugeCavernConfig;
-import cavern.stats.MinerRank;
+import cavern.data.MinerRank;
 import cavern.util.CaveUtils;
 import cavern.world.CaveDimensions;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.DimensionType;
@@ -23,12 +21,6 @@ public class BlockPortalHugeCavern extends BlockPortalCavern
 	public DimensionType getDimension()
 	{
 		return CaveDimensions.HUGE_CAVERN;
-	}
-
-	@Override
-	public boolean isEntityInCave(Entity entity)
-	{
-		return CavernAPI.dimension.isInHugeCavern(entity);
 	}
 
 	@Override

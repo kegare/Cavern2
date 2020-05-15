@@ -33,6 +33,7 @@ public class GeneralConfig
 	public static ConfigCaveborn caveborn = new ConfigCaveborn();
 	public static ConfigItems cavebornBonusItems = new ConfigItems();
 
+	public static int findPortalRange;
 	public static boolean portalCache;
 	public static boolean portalMenu;
 
@@ -146,6 +147,16 @@ public class GeneralConfig
 		prop.setComment(comment);
 		propOrder.add(prop.getName());
 		cavebornBonusItems.setValues(prop.getStringList());
+
+		prop = config.get(category, "findPortalRange", 32);
+		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
+		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
+		comment += " [default: " + prop.getDefault() + "]";
+		comment += Configuration.NEW_LINE;
+		comment += "Note: If multiplayer, server-side only.";
+		prop.setComment(comment);
+		propOrder.add(prop.getName());
+		findPortalRange = prop.getInt(findPortalRange);
 
 		prop = config.get(category, "portalCache", false);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());

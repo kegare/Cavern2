@@ -1,11 +1,11 @@
-package cavern.api;
+package cavern.api.data;
 
 import java.util.Map;
 
 import cavern.util.BlockMeta;
 import net.minecraft.nbt.NBTTagCompound;
 
-public interface IMinerStats
+public interface IMiner
 {
 	int getPoint();
 

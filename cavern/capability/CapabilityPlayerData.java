@@ -1,7 +1,6 @@
 package cavern.capability;
 
-import cavern.api.IPlayerData;
-import cavern.stats.PlayerData;
+import cavern.data.PlayerData;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -11,7 +10,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 public class CapabilityPlayerData implements ICapabilitySerializable<NBTTagCompound>
 {
-	private final IPlayerData playerData;
+	private final PlayerData playerData;
 
 	public CapabilityPlayerData()
 	{
@@ -57,11 +56,11 @@ public class CapabilityPlayerData implements ICapabilitySerializable<NBTTagCompo
 
 	public static void register()
 	{
-		CapabilityManager.INSTANCE.register(IPlayerData.class,
-			new Capability.IStorage<IPlayerData>()
+		CapabilityManager.INSTANCE.register(PlayerData.class,
+			new Capability.IStorage<PlayerData>()
 			{
 				@Override
-				public NBTBase writeNBT(Capability<IPlayerData> capability, IPlayerData instance, EnumFacing side)
+				public NBTBase writeNBT(Capability<PlayerData> capability, PlayerData instance, EnumFacing side)
 				{
 					NBTTagCompound nbt = new NBTTagCompound();
 
@@ -71,7 +70,7 @@ public class CapabilityPlayerData implements ICapabilitySerializable<NBTTagCompo
 				}
 
 				@Override
-				public void readNBT(Capability<IPlayerData> capability, IPlayerData instance, EnumFacing side, NBTBase nbt)
+				public void readNBT(Capability<PlayerData> capability, PlayerData instance, EnumFacing side, NBTBase nbt)
 				{
 					instance.readFromNBT((NBTTagCompound)nbt);
 				}

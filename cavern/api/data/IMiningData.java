@@ -1,4 +1,4 @@
-package cavern.api;
+package cavern.api.data;
 
 import javax.annotation.Nullable;
 

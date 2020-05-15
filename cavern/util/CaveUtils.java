@@ -34,6 +34,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.DummyModContainer;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class CaveUtils
@@ -229,5 +231,29 @@ public class CaveUtils
 		double motionZ = entity.motionZ;
 
 		return motionX * motionX + motionY * motionY + motionZ * motionZ > 0.01D;
+	}
+
+	public static <T, E> T getPrivateValue(Class<? super E> classToAccess, E instance, String deobfName, String reobfName)
+	{
+		if (FMLLaunchHandler.isDeobfuscatedEnvironment())
+		{
+			return ObfuscationReflectionHelper.getPrivateValue(classToAccess, instance, deobfName);
+		}
+		else
+		{
+			return ObfuscationReflectionHelper.getPrivateValue(classToAccess, instance, reobfName);
+		}
+	}
+
+	public static <T, E> void setPrivateValue(Class<? super T> classToAccess, T instance, E value, String deobfName, String reobfName)
+	{
+		if (FMLLaunchHandler.isDeobfuscatedEnvironment())
+		{
+			ObfuscationReflectionHelper.setPrivateValue(classToAccess, instance, value, deobfName);
+		}
+		else
+		{
+			ObfuscationReflectionHelper.setPrivateValue(classToAccess, instance, value, reobfName);
+		}
 	}
 }

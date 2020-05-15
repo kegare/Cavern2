@@ -1,10 +1,10 @@
 package cavern.network.server;
 
-import cavern.api.IMinerStats;
+import cavern.api.data.IMiner;
 import cavern.config.MiningAssistConfig;
+import cavern.data.MinerRank;
+import cavern.data.Miner;
 import cavern.miningassist.MiningAssist;
-import cavern.stats.MinerRank;
-import cavern.stats.MinerStats;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -16,11 +16,11 @@ public class MiningAssistMessage implements IPlayerMessage<MiningAssistMessage, 
 	@Override
 	public IMessage process(EntityPlayerMP player)
 	{
-		IMinerStats stats = MinerStats.get(player);
+		IMiner stats = Miner.get(player);
 
 		if (stats.getRank() < MiningAssistConfig.minerRank.getValue())
 		{
-			ITextComponent component = new TextComponentTranslation(MinerRank.get(MiningAssistConfig.minerRank.getValue()).getTranslationKey());
+			ITextComponent component = new TextComponentTranslation(MinerRank.get(MiningAssistConfig.minerRank.getValue()).getUnlocalizedName());
 			component.getStyle().setItalic(Boolean.valueOf(true));
 			component = new TextComponentTranslation("cavern.miningassist.toggle.failed.message", component);
 			component.getStyle().setColor(TextFormatting.RED);

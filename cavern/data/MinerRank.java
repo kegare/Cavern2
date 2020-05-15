@@ -1,4 +1,4 @@
-package cavern.stats;
+package cavern.data;
 
 import javax.annotation.Nullable;
 
@@ -54,7 +54,7 @@ public enum MinerRank
 		return name;
 	}
 
-	public String getTranslationKey()
+	public String getUnlocalizedName()
 	{
 		return "cavern.minerrank." + name;
 	}

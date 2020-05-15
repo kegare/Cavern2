@@ -2,12 +2,12 @@ package cavern.handler.api;
 
 import javax.annotation.Nullable;
 
-import cavern.api.IDimension;
+import cavern.api.DimensionWrapper;
 import cavern.world.CaveDimensions;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.DimensionType;
 
-public class DimensionHandler implements IDimension
+public class DimensionHandler implements DimensionWrapper
 {
 	private boolean isInDimension(@Nullable Entity entity, @Nullable DimensionType type)
 	{

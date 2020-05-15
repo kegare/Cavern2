@@ -1,7 +1,7 @@
 package cavern.entity;
 
 import cavern.api.CavernAPI;
-import cavern.api.ICavenicMob;
+import cavern.api.entity.ICavenicMob;
 import cavern.item.ItemMagicBook;
 import cavern.item.ItemMirageBook;
 import cavern.util.CaveUtils;

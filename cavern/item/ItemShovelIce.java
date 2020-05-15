@@ -1,6 +1,6 @@
 package cavern.item;
 
-import cavern.api.IIceEquipment;
+import cavern.api.item.IIceEquipment;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

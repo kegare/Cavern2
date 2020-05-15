@@ -2,6 +2,7 @@ package cavern.plugin;
 
 import cavern.block.BlockCave;
 import cavern.block.CaveBlocks;
+import cavern.data.MinerRank;
 import cavern.entity.EntityCaveman;
 import cavern.entity.EntityCavenicBear;
 import cavern.entity.EntityCavenicCreeper;
@@ -16,7 +17,6 @@ import cavern.entity.EntityCrazyZombie;
 import cavern.item.CaveItems;
 import cavern.item.ItemAcresia;
 import cavern.item.ItemCave;
-import cavern.stats.MinerRank;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

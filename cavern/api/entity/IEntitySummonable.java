@@ -1,4 +1,4 @@
-package cavern.api;
+package cavern.api.entity;
 
 import java.util.UUID;
 
@@ -11,9 +11,9 @@ import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 
-public interface ISummonMob extends IEntityOwnable
+public interface IEntitySummonable extends IEntityOwnable
 {
-	static final Predicate<? super Entity> CAN_SUMMON_MOB_TARGET = entity -> entity instanceof IMob && !(entity instanceof ISummonMob);
+	static final Predicate<? super Entity> CAN_SUMMON_MOB_TARGET = entity -> entity instanceof IMob && !(entity instanceof IEntitySummonable);
 
 	int getLifeTime();
 

@@ -10,12 +10,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import cavern.api.CavernAPI;
-import cavern.api.ICavenicMob;
-import cavern.api.IIceEquipment;
-import cavern.api.IMinerStats;
-import cavern.api.IMiningData;
-import cavern.api.IPlayerData;
+import cavern.api.data.IMiner;
+import cavern.api.data.IMiningData;
+import cavern.api.entity.ICavenicMob;
 import cavern.api.event.CriticalMiningEvent;
+import cavern.api.item.IAquaTool;
+import cavern.api.item.IIceEquipment;
 import cavern.block.BlockLeavesPerverted;
 import cavern.block.BlockLogPerverted;
 import cavern.block.BlockPortalCavern;
@@ -24,8 +24,11 @@ import cavern.block.CaveBlocks;
 import cavern.block.RandomiteHelper;
 import cavern.block.RandomiteHelper.Category;
 import cavern.config.GeneralConfig;
+import cavern.data.Miner;
+import cavern.data.MinerRank;
+import cavern.data.MiningData;
+import cavern.data.PlayerData;
 import cavern.item.CaveItems;
-import cavern.item.IAquaTool;
 import cavern.item.ItemCave;
 import cavern.magic.Magic;
 import cavern.magic.MagicBook;
@@ -33,10 +36,6 @@ import cavern.magic.MagicInvisible;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.CustomSeedMessage;
 import cavern.network.client.MiningMessage;
-import cavern.stats.MinerRank;
-import cavern.stats.MinerStats;
-import cavern.stats.MiningData;
-import cavern.stats.PlayerData;
 import cavern.util.BlockMeta;
 import cavern.util.CaveUtils;
 import cavern.util.PlayerHelper;
@@ -130,7 +129,7 @@ public class CaveEventHooks
 		{
 			EntityPlayerMP player = (EntityPlayerMP)event.player;
 
-			MinerStats.adjustData(player);
+			Miner.adjustData(player);
 		}
 	}
 
@@ -167,7 +166,7 @@ public class CaveEventHooks
 			}
 		}
 
-		MinerStats.adjustData(player);
+		Miner.adjustData(player);
 	}
 
 	@SubscribeEvent
@@ -275,11 +274,11 @@ public class CaveEventHooks
 
 		if (GeneralConfig.isMiningPointItem(stack))
 		{
-			int point = MinerStats.getPointAmount(state);
+			int point = Miner.getPointAmount(state);
 
 			if (point != 0)
 			{
-				IMinerStats stats = MinerStats.get(player);
+				IMiner stats = Miner.get(player);
 				IMiningData data = MiningData.get(player);
 
 				if (player.inventory.hasItemStack(ItemCave.EnumType.MINER_ORB.getItemStack()))
@@ -387,7 +386,7 @@ public class CaveEventHooks
 
 		if (CavernAPI.dimension.isInCaveDimensions(player) && CaveUtils.isItemPickaxe(stack))
 		{
-			int rank = MinerStats.get(player).getRank();
+			int rank = Miner.get(player).getRank();
 
 			if (!flag && player.isInWater() && rank >= MinerRank.AQUA_MINER.getRank())
 			{
@@ -422,7 +421,7 @@ public class CaveEventHooks
 
 		IBlockState state = event.getState();
 
-		if (MinerStats.getPointAmount(state) <= 0)
+		if (Miner.getPointAmount(state) <= 0)
 		{
 			return;
 		}
@@ -432,7 +431,7 @@ public class CaveEventHooks
 			return;
 		}
 
-		MinerRank rank = MinerRank.get(MinerStats.get(player).getRank());
+		MinerRank rank = MinerRank.get(Miner.get(player).getRank());
 		float f = rank.getBoost();
 
 		if (f <= 1.0F)
@@ -515,7 +514,7 @@ public class CaveEventHooks
 			return;
 		}
 
-		IMinerStats stats = MinerStats.get(player);
+		IMiner stats = Miner.get(player);
 
 		if (stats.getRank() < MinerRank.AQUA_MINER.getRank())
 		{
@@ -649,7 +648,7 @@ public class CaveEventHooks
 
 		if (!world.isRemote)
 		{
-			IPlayerData data = PlayerData.get(player);
+			PlayerData data = PlayerData.get(player);
 			long worldTime = world.getTotalWorldTime();
 			long sleepTime = data.getLastSleepTime();
 			long requireTime = GeneralConfig.sleepWaitTime * 20;

@@ -1,7 +1,7 @@
 package cavern.network.client;
 
-import cavern.stats.MinerStats;
-import cavern.stats.MiningData;
+import cavern.data.Miner;
+import cavern.data.MiningData;
 import cavern.util.BlockMeta;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
@@ -42,7 +42,7 @@ public class MiningMessage implements IPlayerMessage<MiningMessage, IMessage>
 	@Override
 	public IMessage process(EntityPlayerSP player)
 	{
-		MinerStats.get(player).addMiningRecord(new BlockMeta(state));
+		Miner.get(player).addMiningRecord(new BlockMeta(state));
 
 		MiningData.get(player).notifyMining(state, point);
 

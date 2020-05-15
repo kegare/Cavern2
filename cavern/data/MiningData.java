@@ -1,8 +1,8 @@
-package cavern.stats;
+package cavern.data;
 
 import org.apache.commons.lang3.ObjectUtils;
 
-import cavern.api.IMiningData;
+import cavern.api.data.IMiningData;
 import cavern.capability.CaveCapabilities;
 import cavern.config.GeneralConfig;
 import net.minecraft.block.state.IBlockState;

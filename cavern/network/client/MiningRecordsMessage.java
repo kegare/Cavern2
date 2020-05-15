@@ -5,8 +5,8 @@ import java.util.Map.Entry;
 
 import com.google.common.collect.Maps;
 
-import cavern.api.IMinerStats;
-import cavern.stats.MinerStats;
+import cavern.api.data.IMiner;
+import cavern.data.Miner;
 import cavern.util.BlockMeta;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
@@ -22,7 +22,7 @@ public class MiningRecordsMessage implements IPlayerMessage<MiningRecordsMessage
 
 	public MiningRecordsMessage() {}
 
-	public MiningRecordsMessage(IMinerStats stats)
+	public MiningRecordsMessage(IMiner stats)
 	{
 		this.records = stats.getMiningRecords();
 	}
@@ -59,7 +59,7 @@ public class MiningRecordsMessage implements IPlayerMessage<MiningRecordsMessage
 	@Override
 	public IMessage process(EntityPlayerSP player)
 	{
-		IMinerStats stats = MinerStats.get(player, true);
+		IMiner stats = Miner.get(player, true);
 
 		if (stats != null)
 		{

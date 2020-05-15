@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import cavern.api.ISummonMob;
+import cavern.api.entity.IEntitySummonable;
 import cavern.client.config.CaveConfigGui;
 import cavern.config.Config;
 import cavern.util.ArrayListExtended;
@@ -339,7 +339,7 @@ public class GuiSelectMob extends GuiScreen
 					continue;
 				}
 
-				if (!EntityLiving.class.isAssignableFrom(entityClass) || ISummonMob.class.isAssignableFrom(entityClass))
+				if (!EntityLiving.class.isAssignableFrom(entityClass) || IEntitySummonable.class.isAssignableFrom(entityClass))
 				{
 					continue;
 				}

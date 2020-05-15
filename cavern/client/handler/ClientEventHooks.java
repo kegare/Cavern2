@@ -9,7 +9,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import cavern.api.CavernAPI;
-import cavern.api.IIceEquipment;
+import cavern.api.item.IIceEquipment;
 import cavern.block.RandomiteHelper;
 import cavern.client.CaveKeyBindings;
 import cavern.client.gui.GuiDownloadCaveTerrain;
@@ -27,11 +27,11 @@ import cavern.config.HugeCavernConfig;
 import cavern.config.MiningAssistConfig;
 import cavern.config.MirageWorldsConfig;
 import cavern.core.Cavern;
+import cavern.data.MinerRank;
+import cavern.data.Miner;
 import cavern.item.ItemBowCavenic;
 import cavern.item.ItemBowIce;
 import cavern.miningassist.MiningAssist;
-import cavern.stats.MinerRank;
-import cavern.stats.MinerStats;
 import cavern.util.CaveUtils;
 import cavern.util.Version;
 import cavern.world.CaveDimensions;
@@ -388,7 +388,7 @@ public class ClientEventHooks
 				{
 					EntityPlayer player = (EntityPlayer)entity;
 
-					if (MinerStats.get(player).getRank() >= MinerRank.AQUA_MINER.getRank())
+					if (Miner.get(player).getRank() >= MinerRank.AQUA_MINER.getRank())
 					{
 						GlStateManager.setFog(GlStateManager.FogMode.EXP);
 

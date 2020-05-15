@@ -65,7 +65,7 @@ public class HugeCavernConfig
 		propOrder.add(prop.getName());
 		dimensionId = prop.getInt(dimensionId);
 
-		prop = config.get(category, "worldHeight", Config.highProfiles ? 256 : 128);
+		prop = config.get(category, "worldHeight", 256);
 		prop.setMinValue(64).setMaxValue(256);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
 		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
@@ -131,7 +131,7 @@ public class HugeCavernConfig
 		propOrder.add(prop.getName());
 		generateLakes = prop.getBoolean(generateLakes);
 
-		prop = config.get(category, "monsterSpawn", Config.highProfiles ? 100 : 0);
+		prop = config.get(category, "monsterSpawn", 100);
 		prop.setMinValue(0).setMaxValue(5000);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
 		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");

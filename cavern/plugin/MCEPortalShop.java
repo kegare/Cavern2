@@ -6,8 +6,8 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
-import cavern.stats.MinerRank;
-import cavern.stats.MinerStats;
+import cavern.data.MinerRank;
+import cavern.data.Miner;
 import cavern.util.CaveUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -112,7 +112,7 @@ public class MCEPortalShop implements IShop
 		@Override
 		public boolean canBuy(IShop shop, World world, EntityPlayer player)
 		{
-			return minerRank == null || player != null && MinerStats.get(player).getRank() >= minerRank.getRank();
+			return minerRank == null || player != null && Miner.get(player).getRank() >= minerRank.getRank();
 		}
 	}
 }

@@ -1,13 +1,13 @@
 package cavern.entity;
 
 import cavern.api.CavernAPI;
-import cavern.api.ICavenicMob;
+import cavern.api.entity.ICavenicMob;
 import cavern.item.ItemCave;
+import cavern.util.CaveUtils;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class EntityCavenicCreeper extends EntityCreeper implements ICavenicMob
 {
@@ -23,8 +23,8 @@ public class EntityCavenicCreeper extends EntityCreeper implements ICavenicMob
 
 	protected void applyCustomValues()
 	{
-		ObfuscationReflectionHelper.setPrivateValue(EntityCreeper.class, this, fuseTime, "fuseTime", "field_82225_f");
-		ObfuscationReflectionHelper.setPrivateValue(EntityCreeper.class, this, explosionRadius, "explosionRadius", "field_82226_g");
+		CaveUtils.setPrivateValue(EntityCreeper.class, this, fuseTime, "fuseTime", "field_82225_f");
+		CaveUtils.setPrivateValue(EntityCreeper.class, this, explosionRadius, "explosionRadius", "field_82226_g");
 	}
 
 	@Override

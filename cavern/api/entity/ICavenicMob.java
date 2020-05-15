@@ -1,4 +1,4 @@
-package cavern.api;
+package cavern.api.entity;
 
 public interface ICavenicMob
 {

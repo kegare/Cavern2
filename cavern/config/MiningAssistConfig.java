@@ -9,7 +9,7 @@ import cavern.config.property.ConfigBlocks;
 import cavern.config.property.ConfigItems;
 import cavern.config.property.ConfigMinerRank;
 import cavern.core.Cavern;
-import cavern.stats.MinerRank;
+import cavern.data.MinerRank;
 import cavern.util.CaveUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;

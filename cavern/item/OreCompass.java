@@ -3,7 +3,7 @@ package cavern.item;
 import javax.annotation.Nullable;
 
 import cavern.capability.CaveCapabilities;
-import cavern.stats.MinerStats;
+import cavern.data.Miner;
 import cavern.util.CaveUtils;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockRedstoneOre;
@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,11 +31,13 @@ public class OreCompass
 	private BlockPos orePos;
 
 	@SideOnly(Side.CLIENT)
-	public double wobble(World world, double dir)
+	public double wobble(double dir)
 	{
-		if (world.getTotalWorldTime() != lastUpdateTick)
+		long time = FMLClientHandler.instance().getWorldClient().getTotalWorldTime();
+
+		if (time != lastUpdateTick)
 		{
-			lastUpdateTick = world.getTotalWorldTime();
+			lastUpdateTick = time;
 			double d0 = dir - rotation;
 			d0 = MathHelper.positiveModulo(d0 + 0.5D, 1.0D) - 0.5D;
 			rota += d0 * 0.1D;
@@ -58,11 +59,6 @@ public class OreCompass
 	public boolean refreshOrePos()
 	{
 		Minecraft mc = FMLClientHandler.instance().getClient();
-
-		if (mc == null || !mc.isIntegratedServerRunning())
-		{
-			return false;
-		}
 
 		if (mc.world == null || mc.player == null || CaveUtils.isMoving(mc.player))
 		{
@@ -118,7 +114,7 @@ public class OreCompass
 					return new BlockPos(pos);
 				}
 
-				if (MinerStats.getPointAmount(state) > 0)
+				if (Miner.getPointAmount(state) > 0)
 				{
 					return new BlockPos(pos);
 				}

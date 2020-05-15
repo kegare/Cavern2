@@ -7,16 +7,16 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import cavern.api.IMinerStats;
+import cavern.api.data.IMiner;
 import cavern.client.CaveKeyBindings;
 import cavern.config.MiningAssistConfig;
 import cavern.core.Cavern;
+import cavern.data.Miner;
 import cavern.miningassist.MiningAssist;
 import cavern.miningassist.MiningAssistUnit;
 import cavern.miningassist.MiningSnapshot;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.server.MiningAssistMessage;
-import cavern.stats.MinerStats;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -53,7 +53,7 @@ public class MiningAssistEventHooks
 			return false;
 		}
 
-		IMinerStats stats = MinerStats.get(player);
+		IMiner stats = Miner.get(player);
 
 		if (stats.getRank() < MiningAssistConfig.minerRank.getValue())
 		{

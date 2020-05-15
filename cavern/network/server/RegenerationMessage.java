@@ -9,10 +9,10 @@ import org.apache.commons.io.FileUtils;
 
 import com.google.common.collect.Lists;
 
+import cavern.data.PortalCache;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.RegenerationGuiMessage;
 import cavern.network.client.RegenerationGuiMessage.EnumType;
-import cavern.stats.PortalCache;
 import cavern.util.CaveUtils;
 import cavern.world.CaveDimensions;
 import io.netty.buffer.ByteBuf;

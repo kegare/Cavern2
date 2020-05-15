@@ -20,6 +20,7 @@ import cavern.magic.MagicHeal;
 import cavern.magic.MagicInfinity;
 import cavern.magic.MagicInvisible;
 import cavern.magic.MagicOverload;
+import cavern.magic.MagicPhysicalBoost;
 import cavern.magic.MagicStorage;
 import cavern.magic.MagicSummon;
 import cavern.magic.MagicTeleport;
@@ -302,7 +303,8 @@ public class ItemMagicBook extends Item
 		EXPLOSION(7, "explosion", 20, MagicExplosion.class, 30 * 20),
 		THUNDERBOLT(8, "thunderbolt", 20, MagicThunderbolt.class, 30 * 20),
 		INFINITY(9, "infinity", 3, MagicInfinity.class, 180 * 20),
-		OVERLOAD(10, "overload", 3, MagicOverload.class, 60 * 20);
+		OVERLOAD(10, "overload", 3, MagicOverload.class, 60 * 20),
+		PHYSICAL_BOOST(11, "physicalBoost", 3, MagicPhysicalBoost.class, 60 * 20);
 
 		private final int meta;
 		private final String translationKey;

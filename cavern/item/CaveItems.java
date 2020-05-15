@@ -149,7 +149,7 @@ public class CaveItems
 		registerModel(CAVENIC_BOW);
 		registerModel(ORE_COMPASS);
 		registerModels("mirage_book_", MIRAGE_BOOK, "caveland", "cavenia", "frost_mountains", "wide_desert", "the_void", "dark_forest", "crown_cliffs");
-		registerModels("magic_book_", MAGIC_BOOK, "storage", "heal", "warp", "teleport", "torch", "invisible", "summon", "explosion", "thunderbolt", "infinity", "overload");
+		registerModels("magic_book_", MAGIC_BOOK, "storage", "heal", "warp", "teleport", "torch", "invisible", "summon", "explosion", "thunderbolt", "infinity", "overload", "physical_boost");
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -119,7 +119,7 @@ public class CaveniaConfig
 		propOrder.add(prop.getName());
 		generateLakes = prop.getBoolean(generateLakes);
 
-		prop = config.get(category, "monsterSpawn", Config.highProfiles ? 200 : 0);
+		prop = config.get(category, "monsterSpawn", 200);
 		prop.setMinValue(0).setMaxValue(5000);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
 		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");

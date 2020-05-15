@@ -3,65 +3,55 @@ package cavern.entity;
 import java.util.Collection;
 
 import cavern.core.Cavern;
-import cavern.util.CaveUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class CaveEntityRegistry
 {
-	private static int entityId;
-
-	public static void registerEntity(Class<? extends Entity> entityClass, String key, String name, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
+	protected static EntityEntry createEntry(Class<? extends Entity> entityClass, String key, String name)
 	{
-		EntityRegistry.registerModEntity(CaveUtils.getKey(key), entityClass, name, entityId++, Cavern.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
+		return new EntityEntry(entityClass, name).setRegistryName(new ResourceLocation(Cavern.MODID, key));
 	}
 
-	public static void registerEntity(Class<? extends Entity> entityClass, String key, String name, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int primaryColor, int secondaryColor)
+	protected static EntityEntry createEntry(Class<? extends Entity> entityClass, String key, String name, int primaryColor, int secondaryColor)
 	{
-		EntityRegistry.registerModEntity(CaveUtils.getKey(key), entityClass, name, entityId++, Cavern.instance, trackingRange, updateFrequency, sendsVelocityUpdates, primaryColor, secondaryColor);
+		EntityEntry entry = new EntityEntry(entityClass, name);
+		ResourceLocation regKey = new ResourceLocation(Cavern.MODID, key);
+
+		entry.setRegistryName(regKey);
+		entry.setEgg(new EntityEggInfo(regKey, primaryColor, secondaryColor));
+
+		return entry;
 	}
 
-	public static void registerMob(Class<? extends Entity> entityClass, String key, String name)
+	public static void registerEntities(IForgeRegistry<EntityEntry> registry)
 	{
-		registerEntity(entityClass, key, name, 128, 3, true);
-	}
-
-	public static void registerMob(Class<? extends Entity> entityClass, String key, String name, int primaryColor, int secondaryColor)
-	{
-		registerEntity(entityClass, key, name, 128, 3, true, primaryColor, secondaryColor);
-
-		EntitySpawnPlacementRegistry.setPlacementType(entityClass, SpawnPlacementType.ON_GROUND);
-	}
-
-	public static void registerEntities()
-	{
-		registerMob(EntityCavenicSkeleton.class, "cavenic_skeleton", "CavenicSkeleton", 0xAAAAAA, 0xDDDDDD);
-		registerMob(EntityCavenicCreeper.class, "cavenic_creeper", "CavenicCreeper", 0xAAAAAA, 0x2E8B57);
-		registerMob(EntityCavenicZombie.class, "cavenic_zombie", "CavenicZombie", 0xAAAAAA, 0x00A0A0);
-		registerMob(EntityCavenicSpider.class, "cavenic_spider", "CavenicSpider", 0xAAAAAA, 0x811F1F);
-		registerMob(EntityCavenicWitch.class, "cavenic_witch", "CavenicWitch", 0xAAAAAA, 0x4A5348);
-		registerMob(EntityCavenicBear.class, "cavenic_bear", "CavenicBear", 0xAAAAAA, 0xFFFFFF);
-		registerMob(EntityCrazySkeleton.class, "crazy_skeleton", "CrazySkeleton", 0x909090, 0xDDDDDD);
-		registerMob(EntityCrazyCreeper.class, "crazy_creeper", "CrazyCreeper", 0x909090, 0x2E8B57);
-		registerMob(EntityCrazyZombie.class, "crazy_zombie", "CrazyZombie", 0x909090, 0x00A0A0);
-		registerMob(EntityCrazySpider.class, "crazy_spider", "CrazySpider", 0x909090, 0x811F1F);
-		registerMob(EntityCaveman.class, "caveman", "Caveman", 0xAAAAAA, 0xCCCCCC);
-
-		registerMob(EntitySummonZombie.class, "summon_zombie", "Zombie");
-		registerMob(EntitySummonSkeleton.class, "summon_skeleton", "Skeleton");
-		registerMob(EntitySummonCavenicZombie.class, "summon_cavenic_zombie", "CavenicZombie");
-		registerMob(EntitySummonCavenicSkeleton.class, "summon_cavenic_skeleton", "CavenicSkeleton");
-
-		registerEntity(EntityAquaSquid.class, "squid", "Squid", 64, 3, true);
-
-		registerEntity(EntityMagicTorcher.class, "magic_torcher", "MagicTorcher", 16, 3, false);
-
-		EntitySpawnPlacementRegistry.setPlacementType(EntityAquaSquid.class, SpawnPlacementType.IN_WATER);
+		registry.register(createEntry(EntityCavenicSkeleton.class, "cavenic_skeleton", "CavenicSkeleton", 0xAAAAAA, 0xDDDDDD));
+		registry.register(createEntry(EntityCavenicCreeper.class, "cavenic_creeper", "CavenicCreeper", 0xAAAAAA, 0x2E8B57));
+		registry.register(createEntry(EntityCavenicZombie.class, "cavenic_zombie", "CavenicZombie", 0xAAAAAA, 0x00A0A0));
+		registry.register(createEntry(EntityCavenicSpider.class, "cavenic_spider", "CavenicSpider", 0xAAAAAA, 0x811F1F));
+		registry.register(createEntry(EntityCavenicWitch.class, "cavenic_witch", "CavenicWitch", 0xAAAAAA, 0x4A5348));
+		registry.register(createEntry(EntityCavenicBear.class, "cavenic_bear", "CavenicBear", 0xAAAAAA, 0xFFFFFF));
+		registry.register(createEntry(EntityCrazySkeleton.class, "crazy_skeleton", "CrazySkeleton", 0x909090, 0xDDDDDD));
+		registry.register(createEntry(EntityCrazyCreeper.class, "crazy_creeper", "CrazyCreeper", 0x909090, 0x2E8B57));
+		registry.register(createEntry(EntityCrazyZombie.class, "crazy_zombie", "CrazyZombie", 0x909090, 0x00A0A0));
+		registry.register(createEntry(EntityCrazySpider.class, "crazy_spider", "CrazySpider", 0x909090, 0x811F1F));
+		registry.register(createEntry(EntityCaveman.class, "caveman", "Caveman", 0xAAAAAA, 0xCCCCCC));
+		registry.register(createEntry(EntitySummonZombie.class, "summon_zombie", "Zombie"));
+		registry.register(createEntry(EntitySummonSkeleton.class, "summon_skeleton", "Skeleton"));
+		registry.register(createEntry(EntitySummonCavenicZombie.class, "summon_cavenic_zombie", "CavenicZombie"));
+		registry.register(createEntry(EntitySummonCavenicSkeleton.class, "summon_cavenic_skeleton", "CavenicSkeleton"));
+		registry.register(createEntry(EntityAquaSquid.class, "squid", "Squid"));
+		registry.register(createEntry(EntityMagicTorcher.class, "magic_torcher", "MagicTorcher"));
 	}
 
 	public static void addSpawns()
@@ -81,5 +71,7 @@ public class CaveEntityRegistry
 		EntityRegistry.addSpawn(EntityCrazySpider.class, 1, 1, 1, EnumCreatureType.MONSTER, biomeArray);
 		EntityRegistry.addSpawn(EntityCaveman.class, 30, 1, 1, EnumCreatureType.MONSTER, biomeArray);
 		EntityRegistry.addSpawn(EntityAquaSquid.class, 100, 4, 4, EnumCreatureType.WATER_CREATURE, biomeArray);
+
+		EntitySpawnPlacementRegistry.setPlacementType(EntityAquaSquid.class, SpawnPlacementType.IN_WATER);
 	}
 }

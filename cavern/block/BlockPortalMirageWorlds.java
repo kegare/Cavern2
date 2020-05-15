@@ -8,12 +8,12 @@ import com.google.common.collect.Sets;
 
 import cavern.client.gui.GuiRegeneration;
 import cavern.core.CaveSounds;
+import cavern.data.PlayerData;
 import cavern.item.CaveItems;
 import cavern.item.ItemMirageBook;
 import cavern.item.ItemMirageBook.EnumType;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.MirageSelectMessage;
-import cavern.stats.PlayerData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,6 +57,12 @@ public class BlockPortalMirageWorlds extends BlockPortalCavern
 	public boolean isTriggerItem(ItemStack stack)
 	{
 		return !stack.isEmpty() && stack.getItem() instanceof ItemMirageBook;
+	}
+
+	@Override
+	public DimensionType getDimension()
+	{
+		return null;
 	}
 
 	@Nullable

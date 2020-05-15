@@ -1,6 +1,6 @@
 package cavern.entity;
 
-import cavern.api.ISummonMob;
+import cavern.api.entity.IEntitySummonable;
 import cavern.core.Cavern;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,7 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 
-public class EntitySummonCavenicSkeleton extends EntityCavenicSkeleton implements ISummonMob
+public class EntitySummonCavenicSkeleton extends EntityCavenicSkeleton implements IEntitySummonable
 {
 	private int lifeTime;
 	private EntityPlayer summoner;
@@ -74,7 +74,7 @@ public class EntitySummonCavenicSkeleton extends EntityCavenicSkeleton implement
 	@Override
 	public boolean isFriends(Entity entity)
 	{
-		return entity != null && entity instanceof EntityCavenicSkeleton && entity instanceof ISummonMob;
+		return entity != null && entity instanceof EntityCavenicSkeleton && entity instanceof IEntitySummonable;
 	}
 
 	@Override

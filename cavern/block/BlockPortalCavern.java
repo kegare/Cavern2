@@ -7,18 +7,17 @@ import javax.annotation.Nullable;
 import com.google.common.cache.LoadingCache;
 
 import cavern.api.CavernAPI;
-import cavern.api.IPortalCache;
 import cavern.client.gui.GuiMiningRecords;
 import cavern.client.gui.GuiRegeneration;
 import cavern.config.CavernConfig;
 import cavern.config.GeneralConfig;
 import cavern.core.Cavern;
+import cavern.data.Miner;
+import cavern.data.MinerRank;
+import cavern.data.PortalCache;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.RegenerationGuiMessage;
 import cavern.plugin.MCEPlugin;
-import cavern.stats.MinerRank;
-import cavern.stats.MinerStats;
-import cavern.stats.PortalCache;
 import cavern.util.CaveUtils;
 import cavern.world.CaveDimensions;
 import cavern.world.TeleporterCavern;
@@ -204,11 +203,6 @@ public class BlockPortalCavern extends BlockPortal
 		return CaveDimensions.CAVERN;
 	}
 
-	public boolean isEntityInCave(Entity entity)
-	{
-		return CavernAPI.dimension.isInCavern(entity);
-	}
-
 	public boolean isTriggerItem(ItemStack stack)
 	{
 		if (!CavernConfig.triggerItems.isEmpty())
@@ -250,49 +244,51 @@ public class BlockPortalCavern extends BlockPortal
 			return;
 		}
 
-		if (entity.timeUntilPortal <= 0)
+		int cd = Math.max(entity.getPortalCooldown(), 50);
+
+		if (entity.timeUntilPortal > 0)
 		{
-			ResourceLocation key = getRegistryName();
-			IPortalCache cache = PortalCache.get(entity);
-			MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-			DimensionType dimOld = world.provider.getDimensionType();
-			DimensionType dimNew = isEntityInCave(entity) ? cache.getLastDim(key) : getDimension();
-			WorldServer worldNew = server.getWorld(dimNew.getId());
-			ITeleporter teleporter = new TeleporterCavern(worldNew, this);
-			BlockPos prevPos = entity.getPosition();
+			entity.timeUntilPortal = cd;
 
-			entity.timeUntilPortal = entity.getPortalCooldown();
+			return;
+		}
 
-			if (entity instanceof EntityPlayer)
+		ResourceLocation key = getRegistryName();
+		PortalCache cache = PortalCache.get(entity);
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		DimensionType dimOld = world.provider.getDimensionType();
+		DimensionType dimNew = dimOld == getDimension() ? cache.getLastDim(key) : getDimension();
+		WorldServer worldNew = server.getWorld(dimNew.getId());
+		ITeleporter teleporter = new TeleporterCavern(worldNew, this);
+		BlockPos prevPos = entity.getPosition();
+
+		entity.timeUntilPortal = cd;
+
+		if (entity instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer)entity;
+
+			if (!player.capabilities.isCreativeMode && Miner.get(player).getRank() < getMinerRank().getRank())
 			{
-				EntityPlayer player = (EntityPlayer)entity;
+				player.sendStatusMessage(new TextComponentTranslation("cavern.message.portal.rank", new TextComponentTranslation(getMinerRank().getUnlocalizedName())), true);
 
-				if (!player.capabilities.isCreativeMode && MinerStats.get(player).getRank() < getMinerRank().getRank())
-				{
-					player.sendStatusMessage(new TextComponentTranslation("cavern.message.portal.rank", new TextComponentTranslation(getMinerRank().getTranslationKey())), true);
-
-					return;
-				}
+				return;
 			}
-
-			cache.setLastDim(key, dimOld);
-			cache.setLastPos(key, dimOld, prevPos);
-
-			PatternHelper pattern = createPatternHelper(world, pos);
-			double d0 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
-			double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? entity.posZ : entity.posX;
-			d1 = Math.abs(MathHelper.pct(d1 - (pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - pattern.getWidth()));
-			double d2 = MathHelper.pct(entity.posY - 1.0D, pattern.getFrontTopLeft().getY(), pattern.getFrontTopLeft().getY() - pattern.getHeight());
-
-			cache.setLastPortalVec(new Vec3d(d1, d2, 0.0D));
-			cache.setTeleportDirection(pattern.getForwards());
-
-			entity.changeDimension(dimNew.getId(), teleporter);
 		}
-		else
-		{
-			entity.timeUntilPortal = entity.getPortalCooldown();
-		}
+
+		cache.setLastDim(key, dimOld);
+		cache.setLastPos(key, dimOld, prevPos);
+
+		PatternHelper pattern = createPatternHelper(world, pos);
+		double d0 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
+		double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? entity.posZ : entity.posX;
+		d1 = Math.abs(MathHelper.pct(d1 - (pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - pattern.getWidth()));
+		double d2 = MathHelper.pct(entity.posY - 1.0D, pattern.getFrontTopLeft().getY(), pattern.getFrontTopLeft().getY() - pattern.getHeight());
+
+		cache.setLastPortalVec(new Vec3d(d1, d2, 0.0D));
+		cache.setTeleportDirection(pattern.getForwards());
+
+		entity.changeDimension(dimNew.getId(), teleporter);
 	}
 
 	@Override
@@ -336,17 +332,17 @@ public class BlockPortalCavern extends BlockPortal
 				}
 			}
 
-			EnumFacing.AxisDirection axis1 = EnumFacing.AxisDirection.POSITIVE;
+			EnumFacing.AxisDirection ax = EnumFacing.AxisDirection.POSITIVE;
 
 			for (EnumFacing.AxisDirection direction : EnumFacing.AxisDirection.values())
 			{
-				if (values[direction.ordinal()] < values[axis1.ordinal()])
+				if (values[direction.ordinal()] < values[ax.ordinal()])
 				{
-					axis1 = direction;
+					ax = direction;
 				}
 			}
 
-			return new PatternHelper(facing.getAxisDirection() == axis1 ? blockpos : blockpos.offset(size.rightDir, size.getWidth() - 1), EnumFacing.getFacingFromAxis(axis1, axis), EnumFacing.UP, cache, size.getWidth(), size.getHeight(), 1);
+			return new PatternHelper(facing.getAxisDirection() == ax ? blockpos : blockpos.offset(size.rightDir, size.getWidth() - 1), EnumFacing.getFacingFromAxis(ax, axis), EnumFacing.UP, cache, size.getWidth(), size.getHeight(), 1);
 		}
 	}
 

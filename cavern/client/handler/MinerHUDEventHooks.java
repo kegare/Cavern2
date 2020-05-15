@@ -1,17 +1,17 @@
 package cavern.client.handler;
 
 import cavern.api.CavernAPI;
-import cavern.api.IMinerStats;
-import cavern.api.IMiningData;
+import cavern.api.data.IMiner;
+import cavern.api.data.IMiningData;
 import cavern.client.CaveRenderingRegistry;
 import cavern.config.DisplayConfig;
 import cavern.config.GeneralConfig;
 import cavern.config.MiningAssistConfig;
 import cavern.config.property.ConfigDisplayPos;
+import cavern.data.MinerRank;
+import cavern.data.Miner;
+import cavern.data.MiningData;
 import cavern.miningassist.MiningAssist;
-import cavern.stats.MinerRank;
-import cavern.stats.MinerStats;
-import cavern.stats.MiningData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MinerStatsHUDEventHooks
+public class MinerHUDEventHooks
 {
 	private int posX;
 	private int posY;
@@ -168,7 +168,7 @@ public class MinerStatsHUDEventHooks
 		}
 
 		ScaledResolution resolution = event.getResolution();
-		IMinerStats stats = MinerStats.get(mc.player, true);
+		IMiner stats = Miner.get(mc.player, true);
 
 		if (stats == null || stats.getPoint() < 0)
 		{
@@ -179,7 +179,7 @@ public class MinerStatsHUDEventHooks
 		MiningAssist miningAssist = MiningAssist.get(stats.getMiningAssist());
 
 		String point = Integer.toString(stats.getPoint());
-		String rank = I18n.format(minerRank.getTranslationKey());
+		String rank = I18n.format(minerRank.getUnlocalizedName());
 
 		if (miningAssist != MiningAssist.DISABLED && stats.getRank() >= MiningAssistConfig.minerRank.getValue())
 		{

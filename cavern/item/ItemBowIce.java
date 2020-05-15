@@ -2,7 +2,7 @@ package cavern.item;
 
 import javax.annotation.Nullable;
 
-import cavern.api.IIceEquipment;
+import cavern.api.item.IIceEquipment;
 import cavern.core.Cavern;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentArrowFire;

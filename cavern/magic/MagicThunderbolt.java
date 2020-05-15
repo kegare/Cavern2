@@ -2,7 +2,7 @@ package cavern.magic;
 
 import com.google.common.base.Predicate;
 
-import cavern.api.ISummonMob;
+import cavern.api.entity.IEntitySummonable;
 import cavern.util.PlayerHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -146,7 +146,7 @@ public class MagicThunderbolt extends Magic implements Predicate<Entity>
 			return false;
 		}
 
-		if (!(entity instanceof IMob) || entity instanceof ISummonMob)
+		if (!(entity instanceof IMob) || entity instanceof IEntitySummonable)
 		{
 			return false;
 		}

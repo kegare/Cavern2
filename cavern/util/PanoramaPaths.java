@@ -22,20 +22,20 @@ public class PanoramaPaths
 	{
 		switch (i)
 		{
-		case 0:
-			return north;
-		case 1:
-			return east;
-		case 2:
-			return south;
-		case 3:
-			return west;
-		case 4:
-			return top;
-		case 5:
-			return bottom;
-		default:
-			return top;
+			case 0:
+				return north;
+			case 1:
+				return east;
+			case 2:
+				return south;
+			case 3:
+				return west;
+			case 4:
+				return top;
+			case 5:
+				return bottom;
+			default:
+				return top;
 		}
 	}
 
