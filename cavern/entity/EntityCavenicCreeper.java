@@ -65,12 +65,6 @@ public class EntityCavenicCreeper extends EntityCreeper implements ICavenicMob
 	}
 
 	@Override
-	public boolean getCanSpawnHere()
-	{
-		return CavernAPI.dimension.isInCaves(this) && super.getCanSpawnHere();
-	}
-
-	@Override
 	public int getMaxSpawnedInChunk()
 	{
 		return CavernAPI.dimension.isInCavenia(this) ? 2 : 1;

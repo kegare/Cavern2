@@ -28,8 +28,8 @@ import cavern.handler.CaveEventHooks;
 import cavern.handler.CaveGuiHandler;
 import cavern.handler.CavebornEventHooks;
 import cavern.handler.MiningAssistEventHooks;
-import cavern.handler.api.DimensionHandler;
 import cavern.handler.api.DataHandler;
+import cavern.handler.api.DimensionHandler;
 import cavern.item.CaveItems;
 import cavern.network.CaveNetworkRegistry;
 import cavern.plugin.HaCPlugin;
@@ -214,7 +214,7 @@ public class Cavern
 
 		CaveBlocks.registerSmeltingRecipes();
 
-		CaveEntityRegistry.addSpawns();
+		CaveEntityRegistry.regsiterSpawns();
 
 		CavernConfig.syncConfig();
 		CavernConfig.syncBiomesConfig();

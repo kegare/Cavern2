@@ -491,10 +491,14 @@ key.cavern.miningRecords=採掘の記録の表示
 key.cavern.magicBook=魔術書の詠唱
 
 cavern.miningassist.name=採掘アシスト
+cavern.miningassist.select=採掘アシストモードを選択してください
 cavern.miningassist.disabled=無効
 cavern.miningassist.quick=一括破壊
 cavern.miningassist.ranged=範囲破壊
 cavern.miningassist.adit=坑道掘り
+cavern.miningassist.auto=自動切替
+cavern.miningassist.autoQuick=自動: 一括破壊
+cavern.miningassist.autoAdit=自動: 坑道掘り
 cavern.miningassist.toggle.message=採掘アシストが %s に変更されました
 cavern.miningassist.toggle.failed.message=採掘アシストは %s になるまで使用できません
 cavern.miningassist.toggle.press=%sキーを押すとモードが切り替わります

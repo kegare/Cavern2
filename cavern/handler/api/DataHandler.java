@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class DataHandler implements DataWrapper
 {
 	@Override
-	public IMiner getMinerStats(EntityPlayer player)
+	public IMiner getMiner(EntityPlayer player)
 	{
 		return Miner.get(player);
 	}

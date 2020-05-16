@@ -12,7 +12,6 @@ import com.google.common.collect.Sets;
 import cavern.api.CavernAPI;
 import cavern.api.data.IMiner;
 import cavern.api.data.IMiningData;
-import cavern.api.entity.ICavenicMob;
 import cavern.api.event.CriticalMiningEvent;
 import cavern.api.item.IAquaTool;
 import cavern.api.item.IIceEquipment;
@@ -80,7 +79,6 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
@@ -90,7 +88,6 @@ import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.event.world.BlockEvent.PortalSpawnEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
@@ -278,7 +275,7 @@ public class CaveEventHooks
 
 			if (point != 0)
 			{
-				IMiner stats = Miner.get(player);
+				IMiner miner = Miner.get(player);
 				IMiningData data = MiningData.get(player);
 
 				if (player.inventory.hasItemStack(ItemCave.EnumType.MINER_ORB.getItemStack()))
@@ -289,8 +286,8 @@ public class CaveEventHooks
 					}
 				}
 
-				stats.addPoint(point);
-				stats.addMiningRecord(new BlockMeta(state));
+				miner.addPoint(point);
+				miner.addMiningRecord(new BlockMeta(state));
 
 				data.notifyMining(state, point);
 
@@ -384,7 +381,7 @@ public class CaveEventHooks
 			flag = true;
 		}
 
-		if (CavernAPI.dimension.isInCaveDimensions(player) && CaveUtils.isItemPickaxe(stack))
+		if (CavernAPI.dimension.isInCaveDimensions(player) && CaveUtils.isPickaxe(stack))
 		{
 			int rank = Miner.get(player).getRank();
 
@@ -514,9 +511,7 @@ public class CaveEventHooks
 			return;
 		}
 
-		IMiner stats = Miner.get(player);
-
-		if (stats.getRank() < MinerRank.AQUA_MINER.getRank())
+		if (Miner.get(player).getRank() < MinerRank.AQUA_MINER.getRank())
 		{
 			return;
 		}
@@ -590,22 +585,6 @@ public class CaveEventHooks
 	}
 
 	@SubscribeEvent
-	public void onLivingSpawn(LivingSpawnEvent.CheckSpawn event)
-	{
-		EntityLivingBase entity = event.getEntityLiving();
-
-		if (CavernAPI.dimension.isInCavenia(entity))
-		{
-			if (entity instanceof ICavenicMob && ((ICavenicMob)entity).canSpawnInCavenia())
-			{
-				return;
-			}
-
-			event.setResult(Result.DENY);
-		}
-	}
-
-	@SubscribeEvent
 	public void onLivingSetAttackTarget(LivingSetAttackTargetEvent event)
 	{
 		EntityLivingBase target = event.getTarget();
@@ -625,12 +604,12 @@ public class CaveEventHooks
 
 		EntityLivingBase entity = event.getEntityLiving();
 
-		entity.setRevengeTarget(null);
-
 		if (entity instanceof EntityLiving)
 		{
 			((EntityLiving)entity).setAttackTarget(null);
 		}
+
+		entity.getCombatTracker().reset();
 	}
 
 	@SubscribeEvent

@@ -189,7 +189,7 @@ public class BlockPortalCavern extends BlockPortal
 	{
 		ItemStack held = player.getHeldItem(hand);
 
-		if (CaveUtils.isItemPickaxe(held) && MCEPlugin.openShop(MCEPlugin.getPortalShop(), world, player, pos))
+		if (CaveUtils.isPickaxe(held) && MCEPlugin.openShop(MCEPlugin.getPortalShop(), world, player, pos))
 		{
 			return true;
 		}

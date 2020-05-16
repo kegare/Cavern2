@@ -182,7 +182,7 @@ public class CaveItems
 
 		ModelBakery.registerItemVariants(item, models.toArray(new ResourceLocation[models.size()]));
 
-		for (int i = 0; i < models.size(); ++i)
+		for (int i = 0, size = models.size(); i < size; ++i)
 		{
 			ModelLoader.setCustomModelResourceLocation(item, i, models.get(i));
 		}
@@ -206,7 +206,7 @@ public class CaveItems
 
 		ModelBakery.registerItemVariants(item, models.toArray(new ResourceLocation[models.size()]));
 
-		for (int i = 0; i < models.size(); ++i)
+		for (int i = 0, size = models.size(); i < size; ++i)
 		{
 			ModelLoader.setCustomModelResourceLocation(item, i, models.get(i));
 		}

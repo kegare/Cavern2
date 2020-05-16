@@ -1,5 +1,7 @@
 package cavern.world;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import cavern.client.CaveMusics;
@@ -7,6 +9,7 @@ import cavern.client.renderer.EmptyRenderer;
 import cavern.config.CavernConfig;
 import cavern.config.manager.CaveBiomeManager;
 import cavern.config.property.ConfigBiomeType;
+import cavern.entity.CaveEntityRegistry;
 import cavern.world.CaveEntitySpawner.IWorldEntitySpawner;
 import net.minecraft.client.audio.MusicTicker.MusicType;
 import net.minecraft.entity.Entity;
@@ -22,6 +25,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldProviderSurface;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
@@ -343,6 +347,17 @@ public class WorldProviderCavern extends WorldProviderSurface implements ICustom
 		if (!type.getPeacefulCreature())
 		{
 			return Integer.valueOf(getMonsterSpawn());
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<Biome.SpawnListEntry> getAdditionalCreatures(WorldServer world, EnumCreatureType creatureType, BlockPos pos)
+	{
+		if (creatureType == EnumCreatureType.MONSTER)
+		{
+			return CaveEntityRegistry.SPAWNS;
 		}
 
 		return null;

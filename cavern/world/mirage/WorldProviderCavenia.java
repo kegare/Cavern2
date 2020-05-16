@@ -1,14 +1,21 @@
 package cavern.world.mirage;
 
+import java.util.List;
+
 import cavern.client.CaveMusics;
 import cavern.config.CaveniaConfig;
 import cavern.config.manager.CaveBiomeManager;
 import cavern.config.property.ConfigBiomeType;
+import cavern.entity.CaveEntityRegistry;
 import cavern.world.CaveDimensions;
 import cavern.world.WorldProviderCavern;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker.MusicType;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -80,5 +87,27 @@ public class WorldProviderCavenia extends WorldProviderCavern
 		musicCounter = 0;
 
 		return super.getMusicType();
+	}
+
+	@Override
+	public List<Biome.SpawnListEntry> getPossibleCreatures(WorldServer world, EnumCreatureType creatureType, BlockPos pos)
+	{
+		if (creatureType == EnumCreatureType.MONSTER)
+		{
+			return CaveEntityRegistry.SPAWNS;
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<Biome.SpawnListEntry> getAdditionalCreatures(WorldServer world, EnumCreatureType creatureType, BlockPos pos)
+	{
+		if (creatureType == EnumCreatureType.MONSTER)
+		{
+			return CaveEntityRegistry.CRAZY_SPAWNS;
+		}
+
+		return null;
 	}
 }

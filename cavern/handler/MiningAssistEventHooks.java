@@ -9,14 +9,15 @@ import org.lwjgl.input.Keyboard;
 
 import cavern.api.data.IMiner;
 import cavern.client.CaveKeyBindings;
+import cavern.client.gui.GuiSelectMiningAssist;
 import cavern.config.MiningAssistConfig;
 import cavern.core.Cavern;
 import cavern.data.Miner;
+import cavern.data.MinerRank;
 import cavern.miningassist.MiningAssist;
 import cavern.miningassist.MiningAssistUnit;
 import cavern.miningassist.MiningSnapshot;
-import cavern.network.CaveNetworkRegistry;
-import cavern.network.server.MiningAssistMessage;
+import cavern.util.CaveUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -24,12 +25,19 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.server.management.PlayerInteractionManager;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -53,14 +61,14 @@ public class MiningAssistEventHooks
 			return false;
 		}
 
-		IMiner stats = Miner.get(player);
+		IMiner miner = Miner.get(player);
 
-		if (stats.getRank() < MiningAssistConfig.minerRank.getValue())
+		if (miner.getRank() < MiningAssistConfig.minerRank.getValue())
 		{
 			return false;
 		}
 
-		MiningAssist type = MiningAssist.get(stats.getMiningAssist());
+		MiningAssist type = MiningAssist.get(miner.getMiningAssist());
 
 		if (type == MiningAssist.DISABLED)
 		{
@@ -99,7 +107,7 @@ public class MiningAssistEventHooks
 
 		MiningSnapshot snapshot = assist.getSnapshot(type, pos, state);
 
-		if (!snapshot.isEmpty())
+		if (snapshot != null && !snapshot.isEmpty())
 		{
 			event.setNewSpeed(assist.getBreakSpeed(snapshot));
 		}
@@ -152,7 +160,7 @@ public class MiningAssistEventHooks
 		MiningAssist type = MiningAssist.byPlayer(player);
 		MiningSnapshot snapshot = assist.getSnapshot(type, pos, state);
 
-		if (snapshot.isEmpty())
+		if (snapshot == null || snapshot.isEmpty())
 		{
 			return;
 		}
@@ -295,7 +303,233 @@ public class MiningAssistEventHooks
 
 		if (CaveKeyBindings.KEY_MINING_ASSIST.isActiveAndMatches(key))
 		{
-			CaveNetworkRegistry.sendToServer(new MiningAssistMessage());
+			if (Miner.get(mc.player).getRank() < MiningAssistConfig.minerRank.getValue())
+			{
+				ITextComponent component = new TextComponentTranslation(MinerRank.get(MiningAssistConfig.minerRank.getValue()).getUnlocalizedName());
+				component.getStyle().setItalic(Boolean.valueOf(true));
+				component = new TextComponentTranslation("cavern.miningassist.toggle.failed.message", component);
+				component.getStyle().setColor(TextFormatting.RED);
+
+				mc.ingameGUI.setOverlayMessage(component, false);
+			}
+			else
+			{
+				mc.displayGuiScreen(new GuiSelectMiningAssist());
+			}
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onPlayerLeftClick(PlayerInteractEvent.LeftClickBlock event)
+	{
+		EntityPlayer player = event.getEntityPlayer();
+		MiningAssist assist = MiningAssist.byPlayer(player);
+
+		if (assist != MiningAssist.AUTO && assist != MiningAssist.AUTO_QUICK && assist != MiningAssist.AUTO_ADIT)
+		{
+			return;
+		}
+
+		World world = event.getWorld();
+		BlockPos pos = event.getPos();
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
+		int level = block.getHarvestLevel(state);
+
+		if (level < 0)
+		{
+			return;
+		}
+
+		ItemStack heldMain = player.getHeldItemMainhand();
+		ItemStack heldOff = player.getHeldItemOffhand();
+
+		if (block.isToolEffective("pickaxe", state))
+		{
+			if (CaveUtils.isPickaxe(heldMain))
+			{
+				return;
+			}
+
+			if (CaveUtils.isPickaxe(heldOff))
+			{
+				player.setHeldItem(EnumHand.OFF_HAND, heldMain);
+				player.setHeldItem(EnumHand.MAIN_HAND, heldOff);
+
+				return;
+			}
+
+			NonNullList<ItemStack> mainInventory = player.inventory.mainInventory;
+			int slot = -1;
+
+			for (int i = 0, size = mainInventory.size(); i < size; ++i)
+			{
+				ItemStack stack = mainInventory.get(i);
+
+				if (CaveUtils.isPickaxe(stack))
+				{
+					if (level > 0 && stack.getItem().getHarvestLevel(stack, "pickaxe", player, state) < level)
+					{
+						if (slot < 0)
+						{
+							slot = i;
+						}
+
+						continue;
+					}
+
+					slot = i;
+				}
+			}
+
+			if (slot >= 0)
+			{
+				ItemStack prev = player.inventory.getCurrentItem();
+
+				player.inventory.setInventorySlotContents(player.inventory.currentItem, player.inventory.getStackInSlot(slot));
+				player.inventory.setInventorySlotContents(slot, prev);
+			}
+		}
+		else if (block.isToolEffective("axe", state))
+		{
+			if (CaveUtils.isAxe(heldMain))
+			{
+				return;
+			}
+
+			if (CaveUtils.isAxe(heldOff))
+			{
+				player.setHeldItem(EnumHand.OFF_HAND, heldMain);
+				player.setHeldItem(EnumHand.MAIN_HAND, heldOff);
+
+				return;
+			}
+
+			NonNullList<ItemStack> mainInventory = player.inventory.mainInventory;
+			int slot = -1;
+
+			for (int i = 0, size = mainInventory.size(); i < size; ++i)
+			{
+				ItemStack stack = mainInventory.get(i);
+
+				if (CaveUtils.isAxe(stack))
+				{
+					if (level > 0 && stack.getItem().getHarvestLevel(stack, "axe", player, state) < level)
+					{
+						if (slot < 0)
+						{
+							slot = i;
+						}
+
+						continue;
+					}
+
+					slot = i;
+				}
+			}
+
+			if (slot >= 0)
+			{
+				ItemStack prev = player.inventory.getCurrentItem();
+
+				player.inventory.setInventorySlotContents(player.inventory.currentItem, player.inventory.getStackInSlot(slot));
+				player.inventory.setInventorySlotContents(slot, prev);
+			}
+		}
+		else if (block.isToolEffective("shovel", state))
+		{
+			if (CaveUtils.isShovel(heldMain))
+			{
+				return;
+			}
+
+			if (CaveUtils.isShovel(heldOff))
+			{
+				player.setHeldItem(EnumHand.OFF_HAND, heldMain);
+				player.setHeldItem(EnumHand.MAIN_HAND, heldOff);
+
+				return;
+			}
+
+			NonNullList<ItemStack> mainInventory = player.inventory.mainInventory;
+			int slot = -1;
+
+			for (int i = 0, size = mainInventory.size(); i < size; ++i)
+			{
+				ItemStack stack = mainInventory.get(i);
+
+				if (CaveUtils.isShovel(stack))
+				{
+					if (level > 0 && stack.getItem().getHarvestLevel(stack, "shovel", player, state) < level)
+					{
+						if (slot < 0)
+						{
+							slot = i;
+						}
+
+						continue;
+					}
+
+					slot = i;
+				}
+			}
+
+			if (slot >= 0)
+			{
+				ItemStack prev = player.inventory.getCurrentItem();
+
+				player.inventory.setInventorySlotContents(player.inventory.currentItem, player.inventory.getStackInSlot(slot));
+				player.inventory.setInventorySlotContents(slot, prev);
+			}
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onAttackEntity(AttackEntityEvent event)
+	{
+		EntityPlayer player = event.getEntityPlayer();
+		MiningAssist assist = MiningAssist.byPlayer(player);
+
+		if (assist != MiningAssist.AUTO && assist != MiningAssist.AUTO_QUICK && assist != MiningAssist.AUTO_ADIT)
+		{
+			return;
+		}
+
+		ItemStack heldMain = player.getHeldItemMainhand();
+		ItemStack heldOff = player.getHeldItemOffhand();
+
+		if (heldMain.getItem() instanceof ItemSword)
+		{
+			return;
+		}
+
+		if (heldOff.getItem() instanceof ItemSword)
+		{
+			player.setHeldItem(EnumHand.OFF_HAND, heldMain);
+			player.setHeldItem(EnumHand.MAIN_HAND, heldOff);
+
+			return;
+		}
+
+		NonNullList<ItemStack> mainInventory = player.inventory.mainInventory;
+		int slot = -1;
+
+		for (int i = 0, size = mainInventory.size(); i < size; ++i)
+		{
+			if (mainInventory.get(i).getItem() instanceof ItemSword)
+			{
+				slot = i;
+
+				break;
+			}
+		}
+
+		if (slot >= 0)
+		{
+			ItemStack prev = player.inventory.getCurrentItem();
+
+			player.inventory.setInventorySlotContents(player.inventory.currentItem, player.inventory.getStackInSlot(slot));
+			player.inventory.setInventorySlotContents(slot, prev);
 		}
 	}
 }

@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public interface DataWrapper
 {
-	IMiner getMinerStats(EntityPlayer player);
+	IMiner getMiner(EntityPlayer player);
 
 	IMiningData getMiningData(EntityPlayer player);
 }

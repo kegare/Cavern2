@@ -1,6 +1,5 @@
 package cavern.entity;
 
-import cavern.api.CavernAPI;
 import cavern.api.entity.ICavenicMob;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityAgeable;
@@ -132,11 +131,6 @@ public class EntityCavenicBear extends EntityPolarBear implements ICavenicMob, I
 	@Override
 	public boolean getCanSpawnHere()
 	{
-		if (!CavernAPI.dimension.isInCaveDimensions(this))
-		{
-			return false;
-		}
-
 		if (!world.getBiome(getPosition()).isSnowyBiome())
 		{
 			return false;

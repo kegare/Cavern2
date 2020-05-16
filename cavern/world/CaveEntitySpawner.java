@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import cavern.util.WeightedRandomHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -16,6 +17,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.management.PlayerChunkMapEntry;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -149,7 +151,7 @@ public class CaveEntitySpawner
 										{
 											if (entry == null)
 											{
-												entry = world.getSpawnListEntryForTypeAt(type, pos);
+												entry = getSpawnListEntryForTypeAt(world, type, pos);
 
 												if (entry == null)
 												{
@@ -157,7 +159,7 @@ public class CaveEntitySpawner
 												}
 											}
 
-											if (world.canCreatureTypeSpawnHere(type, entry, pos) &&
+											if (canCreatureTypeSpawnHere(world, type, entry, pos) &&
 												WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntitySpawnPlacementRegistry.getPlacementForEntity(entry.entityClass), world, pos))
 											{
 												EntityLiving entity;
@@ -261,6 +263,82 @@ public class CaveEntitySpawner
 		return 24.0D;
 	}
 
+	@Nullable
+	public Biome.SpawnListEntry getSpawnListEntryForTypeAt(WorldServer world, EnumCreatureType creatureType, BlockPos pos)
+	{
+		if (entitySpawner != null)
+		{
+			List<Biome.SpawnListEntry> list1 = entitySpawner.getPossibleCreatures(world, creatureType, pos);
+			List<Biome.SpawnListEntry> list2 = entitySpawner.getAdditionalCreatures(world, creatureType, pos);
+
+			if (list1 != null || list2 != null)
+			{
+				if (list1 == null)
+				{
+					list1 = world.getChunkProvider().getPossibleCreatures(creatureType, pos);
+				}
+
+				if (list1 != null)
+				{
+					list1 = ForgeEventFactory.getPotentialSpawns(world, creatureType, pos, list1);
+				}
+
+				if (list2 != null)
+				{
+					list2 = ForgeEventFactory.getPotentialSpawns(world, creatureType, pos, list2);
+				}
+
+				boolean flag1 = list1 != null && !list1.isEmpty();
+				boolean flag2 = list2 != null && !list2.isEmpty();
+
+				if (flag1 && flag2)
+				{
+					return WeightedRandomHelper.getRandomItem(world.rand, list1, list2);
+				}
+
+				if (flag1)
+				{
+					return WeightedRandom.getRandomItem(world.rand, list1);
+				}
+
+				if (flag2)
+				{
+					return WeightedRandom.getRandomItem(world.rand, list2);
+				}
+
+				return null;
+			}
+		}
+
+		return world.getSpawnListEntryForTypeAt(creatureType, pos);
+	}
+
+	public boolean canCreatureTypeSpawnHere(WorldServer world, EnumCreatureType creatureType, Biome.SpawnListEntry spawnListEntry, BlockPos pos)
+	{
+		if (entitySpawner != null)
+		{
+			List<Biome.SpawnListEntry> list = entitySpawner.getPossibleCreatures(world, creatureType, pos);
+
+			if (list != null)
+			{
+				list = ForgeEventFactory.getPotentialSpawns(world, creatureType, pos, list);
+
+				return list != null && !list.isEmpty() ? list.contains(spawnListEntry) : false;
+			}
+
+			list = entitySpawner.getAdditionalCreatures(world, creatureType, pos);
+
+			if (list != null)
+			{
+				list = ForgeEventFactory.getPotentialSpawns(world, creatureType, pos, list);
+
+				return list != null && !list.isEmpty() ? list.contains(spawnListEntry) : false;
+			}
+		}
+
+		return world.canCreatureTypeSpawnHere(creatureType, spawnListEntry, pos);
+	}
+
 	protected BlockPos getRandomPosition(World world, int x, int y, int z)
 	{
 		int posX = x * 16 + world.rand.nextInt(16);
@@ -273,16 +351,28 @@ public class CaveEntitySpawner
 	public interface IWorldEntitySpawner
 	{
 		@Nullable
-		public default Boolean canSpawnCreature(WorldServer world, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnOnSetTickRate, EnumCreatureType type)
+		default Boolean canSpawnCreature(WorldServer world, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnOnSetTickRate, EnumCreatureType type)
 		{
 			return null;
 		}
 
 		@Nullable
-		public Integer getMaxNumberOfCreature(WorldServer world, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnOnSetTickRate, EnumCreatureType type);
+		Integer getMaxNumberOfCreature(WorldServer world, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnOnSetTickRate, EnumCreatureType type);
 
 		@Nullable
-		public default Double getSpawnRange(WorldServer world, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnOnSetTickRate, EnumCreatureType type)
+		default Double getSpawnRange(WorldServer world, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnOnSetTickRate, EnumCreatureType type)
+		{
+			return null;
+		}
+
+		@Nullable
+		default List<Biome.SpawnListEntry> getPossibleCreatures(WorldServer world, EnumCreatureType creatureType, BlockPos pos)
+		{
+			return null;
+		}
+
+		@Nullable
+		default List<Biome.SpawnListEntry> getAdditionalCreatures(WorldServer world, EnumCreatureType creatureType, BlockPos pos)
 		{
 			return null;
 		}

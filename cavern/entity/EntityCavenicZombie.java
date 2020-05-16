@@ -56,12 +56,6 @@ public class EntityCavenicZombie extends EntityZombie implements ICavenicMob
 	}
 
 	@Override
-	public boolean getCanSpawnHere()
-	{
-		return CavernAPI.dimension.isInCaves(this) && super.getCanSpawnHere();
-	}
-
-	@Override
 	public int getMaxSpawnedInChunk()
 	{
 		return CavernAPI.dimension.isInCavenia(this) ? 5 : 1;

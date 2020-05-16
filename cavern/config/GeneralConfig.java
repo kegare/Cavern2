@@ -237,7 +237,7 @@ public class GeneralConfig
 
 		if (miningPointItems.isEmpty())
 		{
-			return CaveUtils.isItemPickaxe(stack);
+			return CaveUtils.isPickaxe(stack);
 		}
 
 		if (miningPointItems.hasItemStack(stack))

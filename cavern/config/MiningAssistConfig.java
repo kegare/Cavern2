@@ -188,7 +188,7 @@ public class MiningAssistConfig
 
 		if (effectiveItems.isEmpty())
 		{
-			return CaveUtils.isItemPickaxe(stack);
+			return CaveUtils.isPickaxe(stack);
 		}
 
 		if (effectiveItems.hasItemStack(stack))

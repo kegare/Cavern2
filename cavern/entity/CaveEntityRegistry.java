@@ -1,31 +1,34 @@
 package cavern.entity;
 
-import java.util.Collection;
+import java.util.List;
 
-import cavern.core.Cavern;
+import com.google.common.collect.Lists;
+
+import cavern.util.CaveUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class CaveEntityRegistry
 {
+	public static final List<SpawnListEntry> SPAWNS = Lists.newArrayList();
+	public static final List<SpawnListEntry> CRAZY_SPAWNS = Lists.newArrayList();
+	public static final List<SpawnListEntry> AQUA_SPAWNS = Lists.newArrayList();
+
 	protected static EntityEntry createEntry(Class<? extends Entity> entityClass, String key, String name)
 	{
-		return new EntityEntry(entityClass, name).setRegistryName(new ResourceLocation(Cavern.MODID, key));
+		return new EntityEntry(entityClass, name).setRegistryName(CaveUtils.getKey(key));
 	}
 
 	protected static EntityEntry createEntry(Class<? extends Entity> entityClass, String key, String name, int primaryColor, int secondaryColor)
 	{
 		EntityEntry entry = new EntityEntry(entityClass, name);
-		ResourceLocation regKey = new ResourceLocation(Cavern.MODID, key);
+		ResourceLocation regKey = CaveUtils.getKey(key);
 
 		entry.setRegistryName(regKey);
 		entry.setEgg(new EntityEggInfo(regKey, primaryColor, secondaryColor));
@@ -54,23 +57,22 @@ public class CaveEntityRegistry
 		registry.register(createEntry(EntityMagicTorcher.class, "magic_torcher", "MagicTorcher"));
 	}
 
-	public static void addSpawns()
+	public static void regsiterSpawns()
 	{
-		Collection<Biome> biomes = ForgeRegistries.BIOMES.getValuesCollection();
-		Biome[] biomeArray = biomes.toArray(new Biome[biomes.size()]);
+		SPAWNS.add(new SpawnListEntry(EntityCavenicSkeleton.class, 20, 1, 1));
+		SPAWNS.add(new SpawnListEntry(EntityCavenicCreeper.class, 30, 1, 1));
+		SPAWNS.add(new SpawnListEntry(EntityCavenicZombie.class, 30, 2, 2));
+		SPAWNS.add(new SpawnListEntry(EntityCavenicSpider.class, 30, 1, 1));
+		SPAWNS.add(new SpawnListEntry(EntityCavenicWitch.class, 15, 1, 1));
+		SPAWNS.add(new SpawnListEntry(EntityCavenicBear.class, 30, 1, 1));
+		SPAWNS.add(new SpawnListEntry(EntityCaveman.class, 30, 1, 1));
 
-		EntityRegistry.addSpawn(EntityCavenicSkeleton.class, 20, 1, 1, EnumCreatureType.MONSTER, biomeArray);
-		EntityRegistry.addSpawn(EntityCavenicCreeper.class, 30, 1, 1, EnumCreatureType.MONSTER, biomeArray);
-		EntityRegistry.addSpawn(EntityCavenicZombie.class, 30, 2, 2, EnumCreatureType.MONSTER, biomeArray);
-		EntityRegistry.addSpawn(EntityCavenicSpider.class, 30, 1, 1, EnumCreatureType.MONSTER, biomeArray);
-		EntityRegistry.addSpawn(EntityCavenicWitch.class, 15, 1, 1, EnumCreatureType.MONSTER, biomeArray);
-		EntityRegistry.addSpawn(EntityCavenicBear.class, 30, 1, 1, EnumCreatureType.MONSTER, biomeArray);
-		EntityRegistry.addSpawn(EntityCrazySkeleton.class, 1, 1, 1, EnumCreatureType.MONSTER, biomeArray);
-		EntityRegistry.addSpawn(EntityCrazyCreeper.class, 1, 1, 1, EnumCreatureType.MONSTER, biomeArray);
-		EntityRegistry.addSpawn(EntityCrazyZombie.class, 1, 1, 1, EnumCreatureType.MONSTER, biomeArray);
-		EntityRegistry.addSpawn(EntityCrazySpider.class, 1, 1, 1, EnumCreatureType.MONSTER, biomeArray);
-		EntityRegistry.addSpawn(EntityCaveman.class, 30, 1, 1, EnumCreatureType.MONSTER, biomeArray);
-		EntityRegistry.addSpawn(EntityAquaSquid.class, 100, 4, 4, EnumCreatureType.WATER_CREATURE, biomeArray);
+		CRAZY_SPAWNS.add(new SpawnListEntry(EntityCrazySkeleton.class, 1, 1, 1));
+		CRAZY_SPAWNS.add(new SpawnListEntry(EntityCrazyCreeper.class, 1, 1, 1));
+		CRAZY_SPAWNS.add(new SpawnListEntry(EntityCrazyZombie.class, 1, 1, 1));
+		CRAZY_SPAWNS.add(new SpawnListEntry(EntityCrazySpider.class, 1, 1, 1));
+
+		AQUA_SPAWNS.add(new SpawnListEntry(EntityAquaSquid.class, 100, 4, 4));
 
 		EntitySpawnPlacementRegistry.setPlacementType(EntityAquaSquid.class, SpawnPlacementType.IN_WATER);
 	}

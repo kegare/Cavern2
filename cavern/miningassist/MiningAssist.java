@@ -18,7 +18,10 @@ public enum MiningAssist implements IStringSerializable
 	DISABLED(0, "disabled"),
 	QUICK(1, "quick"),
 	RANGED(2, "ranged"),
-	ADIT(3, "adit");
+	ADIT(3, "adit"),
+	AUTO(4, "auto"),
+	AUTO_QUICK(5, "autoQuick"),
+	AUTO_ADIT(6, "autoAdit");
 
 	public static final MiningAssist[] VALUES = new MiningAssist[values().length];
 
@@ -53,10 +56,12 @@ public enum MiningAssist implements IStringSerializable
 		switch (this)
 		{
 			case QUICK:
+			case AUTO_QUICK:
 				return MiningAssistConfig.quickTargetBlocks;
 			case RANGED:
 				return MiningAssistConfig.rangedTargetBlocks;
 			case ADIT:
+			case AUTO_ADIT:
 				return MiningAssistConfig.aditTargetBlocks;
 			default:
 		}
@@ -73,6 +78,7 @@ public enum MiningAssist implements IStringSerializable
 			switch (this)
 			{
 				case QUICK:
+				case AUTO_QUICK:
 					return state.getBlock() instanceof BlockOre || state.getBlock() instanceof BlockRedstoneOre || Miner.getPointAmount(state) > 0;
 				default:
 					return stack.canHarvestBlock(state);

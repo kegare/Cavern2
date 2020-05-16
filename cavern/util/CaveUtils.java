@@ -27,7 +27,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -173,7 +175,7 @@ public class CaveUtils
 		return list.get(MathHelper.floor(Math.random() * list.size()));
 	}
 
-	public static boolean isItemPickaxe(ItemStack stack)
+	public static boolean isPickaxe(ItemStack stack)
 	{
 		if (stack.isEmpty())
 		{
@@ -188,6 +190,50 @@ public class CaveUtils
 		}
 
 		if (item.getToolClasses(stack).contains("pickaxe"))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isAxe(ItemStack stack)
+	{
+		if (stack.isEmpty())
+		{
+			return false;
+		}
+
+		Item item = stack.getItem();
+
+		if (item instanceof ItemAxe)
+		{
+			return true;
+		}
+
+		if (item.getToolClasses(stack).contains("axe"))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isShovel(ItemStack stack)
+	{
+		if (stack.isEmpty())
+		{
+			return false;
+		}
+
+		Item item = stack.getItem();
+
+		if (item instanceof ItemSpade)
+		{
+			return true;
+		}
+
+		if (item.getToolClasses(stack).contains("shovel"))
 		{
 			return true;
 		}

@@ -471,7 +471,7 @@ public class GuiMiningPointsEditor extends GuiScreen
 		{
 			GuiTextField textField;
 
-			for (int i = 0; i < editFieldList.size(); ++i)
+			for (int i = 0, size = editFieldList.size(); i < size; ++i)
 			{
 				textField = editFieldList.get(i);
 

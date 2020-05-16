@@ -198,12 +198,6 @@ public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
 	}
 
 	@Override
-	public boolean getCanSpawnHere()
-	{
-		return CavernAPI.dimension.isInCaves(this) && super.getCanSpawnHere();
-	}
-
-	@Override
 	public int getMaxSpawnedInChunk()
 	{
 		return CavernAPI.dimension.isInCavenia(this) ? 4 : 1;

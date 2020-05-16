@@ -35,7 +35,7 @@ public class InventoryMagicStorage
 
 		NBTTagList list = new NBTTagList();
 
-		for (int i = 0; i < inventory.getSizeInventory(); ++i)
+		for (int i = 0, size = inventory.getSizeInventory(); i < size; ++i)
 		{
 			ItemStack stack = inventory.getStackInSlot(i);
 
@@ -68,7 +68,7 @@ public class InventoryMagicStorage
 
 		NBTTagList list = nbt.getTagList("Items", NBT.TAG_COMPOUND);
 
-		for (int i = 0; i < list.tagCount(); ++i)
+		for (int i = 0, size = list.tagCount(); i < size; ++i)
 		{
 			NBTTagCompound compound = list.getCompoundTagAt(i);
 			int j = compound.getByte("Slot") & 255;

@@ -12,8 +12,8 @@ import com.google.common.base.Strings;
 import cavern.client.CaveKeyBindings;
 import cavern.client.config.CaveConfigGui;
 import cavern.config.Config;
-import cavern.data.MinerRank;
 import cavern.data.Miner;
+import cavern.data.MinerRank;
 import cavern.util.ArrayListExtended;
 import cavern.util.BlockMeta;
 import cavern.util.PanoramaPaths;
@@ -333,7 +333,7 @@ public class GuiMiningRecords extends GuiScreen
 		{
 			if (score >= 100000)
 			{
-				return "SS";
+				return "S+";
 			}
 
 			if (score >= 50000)

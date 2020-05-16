@@ -47,12 +47,14 @@ public class MiningAssistUnit
 			else switch (type)
 			{
 				case QUICK:
+				case AUTO_QUICK:
 					snapshot = new QuickMiningSnapshot(player.world, pos, state, player);
 					break;
 				case RANGED:
 					snapshot = new RangedMiningSnapshot(player.world, pos, state, player);
 					break;
 				case ADIT:
+				case AUTO_ADIT:
 					snapshot = new AditMiningSnapshot(player.world, pos, state, player);
 					break;
 				default:

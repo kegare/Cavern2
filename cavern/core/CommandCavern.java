@@ -72,10 +72,10 @@ public class CommandCavern extends CommandBase
 
 			if (server.isSinglePlayer() || server.getPlayerList().canSendCommands(player.getGameProfile()))
 			{
-				IMiner stats = Miner.get(player);
+				IMiner miner = Miner.get(player);
 
-				stats.setPoint(0, false);
-				stats.addPoint(MinerRank.get(stats.getRank() + 1).getPhase());
+				miner.setPoint(0, false);
+				miner.addPoint(MinerRank.get(miner.getRank() + 1).getPhase());
 			}
 			else throw new CommandException("commands.generic.permission");
 		}
