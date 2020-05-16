@@ -1,13 +1,12 @@
 package cavern.world;
 
-import java.util.List;
-
 import cavern.client.CaveMusics;
 import cavern.config.AquaCavernConfig;
 import cavern.config.manager.CaveBiomeManager;
 import cavern.config.property.ConfigBiomeType;
-import cavern.entity.CaveEntityRegistry;
+import cavern.entity.EntityAquaSquid;
 import net.minecraft.client.audio.MusicTicker.MusicType;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
@@ -95,13 +94,13 @@ public class WorldProviderAquaCavern extends WorldProviderCavern
 	}
 
 	@Override
-	public List<Biome.SpawnListEntry> getAdditionalCreatures(WorldServer world, EnumCreatureType creatureType, BlockPos pos)
+	public EntityLiving createSpawnCreature(WorldServer world, EnumCreatureType type, BlockPos pos, Biome.SpawnListEntry entry)
 	{
-		if (creatureType == EnumCreatureType.WATER_CREATURE)
+		if (type != EnumCreatureType.WATER_CREATURE)
 		{
-			return CaveEntityRegistry.AQUA_SPAWNS;
+			return null;
 		}
 
-		return super.getAdditionalCreatures(world, creatureType, pos);
+		return new EntityAquaSquid(world);
 	}
 }

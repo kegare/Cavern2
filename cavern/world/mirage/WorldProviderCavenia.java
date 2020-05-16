@@ -1,7 +1,5 @@
 package cavern.world.mirage;
 
-import java.util.List;
-
 import cavern.client.CaveMusics;
 import cavern.config.CaveniaConfig;
 import cavern.config.manager.CaveBiomeManager;
@@ -11,7 +9,9 @@ import cavern.world.CaveDimensions;
 import cavern.world.WorldProviderCavern;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker.MusicType;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
@@ -90,22 +90,22 @@ public class WorldProviderCavenia extends WorldProviderCavern
 	}
 
 	@Override
-	public List<Biome.SpawnListEntry> getPossibleCreatures(WorldServer world, EnumCreatureType creatureType, BlockPos pos)
+	public EntityLiving createSpawnCreature(WorldServer world, EnumCreatureType type, BlockPos pos, Biome.SpawnListEntry entry)
 	{
-		if (creatureType == EnumCreatureType.MONSTER)
+		if (type != EnumCreatureType.MONSTER)
 		{
-			return CaveEntityRegistry.SPAWNS;
+			return null;
 		}
 
-		return null;
-	}
+		Biome.SpawnListEntry spawnEntry = WeightedRandom.getRandomItem(world.rand, world.rand.nextInt(30) == 0 ? CaveEntityRegistry.CRAZY_SPAWNS : CaveEntityRegistry.SPAWNS);
 
-	@Override
-	public List<Biome.SpawnListEntry> getAdditionalCreatures(WorldServer world, EnumCreatureType creatureType, BlockPos pos)
-	{
-		if (creatureType == EnumCreatureType.MONSTER)
+		try
 		{
-			return CaveEntityRegistry.CRAZY_SPAWNS;
+			return spawnEntry.newInstance(world);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 
 		return null;

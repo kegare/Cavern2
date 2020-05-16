@@ -65,14 +65,12 @@ public class CaveEntityRegistry
 		SPAWNS.add(new SpawnListEntry(EntityCavenicSpider.class, 30, 1, 1));
 		SPAWNS.add(new SpawnListEntry(EntityCavenicWitch.class, 15, 1, 1));
 		SPAWNS.add(new SpawnListEntry(EntityCavenicBear.class, 30, 1, 1));
-		SPAWNS.add(new SpawnListEntry(EntityCaveman.class, 30, 1, 1));
+		SPAWNS.add(new SpawnListEntry(EntityCaveman.class, 35, 1, 1));
 
 		CRAZY_SPAWNS.add(new SpawnListEntry(EntityCrazySkeleton.class, 1, 1, 1));
 		CRAZY_SPAWNS.add(new SpawnListEntry(EntityCrazyCreeper.class, 1, 1, 1));
 		CRAZY_SPAWNS.add(new SpawnListEntry(EntityCrazyZombie.class, 1, 1, 1));
 		CRAZY_SPAWNS.add(new SpawnListEntry(EntityCrazySpider.class, 1, 1, 1));
-
-		AQUA_SPAWNS.add(new SpawnListEntry(EntityAquaSquid.class, 100, 4, 4));
 
 		EntitySpawnPlacementRegistry.setPlacementType(EntityAquaSquid.class, SpawnPlacementType.IN_WATER);
 	}

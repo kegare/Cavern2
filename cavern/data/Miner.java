@@ -147,7 +147,7 @@ public class Miner implements IMiner
 				double y = player.posY + player.getEyeHeight();
 				double z = player.posZ;
 
-				player.getServerWorld().playSound(null, x, y, z, CaveSounds.RANK_PROMOTE, SoundCategory.MASTER, 0.85F, 1.0F);
+				player.getServerWorld().playSound(null, x, y, z, CaveSounds.RANK_PROMOTE, SoundCategory.AMBIENT, 0.5F, 1.0F);
 
 				switch (current)
 				{

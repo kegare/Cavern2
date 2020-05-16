@@ -1,7 +1,5 @@
 package cavern.world;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
 
 import cavern.client.CaveMusics;
@@ -13,11 +11,13 @@ import cavern.entity.CaveEntityRegistry;
 import cavern.world.CaveEntitySpawner.IWorldEntitySpawner;
 import net.minecraft.client.audio.MusicTicker.MusicType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
@@ -353,11 +353,25 @@ public class WorldProviderCavern extends WorldProviderSurface implements ICustom
 	}
 
 	@Override
-	public List<Biome.SpawnListEntry> getAdditionalCreatures(WorldServer world, EnumCreatureType creatureType, BlockPos pos)
+	public EntityLiving createSpawnCreature(WorldServer world, EnumCreatureType type, BlockPos pos, Biome.SpawnListEntry entry)
 	{
-		if (creatureType == EnumCreatureType.MONSTER)
+		if (type != EnumCreatureType.MONSTER)
 		{
-			return CaveEntityRegistry.SPAWNS;
+			return null;
+		}
+
+		if (world.rand.nextInt(30) == 0)
+		{
+			Biome.SpawnListEntry spawnEntry = WeightedRandom.getRandomItem(world.rand, CaveEntityRegistry.SPAWNS);
+
+			try
+			{
+				return spawnEntry.newInstance(world);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 		return null;
