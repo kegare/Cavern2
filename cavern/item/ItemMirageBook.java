@@ -80,16 +80,14 @@ public class ItemMirageBook extends Item implements ITeleporter
 			return new ActionResult<>(EnumActionResult.PASS, stack);
 		}
 
-		if (world.provider.getDimensionType() == type)
+		if (!world.isRemote && world.provider.getDimensionType() == type)
 		{
-			if (!world.isRemote)
+			PlayerData.get(player).setLastTeleportTime(type, world.getTotalWorldTime());
+
+			if (transferTo(null, player))
 			{
-				PlayerData.get(player).setLastTeleportTime(type, world.getTotalWorldTime());
-
-				transferTo(null, player);
+				return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 			}
-
-			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 
 		if (world.isRemote)
