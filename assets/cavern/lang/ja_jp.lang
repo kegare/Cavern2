@@ -185,6 +185,8 @@ cavern.config.dimension.darkForest=薄暗い森
 cavern.config.dimension.darkForest.tooltip=薄暗い森のディメンションIDを指定します。0を指定すると、このディメンションは無効になります。
 cavern.config.dimension.crownCliffs=そびえ立つ絶壁
 cavern.config.dimension.crownCliffs.tooltip=そびえ立つ絶壁のディメンションIDを指定します。0を指定すると、このディメンションは無効になります。
+cavern.config.dimension.skyland=空の浮島
+cavern.config.dimension.skyland.tooltip=空の浮島のディメンションIDを指定します。0を指定すると、このディメンションは無効になります。
 
 cavern.config.biomes=バイオームのカスタマイズ
 cavern.config.biomes.tooltip=ディメンションのバイオームの生成設定を変更できます。
@@ -357,7 +359,9 @@ item.mirageBook.wideDesert.name=大砂漠
 item.mirageBook.theVoid.name=虚無の空間
 item.mirageBook.darkForest.name=薄暗い森
 item.mirageBook.crownCliffs.name=そびえ立つ絶壁
+item.mirageBook.skyland.name=空の浮島
 item.mirageBook.portal=使用するにはポータルが必要です。
+item.mirageBook.return=帰還するには幻の世界の書をそのまま使用します。
 item.mirageBook.fail=ここでは使用できません。
 item.magicBook.name=魔術書: %s
 item.magicBook.fail.time=まだ使用できません。
@@ -485,6 +489,8 @@ advancements.cavern.enter_the_dark_forest.title=薄暗い森
 advancements.cavern.enter_the_dark_forest.description=薄暗い森へ行く
 advancements.cavern.enter_the_crown_cliffs.title=そびえ立つ絶壁
 advancements.cavern.enter_the_crown_cliffs.description=そびえ立つ絶壁へ行く
+advancements.cavern.enter_the_skyland.title=空の浮島
+advancements.cavern.enter_the_skyland.description=空の浮島へ行く
 
 key.cavern.miningAssist=採掘アシストの切り替え
 key.cavern.miningRecords=採掘の記録の表示

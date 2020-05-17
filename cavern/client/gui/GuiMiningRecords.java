@@ -14,7 +14,6 @@ import cavern.client.config.CaveConfigGui;
 import cavern.config.Config;
 import cavern.data.Miner;
 import cavern.data.MinerRank;
-import cavern.util.ArrayListExtended;
 import cavern.util.BlockMeta;
 import cavern.util.PanoramaPaths;
 import net.minecraft.client.gui.GuiButton;
@@ -22,6 +21,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.HoverChecker;
@@ -164,7 +164,7 @@ public class GuiMiningRecords extends GuiScreen
 
 	protected class RecordList extends GuiListSlot
 	{
-		protected final ArrayListExtended<MiningRecord> entries = new ArrayListExtended<>();
+		protected final NonNullList<MiningRecord> entries = NonNullList.create();
 
 		protected int nameType;
 		protected int totalCount;
@@ -179,7 +179,7 @@ public class GuiMiningRecords extends GuiScreen
 				BlockMeta blockMeta = entry.getKey();
 				int count = entry.getValue().intValue();
 
-				entries.addIfAbsent(new MiningRecord(blockMeta, count));
+				entries.add(new MiningRecord(blockMeta, count));
 
 				totalCount += count;
 
@@ -272,13 +272,7 @@ public class GuiMiningRecords extends GuiScreen
 		@Override
 		protected void drawSlot(int slot, int par2, int par3, int par4, int mouseX, int mouseY, float partialTicks)
 		{
-			MiningRecord record = entries.get(slot, null);
-
-			if (record == null)
-			{
-				return;
-			}
-
+			MiningRecord record = entries.get(slot);
 			String name = getBlockName(record.blockMeta);
 
 			if (!Strings.isNullOrEmpty(name))

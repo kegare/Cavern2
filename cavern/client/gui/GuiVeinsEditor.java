@@ -28,7 +28,6 @@ import cavern.config.CavernConfig;
 import cavern.config.Config;
 import cavern.config.manager.CaveVein;
 import cavern.config.manager.CaveVeinManager;
-import cavern.util.ArrayListExtended;
 import cavern.util.BlockMeta;
 import cavern.util.CaveFilters;
 import cavern.util.CaveUtils;
@@ -40,6 +39,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -569,8 +570,8 @@ public class GuiVeinsEditor extends GuiScreen
 						{
 							CaveVein vein = new CaveVein(blockMeta, 1, 1, 1, 255);
 
-							veinList.veins.addIfAbsent(vein);
-							veinList.contents.addIfAbsent(vein);
+							veinList.veins.add(vein);
+							veinList.contents.add(vein);
 							veinList.selected.add(vein);
 						}
 
@@ -731,34 +732,30 @@ public class GuiVeinsEditor extends GuiScreen
 		}
 		else if (veinList.isMouseYWithinSlotBounds(mouseY) && isCtrlKeyDown())
 		{
-			CaveVein vein = veinList.contents.get(veinList.getSlotIndexFromScreenCoords(mouseX, mouseY), null);
+			CaveVein vein = veinList.contents.get(veinList.getSlotIndexFromScreenCoords(mouseX, mouseY));
+			List<String> info = Lists.newArrayList();
+			String prefix = TextFormatting.GRAY.toString();
 
-			if (vein != null)
+			info.add(prefix + I18n.format(Config.LANG_KEY + "veins.block") + ": " + vein.getBlockMeta().getName());
+			info.add(prefix + I18n.format(Config.LANG_KEY + "veins.targetBlock") + ": " + vein.getTarget().getName());
+			info.add(prefix + I18n.format(Config.LANG_KEY + "veins.weight") + ": " + vein.getWeight());
+			info.add(prefix + I18n.format(Config.LANG_KEY + "veins.chance") + ": " + vein.getChance());
+			info.add(prefix + I18n.format(Config.LANG_KEY + "veins.size") + ": " + vein.getSize());
+			info.add(prefix + I18n.format(Config.LANG_KEY + "veins.height") + ": " + vein.getMinHeight() + ", " + vein.getMaxHeight());
+
+			String[] biomes = vein.getBiomes();
+
+			if (biomes != null && biomes.length > 0)
 			{
-				List<String> info = Lists.newArrayList();
-				String prefix = TextFormatting.GRAY.toString();
+				List<String> list = fontRenderer.listFormattedStringToWidth(I18n.format(Config.LANG_KEY + "veins.biomes") + ": " + Joiner.on(", ").join(biomes), 300);
 
-				info.add(prefix + I18n.format(Config.LANG_KEY + "veins.block") + ": " + vein.getBlockMeta().getName());
-				info.add(prefix + I18n.format(Config.LANG_KEY + "veins.targetBlock") + ": " + vein.getTarget().getName());
-				info.add(prefix + I18n.format(Config.LANG_KEY + "veins.weight") + ": " + vein.getWeight());
-				info.add(prefix + I18n.format(Config.LANG_KEY + "veins.chance") + ": " + vein.getChance());
-				info.add(prefix + I18n.format(Config.LANG_KEY + "veins.size") + ": " + vein.getSize());
-				info.add(prefix + I18n.format(Config.LANG_KEY + "veins.height") + ": " + vein.getMinHeight() + ", " + vein.getMaxHeight());
-
-				String[] biomes = vein.getBiomes();
-
-				if (biomes != null && biomes.length > 0)
+				for (String text : list)
 				{
-					List<String> list = fontRenderer.listFormattedStringToWidth(I18n.format(Config.LANG_KEY + "veins.biomes") + ": " + Joiner.on(", ").join(biomes), 300);
-
-					for (String text : list)
-					{
-						info.add(prefix + text);
-					}
+					info.add(prefix + text);
 				}
-
-				drawHoveringText(info, mouseX, mouseY);
 			}
+
+			drawHoveringText(info, mouseX, mouseY);
 		}
 
 		if (veinList.selected.size() > 1 && mouseX <= 100 && mouseY <= 20)
@@ -974,8 +971,8 @@ public class GuiVeinsEditor extends GuiScreen
 
 						for (CaveVein vein : veinList.selected)
 						{
-							veinList.contents.swapTo(veinList.contents.indexOf(vein), -1);
-							veinList.veins.swapTo(veinList.veins.indexOf(vein), -1);
+							veinList.swapVeinsTo(veinList.veins.indexOf(vein), -1);
+							veinList.swapContentsTo(veinList.contents.indexOf(vein), -1);
 						}
 
 						veinList.scrollToTop();
@@ -995,8 +992,8 @@ public class GuiVeinsEditor extends GuiScreen
 
 						for (CaveVein vein : veinList.selected)
 						{
-							veinList.contents.swapTo(veinList.contents.indexOf(vein), 1);
-							veinList.veins.swapTo(veinList.veins.indexOf(vein), 1);
+							veinList.swapVeinsTo(veinList.veins.indexOf(vein), 1);
+							veinList.swapContentsTo(veinList.contents.indexOf(vein), 1);
 						}
 
 						veinList.scrollToTop();
@@ -1112,15 +1109,15 @@ public class GuiVeinsEditor extends GuiScreen
 
 		for (CaveVein vein : veins)
 		{
-			veinList.veins.addIfAbsent(vein);
-			veinList.contents.addIfAbsent(vein);
+			veinList.veins.add(vein);
+			veinList.contents.add(vein);
 		}
 	}
 
 	protected class VeinList extends GuiListSlot implements Comparator<CaveVein>
 	{
-		protected final ArrayListExtended<CaveVein> veins = new ArrayListExtended<>();
-		protected final ArrayListExtended<CaveVein> contents = new ArrayListExtended<>();
+		protected final NonNullList<CaveVein> veins = NonNullList.create();
+		protected final NonNullList<CaveVein> contents = NonNullList.create();
 		protected final List<CaveVein> selected = Lists.newArrayList();
 		protected final List<CaveVein> copied = Lists.newArrayList();
 
@@ -1171,13 +1168,7 @@ public class GuiVeinsEditor extends GuiScreen
 		@Override
 		protected void drawSlot(int slot, int par2, int par3, int par4, int mouseX, int mouseY, float partialTicks)
 		{
-			CaveVein vein = contents.get(slot, null);
-
-			if (vein == null)
-			{
-				return;
-			}
-
+			CaveVein vein = contents.get(slot);
 			BlockMeta blockMeta = vein.getBlockMeta();
 			Block block = blockMeta.getBlock();
 			int meta = blockMeta.getMeta();
@@ -1234,9 +1225,9 @@ public class GuiVeinsEditor extends GuiScreen
 				return;
 			}
 
-			CaveVein vein = contents.get(slot, null);
+			CaveVein vein = contents.get(slot);
 
-			if (vein != null && (clickFlag = !clickFlag == true) && !selected.remove(vein))
+			if ((clickFlag = !clickFlag == true) && !selected.remove(vein))
 			{
 				if (!isCtrlKeyDown())
 				{
@@ -1250,9 +1241,7 @@ public class GuiVeinsEditor extends GuiScreen
 		@Override
 		protected boolean isSelected(int slot)
 		{
-			CaveVein vein = contents.get(slot, null);
-
-			return vein != null && selected.contains(vein);
+			return selected.contains(contents.get(slot));
 		}
 
 		@Override
@@ -1313,6 +1302,31 @@ public class GuiVeinsEditor extends GuiScreen
 			}
 
 			return false;
+		}
+
+		protected void swapVeins(int index1, int index2)
+		{
+			if (index1 >= 0 && index1 < veins.size() && index2 >= 0 && index2 < veins.size())
+			{
+				Collections.swap(veins, index1, index2);
+			}
+		}
+		protected void swapContents(int index1, int index2)
+		{
+			if (index1 >= 0 && index1 < contents.size() && index2 >= 0 && index2 < contents.size())
+			{
+				Collections.swap(contents, index1, index2);
+			}
+		}
+
+		protected void swapVeinsTo(int index, int amount)
+		{
+			swapVeins(index, MathHelper.clamp(index + amount, 0, veins.size() - 1));
+		}
+
+		protected void swapContentsTo(int index, int amount)
+		{
+			swapContents(index, MathHelper.clamp(index + amount, 0, contents.size() - 1));
 		}
 	}
 }

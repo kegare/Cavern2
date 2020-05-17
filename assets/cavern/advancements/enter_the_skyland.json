@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "cavern:mirage_book",
+            "data": 7
+        },
+        "title": {
+            "translate": "advancements.cavern.enter_the_skyland.title"
+        },
+        "description": {
+            "translate": "advancements.cavern.enter_the_skyland.description"
+        }
+    },
+    "parent": "cavern:enter_the_crown_cliffs",
+    "criteria": {
+        "entered_skyland": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

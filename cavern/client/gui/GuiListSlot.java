@@ -12,7 +12,6 @@ import com.google.common.base.Strings;
 
 import cavern.client.CaveRenderingRegistry;
 import cavern.core.Cavern;
-import cavern.util.ArrayListExtended;
 import cavern.util.BlockMeta;
 import cavern.util.PanoramaPaths;
 import net.minecraft.block.state.IBlockState;
@@ -31,6 +30,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,7 +40,7 @@ import net.minecraftforge.oredict.OreDictionary;
 @SideOnly(Side.CLIENT)
 public abstract class GuiListSlot extends GuiSlot
 {
-	public static final ArrayListExtended<PanoramaPaths> PANORAMA_PATHS = new ArrayListExtended<>();
+	public static final NonNullList<PanoramaPaths> PANORAMA_PATHS = NonNullList.create();
 
 	private static final Random RANDOM = new Random();
 
@@ -57,7 +57,7 @@ public abstract class GuiListSlot extends GuiSlot
 				paths[j] = new ResourceLocation(Cavern.MODID, String.format("textures/gui/panorama/%d/%d.png", i, j));
 			}
 
-			PANORAMA_PATHS.addIfAbsent(new PanoramaPaths(paths[0], paths[1], paths[2], paths[3], paths[4], paths[5]));
+			PANORAMA_PATHS.add(new PanoramaPaths(paths[0], paths[1], paths[2], paths[3], paths[4], paths[5]));
 		}
 	}
 
@@ -77,6 +77,7 @@ public abstract class GuiListSlot extends GuiSlot
 		this.panoramaBackground = mc.getTextureManager().getDynamicTextureLocation("background", viewportTexture);
 	}
 
+	@Nullable
 	public PanoramaPaths getPanoramaPaths()
 	{
 		if (PANORAMA_PATHS.isEmpty())
@@ -85,7 +86,7 @@ public abstract class GuiListSlot extends GuiSlot
 		}
 		else if (currentPanoramaPaths == null)
 		{
-			currentPanoramaPaths = PANORAMA_PATHS.get(RANDOM.nextInt(PANORAMA_PATHS.size()), null);
+			currentPanoramaPaths = PANORAMA_PATHS.get(RANDOM.nextInt(PANORAMA_PATHS.size()));
 		}
 
 		return currentPanoramaPaths;
@@ -124,6 +125,13 @@ public abstract class GuiListSlot extends GuiSlot
 
 			for (int l = 0; l < 6; ++l)
 			{
+				PanoramaPaths paths = getPanoramaPaths();
+
+				if (paths == null)
+				{
+					break;
+				}
+
 				GlStateManager.pushMatrix();
 
 				switch (l)
@@ -145,7 +153,7 @@ public abstract class GuiListSlot extends GuiSlot
 						break;
 				}
 
-				mc.getTextureManager().bindTexture(getPanoramaPaths().getPath(l));
+				mc.getTextureManager().bindTexture(paths.getPath(l));
 				buffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 				int i = 255 / (k + 1);
 				buffer.pos(-1.0D, -1.0D, 1.0D).tex(0.0D, 0.0D).color(255, 255, 255, i).endVertex();

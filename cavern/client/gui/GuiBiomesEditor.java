@@ -25,7 +25,6 @@ import cavern.config.CavernConfig;
 import cavern.config.Config;
 import cavern.config.manager.CaveBiome;
 import cavern.config.manager.CaveBiomeManager;
-import cavern.util.ArrayListExtended;
 import cavern.util.BlockMeta;
 import cavern.util.CaveFilters;
 import net.minecraft.block.Block;
@@ -34,6 +33,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -436,8 +436,8 @@ public class GuiBiomesEditor extends GuiScreen
 							{
 								CaveBiome caveBiome = new CaveBiome(biome, 10);
 
-								biomeList.biomes.addIfAbsent(caveBiome);
-								biomeList.contents.addIfAbsent(caveBiome);
+								biomeList.biomes.add(caveBiome);
+								biomeList.contents.add(caveBiome);
 								biomeList.selected.add(caveBiome);
 							}
 
@@ -559,19 +559,15 @@ public class GuiBiomesEditor extends GuiScreen
 		}
 		else if (biomeList.isMouseYWithinSlotBounds(mouseY) && isCtrlKeyDown())
 		{
-			CaveBiome caveBiome = biomeList.contents.get(biomeList.getSlotIndexFromScreenCoords(mouseX, mouseY), null);
+			CaveBiome caveBiome = biomeList.contents.get(biomeList.getSlotIndexFromScreenCoords(mouseX, mouseY));
+			List<String> info = Lists.newArrayList();
+			String prefix = TextFormatting.GRAY.toString();
 
-			if (caveBiome != null)
-			{
-				List<String> info = Lists.newArrayList();
-				String prefix = TextFormatting.GRAY.toString();
+			info.add(prefix + I18n.format(Config.LANG_KEY + "biomes.weight") + ": " + caveBiome.getWeight());
+			info.add(prefix + I18n.format(Config.LANG_KEY + "biomes.terrainBlock") + ": " + caveBiome.getTerrainBlock().getName());
+			info.add(prefix + I18n.format(Config.LANG_KEY + "biomes.topBlock") + ": " + caveBiome.getTopBlock().getName());
 
-				info.add(prefix + I18n.format(Config.LANG_KEY + "biomes.weight") + ": " + caveBiome.getWeight());
-				info.add(prefix + I18n.format(Config.LANG_KEY + "biomes.terrainBlock") + ": " + caveBiome.getTerrainBlock().getName());
-				info.add(prefix + I18n.format(Config.LANG_KEY + "biomes.topBlock") + ": " + caveBiome.getTopBlock().getName());
-
-				drawHoveringText(info, mouseX, mouseY);
-			}
+			drawHoveringText(info, mouseX, mouseY);
 		}
 
 		if (biomeList.selected.size() > 1 && mouseX <= 100 && mouseY <= 20)
@@ -784,15 +780,15 @@ public class GuiBiomesEditor extends GuiScreen
 
 		biomes.stream().sorted().forEach(biome ->
 		{
-			biomeList.biomes.addIfAbsent(biome);
-			biomeList.contents.addIfAbsent(biome);
+			biomeList.biomes.add(biome);
+			biomeList.contents.add(biome);
 		});
 	}
 
 	protected class BiomeList extends GuiListSlot
 	{
-		protected final ArrayListExtended<CaveBiome> biomes = new ArrayListExtended<>();
-		protected final ArrayListExtended<CaveBiome> contents = new ArrayListExtended<>();
+		protected final NonNullList<CaveBiome> biomes = NonNullList.create();
+		protected final NonNullList<CaveBiome> contents = NonNullList.create();
 		protected final Set<CaveBiome> selected = Sets.newTreeSet();
 
 		protected final Map<String, List<CaveBiome>> filterCache = Maps.newHashMap();
@@ -842,13 +838,7 @@ public class GuiBiomesEditor extends GuiScreen
 		@Override
 		protected void drawSlot(int slot, int par2, int par3, int par4, int mouseX, int mouseY, float partialTicks)
 		{
-			CaveBiome caveBiome = contents.get(slot, null);
-
-			if (caveBiome == null)
-			{
-				return;
-			}
-
+			CaveBiome caveBiome = contents.get(slot);
 			Biome biome = caveBiome.getBiome();
 			String text;
 
@@ -882,9 +872,9 @@ public class GuiBiomesEditor extends GuiScreen
 				return;
 			}
 
-			CaveBiome biome = contents.get(slot, null);
+			CaveBiome biome = contents.get(slot);
 
-			if (biome != null && (clickFlag = !clickFlag == true) && !selected.remove(biome))
+			if ((clickFlag = !clickFlag == true) && !selected.remove(biome))
 			{
 				if (!isCtrlKeyDown())
 				{
@@ -898,9 +888,7 @@ public class GuiBiomesEditor extends GuiScreen
 		@Override
 		protected boolean isSelected(int slot)
 		{
-			CaveBiome biome = contents.get(slot, null);
-
-			return biome != null && selected.contains(biome);
+			return selected.contains(contents.get(slot));
 		}
 
 		protected void setFilter(String filter)

@@ -23,7 +23,6 @@ import com.google.common.collect.Sets;
 import cavern.api.entity.IEntitySummonable;
 import cavern.client.config.CaveConfigGui;
 import cavern.config.Config;
-import cavern.util.ArrayListExtended;
 import cavern.util.CaveUtils;
 import cavern.util.PanoramaPaths;
 import net.minecraft.client.gui.GuiButton;
@@ -36,6 +35,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
@@ -317,8 +317,8 @@ public class GuiSelectMob extends GuiScreen
 
 	protected class MobList extends GuiListSlot
 	{
-		protected final ArrayListExtended<String> mobs = new ArrayListExtended<>();
-		protected final ArrayListExtended<String> contents = new ArrayListExtended<>();
+		protected final NonNullList<String> mobs = NonNullList.create();
+		protected final NonNullList<String> contents = NonNullList.create();
 		protected final Set<String> selected = Sets.newTreeSet();
 		protected final Map<String, List<String>> filterCache = Maps.newHashMap();
 
@@ -344,7 +344,7 @@ public class GuiSelectMob extends GuiScreen
 					continue;
 				}
 
-				mobs.addIfAbsent(entry.getKey().toString());
+				mobs.add(entry.getKey().toString());
 			}
 
 			Collections.sort(mobs);
@@ -398,15 +398,9 @@ public class GuiSelectMob extends GuiScreen
 		}
 
 		@Override
-		protected void drawSlot(int index, int par2, int par3, int par4, int mouseX, int mouseY, float partialTicks)
+		protected void drawSlot(int slot, int par2, int par3, int par4, int mouseX, int mouseY, float partialTicks)
 		{
-			String entry = contents.get(index, null);
-
-			if (Strings.isNullOrEmpty(entry))
-			{
-				return;
-			}
-
+			String entry = contents.get(slot);
 			String name;
 
 			switch (nameType)
@@ -423,22 +417,20 @@ public class GuiSelectMob extends GuiScreen
 		}
 
 		@Override
-		protected void elementClicked(int index, boolean flag, int mouseX, int mouseY)
+		protected void elementClicked(int slot, boolean flag, int mouseX, int mouseY)
 		{
-			String entry = contents.get(index, null);
+			String entry = contents.get(slot);
 
-			if (!Strings.isNullOrEmpty(entry) && (clickFlag = !clickFlag == true) && !selected.remove(entry))
+			if ((clickFlag = !clickFlag == true) && !selected.remove(entry))
 			{
 				selected.add(entry);
 			}
 		}
 
 		@Override
-		protected boolean isSelected(int index)
+		protected boolean isSelected(int slot)
 		{
-			String entry = contents.get(index, null);
-
-			return !Strings.isNullOrEmpty(entry) && selected.contains(entry);
+			return selected.contains(contents.get(slot));
 		}
 
 		protected void setFilter(String filter)

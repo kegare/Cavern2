@@ -57,6 +57,11 @@ public interface DimensionWrapper
 
 	boolean isInCrownCliffs(@Nullable Entity entity);
 
+	@Nullable
+	DimensionType getSkyland();
+
+	boolean isInSkyland(@Nullable Entity entity);
+
 	boolean isInCaveDimensions(@Nullable Entity entity);
 
 	boolean isCaveDimensions(@Nullable DimensionType type);

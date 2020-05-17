@@ -32,8 +32,8 @@ public class GuiRegeneration extends GuiScreen
 	protected GuiButton regenButton;
 	protected GuiButton cancelButton;
 
-	protected GuiCheckBox backupCheckBox, cavernCheckBox, hugeCavernCheckBox, aquaCavernCheckBox,
-		cavelandCheckBox, caveniaCheckBox, frostMountainsCheckBox, wideDesertCheckBox, theVoidCheckBox, darkForestCheckBox, crownCliffsCheckBox;
+	protected GuiCheckBox backupCheckBox, cavernCheckBox, hugeCavernCheckBox, aquaCavernCheckBox, cavelandCheckBox, caveniaCheckBox,
+		frostMountainsCheckBox, wideDesertCheckBox, theVoidCheckBox, darkForestCheckBox, crownCliffsCheckBox, skylandCheckBox;
 
 	private HoverChecker backupHoverChecker;
 
@@ -195,6 +195,19 @@ public class GuiRegeneration extends GuiScreen
 
 		before = crownCliffsCheckBox;
 
+		if (skylandCheckBox == null)
+		{
+			skylandCheckBox = new GuiCheckBox(12, 10, before.y + before.height + 5, I18n.format(mirage + ".skyland.name"), dimensions.contains(CaveDimensions.SKYLAND));
+		}
+
+		if (CaveDimensions.SKYLAND == null)
+		{
+			skylandCheckBox.enabled = false;
+			skylandCheckBox.setIsChecked(false);
+		}
+
+		before = skylandCheckBox;
+
 		buttonList.clear();
 		buttonList.add(regenButton);
 		buttonList.add(cancelButton);
@@ -209,6 +222,7 @@ public class GuiRegeneration extends GuiScreen
 		buttonList.add(theVoidCheckBox);
 		buttonList.add(darkForestCheckBox);
 		buttonList.add(crownCliffsCheckBox);
+		buttonList.add(skylandCheckBox);
 
 		if (backupHoverChecker == null)
 		{
@@ -286,6 +300,11 @@ public class GuiRegeneration extends GuiScreen
 					if (crownCliffsCheckBox.isChecked())
 					{
 						message.dimensions.add(CaveDimensions.CROWN_CLIFFS);
+					}
+
+					if (skylandCheckBox.isChecked())
+					{
+						message.dimensions.add(CaveDimensions.SKYLAND);
 					}
 
 					if (!message.dimensions.isEmpty())

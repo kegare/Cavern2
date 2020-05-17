@@ -21,7 +21,6 @@ import com.google.common.collect.Sets;
 
 import cavern.client.config.CaveConfigGui;
 import cavern.config.Config;
-import cavern.util.ArrayListExtended;
 import cavern.util.CaveUtils;
 import cavern.util.PanoramaPaths;
 import net.minecraft.client.gui.GuiButton;
@@ -29,6 +28,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.ArrayEntry;
@@ -411,8 +411,8 @@ public class GuiSelectOreDict extends GuiScreen
 
 	protected class OreDictList extends GuiListSlot
 	{
-		protected final ArrayListExtended<OreDictEntry> entries = new ArrayListExtended<>();
-		protected final ArrayListExtended<OreDictEntry> contents = new ArrayListExtended<>();
+		protected final NonNullList<OreDictEntry> entries = NonNullList.create();
+		protected final NonNullList<OreDictEntry> contents = NonNullList.create();
 		protected final Set<OreDictEntry> selected = Sets.newTreeSet();
 		protected final Map<String, List<OreDictEntry>> filterCache = Maps.newHashMap();
 
@@ -449,8 +449,8 @@ public class GuiSelectOreDict extends GuiScreen
 
 				if (selectorCallback == null || selectorCallback.isValidEntry(entry))
 				{
-					entries.addIfAbsent(entry);
-					contents.addIfAbsent(entry);
+					entries.add(entry);
+					contents.add(entry);
 
 					if (select.contains(name))
 					{
@@ -509,13 +509,7 @@ public class GuiSelectOreDict extends GuiScreen
 		@Override
 		protected void drawSlot(int slot, int par2, int par3, int par4, int mouseX, int mouseY, float partialTicks)
 		{
-			OreDictEntry entry = contents.get(slot, null);
-
-			if (entry == null)
-			{
-				return;
-			}
-
+			OreDictEntry entry = contents.get(slot);
 			String name = entry.getName();
 
 			if (nameType == 1)
@@ -542,9 +536,9 @@ public class GuiSelectOreDict extends GuiScreen
 		@Override
 		protected void elementClicked(int slot, boolean flag, int mouseX, int mouseY)
 		{
-			OreDictEntry entry = contents.get(slot, null);
+			OreDictEntry entry = contents.get(slot);
 
-			if (entry != null && (clickFlag = !clickFlag == true) && !selected.remove(entry))
+			if ((clickFlag = !clickFlag == true) && !selected.remove(entry))
 			{
 				selected.add(entry);
 			}
@@ -553,9 +547,7 @@ public class GuiSelectOreDict extends GuiScreen
 		@Override
 		protected boolean isSelected(int slot)
 		{
-			OreDictEntry entry = contents.get(slot, null);
-
-			return entry != null && selected.contains(entry);
+			return selected.contains(contents.get(slot));
 		}
 
 		protected void setFilter(String filter)

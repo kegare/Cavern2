@@ -32,7 +32,7 @@ import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WorldProviderCavern extends WorldProviderSurface implements ICustomSeed, IWorldEntitySpawner
+public class WorldProviderCavern extends WorldProviderSurface implements CustomSeedProvider, IWorldEntitySpawner
 {
 	private CustomSeedData seedData;
 	private CustomHeightData heightData;

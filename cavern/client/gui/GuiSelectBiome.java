@@ -21,7 +21,6 @@ import com.google.common.collect.Sets;
 
 import cavern.client.config.CaveConfigGui;
 import cavern.config.Config;
-import cavern.util.ArrayListExtended;
 import cavern.util.CaveFilters;
 import cavern.util.CaveUtils;
 import cavern.util.PanoramaPaths;
@@ -33,6 +32,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -40,6 +40,7 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.HoverChecker;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -225,67 +226,63 @@ public class GuiSelectBiome extends GuiScreen
 		}
 		else if (biomeList.isMouseYWithinSlotBounds(mouseY) && isCtrlKeyDown())
 		{
-			Biome biome = biomeList.contents.get(biomeList.getSlotIndexFromScreenCoords(mouseX, mouseY), null);
+			Biome biome = biomeList.contents.get(biomeList.getSlotIndexFromScreenCoords(mouseX, mouseY));
+			List<String> info = Lists.newArrayList();
 
-			if (biome != null)
+			info.add(biome.getBiomeName() + TextFormatting.DARK_GRAY + "   " + biome.getRegistryName().toString());
+
+			IBlockState state = biome.topBlock;
+			Block block = state.getBlock();
+			int meta = block.getMetaFromState(state);
+			ItemStack stack = new ItemStack(block, 1, meta);
+			boolean hasItem = stack.getItem() != Items.AIR;
+
+			String text;
+
+			if (hasItem)
 			{
-				List<String> info = Lists.newArrayList();
-
-				info.add(biome.getBiomeName() + TextFormatting.DARK_GRAY + "   " + biome.getRegistryName().toString());
-
-				IBlockState state = biome.topBlock;
-				Block block = state.getBlock();
-				int meta = block.getMetaFromState(state);
-				ItemStack stack = new ItemStack(block, 1, meta);
-				boolean hasItem = stack.getItem() != Items.AIR;
-
-				String text;
-
-				if (hasItem)
-				{
-					text = stack.getDisplayName();
-				}
-				else
-				{
-					text = block.getRegistryName() + ":" + meta;
-				}
-
-				info.add(TextFormatting.GRAY + I18n.format(Config.LANG_KEY + "select.biome.info.topBlock") + ": " + text);
-
-				state = biome.fillerBlock;
-				block = state.getBlock();
-				meta = block.getMetaFromState(state);
-				stack = new ItemStack(block, 1, meta);
-				hasItem = stack.getItem() != Items.AIR;
-
-				if (hasItem)
-				{
-					text = stack.getDisplayName();
-				}
-				else
-				{
-					text = block.getRegistryName() + ":" + meta;;
-				}
-
-				info.add(TextFormatting.GRAY + I18n.format(Config.LANG_KEY + "select.biome.info.fillerBlock") + ": " + text);
-
-				info.add(TextFormatting.GRAY + I18n.format(Config.LANG_KEY + "select.biome.info.temperature") + ": " + biome.getDefaultTemperature());
-				info.add(TextFormatting.GRAY + I18n.format(Config.LANG_KEY + "select.biome.info.rainfall") + ": " + biome.getRainfall());
-
-				if (BiomeDictionary.hasAnyType(biome))
-				{
-					Set<String> types = Sets.newTreeSet();
-
-					for (Type type : BiomeDictionary.getTypes(biome))
-					{
-						types.add(type.getName());
-					}
-
-					info.add(TextFormatting.GRAY + I18n.format(Config.LANG_KEY + "select.biome.info.type") + ": " + Joiner.on(", ").skipNulls().join(types));
-				}
-
-				drawHoveringText(info, mouseX, mouseY);
+				text = stack.getDisplayName();
 			}
+			else
+			{
+				text = block.getRegistryName() + ":" + meta;
+			}
+
+			info.add(TextFormatting.GRAY + I18n.format(Config.LANG_KEY + "select.biome.info.topBlock") + ": " + text);
+
+			state = biome.fillerBlock;
+			block = state.getBlock();
+			meta = block.getMetaFromState(state);
+			stack = new ItemStack(block, 1, meta);
+			hasItem = stack.getItem() != Items.AIR;
+
+			if (hasItem)
+			{
+				text = stack.getDisplayName();
+			}
+			else
+			{
+				text = block.getRegistryName() + ":" + meta;;
+			}
+
+			info.add(TextFormatting.GRAY + I18n.format(Config.LANG_KEY + "select.biome.info.fillerBlock") + ": " + text);
+
+			info.add(TextFormatting.GRAY + I18n.format(Config.LANG_KEY + "select.biome.info.temperature") + ": " + biome.getDefaultTemperature());
+			info.add(TextFormatting.GRAY + I18n.format(Config.LANG_KEY + "select.biome.info.rainfall") + ": " + biome.getRainfall());
+
+			if (BiomeDictionary.hasAnyType(biome))
+			{
+				Set<String> types = Sets.newTreeSet();
+
+				for (Type type : BiomeDictionary.getTypes(biome))
+				{
+					types.add(type.getName());
+				}
+
+				info.add(TextFormatting.GRAY + I18n.format(Config.LANG_KEY + "select.biome.info.type") + ": " + Joiner.on(", ").skipNulls().join(types));
+			}
+
+			drawHoveringText(info, mouseX, mouseY);
 		}
 
 		if (!biomeList.selected.isEmpty())
@@ -401,8 +398,8 @@ public class GuiSelectBiome extends GuiScreen
 
 	protected class BiomeList extends GuiListSlot implements Comparator<Biome>
 	{
-		protected final ArrayListExtended<Biome> biomes = new ArrayListExtended<>();
-		protected final ArrayListExtended<Biome> contents = new ArrayListExtended<>();
+		protected final NonNullList<Biome> biomes = NonNullList.create();
+		protected final NonNullList<Biome> contents = NonNullList.create();
 		protected final Set<Biome> selected = Sets.newTreeSet(this);
 		protected final Map<String, List<Biome>> filterCache = Maps.newHashMap();
 
@@ -412,7 +409,7 @@ public class GuiSelectBiome extends GuiScreen
 		{
 			super(GuiSelectBiome.this.mc, 0, 0, 0, 0, 18);
 
-			for (Biome biome : Biome.REGISTRY)
+			for (Biome biome : ForgeRegistries.BIOMES.getValuesCollection())
 			{
 				if (selectorCallback == null || selectorCallback.isValidEntry(biome))
 				{
@@ -510,13 +507,7 @@ public class GuiSelectBiome extends GuiScreen
 		@Override
 		protected void drawSlot(int slot, int par2, int par3, int par4, int mouseX, int mouseY, float partialTicks)
 		{
-			Biome biome = contents.get(slot, null);
-
-			if (biome == null)
-			{
-				return;
-			}
-
+			Biome biome = contents.get(slot);
 			boolean isTabDown = Keyboard.isKeyDown(Keyboard.KEY_TAB);
 
 			if (isTabDown)
@@ -540,9 +531,9 @@ public class GuiSelectBiome extends GuiScreen
 		@Override
 		protected void elementClicked(int slot, boolean flag, int mouseX, int mouseY)
 		{
-			Biome biome = contents.get(slot, null);
+			Biome biome = contents.get(slot);
 
-			if (biome != null && (clickFlag = !clickFlag == true) && !selected.add(biome))
+			if ((clickFlag = !clickFlag == true) && !selected.add(biome))
 			{
 				selected.remove(biome);
 			}
@@ -551,9 +542,7 @@ public class GuiSelectBiome extends GuiScreen
 		@Override
 		protected boolean isSelected(int slot)
 		{
-			Biome biome = contents.get(slot, null);
-
-			return biome != null && selected.contains(biome);
+			return selected.contains(contents.get(slot));
 		}
 
 		@Override

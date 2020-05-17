@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.base.Strings;
@@ -21,18 +20,13 @@ import com.google.common.collect.Sets;
 
 import cavern.client.config.CaveConfigGui;
 import cavern.config.Config;
-import cavern.util.ArrayListExtended;
 import cavern.util.BlockMeta;
 import cavern.util.CaveFilters;
 import cavern.util.PanoramaPaths;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -46,63 +40,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiSelectBlock extends GuiScreen
 {
-	private static final ArrayListExtended<BlockMeta> BLOCKS = new ArrayListExtended<>();
-
-	static
-	{
-		NonNullList<ItemStack> list = NonNullList.create();
-
-		for (Block block : Block.REGISTRY)
-		{
-			if (block == null || block == Blocks.AIR)
-			{
-				continue;
-			}
-
-			list.clear();
-
-			block.getSubBlocks(ObjectUtils.defaultIfNull(block.getCreativeTabToDisplayOn(), CreativeTabs.SEARCH), list);
-
-			if (list.isEmpty())
-			{
-				if (!block.hasTileEntity(block.getDefaultState()))
-				{
-					BLOCKS.addIfAbsent(new BlockMeta(block, 0));
-				}
-			}
-			else for (ItemStack stack : list)
-			{
-				if (stack.isEmpty())
-				{
-					continue;
-				}
-
-				Block sub = Block.getBlockFromItem(stack.getItem());
-
-				if (sub == null || sub == Blocks.AIR)
-				{
-					continue;
-				}
-
-				int meta = stack.getMetadata();
-
-				if (meta < 0 || meta > 15)
-				{
-					continue;
-				}
-
-				IBlockState state = sub.getStateFromMeta(meta);
-
-				if (state == null || sub.hasTileEntity(state))
-				{
-					continue;
-				}
-
-				BLOCKS.addIfAbsent(new BlockMeta(sub, meta));
-			}
-		}
-	}
-
 	protected final GuiScreen parent;
 
 	protected ISelectorCallback<BlockMeta> selectorCallback;
@@ -549,8 +486,8 @@ public class GuiSelectBlock extends GuiScreen
 
 	protected class BlockList extends GuiListSlot
 	{
-		protected final ArrayListExtended<BlockMeta> entries = new ArrayListExtended<>();
-		protected final ArrayListExtended<BlockMeta> contents = new ArrayListExtended<>();
+		protected final NonNullList<BlockMeta> entries = NonNullList.create();
+		protected final NonNullList<BlockMeta> contents = NonNullList.create();
 		protected final Set<BlockMeta> selected = Sets.newTreeSet();
 		protected final Map<String, List<BlockMeta>> filterCache = Maps.newHashMap();
 
@@ -610,12 +547,12 @@ public class GuiSelectBlock extends GuiScreen
 				});
 			}
 
-			for (BlockMeta blockMeta : BLOCKS)
+			for (BlockMeta blockMeta : SelectListHelper.BLOCKS)
 			{
 				if (selectorCallback == null || selectorCallback.isValidEntry(blockMeta))
 				{
-					entries.addIfAbsent(blockMeta);
-					contents.addIfAbsent(blockMeta);
+					entries.add(blockMeta);
+					contents.add(blockMeta);
 
 					if (select.contains(blockMeta))
 					{
@@ -726,13 +663,7 @@ public class GuiSelectBlock extends GuiScreen
 		@Override
 		protected void drawSlot(int slot, int par2, int par3, int par4, int mouseX, int mouseY, float partialTicks)
 		{
-			BlockMeta blockMeta = contents.get(slot, null);
-
-			if (blockMeta == null)
-			{
-				return;
-			}
-
+			BlockMeta blockMeta = contents.get(slot);
 			String name = getBlockName(blockMeta);
 
 			if (!Strings.isNullOrEmpty(name))
@@ -749,9 +680,9 @@ public class GuiSelectBlock extends GuiScreen
 		@Override
 		protected void elementClicked(int slot, boolean flag, int mouseX, int mouseY)
 		{
-			BlockMeta blockMeta = contents.get(slot, null);
+			BlockMeta blockMeta = contents.get(slot);
 
-			if (blockMeta != null && (clickFlag = !clickFlag == true) && !selected.remove(blockMeta))
+			if ((clickFlag = !clickFlag == true) && !selected.remove(blockMeta))
 			{
 				if (nameField != null || metaField != null)
 				{
@@ -765,9 +696,7 @@ public class GuiSelectBlock extends GuiScreen
 		@Override
 		protected boolean isSelected(int slot)
 		{
-			BlockMeta blockMeta = contents.get(slot, null);
-
-			return blockMeta != null && selected.contains(blockMeta);
+			return selected.contains(contents.get(slot));
 		}
 
 		protected void setFilter(String filter)

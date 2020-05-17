@@ -2,11 +2,10 @@ package cavern.client.gui;
 
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 import cavern.miningassist.MiningAssist;
 import cavern.network.CaveNetworkRegistry;
@@ -140,7 +139,7 @@ public class GuiSelectMiningAssist extends GuiScreen
 
 	protected class ModeList extends GuiListSlot implements Comparator<MiningAssist>
 	{
-		protected final List<MiningAssist> types = Lists.newArrayList(MiningAssist.VALUES);
+		protected final ImmutableList<MiningAssist> types = ImmutableList.copyOf(MiningAssist.VALUES);
 
 		protected boolean clickFlag;
 		protected MiningAssist selected;
@@ -148,8 +147,6 @@ public class GuiSelectMiningAssist extends GuiScreen
 		protected ModeList()
 		{
 			super(GuiSelectMiningAssist.this.mc, 0, 0, 0, 0, 18);
-
-			types.sort(this);
 
 			selected = MiningAssist.byPlayer(GuiSelectMiningAssist.this.mc.player);
 		}

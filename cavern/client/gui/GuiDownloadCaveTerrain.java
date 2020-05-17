@@ -1,5 +1,7 @@
 package cavern.client.gui;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
@@ -38,6 +40,7 @@ public class GuiDownloadCaveTerrain extends GuiDownloadTerrain
 		this.prevTime = Minecraft.getSystemTime();
 	}
 
+	@Nullable
 	public PanoramaPaths getPanoramaPaths()
 	{
 		if (GuiListSlot.PANORAMA_PATHS.isEmpty())
@@ -46,7 +49,7 @@ public class GuiDownloadCaveTerrain extends GuiDownloadTerrain
 		}
 		else if (currentPanoramaPaths == null)
 		{
-			currentPanoramaPaths = GuiListSlot.PANORAMA_PATHS.get(0, null);
+			currentPanoramaPaths = GuiListSlot.PANORAMA_PATHS.get(0);
 		}
 
 		return currentPanoramaPaths;
@@ -85,6 +88,13 @@ public class GuiDownloadCaveTerrain extends GuiDownloadTerrain
 
 			for (int l = 0; l < 6; ++l)
 			{
+				PanoramaPaths paths = getPanoramaPaths();
+
+				if (paths == null)
+				{
+					break;
+				}
+
 				GlStateManager.pushMatrix();
 
 				switch (l)
@@ -106,7 +116,7 @@ public class GuiDownloadCaveTerrain extends GuiDownloadTerrain
 						break;
 				}
 
-				mc.getTextureManager().bindTexture(getPanoramaPaths().getPath(l));
+				mc.getTextureManager().bindTexture(paths.getPath(l));
 				buffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 				int i = 255 / (k + 1);
 				buffer.pos(-1.0D, -1.0D, 1.0D).tex(0.0D, 0.0D).color(255, 255, 255, i).endVertex();

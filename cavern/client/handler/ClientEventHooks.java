@@ -15,6 +15,7 @@ import cavern.client.CaveKeyBindings;
 import cavern.client.gui.GuiDownloadCaveTerrain;
 import cavern.client.gui.GuiLoadCaveTerrain;
 import cavern.client.gui.GuiMiningRecords;
+import cavern.client.gui.GuiSelectMiningAssist;
 import cavern.client.gui.toasts.DelayedToast;
 import cavern.config.AquaCavernConfig;
 import cavern.config.CavelandConfig;
@@ -27,8 +28,8 @@ import cavern.config.HugeCavernConfig;
 import cavern.config.MiningAssistConfig;
 import cavern.config.MirageWorldsConfig;
 import cavern.core.Cavern;
-import cavern.data.MinerRank;
 import cavern.data.Miner;
+import cavern.data.MinerRank;
 import cavern.item.ItemBowCavenic;
 import cavern.item.ItemBowIce;
 import cavern.miningassist.MiningAssist;
@@ -272,7 +273,23 @@ public class ClientEventHooks
 
 		int key = Keyboard.getEventKey();
 
-		if (CaveKeyBindings.KEY_MINING_RECORDS.isActiveAndMatches(key))
+		if (CaveKeyBindings.KEY_MINING_ASSIST.isActiveAndMatches(key))
+		{
+			if (Miner.get(mc.player).getRank() < MiningAssistConfig.minerRank.getValue())
+			{
+				ITextComponent component = new TextComponentTranslation(MinerRank.get(MiningAssistConfig.minerRank.getValue()).getUnlocalizedName());
+				component.getStyle().setItalic(Boolean.valueOf(true));
+				component = new TextComponentTranslation("cavern.miningassist.toggle.failed.message", component);
+				component.getStyle().setColor(TextFormatting.RED);
+
+				mc.ingameGUI.setOverlayMessage(component, false);
+			}
+			else
+			{
+				mc.displayGuiScreen(new GuiSelectMiningAssist());
+			}
+		}
+		else if (CaveKeyBindings.KEY_MINING_RECORDS.isActiveAndMatches(key))
 		{
 			mc.displayGuiScreen(new GuiMiningRecords());
 		}

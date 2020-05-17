@@ -135,6 +135,18 @@ public class DimensionHandler implements DimensionWrapper
 	}
 
 	@Override
+	public DimensionType getSkyland()
+	{
+		return CaveDimensions.SKYLAND;
+	}
+
+	@Override
+	public boolean isInSkyland(Entity entity)
+	{
+		return isInDimension(entity, getSkyland());
+	}
+
+	@Override
 	public boolean isInCaveDimensions(Entity entity)
 	{
 		return isInCaverns(entity) || isInMirageWorlds(entity);
@@ -173,12 +185,14 @@ public class DimensionHandler implements DimensionWrapper
 	@Override
 	public boolean isInMirageWorlds(Entity entity)
 	{
-		return isInCaveland(entity) || isInCavenia(entity) || isInFrostMountains(entity) || isInWideDesert(entity) || isInTheVoid(entity) || isInDarkForest(entity) || isInCrownCliffs(entity);
+		return isInCaveland(entity) || isInCavenia(entity) || isInFrostMountains(entity) || isInWideDesert(entity) ||
+			isInTheVoid(entity) || isInDarkForest(entity) || isInCrownCliffs(entity) || isInSkyland(entity);
 	}
 
 	@Override
 	public boolean isMirageWorlds(DimensionType type)
 	{
-		return type != null && (type == getCaveland() || type == getCavenia() || type == getFrostMountains() || type == getWideDesert() || type == getTheVoid() || type == getDarkForest() || type == getCrownCliffs());
+		return type != null && (type == getCaveland() || type == getCavenia() || type == getFrostMountains() || type == getWideDesert() ||
+			type == getTheVoid() || type == getDarkForest() || type == getCrownCliffs() || type == getSkyland());
 	}
 }

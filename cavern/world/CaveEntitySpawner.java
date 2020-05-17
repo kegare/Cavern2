@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EnumCreatureType;
@@ -277,16 +278,7 @@ public class CaveEntitySpawner
 			}
 		}
 
-		try
-		{
-			return entry.newInstance(world);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-		return null;
+		return (EntityLiving)EntityList.newEntity(entry.entityClass, world);
 	}
 
 	public interface IWorldEntitySpawner

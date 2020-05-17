@@ -9,6 +9,7 @@ import cavern.data.PortalCache;
 import cavern.handler.CaveEventHooks;
 import cavern.util.CaveUtils;
 import cavern.world.CaveDimensions;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +22,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DimensionType;
@@ -135,11 +137,16 @@ public class ItemMirageBook extends Item implements ITeleporter
 
 		player.timeUntilPortal = player.getPortalCooldown();
 
-		player.changeDimension(dimNew.getId(), this);
+		player = (EntityPlayer)player.changeDimension(dimNew.getId(), this);
 
-		if (player.getBedLocation(dimNew.getId()) == null)
+		if (player == null)
 		{
-			player.setSpawnChunk(player.getPosition(), true, dimNew.getId());
+			return false;
+		}
+
+		if (CavernAPI.dimension.isInMirageWorlds(player))
+		{
+			player.sendStatusMessage(new TextComponentTranslation("item.mirageBook.return"), true);
 		}
 
 		return true;
@@ -150,6 +157,13 @@ public class ItemMirageBook extends Item implements ITeleporter
 	{
 		if (attemptToLastPos(world, entity))
 		{
+			return;
+		}
+
+		if (CavernAPI.dimension.isInSkyland(entity))
+		{
+			attemptToSkyland(world, entity);
+
 			return;
 		}
 
@@ -250,6 +264,47 @@ public class ItemMirageBook extends Item implements ITeleporter
 		return true;
 	}
 
+	protected void attemptToSkyland(World world, Entity entity)
+	{
+		int posX = MathHelper.floor(entity.posX);
+		int posZ = MathHelper.floor(entity.posZ);
+		MutableBlockPos pos = new MutableBlockPos();
+
+		Cavern.proxy.loadChunks(world, posX >> 4, posZ >> 4, 3);
+
+		for (int range = 1; range <= 128; ++range)
+		{
+			for (int px = - range; px <= range; ++px)
+			{
+				for (int pz = - range; pz <= range; ++pz)
+				{
+					if (Math.abs(px) < range && Math.abs(pz) < range) continue;
+
+					for (int y = 100; y >= 50; --y)
+					{
+						pos.setPos(posX + px, y, posZ + pz);
+
+						if (world.isAirBlock(pos))
+						{
+							continue;
+						}
+
+						Material material = world.getBlockState(pos).getMaterial();
+
+						if (material.isSolid() || material == Material.WATER)
+						{
+							entity.setPositionAndUpdate(pos.getX() + 0.5D, y + 2.5D, pos.getZ() + 0.5D);
+
+							return;
+						}
+					}
+				}
+			}
+		}
+
+		world.setBlockState(new BlockPos(entity).down(), Blocks.DIRT.getDefaultState());
+	}
+
 	public static ItemStack getRandomBook()
 	{
 		int i = MathHelper.floor(CaveEventHooks.RANDOM.nextDouble() * EnumType.VALUES.length);
@@ -271,7 +326,8 @@ public class ItemMirageBook extends Item implements ITeleporter
 		WIDE_DESERT(3, "wideDesert"),
 		THE_VOID(4, "theVoid"),
 		DARK_FOREST(5, "darkForest"),
-		CROWN_CLIFFS(6, "crownCliffs");
+		CROWN_CLIFFS(6, "crownCliffs"),
+		SKYLAND(7, "skyland");
 
 		public static final EnumType[] VALUES = new EnumType[values().length];
 
@@ -313,6 +369,8 @@ public class ItemMirageBook extends Item implements ITeleporter
 					return CaveDimensions.DARK_FOREST;
 				case CROWN_CLIFFS:
 					return CaveDimensions.CROWN_CLIFFS;
+				case SKYLAND:
+					return CaveDimensions.SKYLAND;
 			}
 
 			return null;

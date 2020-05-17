@@ -18,6 +18,7 @@ import cavern.world.mirage.WorldProviderCavenia;
 import cavern.world.mirage.WorldProviderCrownCliffs;
 import cavern.world.mirage.WorldProviderDarkForest;
 import cavern.world.mirage.WorldProviderFrostMountains;
+import cavern.world.mirage.WorldProviderSkyland;
 import cavern.world.mirage.WorldProviderVoid;
 import cavern.world.mirage.WorldProviderWideDesert;
 import net.minecraft.world.DimensionType;
@@ -37,8 +38,10 @@ public class CaveDimensions
 	public static DimensionType THE_VOID;
 	public static DimensionType DARK_FOREST;
 	public static DimensionType CROWN_CLIFFS;
+	public static DimensionType SKYLAND;
 
-	public static DimensionType register(String name, int id, Class<? extends WorldProvider> provider)
+	@Nullable
+	private static DimensionType register(String name, int id, Class<? extends WorldProvider> provider)
 	{
 		if (Strings.isNullOrEmpty(name) || id == 0 || DimensionManager.isDimensionRegistered(id))
 		{
@@ -65,6 +68,7 @@ public class CaveDimensions
 		THE_VOID = register("the_void", MirageWorldsConfig.theVoid, WorldProviderVoid.class);
 		DARK_FOREST = register("dark_forest", MirageWorldsConfig.darkForest, WorldProviderDarkForest.class);
 		CROWN_CLIFFS = register("crown_cliffs", MirageWorldsConfig.crownCliffs, WorldProviderCrownCliffs.class);
+		SKYLAND = register("skyland", MirageWorldsConfig.skyland, WorldProviderSkyland.class);
 	}
 
 	public static String getLocalizedName(@Nullable DimensionType type)
@@ -124,6 +128,11 @@ public class CaveDimensions
 		if (type == CROWN_CLIFFS)
 		{
 			return Cavern.proxy.translate(suffix + ".crownCliffs.name");
+		}
+
+		if (type == SKYLAND)
+		{
+			return Cavern.proxy.translate(suffix + ".skyland.name");
 		}
 
 		if (CavernAPI.dimension.isMirageWorlds(type))

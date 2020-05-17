@@ -66,4 +66,11 @@ public class CustomSeedData
 	{
 		seed = Long.valueOf(newSeed);
 	}
+
+	public void refreshSeed()
+	{
+		seed = null;
+
+		getSeed();
+	}
 }

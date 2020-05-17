@@ -5,15 +5,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class CaveSounds
+public final class CaveSounds
 {
 	public static final CaveSoundEvent CAVE_PORTAL = new CaveSoundEvent("cave_portal");
 	public static final CaveSoundEvent RANK_PROMOTE = new CaveSoundEvent("rank.promote");
+	public static final CaveSoundEvent FALLING = new CaveSoundEvent("falling");
 
 	public static final CaveSoundEvent MUSIC_CAVES = new CaveSoundEvent("music.caves");
 	public static final CaveSoundEvent MUSIC_AQUA_CAVES = new CaveSoundEvent("music.aqua_caves");
 	public static final CaveSoundEvent MUSIC_CAVELAND = new CaveSoundEvent("music.caveland");
 	public static final CaveSoundEvent MUSIC_CAVENIA = new CaveSoundEvent("music.cavenia");
+	public static final CaveSoundEvent MUSIC_SKYLAND = new CaveSoundEvent("music.skyland");
 
 	public static final CaveSoundEvent MAGIC_SPELLING = new CaveSoundEvent("magic.spelling");
 	public static final CaveSoundEvent MAGIC_CLOSE_BOOK  = new CaveSoundEvent("magic.close_book");
@@ -28,11 +30,13 @@ public class CaveSounds
 	{
 		registry.register(CAVE_PORTAL);
 		registry.register(RANK_PROMOTE);
+		registry.register(FALLING);
 
 		registry.register(MUSIC_CAVES);
 		registry.register(MUSIC_AQUA_CAVES);
 		registry.register(MUSIC_CAVELAND);
 		registry.register(MUSIC_CAVENIA);
+		registry.register(MUSIC_SKYLAND);
 
 		registry.register(MAGIC_SPELLING);
 		registry.register(MAGIC_CLOSE_BOOK);

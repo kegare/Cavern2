@@ -23,7 +23,6 @@ import cavern.client.CaveRenderingRegistry;
 import cavern.client.config.CaveConfigGui;
 import cavern.client.gui.GuiSelectOreDict.OreDictEntry;
 import cavern.config.Config;
-import cavern.util.ArrayListExtended;
 import cavern.util.BlockMeta;
 import cavern.util.CaveFilters;
 import cavern.util.CaveUtils;
@@ -35,6 +34,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
@@ -371,12 +371,9 @@ public class GuiMiningPointsEditor extends GuiScreen
 				{
 					PointEntry entry = new PointEntry(blockMeta, 1);
 
-					if (pointList.points.addIfAbsent(entry))
-					{
-						pointList.contents.addIfAbsent(entry);
-
-						pointList.selected.add(entry);
-					}
+					pointList.points.add(entry);
+					pointList.contents.add(entry);
+					pointList.selected.add(entry);
 				}
 
 				pointList.scrollToTop();
@@ -422,12 +419,9 @@ public class GuiMiningPointsEditor extends GuiScreen
 				{
 					PointEntry entry = new PointEntry(oreDict, 1);
 
-					if (pointList.points.addIfAbsent(entry))
-					{
-						pointList.contents.addIfAbsent(entry);
-
-						pointList.selected.add(entry);
-					}
+					pointList.points.add(entry);
+					pointList.contents.add(entry);
+					pointList.selected.add(entry);
 				}
 
 				pointList.scrollToTop();
@@ -509,26 +503,22 @@ public class GuiMiningPointsEditor extends GuiScreen
 		}
 		else if (pointList.isMouseYWithinSlotBounds(mouseY) && isCtrlKeyDown())
 		{
-			PointEntry entry = pointList.contents.get(pointList.getSlotIndexFromScreenCoords(mouseX, mouseY), null);
+			PointEntry entry = pointList.contents.get(pointList.getSlotIndexFromScreenCoords(mouseX, mouseY));
+			List<String> info = Lists.newArrayList();
+			String prefix = TextFormatting.GRAY.toString();
 
-			if (entry != null)
+			if (entry.isOreDict())
 			{
-				List<String> info = Lists.newArrayList();
-				String prefix = TextFormatting.GRAY.toString();
-
-				if (entry.isOreDict())
-				{
-					info.add(prefix + I18n.format(Config.LANG_KEY + "points.oreDict") + ": " + entry.getOreDict().getName());
-				}
-				else
-				{
-					info.add(prefix + I18n.format(Config.LANG_KEY + "points.block") + ": " + entry.getBlockMeta().getBlockName() + ":" + entry.getBlockMeta().getMetaString());
-				}
-
-				info.add(prefix + I18n.format(Config.LANG_KEY + "points.point") + ": " + entry.getPoint());
-
-				drawHoveringText(info, mouseX, mouseY);
+				info.add(prefix + I18n.format(Config.LANG_KEY + "points.oreDict") + ": " + entry.getOreDict().getName());
 			}
+			else
+			{
+				info.add(prefix + I18n.format(Config.LANG_KEY + "points.block") + ": " + entry.getBlockMeta().getBlockName() + ":" + entry.getBlockMeta().getMetaString());
+			}
+
+			info.add(prefix + I18n.format(Config.LANG_KEY + "points.point") + ": " + entry.getPoint());
+
+			drawHoveringText(info, mouseX, mouseY);
 		}
 
 		if (pointList.selected.size() > 1 && mouseX <= 100 && mouseY <= 20)
@@ -706,8 +696,8 @@ public class GuiMiningPointsEditor extends GuiScreen
 
 	protected class PointList extends GuiListSlot implements Comparator<PointEntry>
 	{
-		protected final ArrayListExtended<PointEntry> points = new ArrayListExtended<>();
-		protected final ArrayListExtended<PointEntry> contents = new ArrayListExtended<>();
+		protected final NonNullList<PointEntry> points = NonNullList.create();
+		protected final NonNullList<PointEntry> contents = NonNullList.create();
 		protected final Set<PointEntry> selected = Sets.newTreeSet(this);
 		protected final Map<String, List<PointEntry>> filterCache = Maps.newHashMap();
 
@@ -806,13 +796,7 @@ public class GuiMiningPointsEditor extends GuiScreen
 		@Override
 		protected void drawSlot(int index, int par2, int par3, int par4, int mouseX, int mouseY, float partialTicks)
 		{
-			PointEntry entry = contents.get(index, null);
-
-			if (entry == null)
-			{
-				return;
-			}
-
+			PointEntry entry = contents.get(index);
 			String text = null;
 			ItemStack stack = null;
 
@@ -885,9 +869,9 @@ public class GuiMiningPointsEditor extends GuiScreen
 				return;
 			}
 
-			PointEntry entry = contents.get(index, null);
+			PointEntry entry = contents.get(index);
 
-			if (entry != null && (clickFlag = !clickFlag == true) && !selected.remove(entry))
+			if ((clickFlag = !clickFlag == true) && !selected.remove(entry))
 			{
 				if (!isCtrlKeyDown())
 				{
@@ -901,9 +885,7 @@ public class GuiMiningPointsEditor extends GuiScreen
 		@Override
 		protected boolean isSelected(int index)
 		{
-			PointEntry entry = contents.get(index, null);
-
-			return entry != null && selected.contains(entry);
+			return selected.contains(contents.get(index));
 		}
 
 		protected void setFilter(String filter)

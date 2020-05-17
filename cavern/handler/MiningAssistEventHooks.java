@@ -5,22 +5,16 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import org.lwjgl.input.Keyboard;
-
 import cavern.api.data.IMiner;
-import cavern.client.CaveKeyBindings;
-import cavern.client.gui.GuiSelectMiningAssist;
 import cavern.config.MiningAssistConfig;
 import cavern.core.Cavern;
 import cavern.data.Miner;
-import cavern.data.MinerRank;
 import cavern.miningassist.MiningAssist;
 import cavern.miningassist.MiningAssistUnit;
 import cavern.miningassist.MiningSnapshot;
 import cavern.util.CaveUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -30,9 +24,6 @@ import net.minecraft.server.management.PlayerInteractionManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -40,12 +31,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MiningAssistEventHooks
 {
@@ -281,42 +268,6 @@ public class MiningAssistEventHooks
 		drops.clear();
 
 		assist.addDrops(pos, items);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onKeyInput(KeyInputEvent event)
-	{
-		if (!Keyboard.getEventKeyState())
-		{
-			return;
-		}
-
-		Minecraft mc = FMLClientHandler.instance().getClient();
-
-		if (mc.player == null)
-		{
-			return;
-		}
-
-		int key = Keyboard.getEventKey();
-
-		if (CaveKeyBindings.KEY_MINING_ASSIST.isActiveAndMatches(key))
-		{
-			if (Miner.get(mc.player).getRank() < MiningAssistConfig.minerRank.getValue())
-			{
-				ITextComponent component = new TextComponentTranslation(MinerRank.get(MiningAssistConfig.minerRank.getValue()).getUnlocalizedName());
-				component.getStyle().setItalic(Boolean.valueOf(true));
-				component = new TextComponentTranslation("cavern.miningassist.toggle.failed.message", component);
-				component.getStyle().setColor(TextFormatting.RED);
-
-				mc.ingameGUI.setOverlayMessage(component, false);
-			}
-			else
-			{
-				mc.displayGuiScreen(new GuiSelectMiningAssist());
-			}
-		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

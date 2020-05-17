@@ -10,7 +10,7 @@
             "translate": "advancements.cavern.slip_ice.description"
         }
     },
-    "parent": "cavern:root",
+    "parent": "cavern:enter_the_frost_mountains",
     "criteria": {
         "slip_ice": {
             "trigger": "minecraft:impossible"

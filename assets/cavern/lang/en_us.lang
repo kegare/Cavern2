@@ -184,6 +184,8 @@ cavern.config.dimension.darkForest=Dark Forest
 cavern.config.dimension.darkForest.tooltip=The dimension id of the Dark Forest. Set to 0 to disable.
 cavern.config.dimension.crownCliffs=Crown Cliffs
 cavern.config.dimension.crownCliffs.tooltip=The dimension id of the Crown Cliffs. Set to 0 to disable.
+cavern.config.dimension.skyland=Skyland
+cavern.config.dimension.skyland.tooltip=The dimension id of the Skyland. Set to 0 to disable.
 
 cavern.config.biomes=Biome Settings
 cavern.config.biomes.tooltip=Change the biome settings of this dimension.
@@ -354,9 +356,10 @@ item.mirageBook.wideDesert.name=Wide Desert
 item.mirageBook.theVoid.name=Void
 item.mirageBook.darkForest.name=Dark Forest
 item.mirageBook.crownCliffs.name=Crown Cliffs
-item.mirageBook.portal=You need a portal. 
+item.mirageBook.skyland.name=Skyland
+item.mirageBook.portal=You need a portal.
+item.mirageBook.return=Right-click the your mirage book to go back.
 item.mirageBook.fail=You cannot use this here.
-
 item.magicBook.name=Magic Book: %s
 item.magicBook.fail.time=You cannot use this yet.
 item.magicBook.fail.place=You cannot use this here.
@@ -485,6 +488,8 @@ advancements.cavern.enter_the_dark_forest.title=Dark Forest
 advancements.cavern.enter_the_dark_forest.description=Enter the Dark Forest
 advancements.cavern.enter_the_crown_cliffs.title=Crown Cliffs
 advancements.cavern.enter_the_crown_cliffs.description=Enter the Crown Cliffs
+advancements.cavern.enter_the_skyland.title=Skyland
+advancements.cavern.enter_the_skyland.description=Enter the Skyland
 
 key.categories.cavern=Cavern
 key.cavern.miningAssist=Toggle Mining Assist

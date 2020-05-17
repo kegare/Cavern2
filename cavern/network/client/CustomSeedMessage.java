@@ -1,7 +1,7 @@
 package cavern.network.client;
 
 import cavern.world.CustomSeedData;
-import cavern.world.ICustomSeed;
+import cavern.world.CustomSeedProvider;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -35,9 +35,9 @@ public class CustomSeedMessage implements IClientMessage<CustomSeedMessage, IMes
 	@Override
 	public IMessage process(Minecraft mc)
 	{
-		if (mc.world.provider instanceof ICustomSeed)
+		if (mc.world.provider instanceof CustomSeedProvider)
 		{
-			CustomSeedData data = ((ICustomSeed)mc.world.provider).getSeedData();
+			CustomSeedData data = ((CustomSeedProvider)mc.world.provider).getSeedData();
 
 			if (data != null)
 			{

@@ -26,7 +26,7 @@ public class CommonProxy
 	{
 		if (world instanceof WorldServer)
 		{
-			((WorldServer)world).getChunkProvider().loadChunk(x, z);
+			((WorldServer)world).getChunkProvider().provideChunk(x, z);
 		}
 	}
 

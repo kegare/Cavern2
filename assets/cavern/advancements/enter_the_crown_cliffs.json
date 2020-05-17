@@ -11,7 +11,7 @@
             "translate": "advancements.cavern.enter_the_crown_cliffs.description"
         }
     },
-    "parent": "cavern:enter_the_crown_cliffs",
+    "parent": "cavern:enter_the_dark_forest",
     "criteria": {
         "entered_crown_cliffs": {
             "trigger": "minecraft:impossible"

@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.lwjgl.input.Keyboard;
 
@@ -21,7 +20,6 @@ import com.google.common.collect.Sets;
 
 import cavern.client.config.CaveConfigGui;
 import cavern.config.Config;
-import cavern.util.ArrayListExtended;
 import cavern.util.CaveFilters;
 import cavern.util.ItemMeta;
 import cavern.util.PanoramaPaths;
@@ -29,9 +27,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -44,34 +39,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiSelectItem extends GuiScreen
 {
-	private static final ArrayListExtended<ItemMeta> ITEMS = new ArrayListExtended<>();
-
-	static
-	{
-		NonNullList<ItemStack> list = NonNullList.create();
-
-		for (Item item : Item.REGISTRY)
-		{
-			if (item == null || item == Items.AIR)
-			{
-				continue;
-			}
-
-			list.clear();
-
-			item.getSubItems(ObjectUtils.defaultIfNull(item.getCreativeTab(), CreativeTabs.SEARCH), list);
-
-			if (list.isEmpty())
-			{
-				ITEMS.addIfAbsent(new ItemMeta(item, 0));
-			}
-			else for (ItemStack stack : list)
-			{
-				ITEMS.addIfAbsent(new ItemMeta(stack));
-			}
-		}
-	}
-
 	protected final GuiScreen parent;
 
 	protected ISelectorCallback<ItemMeta> selectorCallback;
@@ -437,8 +404,8 @@ public class GuiSelectItem extends GuiScreen
 
 	protected class ItemList extends GuiListSlot
 	{
-		protected final ArrayListExtended<ItemMeta> entries = new ArrayListExtended<>();
-		protected final ArrayListExtended<ItemMeta> contents = new ArrayListExtended<>();
+		protected final NonNullList<ItemMeta> entries = NonNullList.create();
+		protected final NonNullList<ItemMeta> contents = NonNullList.create();
 		protected final Set<ItemMeta> selected = Sets.newTreeSet();
 		protected final Map<String, List<ItemMeta>> filterCache = Maps.newHashMap();
 
@@ -496,12 +463,12 @@ public class GuiSelectItem extends GuiScreen
 				});
 			}
 
-			for (ItemMeta itemMeta : ITEMS)
+			for (ItemMeta itemMeta : SelectListHelper.ITEMS)
 			{
 				if (selectorCallback == null || selectorCallback.isValidEntry(itemMeta))
 				{
-					entries.addIfAbsent(itemMeta);
-					contents.addIfAbsent(itemMeta);
+					entries.add(itemMeta);
+					contents.add(itemMeta);
 
 					if (select.contains(itemMeta))
 					{
@@ -597,13 +564,7 @@ public class GuiSelectItem extends GuiScreen
 		@Override
 		protected void drawSlot(int slot, int par2, int par3, int par4, int mouseX, int mouseY, float partialTicks)
 		{
-			ItemMeta itemMeta = contents.get(slot, null);
-
-			if (itemMeta == null)
-			{
-				return;
-			}
-
+			ItemMeta itemMeta = contents.get(slot);
 			ItemStack stack = itemMeta.getItemStack();
 			String name = getItemMetaTypeName(itemMeta, stack);
 
@@ -621,9 +582,9 @@ public class GuiSelectItem extends GuiScreen
 		@Override
 		protected void elementClicked(int slot, boolean flag, int mouseX, int mouseY)
 		{
-			ItemMeta itemMeta = contents.get(slot, null);
+			ItemMeta itemMeta = contents.get(slot);
 
-			if (itemMeta != null && (clickFlag = !clickFlag == true) && !selected.remove(itemMeta))
+			if ((clickFlag = !clickFlag == true) && !selected.remove(itemMeta))
 			{
 				if (nameField != null || metaField != null)
 				{
@@ -637,9 +598,7 @@ public class GuiSelectItem extends GuiScreen
 		@Override
 		protected boolean isSelected(int slot)
 		{
-			ItemMeta itemMeta = contents.get(slot, null);
-
-			return itemMeta != null && selected.contains(itemMeta);
+			return selected.contains(contents.get(slot));
 		}
 
 		protected void setFilter(String filter)

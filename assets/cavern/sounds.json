@@ -59,6 +59,16 @@
       }
     ]
   },
+  "music.skyland": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "cavern:music/skyland",
+        "volume": 0.5,
+        "stream": true
+      }
+    ]
+  },
   "cave_portal": {
     "category": "block",
     "sounds": [
@@ -74,6 +84,14 @@
       {
         "name": "cavern:promote",
         "volume": 0.75
+      }
+    ]
+  },
+  "falling": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "cavern:falling"
       }
     ]
   },

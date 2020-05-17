@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -14,6 +16,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -23,7 +26,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockMeta implements Comparable<BlockMeta>
 {
-	private Block block;
+	private final Block block;
+
 	private int meta;
 
 	public BlockMeta(Block block, int meta)
@@ -48,6 +52,7 @@ public class BlockMeta implements Comparable<BlockMeta>
 		this.meta = getMetaFromString(block, meta);
 	}
 
+	@Nonnull
 	public Block getBlock()
 	{
 		return block;
@@ -55,7 +60,7 @@ public class BlockMeta implements Comparable<BlockMeta>
 
 	public boolean isNotAir()
 	{
-		return block != Blocks.AIR;
+		return !(block instanceof BlockAir);
 	}
 
 	public int getMeta()
@@ -172,7 +177,7 @@ public class BlockMeta implements Comparable<BlockMeta>
 		return i;
 	}
 
-	public static final Pattern NUMBER_PATTERN = Pattern.compile("^[0-9]+$");
+	private static final Pattern NUMBER_PATTERN = Pattern.compile("^[0-9]+$");
 
 	private static final LoadingCache<Pair<Block, String>, Integer> STRING_META_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<Pair<Block, String>, Integer>()
 	{

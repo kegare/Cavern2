@@ -148,7 +148,7 @@ public class CaveItems
 		registerModel(CAVENIC_AXE);
 		registerModel(CAVENIC_BOW);
 		registerModel(ORE_COMPASS);
-		registerModels("mirage_book_", MIRAGE_BOOK, "caveland", "cavenia", "frost_mountains", "wide_desert", "the_void", "dark_forest", "crown_cliffs");
+		registerModels("mirage_book_", MIRAGE_BOOK, "caveland", "cavenia", "frost_mountains", "wide_desert", "the_void", "dark_forest", "crown_cliffs", "skyland");
 		registerModels("magic_book_", MAGIC_BOOK, "storage", "heal", "warp", "teleport", "torch", "invisible", "summon", "explosion", "thunderbolt", "infinity", "overload", "physical_boost");
 	}
 

@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Sets;
 
 import cavern.client.gui.GuiRegeneration;
-import cavern.core.CaveSounds;
 import cavern.data.PlayerData;
 import cavern.item.CaveItems;
 import cavern.item.ItemMirageBook;
@@ -21,7 +20,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DimensionType;
@@ -148,12 +146,6 @@ public class BlockPortalMirageWorlds extends BlockPortalCavern
 			{
 				for (DimensionType type : message.dimensions)
 				{
-					double x = player.posX;
-					double y = player.posY + player.getEyeHeight();
-					double z = player.posZ;
-
-					player.getServerWorld().playSound(player, x, y, z, CaveSounds.CAVE_PORTAL, SoundCategory.BLOCKS, 0.5F, 1.0F);
-
 					CaveItems.MIRAGE_BOOK.transferTo(type, player);
 
 					return;

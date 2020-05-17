@@ -1,7 +1,7 @@
 package cavern.world.mirage;
 
 import cavern.world.CustomSeedData;
-import cavern.world.ICustomSeed;
+import cavern.world.CustomSeedProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -9,7 +9,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 
-public abstract class WorldProviderMirageWorld extends WorldProvider implements ICustomSeed
+public abstract class WorldProviderMirageWorld extends WorldProvider implements CustomSeedProvider
 {
 	protected CustomSeedData seedData;
 

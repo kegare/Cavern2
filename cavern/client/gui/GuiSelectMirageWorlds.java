@@ -2,7 +2,6 @@ package cavern.client.gui;
 
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -10,7 +9,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.input.Keyboard;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import cavern.block.CaveBlocks;
@@ -161,7 +159,7 @@ public class GuiSelectMirageWorlds extends GuiScreen
 
 	protected class WorldList extends GuiListSlot implements Comparator<Pair<DimensionType, ItemStack>>
 	{
-		protected final List<Pair<DimensionType, ItemStack>> types = Lists.newArrayList();
+		protected final NonNullList<Pair<DimensionType, ItemStack>> types = NonNullList.create();
 
 		protected boolean clickFlag;
 		protected Pair<DimensionType, ItemStack> selected;
@@ -277,9 +275,7 @@ public class GuiSelectMirageWorlds extends GuiScreen
 		@Override
 		protected boolean isSelected(int slot)
 		{
-			Pair<DimensionType, ItemStack> entry = types.get(slot);
-
-			return selected == entry;
+			return selected == types.get(slot);
 		}
 
 		@Override

@@ -15,6 +15,8 @@ import cavern.network.client.RegenerationGuiMessage;
 import cavern.network.client.RegenerationGuiMessage.EnumType;
 import cavern.util.CaveUtils;
 import cavern.world.CaveDimensions;
+import cavern.world.CustomSeedData;
+import cavern.world.CustomSeedProvider;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -128,6 +130,16 @@ public class RegenerationMessage implements ISimpleMessage<RegenerationMessage, 
 				DimensionManager.setWorld(world.provider.getDimension(), null, server);
 
 				world.getWorldInfo().setDimensionData(world.provider.getDimension(), null);
+
+				if (world.provider instanceof CustomSeedProvider)
+				{
+					CustomSeedData seed = ((CustomSeedProvider)world.provider).getSeedData();
+
+					if (seed != null)
+					{
+						seed.refreshSeed();
+					}
+				}
 			}
 
 			for (EntityPlayerMP player : server.getPlayerList().getPlayers())

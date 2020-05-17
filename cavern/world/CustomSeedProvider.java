@@ -2,7 +2,7 @@ package cavern.world;
 
 import javax.annotation.Nullable;
 
-public interface ICustomSeed
+public interface CustomSeedProvider
 {
 	@Nullable
 	CustomSeedData getSeedData();

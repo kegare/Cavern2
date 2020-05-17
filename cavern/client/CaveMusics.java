@@ -13,12 +13,14 @@ public class CaveMusics
 	public static MusicType AQUA_CAVES;
 	public static MusicType CAVELAND;
 	public static MusicType CAVENIA;
+	public static MusicType SKYLAND;
 
 	public static void registerMusics()
 	{
 		CAVES = EnumHelperClient.addMusicType("CAVERN_CAVES", CaveSounds.MUSIC_CAVES, 12000, 24000);
 		AQUA_CAVES = EnumHelperClient.addMusicType("AQUA_CAVES", CaveSounds.MUSIC_AQUA_CAVES, 12000, 24000);
 		CAVELAND = EnumHelperClient.addMusicType("CAVELAND", CaveSounds.MUSIC_CAVELAND, 12000, 24000);
-		CAVENIA = EnumHelperClient.addMusicType("CAVENIA", CaveSounds.MUSIC_CAVENIA, 0, 0);
+		CAVENIA = EnumHelperClient.addMusicType("CAVENIA", CaveSounds.MUSIC_CAVENIA, 6000, 12000);
+		SKYLAND = EnumHelperClient.addMusicType("SKYLAND", CaveSounds.MUSIC_SKYLAND, 12000, 24000);
 	}
 }

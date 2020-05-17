@@ -3,6 +3,7 @@ package cavern.network;
 import cavern.core.Cavern;
 import cavern.network.client.CustomSeedMessage;
 import cavern.network.client.ExplosionMessage;
+import cavern.network.client.FallTeleportMessage;
 import cavern.network.client.MagicCancelMessage;
 import cavern.network.client.MinerDataMessage;
 import cavern.network.client.MiningMessage;
@@ -68,6 +69,7 @@ public class CaveNetworkRegistry
 		registerMessage(MirageSelectMessage.class, MirageSelectMessage.class, Side.CLIENT);
 		registerMessage(MagicCancelMessage.class, MagicCancelMessage.class, Side.CLIENT);
 		registerMessage(ExplosionMessage.class, ExplosionMessage.class, Side.CLIENT);
+		registerMessage(FallTeleportMessage.class, FallTeleportMessage.class, Side.CLIENT);
 
 		registerMessage(RegenerationMessage.class, RegenerationMessage.class, Side.SERVER);
 		registerMessage(MiningAssistMessage.class, MiningAssistMessage.class, Side.SERVER);

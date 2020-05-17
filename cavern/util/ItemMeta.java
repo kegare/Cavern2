@@ -1,5 +1,7 @@
 package cavern.util;
 
+import javax.annotation.Nonnull;
+
 import org.apache.commons.lang3.ObjectUtils;
 
 import com.google.common.base.Objects;
@@ -11,8 +13,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemMeta implements Comparable<ItemMeta>
 {
-	private Item item = Items.AIR;
-	private int meta;
+	private final Item item;
+	private final int meta;
 
 	public ItemMeta(Item item, int meta)
 	{
@@ -30,6 +32,7 @@ public class ItemMeta implements Comparable<ItemMeta>
 		this(ObjectUtils.defaultIfNull(Item.getByNameOrId(name), Items.AIR), meta);
 	}
 
+	@Nonnull
 	public Item getItem()
 	{
 		return item;

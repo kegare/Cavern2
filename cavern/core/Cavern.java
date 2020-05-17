@@ -10,6 +10,7 @@ import cavern.client.CaveKeyBindings;
 import cavern.client.CaveMusics;
 import cavern.client.CaveRenderingRegistry;
 import cavern.client.config.CaveConfigEntries;
+import cavern.client.gui.SelectListHelper;
 import cavern.client.handler.ClientEventHooks;
 import cavern.client.handler.MagicEventHooks;
 import cavern.client.handler.MinerHUDEventHooks;
@@ -24,10 +25,13 @@ import cavern.config.HugeCavernConfig;
 import cavern.config.MiningAssistConfig;
 import cavern.config.MirageWorldsConfig;
 import cavern.entity.CaveEntityRegistry;
+import cavern.handler.AquaEventHooks;
 import cavern.handler.CaveEventHooks;
 import cavern.handler.CaveGuiHandler;
 import cavern.handler.CavebornEventHooks;
+import cavern.handler.MinerEventHooks;
 import cavern.handler.MiningAssistEventHooks;
+import cavern.handler.MirageEventHooks;
 import cavern.handler.api.DataHandler;
 import cavern.handler.api.DimensionHandler;
 import cavern.item.CaveItems;
@@ -141,7 +145,10 @@ public class Cavern
 
 		MinecraftForge.EVENT_BUS.register(new CaveEventHooks());
 		MinecraftForge.EVENT_BUS.register(new CavebornEventHooks());
+		MinecraftForge.EVENT_BUS.register(new MinerEventHooks());
 		MinecraftForge.EVENT_BUS.register(new MiningAssistEventHooks());
+		MinecraftForge.EVENT_BUS.register(new AquaEventHooks());
+		MinecraftForge.EVENT_BUS.register(new MirageEventHooks());
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new CaveGuiHandler());
 	}
@@ -249,6 +256,12 @@ public class Cavern
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		loadPlugins();
+
+		if (event.getSide().isClient())
+		{
+			SelectListHelper.setupBlocks();
+			SelectListHelper.setupItems();
+		}
 	}
 
 	public void loadPlugins()
