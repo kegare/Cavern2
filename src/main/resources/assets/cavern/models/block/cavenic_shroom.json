@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "cavern:blocks/cavenic_shroom"
+  }
+}
