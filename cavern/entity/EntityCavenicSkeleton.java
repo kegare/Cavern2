@@ -1,7 +1,5 @@
 package cavern.entity;
 
-import javax.annotation.Nullable;
-
 import cavern.api.CavernAPI;
 import cavern.api.entity.ICavenicMob;
 import cavern.api.entity.IEntitySummonable;
@@ -25,26 +23,23 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
-{
+import javax.annotation.Nullable;
+
+public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob {
 	protected EntityAIAttackRangedBow<EntityCavenicSkeleton> aiArrowAttack;
 	protected EntityAIAttackMelee aiAttackOnCollide;
 
-	public EntityCavenicSkeleton(World world)
-	{
+	public EntityCavenicSkeleton(World world) {
 		super(world);
 		this.experienceValue = 13;
 		this.setSize(0.68F, 2.0F);
 	}
 
-	protected void initCustomAI()
-	{
-		aiArrowAttack = new EntityAIAttackCavenicBow<>(this, 0.975D, 5.0F, 4);
-		aiAttackOnCollide = new EntityAIAttackMelee(this, 1.25D, false)
-		{
+	protected void initCustomAI() {
+		aiArrowAttack = new EntityAIAttackCavenicBow<>(this, 0.975D, 10.0F, 4);
+		aiAttackOnCollide = new EntityAIAttackMelee(this, 1.25D, false) {
 			@Override
-			public void resetTask()
-			{
+			public void resetTask() {
 				super.resetTask();
 
 				EntityCavenicSkeleton.this.setSwingingArms(false);
@@ -68,11 +63,11 @@ public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
 		applyMobAttributes();
 	}
 
-	protected void applyMobAttributes()
-	{
+	protected void applyMobAttributes() {
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(21.0D);
 	}
 
 	@Override

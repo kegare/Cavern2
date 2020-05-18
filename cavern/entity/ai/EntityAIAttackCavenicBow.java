@@ -75,6 +75,7 @@ public class EntityAIAttackCavenicBow<T extends EntityMob & IRangedAttackMob> ex
 		super.startExecuting();
 
 		attacker.setSwingingArms(true);
+		attackCooldown = 20;
 	}
 
 	@Override
@@ -167,10 +168,13 @@ public class EntityAIAttackCavenicBow<T extends EntityMob & IRangedAttackMob> ex
 					attackTime = 0;
 					attackCooldown = 50;
 				}
-				else if (canSee && --attackCooldown <= 0)
-				{
-					if (++attackRapid >= getAttackSpeed())
-					{
+				else if (canSee && --attackCooldown <= 0) {
+
+					if (maxAttackDistance * 0.55F < dist && ++attackRapid >= getAttackSpeed() * 30) {
+						attacker.attackEntityWithRangedAttack(target, ItemBow.getArrowVelocity(60));
+
+						attackRapid = 0;
+					} else if (maxAttackDistance * 0.55F > dist && ++attackRapid >= getAttackSpeed()) {
 						attacker.attackEntityWithRangedAttack(target, ItemBow.getArrowVelocity(5));
 
 						attackRapid = 0;
