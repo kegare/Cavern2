@@ -26,27 +26,27 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-public class BlockCaverShroom extends BlockBush {
+public class BlockCavenicBush extends BlockBush {
     private final Map<ResourceLocation, ResourceLocation> transformMap = new HashMap<>();
     protected static final AxisAlignedBB MUSHROOM_AABB = new AxisAlignedBB(0.30000001192092896D, 0.0D, 0.30000001192092896D, 0.699999988079071D, 0.4000000059604645D, 0.699999988079071D);
 
-    public BlockCaverShroom() {
+    public BlockCavernicBush() {
         super();
-        this.setUnlocalizedName("caver_shroom");
+        this.setUnlocalizedName("cavenicShroom");
         this.setTickRandomly(true);
         this.setSoundType(SoundType.PLANT);
         this.setCreativeTab(Cavern.TAB_CAVERN);
 
-        this.addCavernicTransformation(new ResourceLocation("minecraft", "zombie"), new ResourceLocation("cavern", "cavenic_zombie"));
-        this.addCavernicTransformation(new ResourceLocation("minecraft", "skeleton"), new ResourceLocation("cavern", "cavenic_skeleton"));
-        this.addCavernicTransformation(new ResourceLocation("minecraft", "spider"), new ResourceLocation("cavern", "cavenic_spider"));
-        this.addCavernicTransformation(new ResourceLocation("minecraft", "creeper"), new ResourceLocation("cavern", "cavenic_creeper"));
-        this.addCavernicTransformation(new ResourceLocation("minecraft", "witch"), new ResourceLocation("cavern", "cavenic_witch"));
-        this.addCavernicTransformation(new ResourceLocation("minecraft", "polar_bear"), new ResourceLocation("cavern", "cavenic_bear"));
-        this.addCavernicTransformation(new ResourceLocation("tofucraft", "tofunian"), new ResourceLocation("cavern", "caveman"));
+        this.addCavenicTransformation(new ResourceLocation("minecraft", "zombie"), new ResourceLocation("cavern", "cavenic_zombie"));
+        this.addCavenicTransformation(new ResourceLocation("minecraft", "skeleton"), new ResourceLocation("cavern", "cavenic_skeleton"));
+        this.addCavenicTransformation(new ResourceLocation("minecraft", "spider"), new ResourceLocation("cavern", "cavenic_spider"));
+        this.addCavenicTransformation(new ResourceLocation("minecraft", "creeper"), new ResourceLocation("cavern", "cavenic_creeper"));
+        this.addCavenicTransformation(new ResourceLocation("minecraft", "witch"), new ResourceLocation("cavern", "cavenic_witch"));
+        this.addCavenicTransformation(new ResourceLocation("minecraft", "polar_bear"), new ResourceLocation("cavern", "cavenic_bear"));
+        this.addCavenicTransformation(new ResourceLocation("tofucraft", "tofunian"), new ResourceLocation("cavern", "caveman"));
     }
 
-    private void addCavernicTransformation(ResourceLocation from, ResourceLocation to) {
+    private void addCavenicTransformation(ResourceLocation from, ResourceLocation to) {
         transformMap.put(from, to);
     }
 

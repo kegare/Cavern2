@@ -300,6 +300,7 @@ tile.oreRandomite.name=Randomite Ore
 tile.oreHexcite.name=Hexcite Ore
 tile.blockHexcite.name=Block of Hexcite
 tile.fissured.name=Fissured %s
+tile.cavenicShroom.name=Cavenic Shroom
 tile.acresia.name=Acresia
 tile.perverted.name=Perverted %s
 tile.pervertedWood.name=Perverted Wood
