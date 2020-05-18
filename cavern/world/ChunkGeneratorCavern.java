@@ -1,18 +1,9 @@
 package cavern.world;
 
-import java.util.List;
-import java.util.Random;
-
+import cavern.block.BlockCaverShroom;
 import cavern.config.CavernConfig;
 import cavern.config.manager.CaveBiome;
-import cavern.world.gen.MapGenCavernCaves;
-import cavern.world.gen.MapGenCavernRavine;
-import cavern.world.gen.MapGenExtremeCaves;
-import cavern.world.gen.MapGenExtremeRavine;
-import cavern.world.gen.VeinGenerator;
-import cavern.world.gen.WorldGenCaveDungeons;
-import cavern.world.gen.WorldGenMirageRemnant;
-import cavern.world.gen.WorldGenTowerDungeons;
+import cavern.world.gen.*;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
@@ -27,6 +18,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenBase;
+import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -40,6 +32,9 @@ import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
+
+import java.util.List;
+import java.util.Random;
 
 public class ChunkGeneratorCavern implements IChunkGenerator
 {
@@ -62,14 +57,14 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
+	private final WorldGenerator caverShroomGen = new WorldGenBush(new BlockCaverShroom());
 	private final WorldGenerator dungeonGen = new WorldGenCaveDungeons(CavernConfig.dungeonMobs.getKeys());
 	private final WorldGenerator towerDungeonGen = new WorldGenTowerDungeons(CavernConfig.towerDungeonMobs.getKeys());
 	private final WorldGenerator mirageRemnantGen = new WorldGenMirageRemnant();
 	private final WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
 	private final WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
 
-	public ChunkGeneratorCavern(World world)
-	{
+	public ChunkGeneratorCavern(World world) {
 		this.world = world;
 		this.rand = new Random(world.getSeed());
 	}
@@ -295,8 +290,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 				i += 1;
 			}
 
-			if (rand.nextInt(2) <= i)
-			{
+			if (rand.nextInt(2) <= i) {
 				x = rand.nextInt(16) + 8;
 				y = rand.nextInt(worldHeight - 16) + 10;
 				z = rand.nextInt(16) + 8;
@@ -304,8 +298,16 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 				decorator.mushroomBrownGen.generate(world, rand, blockPos.add(x, y, z));
 			}
 
-			if (rand.nextInt(7) <= i)
-			{
+
+			if (rand.nextInt(10) <= i) {
+				x = rand.nextInt(16) + 8;
+				y = rand.nextInt(worldHeight - 16) + 10;
+				z = rand.nextInt(16) + 8;
+
+				caverShroomGen.generate(world, rand, blockPos.add(x, y, z));
+			}
+
+			if (rand.nextInt(7) <= i) {
 				x = rand.nextInt(16) + 8;
 				y = rand.nextInt(worldHeight - 16) + 10;
 				z = rand.nextInt(16) + 8;
