@@ -79,7 +79,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 	guiFactory = "cavern.client.config.CaveGuiFactory",
 	updateJSON = "https://raw.githubusercontent.com/kegare/Cavern2/master/cavern2.json"
 )
-public class Cavern
+public final class Cavern
 {
 	public static final String MODID = "cavern";
 
@@ -264,7 +264,7 @@ public class Cavern
 		}
 	}
 
-	public void loadPlugins()
+	private void loadPlugins()
 	{
 		if (Loader.isModLoaded(HaCPlugin.LIB_MODID))
 		{

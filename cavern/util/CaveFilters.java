@@ -17,7 +17,7 @@ import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import net.minecraftforge.common.BiomeManager.BiomeType;
 
-public class CaveFilters
+public final class CaveFilters
 {
 	public static boolean blockFilter(@Nullable BlockMeta blockMeta, @Nullable String filter)
 	{

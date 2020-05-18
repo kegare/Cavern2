@@ -60,7 +60,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 
-public class CaveEventHooks
+public final class CaveEventHooks
 {
 	public static final Random RANDOM = new Random();
 

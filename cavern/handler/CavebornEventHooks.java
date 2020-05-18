@@ -29,9 +29,9 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
-public class CavebornEventHooks
+public final class CavebornEventHooks
 {
-	public static final Set<String> FIRST_PLAYERS = Sets.newHashSet();
+	private final Set<String> firstPlayers = Sets.newHashSet();
 
 	@SubscribeEvent
 	public void onPlayerLoadFromFile(PlayerEvent.LoadFromFile event)
@@ -64,7 +64,7 @@ public class CavebornEventHooks
 
 		player.dimension = portal.getDimension().getId();
 
-		FIRST_PLAYERS.add(uuid);
+		firstPlayers.add(uuid);
 	}
 
 	@SubscribeEvent
@@ -77,7 +77,7 @@ public class CavebornEventHooks
 
 		EntityPlayerMP player = (EntityPlayerMP)event.player;
 
-		if (!FIRST_PLAYERS.contains(player.getCachedUniqueIdString()))
+		if (!firstPlayers.contains(player.getCachedUniqueIdString()))
 		{
 			return;
 		}
@@ -100,7 +100,7 @@ public class CavebornEventHooks
 
 		new TeleporterCavern(world, portal).placeEntity(world, player, player.rotationYaw);
 
-		FIRST_PLAYERS.remove(event.player.getCachedUniqueIdString());
+		firstPlayers.remove(event.player.getCachedUniqueIdString());
 
 		DimensionType type = portal.getDimension();
 

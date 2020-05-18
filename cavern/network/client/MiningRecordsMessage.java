@@ -59,13 +59,13 @@ public class MiningRecordsMessage implements IPlayerMessage<MiningRecordsMessage
 	@Override
 	public IMessage process(EntityPlayerSP player)
 	{
-		IMiner stats = Miner.get(player, true);
+		IMiner miner = Miner.get(player, true);
 
-		if (stats != null)
+		if (miner != null)
 		{
 			for (Entry<BlockMeta, Integer> record : records.entrySet())
 			{
-				stats.setMiningRecord(record.getKey(), record.getValue().intValue());
+				miner.setMiningRecord(record.getKey(), record.getValue().intValue());
 			}
 		}
 

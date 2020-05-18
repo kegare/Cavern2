@@ -35,12 +35,12 @@ import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class MirageEventHooks
+public final class MirageEventHooks
 {
-	private static final Random RANDOM = CaveEventHooks.RANDOM;
-	private static final Set<String> FALL_CANCEL_PLAYERS = Sets.newHashSet();
-
 	public static boolean fallDamageCancel;
+
+	private final Random rand = CaveEventHooks.RANDOM;
+	private final Set<String> fallCancelPlayers = Sets.newHashSet();
 
 	@SubscribeEvent
 	public void onLivingDeath(LivingDeathEvent event)
@@ -103,22 +103,22 @@ public class MirageEventHooks
 				return;
 			}
 
-			if (RANDOM.nextDouble() < 0.05D)
+			if (rand.nextDouble() < 0.05D)
 			{
 				Block.spawnAsEntity(world, pos, new ItemStack(Blocks.ICE));
 			}
-			else if (RANDOM.nextDouble() < 0.005D)
+			else if (rand.nextDouble() < 0.005D)
 			{
 				Category category = Category.COMMON;
 
-				if (RANDOM.nextInt(5) == 0)
+				if (rand.nextInt(5) == 0)
 				{
 					category = Category.FOOD;
 				}
 
 				Block.spawnAsEntity(world, pos, RandomiteHelper.getDropItem(category));
 			}
-			else if (stack.getItem() instanceof IIceEquipment && RANDOM.nextDouble() < 0.03D || RANDOM.nextDouble() < 0.01D)
+			else if (stack.getItem() instanceof IIceEquipment && rand.nextDouble() < 0.03D || rand.nextDouble() < 0.01D)
 			{
 				Block.spawnAsEntity(world, pos, new ItemStack(Blocks.PACKED_ICE));
 			}
@@ -168,7 +168,7 @@ public class MirageEventHooks
 				{
 					player.connection.setPlayerLocation(player.posX, 305.0D, player.posZ, player.rotationYaw, 60.0F);
 
-					FALL_CANCEL_PLAYERS.add(player.getCachedUniqueIdString());
+					fallCancelPlayers.add(player.getCachedUniqueIdString());
 				}
 
 				CaveNetworkRegistry.sendTo(new FallTeleportMessage(), player);
@@ -183,7 +183,7 @@ public class MirageEventHooks
 
 		if (entity instanceof EntityPlayer)
 		{
-			if (fallDamageCancel || FALL_CANCEL_PLAYERS.remove(entity.getCachedUniqueIdString()))
+			if (fallDamageCancel || fallCancelPlayers.remove(entity.getCachedUniqueIdString()))
 			{
 				event.setCanceled(true);
 			}

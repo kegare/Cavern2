@@ -35,9 +35,9 @@ import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
-public class MinerEventHooks
+public final class MinerEventHooks
 {
-	private static final Random RANDOM = CaveEventHooks.RANDOM;
+	private final Random rand = CaveEventHooks.RANDOM;
 
 	@SubscribeEvent
 	public void onPlayerLoggedIn(PlayerLoggedInEvent event)
@@ -82,7 +82,7 @@ public class MinerEventHooks
 
 				if (player.inventory.hasItemStack(ItemCave.EnumType.MINER_ORB.getItemStack()))
 				{
-					if (RANDOM.nextDouble() < 0.15D)
+					if (rand.nextDouble() < 0.15D)
 					{
 						point += Math.max(point / 2, 1);
 					}
@@ -98,7 +98,7 @@ public class MinerEventHooks
 				if (combo > 0 && combo % 10 == 0)
 				{
 					world.playSound(null, player.posX, player.posY + 0.25D, player.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
-						SoundCategory.PLAYERS, 0.1F, 0.5F * ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.7F + 1.8F));
+						SoundCategory.PLAYERS, 0.1F, 0.5F * ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.8F));
 
 					player.addExperience(combo / 10);
 				}
@@ -179,7 +179,7 @@ public class MinerEventHooks
 
 		for (ItemStack stack : originalDrops)
 		{
-			if (!stack.isEmpty() && !(stack.getItem() instanceof ItemBlock) && RANDOM.nextFloat() <= f)
+			if (!stack.isEmpty() && !(stack.getItem() instanceof ItemBlock) && rand.nextFloat() <= f)
 			{
 				drops.add(stack.copy());
 			}

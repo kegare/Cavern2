@@ -1,6 +1,5 @@
 package cavern.item;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -21,7 +20,6 @@ import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.EnumHelper;
@@ -30,10 +28,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class CaveItems
+public final class CaveItems
 {
-	private static final NonNullList<Item> ITEMS = NonNullList.create();
-
 	public static final ToolMaterial AQUAMARINE = EnumHelper.addToolMaterial("AQUAMARINE", 2, 200, 8.0F, 1.5F, 15);
 	public static final ToolMaterial MAGNITE = EnumHelper.addToolMaterial("MAGNITE", 3, 10, 100.0F, 11.0F, 50);
 	public static final ToolMaterial HEXCITE = EnumHelper.addToolMaterial("HEXCITE", 3, 1041, 10.0F, 5.0F, 15);
@@ -73,49 +69,37 @@ public class CaveItems
 	public static final ItemMirageBook MIRAGE_BOOK = new ItemMirageBook();
 	public static final ItemMagicBook MAGIC_BOOK = new ItemMagicBook();
 
-	public static List<Item> getItems()
-	{
-		return Collections.unmodifiableList(ITEMS);
-	}
-
-	public static void registerItem(IForgeRegistry<Item> registry, Item item)
-	{
-		ITEMS.add(item);
-
-		registry.register(item);
-	}
-
 	public static void registerItems(IForgeRegistry<Item> registry)
 	{
-		registerItem(registry, CAVE_ITEM.setRegistryName("cave_item"));
-		registerItem(registry, AQUAMARINE_PICKAXE.setRegistryName("aquamarine_pickaxe"));
-		registerItem(registry, AQUAMARINE_AXE.setRegistryName("aquamarine_axe"));
-		registerItem(registry, AQUAMARINE_SHOVEL.setRegistryName("aquamarine_shovel"));
-		registerItem(registry, MAGNITE_SWORD.setRegistryName("magnite_sword"));
-		registerItem(registry, MAGNITE_PICKAXE.setRegistryName("magnite_pickaxe"));
-		registerItem(registry, MAGNITE_AXE.setRegistryName("magnite_axe"));
-		registerItem(registry, MAGNITE_SHOVEL.setRegistryName("magnite_shovel"));
-		registerItem(registry, HEXCITE_SWORD.setRegistryName("hexcite_sword"));
-		registerItem(registry, HEXCITE_PICKAXE.setRegistryName("hexcite_pickaxe"));
-		registerItem(registry, HEXCITE_AXE.setRegistryName("hexcite_axe"));
-		registerItem(registry, HEXCITE_SHOVEL.setRegistryName("hexcite_shovel"));
-		registerItem(registry, HEXCITE_HOE.setRegistryName("hexcite_hoe"));
-		registerItem(registry, HEXCITE_HELMET.setRegistryName("hexcite_helmet"));
-		registerItem(registry, HEXCITE_CHESTPLATE.setRegistryName("hexcite_chestplate"));
-		registerItem(registry, HEXCITE_LEGGINGS.setRegistryName("hexcite_leggings"));
-		registerItem(registry, HEXCITE_BOOTS.setRegistryName("hexcite_boots"));
-		registerItem(registry, ICE_SWORD.setRegistryName("ice_sword"));
-		registerItem(registry, ICE_PICKAXE.setRegistryName("ice_pickaxe"));
-		registerItem(registry, ICE_AXE.setRegistryName("ice_axe"));
-		registerItem(registry, ICE_SHOVEL.setRegistryName("ice_shovel"));
-		registerItem(registry, ICE_HOE.setRegistryName("ice_hoe"));
-		registerItem(registry, ICE_BOW.setRegistryName("ice_bow"));
-		registerItem(registry, CAVENIC_SWORD.setRegistryName("cavenic_sword"));
-		registerItem(registry, CAVENIC_AXE.setRegistryName("cavenic_axe"));
-		registerItem(registry, CAVENIC_BOW.setRegistryName("cavenic_bow"));
-		registerItem(registry, ORE_COMPASS.setRegistryName("ore_compass"));
-		registerItem(registry, MIRAGE_BOOK.setRegistryName("mirage_book"));
-		registerItem(registry, MAGIC_BOOK.setRegistryName("magic_book"));
+		registry.register(CAVE_ITEM.setRegistryName("cave_item"));
+		registry.register(AQUAMARINE_PICKAXE.setRegistryName("aquamarine_pickaxe"));
+		registry.register(AQUAMARINE_AXE.setRegistryName("aquamarine_axe"));
+		registry.register(AQUAMARINE_SHOVEL.setRegistryName("aquamarine_shovel"));
+		registry.register(MAGNITE_SWORD.setRegistryName("magnite_sword"));
+		registry.register(MAGNITE_PICKAXE.setRegistryName("magnite_pickaxe"));
+		registry.register(MAGNITE_AXE.setRegistryName("magnite_axe"));
+		registry.register(MAGNITE_SHOVEL.setRegistryName("magnite_shovel"));
+		registry.register(HEXCITE_SWORD.setRegistryName("hexcite_sword"));
+		registry.register(HEXCITE_PICKAXE.setRegistryName("hexcite_pickaxe"));
+		registry.register(HEXCITE_AXE.setRegistryName("hexcite_axe"));
+		registry.register(HEXCITE_SHOVEL.setRegistryName("hexcite_shovel"));
+		registry.register(HEXCITE_HOE.setRegistryName("hexcite_hoe"));
+		registry.register(HEXCITE_HELMET.setRegistryName("hexcite_helmet"));
+		registry.register(HEXCITE_CHESTPLATE.setRegistryName("hexcite_chestplate"));
+		registry.register(HEXCITE_LEGGINGS.setRegistryName("hexcite_leggings"));
+		registry.register(HEXCITE_BOOTS.setRegistryName("hexcite_boots"));
+		registry.register(ICE_SWORD.setRegistryName("ice_sword"));
+		registry.register(ICE_PICKAXE.setRegistryName("ice_pickaxe"));
+		registry.register(ICE_AXE.setRegistryName("ice_axe"));
+		registry.register(ICE_SHOVEL.setRegistryName("ice_shovel"));
+		registry.register(ICE_HOE.setRegistryName("ice_hoe"));
+		registry.register(ICE_BOW.setRegistryName("ice_bow"));
+		registry.register(CAVENIC_SWORD.setRegistryName("cavenic_sword"));
+		registry.register(CAVENIC_AXE.setRegistryName("cavenic_axe"));
+		registry.register(CAVENIC_BOW.setRegistryName("cavenic_bow"));
+		registry.register(ORE_COMPASS.setRegistryName("ore_compass"));
+		registry.register(MIRAGE_BOOK.setRegistryName("mirage_book"));
+		registry.register(MAGIC_BOOK.setRegistryName("magic_book"));
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -18,7 +18,7 @@ import net.minecraftforge.common.ForgeVersion.Status;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
 
-public class Version
+public final class Version
 {
 	private static String CURRENT;
 

@@ -48,7 +48,7 @@ public final class CaveSounds
 		registry.register(MAGIC_BLAZE);
 	}
 
-	public static class CaveSoundEvent extends SoundEvent
+	private static class CaveSoundEvent extends SoundEvent
 	{
 		public CaveSoundEvent(ResourceLocation key)
 		{

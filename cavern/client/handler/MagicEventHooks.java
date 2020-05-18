@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import cavern.client.CaveKeyBindings;
 import cavern.client.particle.ParticleMagicSpell;
+import cavern.handler.CaveEventHooks;
 import cavern.item.ItemMagicBook;
 import cavern.item.ItemMagicBook.EnumType;
 import cavern.magic.Magic;
@@ -37,9 +38,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MagicEventHooks
+public final class MagicEventHooks
 {
-	private static final Random RANDOM = new Random();
+	private final Random rand = CaveEventHooks.RANDOM;
 
 	private int spellingSlot;
 	private int spellingSoundTicks;
@@ -217,14 +218,14 @@ public class MagicEventHooks
 
 			for (int i = 0; i < 2; ++i)
 			{
-				int var1 = RANDOM.nextInt(2) * 2 - 1;
-				int var2 = RANDOM.nextInt(2) * 2 - 1;
+				int var1 = rand.nextInt(2) * 2 - 1;
+				int var2 = rand.nextInt(2) * 2 - 1;
 				double ptX = mc.player.posX + 0.25D * var1;
-				double ptY = mc.player.posY + 0.7D + RANDOM.nextFloat();
+				double ptY = mc.player.posY + 0.7D + rand.nextFloat();
 				double ptZ = mc.player.posZ + 0.25D * var2;
-				double motionX = RANDOM.nextFloat() * 1.0F * var1;
-				double motionY = (RANDOM.nextFloat() - 0.25D) * 0.125D;
-				double motionZ = RANDOM.nextFloat() * 1.0F * var2;
+				double motionX = rand.nextFloat() * 1.0F * var1;
+				double motionY = (rand.nextFloat() - 0.25D) * 0.125D;
+				double motionZ = rand.nextFloat() * 1.0F * var2;
 				ParticleMagicSpell particle = new ParticleMagicSpell(mc.world, ptX, ptY, ptZ, motionX, motionY, motionZ);
 
 				mc.effectRenderer.addEffect(particle);

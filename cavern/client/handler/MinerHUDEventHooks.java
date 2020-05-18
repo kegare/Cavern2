@@ -8,8 +8,8 @@ import cavern.config.DisplayConfig;
 import cavern.config.GeneralConfig;
 import cavern.config.MiningAssistConfig;
 import cavern.config.property.ConfigDisplayPos;
-import cavern.data.MinerRank;
 import cavern.data.Miner;
+import cavern.data.MinerRank;
 import cavern.data.MiningData;
 import cavern.miningassist.MiningAssist;
 import net.minecraft.block.state.IBlockState;
@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MinerHUDEventHooks
+public final class MinerHUDEventHooks
 {
 	private int posX;
 	private int posY;
@@ -168,20 +168,20 @@ public class MinerHUDEventHooks
 		}
 
 		ScaledResolution resolution = event.getResolution();
-		IMiner stats = Miner.get(mc.player, true);
+		IMiner miner = Miner.get(mc.player, true);
 
-		if (stats == null || stats.getPoint() < 0)
+		if (miner == null || miner.getPoint() < 0)
 		{
 			return;
 		}
 
-		MinerRank minerRank = MinerRank.get(stats.getRank());
-		MiningAssist miningAssist = MiningAssist.get(stats.getMiningAssist());
+		MinerRank minerRank = MinerRank.get(miner.getRank());
+		MiningAssist miningAssist = MiningAssist.get(miner.getMiningAssist());
 
-		String point = Integer.toString(stats.getPoint());
+		String point = Integer.toString(miner.getPoint());
 		String rank = I18n.format(minerRank.getUnlocalizedName());
 
-		if (miningAssist != MiningAssist.DISABLED && stats.getRank() >= MiningAssistConfig.minerRank.getValue())
+		if (miningAssist != MiningAssist.DISABLED && miner.getRank() >= MiningAssistConfig.minerRank.getValue())
 		{
 			rank += " / " + I18n.format(miningAssist.getUnlocalizedName());
 		}
@@ -228,11 +228,11 @@ public class MinerHUDEventHooks
 			point = " " + point;
 		}
 
-		MinerRank nextRank = MinerRank.get(stats.getRank() + 1);
+		MinerRank nextRank = MinerRank.get(miner.getRank() + 1);
 
 		if (minerRank.getRank() < nextRank.getRank())
 		{
-			String per = String.format("%.2f", calcMiningPointPer(stats.getPoint(), nextRank.getPhase(), false)) + "%";
+			String per = String.format("%.2f", calcMiningPointPer(miner.getPoint(), nextRank.getPhase(), false)) + "%";
 
 			point = displayType.isLeft() ? point + " < " + per : per + " > " + point;
 		}

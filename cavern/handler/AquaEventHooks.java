@@ -17,7 +17,7 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class AquaEventHooks
+public final class AquaEventHooks
 {
 	@SubscribeEvent
 	public void onBreakSpeed(BreakSpeed event)

@@ -24,6 +24,7 @@ public class SelectListHelper
 	protected static final NonNullList<BlockMeta> BLOCKS = NonNullList.create();
 	protected static final NonNullList<ItemMeta> ITEMS = NonNullList.create();
 
+	@SuppressWarnings("deprecation")
 	public static void setupBlocks()
 	{
 		NonNullList<ItemStack> subList = NonNullList.create();

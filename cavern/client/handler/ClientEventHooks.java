@@ -78,7 +78,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ClientEventHooks
+public final class ClientEventHooks
 {
 	public static final List<DelayedToast> DELAYED_TOAST = Lists.newArrayList();
 

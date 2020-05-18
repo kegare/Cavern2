@@ -6,6 +6,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 import cavern.config.GeneralConfig;
+import cavern.handler.CaveEventHooks;
 import cavern.item.ItemCave;
 import cavern.util.CaveUtils;
 import cavern.util.WeightedItemStack;
@@ -20,9 +21,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.WeightedRandom;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class RandomiteHelper
+public final class RandomiteHelper
 {
-	private static final Random RANDOM = new Random();
+	private static final Random RANDOM = CaveEventHooks.RANDOM;
 
 	public static void refreshItems()
 	{
@@ -113,7 +114,7 @@ public class RandomiteHelper
 		addItem(Category.COMMON, ItemCave.EnumType.MINER_ORB.getItemStack(), 1);
 	}
 
-	public static boolean addItem(Category category, ItemStack stack, int weight)
+	private static boolean addItem(Category category, ItemStack stack, int weight)
 	{
 		if (stack.isEmpty() || GeneralConfig.randomiteExcludeItems.hasItemStack(stack))
 		{

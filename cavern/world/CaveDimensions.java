@@ -25,7 +25,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.DimensionManager;
 
-public class CaveDimensions
+public final class CaveDimensions
 {
 	public static DimensionType CAVERN;
 	public static DimensionType HUGE_CAVERN;

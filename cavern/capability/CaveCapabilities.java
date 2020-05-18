@@ -24,24 +24,24 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class CaveCapabilities
+public final class CaveCapabilities
 {
 	@CapabilityInject(PortalCache.class)
-	public static Capability<PortalCache> PORTAL_CACHE = null;
+	public static final Capability<PortalCache> PORTAL_CACHE = null;
 	@CapabilityInject(PlayerData.class)
-	public static Capability<PlayerData> PLAYER_DATA = null;
+	public static final Capability<PlayerData> PLAYER_DATA = null;
 	@CapabilityInject(IMiner.class)
-	public static Capability<IMiner> MINER = null;
+	public static final Capability<IMiner> MINER = null;
 	@CapabilityInject(IMiningData.class)
-	public static Capability<IMiningData> MINING_DATA = null;
+	public static final Capability<IMiningData> MINING_DATA = null;
 	@CapabilityInject(MiningAssistUnit.class)
-	public static Capability<MiningAssistUnit> MINING_ASSIST = null;
+	public static final Capability<MiningAssistUnit> MINING_ASSIST = null;
 	@CapabilityInject(OreCompass.class)
-	public static Capability<OreCompass> ORE_COMPASS = null;
+	public static final Capability<OreCompass> ORE_COMPASS = null;
 	@CapabilityInject(MagicBook.class)
-	public static Capability<MagicBook> MAGIC_BOOK = null;
+	public static final Capability<MagicBook> MAGIC_BOOK = null;
 	@CapabilityInject(InventoryMagicStorage.class)
-	public static Capability<InventoryMagicStorage> MAGIC_STORAGE = null;
+	public static final Capability<InventoryMagicStorage> MAGIC_STORAGE = null;
 
 	public static void registerCapabilities()
 	{

@@ -68,6 +68,7 @@ public class BlockMeta implements Comparable<BlockMeta>
 		return meta;
 	}
 
+	@SuppressWarnings("deprecation")
 	public IBlockState getBlockState()
 	{
 		return block.getStateFromMeta(meta);

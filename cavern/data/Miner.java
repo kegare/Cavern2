@@ -50,6 +50,11 @@ public class Miner implements IMiner
 
 	private final Map<BlockMeta, Integer> records = Maps.newHashMap();
 
+	public Miner()
+	{
+		this(null);
+	}
+
 	public Miner(EntityPlayer player)
 	{
 		this.entityPlayer = player;
@@ -313,13 +318,13 @@ public class Miner implements IMiner
 
 	public static void adjustData(EntityPlayerMP player)
 	{
-		IMiner stats = Miner.get(player, true);
+		IMiner miner = Miner.get(player, true);
 
-		if (stats != null)
+		if (miner != null)
 		{
-			stats.adjustData();
+			miner.adjustData();
 
-			CaveNetworkRegistry.sendTo(new MiningRecordsMessage(stats), player);
+			CaveNetworkRegistry.sendTo(new MiningRecordsMessage(miner), player);
 		}
 	}
 

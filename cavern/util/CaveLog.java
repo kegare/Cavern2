@@ -10,7 +10,7 @@ import org.apache.logging.log4j.ThreadContext;
 import cavern.core.Cavern;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
-public class CaveLog
+public final class CaveLog
 {
 	public static final CaveLog LOG = new CaveLog();
 

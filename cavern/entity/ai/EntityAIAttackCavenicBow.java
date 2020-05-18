@@ -168,8 +168,10 @@ public class EntityAIAttackCavenicBow<T extends EntityMob & IRangedAttackMob> ex
 					attackTime = 0;
 					attackCooldown = 50;
 				}
-				else if (canSee && --attackCooldown <= 0) {
-					if (++attackRapid >= getAttackSpeed()) {
+				else if (canSee && --attackCooldown <= 0)
+				{
+					if (++attackRapid >= getAttackSpeed())
+					{
 						attacker.attackEntityWithRangedAttack(target, ItemBow.getArrowVelocity(5));
 
 						attackRapid = 0;

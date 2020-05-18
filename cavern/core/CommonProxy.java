@@ -5,6 +5,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+@SuppressWarnings("deprecation")
 public class CommonProxy
 {
 	public String translate(String key)

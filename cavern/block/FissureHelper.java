@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import cavern.handler.CaveEventHooks;
 import net.minecraft.entity.EntityAreaEffectCloud;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
@@ -12,9 +13,9 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class FissureHelper
+public final class FissureHelper
 {
-	private static final Random RANDOM = new Random();
+	private static final Random RANDOM = CaveEventHooks.RANDOM;
 
 	public static void fireAreaEffect(World world, BlockPos pos, @Nullable EntityLivingBase entity)
 	{
@@ -53,7 +54,7 @@ public class FissureHelper
 		}
 	}
 
-	public static Potion getRandomPotion(boolean badEffect)
+	private static Potion getRandomPotion(boolean badEffect)
 	{
 		if (badEffect)
 		{

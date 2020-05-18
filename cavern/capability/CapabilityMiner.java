@@ -77,7 +77,7 @@ public class CapabilityMiner implements ICapabilitySerializable<NBTTagCompound>
 					instance.readFromNBT((NBTTagCompound)nbt);
 				}
 			},
-			() -> new Miner(null)
+			Miner::new
 		);
 	}
 }

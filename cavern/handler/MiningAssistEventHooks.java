@@ -34,7 +34,7 @@ import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class MiningAssistEventHooks
+public final class MiningAssistEventHooks
 {
 	private boolean breaking;
 	private boolean checking;

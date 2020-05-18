@@ -43,13 +43,13 @@ public class MinerDataMessage implements IPlayerMessage<MinerDataMessage, IMessa
 	@Override
 	public IMessage process(EntityPlayerSP player)
 	{
-		IMiner stats = Miner.get(player, true);
+		IMiner miner = Miner.get(player, true);
 
-		if (stats != null)
+		if (miner != null)
 		{
-			stats.setPoint(point, false);
-			stats.setRank(rank, false);
-			stats.setMiningAssist(miningAssist, false);
+			miner.setPoint(point, false);
+			miner.setRank(rank, false);
+			miner.setMiningAssist(miningAssist, false);
 		}
 
 		return null;

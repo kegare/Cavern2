@@ -40,7 +40,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class CaveUtils
+public final class CaveUtils
 {
 	public static ModContainer getModContainer()
 	{
