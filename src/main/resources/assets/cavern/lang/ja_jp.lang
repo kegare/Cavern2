@@ -361,7 +361,6 @@ item.mirageBook.crownCliffs.name=そびえ立つ絶壁
 item.mirageBook.skyland.name=空の浮島
 item.mirageBook.portal=使用するにはポータルが必要です。
 item.mirageBook.return=帰還するには幻の世界の書をそのまま使用します。
-item.mirageBook.fail=ここでは使用できません。
 item.magicBook.name=魔術書: %s
 item.magicBook.fail.time=まだ使用できません。
 item.magicBook.fail.place=ここでは使用できません。

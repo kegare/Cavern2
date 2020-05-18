@@ -360,7 +360,6 @@ item.mirageBook.crownCliffs.name=Crown Cliffs
 item.mirageBook.skyland.name=Skyland
 item.mirageBook.portal=You need a portal.
 item.mirageBook.return=Right-click the your mirage book to go back.
-item.mirageBook.fail=You cannot use this here.
 item.magicBook.name=Magic Book: %s
 item.magicBook.fail.time=You cannot use this yet.
 item.magicBook.fail.place=You cannot use this here.
