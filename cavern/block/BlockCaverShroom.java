@@ -30,7 +30,7 @@ public class BlockCaverShroom extends BlockBush {
     private final Map<ResourceLocation, ResourceLocation> transformMap = new HashMap<>();
     protected static final AxisAlignedBB MUSHROOM_AABB = new AxisAlignedBB(0.30000001192092896D, 0.0D, 0.30000001192092896D, 0.699999988079071D, 0.4000000059604645D, 0.699999988079071D);
 
-    protected BlockCaverShroom() {
+    public BlockCaverShroom() {
         super();
         this.setUnlocalizedName("caver_shroom");
         this.setTickRandomly(true);
