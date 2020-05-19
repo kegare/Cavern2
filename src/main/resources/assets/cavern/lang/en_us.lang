@@ -393,6 +393,7 @@ entity.CrazySpider.name=Crazy Spider
 entity.CavenicBear.name=Cavenic Bear
 entity.CavenicWitch.name=Cavenic Witch
 entity.Caveman.name=Caveman
+entity.DurangHog.name=Durang Hog
 entity.summon.name=Summoned %s
 
 dimension.cavern.name=Cavern

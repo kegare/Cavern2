@@ -1,11 +1,5 @@
 package cavern.client;
 
-import java.util.Map;
-
-import org.apache.commons.lang3.ObjectUtils;
-
-import com.google.common.collect.Maps;
-
 import cavern.client.renderer.RenderCaveman;
 import cavern.client.renderer.RenderCavenicBear;
 import cavern.client.renderer.RenderCavenicCreeper;
@@ -17,6 +11,7 @@ import cavern.client.renderer.RenderCrazyCreeper;
 import cavern.client.renderer.RenderCrazySkeleton;
 import cavern.client.renderer.RenderCrazySpider;
 import cavern.client.renderer.RenderCrazyZombie;
+import cavern.client.renderer.RenderDurangHog;
 import cavern.client.renderer.RenderMagicTorcher;
 import cavern.entity.EntityCaveman;
 import cavern.entity.EntityCavenicBear;
@@ -30,11 +25,16 @@ import cavern.entity.EntityCrazySkeleton;
 import cavern.entity.EntityCrazySpider;
 import cavern.entity.EntityCrazyZombie;
 import cavern.entity.EntityMagicTorcher;
+import cavern.entity.passive.EntityDurangHog;
+import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.ObjectUtils;
+
+import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class CaveRenderingRegistry
@@ -54,6 +54,7 @@ public class CaveRenderingRegistry
 		RenderingRegistry.registerEntityRenderingHandler(EntityCrazySpider.class, RenderCrazySpider::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCavenicBear.class, RenderCavenicBear::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCaveman.class, RenderCaveman::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityDurangHog.class, RenderDurangHog::new);
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityMagicTorcher.class, RenderMagicTorcher::new);
 	}
