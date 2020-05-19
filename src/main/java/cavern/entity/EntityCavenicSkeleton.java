@@ -25,21 +25,26 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob {
+public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
+{
 	protected EntityAIAttackRangedBow<EntityCavenicSkeleton> aiArrowAttack;
 	protected EntityAIAttackMelee aiAttackOnCollide;
 
-	public EntityCavenicSkeleton(World world) {
+	public EntityCavenicSkeleton(World world)
+	{
 		super(world);
 		this.experienceValue = 13;
 		this.setSize(0.68F, 2.0F);
 	}
 
-	protected void initCustomAI() {
+	protected void initCustomAI()
+	{
 		aiArrowAttack = new EntityAIAttackCavenicBow<>(this, 0.975D, 5.0F, 4);
-		aiAttackOnCollide = new EntityAIAttackMelee(this, 1.25D, false) {
+		aiAttackOnCollide = new EntityAIAttackMelee(this, 1.25D, false)
+		{
 			@Override
-			public void resetTask() {
+			public void resetTask()
+			{
 				super.resetTask();
 
 				EntityCavenicSkeleton.this.setSwingingArms(false);
@@ -63,7 +68,8 @@ public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
 		applyMobAttributes();
 	}
 
-	protected void applyMobAttributes() {
+	protected void applyMobAttributes()
+	{
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
@@ -110,8 +116,7 @@ public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
 			if (!heldMain.isEmpty() && heldMain.getItem() instanceof ItemBow)
 			{
 				tasks.addTask(4, aiArrowAttack);
-			}
-			else
+			} else
 			{
 				tasks.addTask(4, aiAttackOnCollide);
 			}
@@ -129,15 +134,14 @@ public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
 			arrow.setEnchantmentEffectsFromEntity(this, dist);
 
 			return arrow;
-		}
-		else
+		} else
 		{
 			EntityArrow arrow = new EntityCavenicArrow(world, this);
 			arrow.setEnchantmentEffectsFromEntity(this, dist);
 
 			if (heldOff.getItem() == Items.TIPPED_ARROW && arrow instanceof EntityTippedArrow)
 			{
-				((EntityTippedArrow)arrow).setPotionEffect(heldOff);
+				((EntityTippedArrow) arrow).setPotionEffect(heldOff);
 			}
 
 			return arrow;
