@@ -104,6 +104,7 @@ public class ItemBowCavenic extends ItemBow
 		return title.appendText(": ").appendSibling(name);
 	}
 
+	@Override
 	protected ItemStack findAmmo(EntityPlayer player)
 	{
 		if (isArrow(player.getHeldItem(EnumHand.OFF_HAND)))

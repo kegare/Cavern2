@@ -262,7 +262,7 @@ public class GuiSelectBiome extends GuiScreen
 			}
 			else
 			{
-				text = block.getRegistryName() + ":" + meta;;
+				text = block.getRegistryName() + ":" + meta;
 			}
 
 			info.add(TextFormatting.GRAY + I18n.format(Config.LANG_KEY + "select.biome.info.fillerBlock") + ": " + text);

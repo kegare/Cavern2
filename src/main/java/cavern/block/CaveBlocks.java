@@ -161,11 +161,7 @@ public final class CaveBlocks
 		},
 		PERVERTED_LEAVES);
 
-		colors.registerBlockColorHandler((state, world, pos, tintIndex) ->
-		{
-			return DisplayConfig.slipperyIceCustomColor ? 0xEFFAFF : -1;
-		},
-		SLIPPERY_ICE);
+		colors.registerBlockColorHandler((state, world, pos, tintIndex) -> DisplayConfig.slipperyIceCustomColor ? 0xEFFAFF : -1, SLIPPERY_ICE);
 	}
 
 	@SideOnly(Side.CLIENT)

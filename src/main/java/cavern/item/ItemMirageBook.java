@@ -14,8 +14,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -27,6 +30,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.ITeleporter;
 
 public class ItemMirageBook extends Item implements ITeleporter
@@ -50,6 +54,73 @@ public class ItemMirageBook extends Item implements ITeleporter
 	public String getItemStackDisplayName(ItemStack stack)
 	{
 		return Cavern.proxy.translateFormat(getUnlocalizedName() + ".name", super.getItemStackDisplayName(stack));
+	}
+
+	public int getCoupon(ItemStack stack)
+	{
+		if (stack.isEmpty())
+		{
+			return 0;
+		}
+
+		NBTTagCompound tag = stack.getTagCompound();
+
+		if (tag == null || !tag.hasKey("Coupon", NBT.TAG_INT))
+		{
+			EnumType type = EnumType.byItemStack(stack);
+
+			setCoupon(stack, type.getCoupon());
+
+			return type.getCoupon();
+		}
+
+		return tag.getInteger("Coupon");
+	}
+
+	public ItemStack setCoupon(ItemStack stack, int coupon)
+	{
+		stack.setTagInfo("Coupon", new NBTTagInt(Math.max(coupon, 0)));
+
+		return stack;
+	}
+
+	public boolean consumeCoupon(ItemStack stack, int coupon)
+	{
+		if (coupon == 0)
+		{
+			return false;
+		}
+
+		int current = getCoupon(stack);
+
+		if (coupon > 0 && current < coupon)
+		{
+			return false;
+		}
+
+		setCoupon(stack, current - coupon);
+
+		return true;
+	}
+
+	@Override
+	public boolean showDurabilityBar(ItemStack stack)
+	{
+		int coupon = getCoupon(stack);
+
+		return coupon > 0 && coupon < EnumType.byItemStack(stack).getCoupon();
+	}
+
+	@Override
+	public double getDurabilityForDisplay(ItemStack stack)
+	{
+		return 1.0D - ((double)getCoupon(stack) / (double)EnumType.byItemStack(stack).getCoupon());
+	}
+
+	@Override
+	public int getRGBDurabilityForDisplay(ItemStack stack)
+	{
+		return 0xA260BF;
 	}
 
 	@Override
@@ -80,25 +151,25 @@ public class ItemMirageBook extends Item implements ITeleporter
 			return new ActionResult<>(EnumActionResult.PASS, stack);
 		}
 
-		if (!world.isRemote && world.provider.getDimensionType() == type)
+		if (world.provider.getDimensionType() != type)
 		{
+			if (world.isRemote) player.sendStatusMessage(new TextComponentTranslation(getUnlocalizedName() + ".portal"), true);
+
+			return new ActionResult<>(EnumActionResult.PASS, stack);
+		}
+
+		if (consumeCoupon(stack, 1))
+		{
+			if (getCoupon(stack) <= 0)
+			{
+				player.setHeldItem(hand, new ItemStack(Items.BOOK));
+			}
+
 			PlayerData.get(player).setLastTeleportTime(type, world.getTotalWorldTime());
 
 			if (transferTo(null, player))
 			{
 				return new ActionResult<>(EnumActionResult.SUCCESS, stack);
-			}
-		}
-
-		if (world.isRemote)
-		{
-			if (CavernAPI.dimension.isInMirageWorlds(player))
-			{
-				player.sendStatusMessage(new TextComponentTranslation(getUnlocalizedName() + ".fail"), true);
-			}
-			else
-			{
-				player.sendStatusMessage(new TextComponentTranslation(getUnlocalizedName() + ".portal"), true);
 			}
 		}
 
@@ -331,14 +402,21 @@ public class ItemMirageBook extends Item implements ITeleporter
 
 		private final int meta;
 		private final String translationKey;
+		private final int coupon;
 
 		private EnumType(int meta, String name)
 		{
-			this.meta = meta;
-			this.translationKey = name;
+			this(meta, name, 10);
 		}
 
-		public int getMetadata()
+		private EnumType(int meta, String name, int coupon)
+		{
+			this.meta = meta;
+			this.translationKey = name;
+			this.coupon = coupon;
+		}
+
+		public int getMeta()
 		{
 			return meta;
 		}
@@ -346,6 +424,11 @@ public class ItemMirageBook extends Item implements ITeleporter
 		public String getTranslationKey()
 		{
 			return translationKey;
+		}
+
+		public int getCoupon()
+		{
+			return coupon;
 		}
 
 		@Nullable
@@ -376,7 +459,7 @@ public class ItemMirageBook extends Item implements ITeleporter
 
 		public ItemStack getItemStack()
 		{
-			return new ItemStack(CaveItems.MIRAGE_BOOK, 1, getMetadata());
+			return CaveItems.MIRAGE_BOOK.setCoupon(new ItemStack(CaveItems.MIRAGE_BOOK, 1, getMeta()), getCoupon());
 		}
 
 		public static EnumType byMetadata(int meta)
@@ -398,7 +481,7 @@ public class ItemMirageBook extends Item implements ITeleporter
 		{
 			for (EnumType type : values())
 			{
-				VALUES[type.getMetadata()] = type;
+				VALUES[type.getMeta()] = type;
 			}
 		}
 	}

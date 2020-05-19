@@ -32,6 +32,7 @@ import cavern.handler.CavebornEventHooks;
 import cavern.handler.MinerEventHooks;
 import cavern.handler.MiningAssistEventHooks;
 import cavern.handler.MirageEventHooks;
+import cavern.handler.TerrainEventHooks;
 import cavern.handler.api.DataHandler;
 import cavern.handler.api.DimensionHandler;
 import cavern.item.CaveItems;
@@ -149,6 +150,8 @@ public final class Cavern
 		MinecraftForge.EVENT_BUS.register(new MiningAssistEventHooks());
 		MinecraftForge.EVENT_BUS.register(new AquaEventHooks());
 		MinecraftForge.EVENT_BUS.register(new MirageEventHooks());
+
+		MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainEventHooks());
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new CaveGuiHandler());
 	}
