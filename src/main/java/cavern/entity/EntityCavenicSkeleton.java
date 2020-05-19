@@ -116,7 +116,8 @@ public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
 			if (!heldMain.isEmpty() && heldMain.getItem() instanceof ItemBow)
 			{
 				tasks.addTask(4, aiArrowAttack);
-			} else
+			}
+			else
 			{
 				tasks.addTask(4, aiAttackOnCollide);
 			}
@@ -134,7 +135,8 @@ public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
 			arrow.setEnchantmentEffectsFromEntity(this, dist);
 
 			return arrow;
-		} else
+		}
+		else
 		{
 			EntityArrow arrow = new EntityCavenicArrow(world, this);
 			arrow.setEnchantmentEffectsFromEntity(this, dist);

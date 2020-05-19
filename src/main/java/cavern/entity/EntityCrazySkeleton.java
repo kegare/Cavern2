@@ -102,9 +102,7 @@ public class EntityCrazySkeleton extends EntityCavenicSkeleton
 	}
 
 	@Override
-	public void onStruckByLightning(EntityLightningBolt lightningBolt)
-	{
-	}
+	public void onStruckByLightning(EntityLightningBolt lightningBolt) {}
 
 	@SideOnly(Side.CLIENT)
 	@Override

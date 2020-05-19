@@ -83,7 +83,8 @@ public class ModelDurangHog extends ModelBase
 			this.backLegL.render(scale);
 			this.backLegR.render(scale);
 			GlStateManager.popMatrix();
-		} else
+		}
+		else
 		{
 			this.head.render(scale);
 			this.nose.render(scale);
