@@ -1,5 +1,6 @@
 package cavern.client.renderer;
 
+import cavern.util.CaveUtils;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSpider;
 import net.minecraft.entity.monster.EntitySpider;
@@ -10,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderCrazySpider extends RenderSpider<EntitySpider>
 {
-	private static final ResourceLocation CRAZY_SPIDER_TEXTURE = new ResourceLocation("cavern", "textures/entity/crazy_spider.png");
+	private static final ResourceLocation CRAZY_SPIDER_TEXTURE = CaveUtils.getKey("textures/entity/crazy_spider.png");
 
 	public RenderCrazySpider(RenderManager manager)
 	{

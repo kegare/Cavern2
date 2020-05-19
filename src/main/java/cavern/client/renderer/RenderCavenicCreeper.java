@@ -1,5 +1,6 @@
 package cavern.client.renderer;
 
+import cavern.util.CaveUtils;
 import net.minecraft.client.renderer.entity.RenderCreeper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -10,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderCavenicCreeper extends RenderCreeper
 {
-	private static final ResourceLocation CAVENIC_CREEPER_TEXTURE = new ResourceLocation("cavern", "textures/entity/cavenic_creeper.png");
+	private static final ResourceLocation CAVENIC_CREEPER_TEXTURE = CaveUtils.getKey("textures/entity/cavenic_creeper.png");
 
 	public RenderCavenicCreeper(RenderManager manager)
 	{

@@ -1,19 +1,17 @@
-package cavern.entity;
+package cavern.entity.monster;
 
 import cavern.api.entity.IEntitySummonable;
 import cavern.core.Cavern;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.EntityAIZombieAttack;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.DamageSource;
@@ -21,27 +19,27 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 
-public class EntitySummonCavenicZombie extends EntityCavenicZombie implements IEntitySummonable
+public class EntitySummonCavenicSkeleton extends EntityCavenicSkeleton implements IEntitySummonable
 {
 	private int lifeTime;
 	private EntityPlayer summoner;
 
-	public EntitySummonCavenicZombie(World world)
+	public EntitySummonCavenicSkeleton(World world)
 	{
 		this(world, null);
 	}
 
-	public EntitySummonCavenicZombie(World world, int lifeTime)
+	public EntitySummonCavenicSkeleton(World world, int lifeTime)
 	{
 		this(world, lifeTime, null);
 	}
 
-	public EntitySummonCavenicZombie(World world, EntityPlayer player)
+	public EntitySummonCavenicSkeleton(World world, EntityPlayer player)
 	{
-		this(world, 3600, player);
+		this(world, 2400, player);
 	}
 
-	public EntitySummonCavenicZombie(World world, int lifeTime, EntityPlayer player)
+	public EntitySummonCavenicSkeleton(World world, int lifeTime, EntityPlayer player)
 	{
 		super(world);
 		this.experienceValue = 0;
@@ -53,18 +51,10 @@ public class EntitySummonCavenicZombie extends EntityCavenicZombie implements IE
 	@Override
 	protected void initEntityAI()
 	{
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(2, new EntityAIZombieAttack(this, 1.0D, false));
-		tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		tasks.addTask(7, new EntityAIWanderAvoidWater(this, 1.0D));
-		tasks.addTask(8, new EntityAIWatchClosest(this, EntityMob.class, 8.0F));
-		tasks.addTask(8, new EntityAILookIdle(this));
-		applyEntityAI();
-	}
-
-	@Override
-	protected void applyEntityAI()
-	{
+		tasks.addTask(1, new EntityAISwimming(this));
+		tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
+		tasks.addTask(6, new EntityAIWatchClosest(this, EntityMob.class, 8.0F));
+		tasks.addTask(6, new EntityAILookIdle(this));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, 10, true, false, CAN_SUMMON_MOB_TARGET));
 	}
 
@@ -79,6 +69,12 @@ public class EntitySummonCavenicZombie extends EntityCavenicZombie implements IE
 		}
 
 		return Cavern.proxy.translateFormat("entity.summon.name", name);
+	}
+
+	@Override
+	public boolean isFriends(Entity entity)
+	{
+		return entity != null && entity instanceof EntityCavenicSkeleton && entity instanceof IEntitySummonable;
 	}
 
 	@Override
@@ -101,21 +97,6 @@ public class EntitySummonCavenicZombie extends EntityCavenicZombie implements IE
 	public void setFire(int seconds) {}
 
 	@Override
-	public void setBreakDoorsAItask(boolean enabled) {}
-
-	@Override
-	protected int getExperiencePoints(EntityPlayer player)
-	{
-		return 0;
-	}
-
-	@Override
-	protected boolean shouldBurnInDay()
-	{
-		return false;
-	}
-
-	@Override
 	protected boolean canDropLoot()
 	{
 		return false;
@@ -125,12 +106,6 @@ public class EntitySummonCavenicZombie extends EntityCavenicZombie implements IE
 	protected ResourceLocation getLootTable()
 	{
 		return null;
-	}
-
-	@Override
-	protected ItemStack getSkullDrop()
-	{
-		return ItemStack.EMPTY;
 	}
 
 	@Override

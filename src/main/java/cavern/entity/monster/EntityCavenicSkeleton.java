@@ -1,9 +1,12 @@
-package cavern.entity;
+package cavern.entity.monster;
+
+import javax.annotation.Nullable;
 
 import cavern.api.CavernAPI;
 import cavern.api.entity.ICavenicMob;
 import cavern.api.entity.IEntitySummonable;
 import cavern.entity.ai.EntityAIAttackCavenicBow;
+import cavern.entity.projectile.EntityCavenicArrow;
 import cavern.item.CaveItems;
 import cavern.item.ItemCave;
 import net.minecraft.entity.Entity;
@@ -22,8 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
 {
@@ -143,7 +144,7 @@ public class EntityCavenicSkeleton extends EntitySkeleton implements ICavenicMob
 
 			if (heldOff.getItem() == Items.TIPPED_ARROW && arrow instanceof EntityTippedArrow)
 			{
-				((EntityTippedArrow) arrow).setPotionEffect(heldOff);
+				((EntityTippedArrow)arrow).setPotionEffect(heldOff);
 			}
 
 			return arrow;

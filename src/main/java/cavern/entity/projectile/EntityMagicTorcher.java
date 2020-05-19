@@ -1,4 +1,4 @@
-package cavern.entity;
+package cavern.entity.projectile;
 
 import javax.annotation.Nullable;
 

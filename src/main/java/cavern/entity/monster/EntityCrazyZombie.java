@@ -1,80 +1,38 @@
-package cavern.entity;
+package cavern.entity.monster;
 
 import cavern.api.CavernAPI;
 import cavern.client.particle.ParticleCrazyMob;
-import cavern.entity.ai.EntityAIAttackCavenicBow;
-import cavern.item.CaveItems;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Enchantments;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityCrazySkeleton extends EntityCavenicSkeleton
+public class EntityCrazyZombie extends EntityCavenicZombie
 {
-	private final BossInfoServer bossInfo = new BossInfoServer(getDisplayName(), BossInfo.Color.WHITE, BossInfo.Overlay.PROGRESS);
+	private final BossInfoServer bossInfo = new BossInfoServer(getDisplayName(), BossInfo.Color.BLUE, BossInfo.Overlay.PROGRESS);
 
-	public EntityCrazySkeleton(World world)
+	public EntityCrazyZombie(World world)
 	{
 		super(world);
 		this.experienceValue = 50;
-		this.setDropChance(EntityEquipmentSlot.MAINHAND, 1.0F);
-	}
-
-	@Override
-	protected void initCustomAI()
-	{
-		aiArrowAttack = new EntityAIAttackCavenicBow<>(this, 0.99D, 6.0F, 1);
-		aiAttackOnCollide = new EntityAIAttackMelee(this, 1.35D, false)
-		{
-			@Override
-			public void resetTask()
-			{
-				super.resetTask();
-
-				EntityCrazySkeleton.this.setSwingingArms(false);
-			}
-
-			@Override
-			public void startExecuting()
-			{
-				super.startExecuting();
-
-				EntityCrazySkeleton.this.setSwingingArms(true);
-			}
-		};
 	}
 
 	@Override
 	protected void applyMobAttributes()
 	{
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2000.0D);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(50.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(22.0D);
-	}
-
-	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
-	{
-		super.setEquipmentBasedOnDifficulty(difficulty);
-
-		ItemStack stack = new ItemStack(CaveItems.CAVENIC_BOW);
-
-		stack.addEnchantment(Enchantments.INFINITY, 1);
-
-		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(7.5D);
+		getEntityAttribute(SPAWN_REINFORCEMENTS_CHANCE).setBaseValue(0.0D);
 	}
 
 	@Override
@@ -101,9 +59,6 @@ public class EntityCrazySkeleton extends EntityCavenicSkeleton
 		return CavernAPI.dimension.isInCavenia(this) && super.getCanSpawnHere();
 	}
 
-	@Override
-	public void onStruckByLightning(EntityLightningBolt lightningBolt) {}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void onUpdate()
@@ -127,6 +82,28 @@ public class EntityCrazySkeleton extends EntityCavenicSkeleton
 				FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
 			}
 		}
+	}
+
+	@Override
+	public boolean attackEntityAsMob(Entity entity)
+	{
+		boolean ret = super.attackEntityAsMob(entity);
+
+		int power = rand.nextInt(5) == 0 ? rand.nextInt(3) + 3 : 0;
+
+		if (power > 0)
+		{
+			if (entity instanceof EntityLivingBase)
+			{
+				((EntityLivingBase)entity).knockBack(this, power * 0.5F, MathHelper.sin(rotationYaw * 0.017453292F), -MathHelper.cos(rotationYaw * 0.017453292F));
+			}
+			else
+			{
+				entity.addVelocity(-MathHelper.sin(rotationYaw * 0.017453292F) * power * 0.5F, 0.1D, MathHelper.cos(rotationYaw * 0.017453292F) * power * 0.5F);
+			}
+		}
+
+		return ret;
 	}
 
 	@Override

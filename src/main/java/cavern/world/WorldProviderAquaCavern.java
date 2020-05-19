@@ -4,7 +4,7 @@ import cavern.client.CaveMusics;
 import cavern.config.AquaCavernConfig;
 import cavern.config.manager.CaveBiomeManager;
 import cavern.config.property.ConfigBiomeType;
-import cavern.entity.EntityAquaSquid;
+import cavern.entity.passive.EntityAquaSquid;
 import net.minecraft.client.audio.MusicTicker.MusicType;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;

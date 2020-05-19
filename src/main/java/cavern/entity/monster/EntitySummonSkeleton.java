@@ -1,8 +1,7 @@
-package cavern.entity;
+package cavern.entity.monster;
 
 import cavern.api.entity.IEntitySummonable;
 import cavern.core.Cavern;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -10,6 +9,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,27 +19,27 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 
-public class EntitySummonCavenicSkeleton extends EntityCavenicSkeleton implements IEntitySummonable
+public class EntitySummonSkeleton extends EntitySkeleton implements IEntitySummonable
 {
 	private int lifeTime;
 	private EntityPlayer summoner;
 
-	public EntitySummonCavenicSkeleton(World world)
+	public EntitySummonSkeleton(World world)
 	{
 		this(world, null);
 	}
 
-	public EntitySummonCavenicSkeleton(World world, int lifeTime)
+	public EntitySummonSkeleton(World world, int lifeTime)
 	{
 		this(world, lifeTime, null);
 	}
 
-	public EntitySummonCavenicSkeleton(World world, EntityPlayer player)
+	public EntitySummonSkeleton(World world, EntityPlayer player)
 	{
-		this(world, 2400, player);
+		this(world, 6000, player);
 	}
 
-	public EntitySummonCavenicSkeleton(World world, int lifeTime, EntityPlayer player)
+	public EntitySummonSkeleton(World world, int lifeTime, EntityPlayer player)
 	{
 		super(world);
 		this.experienceValue = 0;
@@ -72,12 +72,6 @@ public class EntitySummonCavenicSkeleton extends EntityCavenicSkeleton implement
 	}
 
 	@Override
-	public boolean isFriends(Entity entity)
-	{
-		return entity != null && entity instanceof EntityCavenicSkeleton && entity instanceof IEntitySummonable;
-	}
-
-	@Override
 	public boolean isEntityInvulnerable(DamageSource source)
 	{
 		if (super.isEntityInvulnerable(source))
@@ -107,9 +101,6 @@ public class EntitySummonCavenicSkeleton extends EntityCavenicSkeleton implement
 	{
 		return null;
 	}
-
-	@Override
-	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {}
 
 	@Override
 	protected boolean canDespawn()

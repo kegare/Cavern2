@@ -90,7 +90,7 @@ public final class Cavern
 	@Metadata(MODID)
 	public static ModMetadata metadata;
 
-	@SidedProxy(modId = MODID, clientSide = "cavern.client.ClientProxy", serverSide = "cavern.core.CommonProxy")
+	@SidedProxy(clientSide = "cavern.client.ClientProxy", serverSide = "cavern.core.CommonProxy")
 	public static CommonProxy proxy;
 
 	public static final CreativeTabCavern TAB_CAVERN = new CreativeTabCavern();

@@ -1,4 +1,4 @@
-package cavern.entity;
+package cavern.entity.projectile;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.EntityLivingBase;

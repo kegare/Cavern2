@@ -527,7 +527,7 @@ public class BlockPortalCavern extends BlockPortal
 				}
 			}
 
-			return CaveUtils.areBlockStatesEqual(portalFrame, state);
+			return CaveUtils.isBlockEqual(portalFrame, state);
 		}
 
 		public boolean isValid()

@@ -1,5 +1,6 @@
 package cavern.client.renderer;
 
+import cavern.util.CaveUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSkeleton;
@@ -11,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderCavenicSkeleton extends RenderSkeleton
 {
-	private static final ResourceLocation CAVENIC_SKELETON_TEXTURE = new ResourceLocation("cavern", "textures/entity/cavenic_skeleton.png");
+	private static final ResourceLocation CAVENIC_SKELETON_TEXTURE = CaveUtils.getKey("textures/entity/cavenic_skeleton.png");
 
 	public RenderCavenicSkeleton(RenderManager manager)
 	{

@@ -22,13 +22,6 @@ public class WorldProviderSkyland extends WorldProviderMirageWorld
 	}
 
 	@Override
-	protected void init()
-	{
-		hasSkyLight = true;
-		biomeProvider = new BiomeProviderSkyland(getSeed(), world.getWorldType(), world.getWorldInfo().getGeneratorOptions());
-	}
-
-	@Override
 	protected void generateLightBrightnessTable()
 	{
 		float f = 0.075F;
@@ -78,13 +71,13 @@ public class WorldProviderSkyland extends WorldProviderMirageWorld
 	}
 
 	@Override
-	public boolean shouldMapSpin(String entity, double x, double y, double z)
+	public int getActualHeight()
 	{
-		return false;
+		return 128;
 	}
 
 	@Override
-	public boolean shouldClientCheckLighting()
+	public boolean shouldMapSpin(String entity, double x, double y, double z)
 	{
 		return false;
 	}
@@ -181,11 +174,5 @@ public class WorldProviderSkyland extends WorldProviderMirageWorld
 	public boolean canDoRainSnowIce(Chunk chunk)
 	{
 		return false;
-	}
-
-	@Override
-	public boolean canDropChunk(int x, int z)
-	{
-		return true;
 	}
 }

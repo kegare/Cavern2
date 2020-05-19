@@ -1,13 +1,13 @@
 package cavern.plugin;
 
 import cavern.block.CaveBlocks;
-import cavern.entity.EntityCaveman;
-import cavern.entity.EntityCavenicBear;
-import cavern.entity.EntityCavenicCreeper;
-import cavern.entity.EntityCavenicSkeleton;
-import cavern.entity.EntityCavenicSpider;
-import cavern.entity.EntityCavenicWitch;
-import cavern.entity.EntityCavenicZombie;
+import cavern.entity.monster.EntityCaveman;
+import cavern.entity.monster.EntityCavenicBear;
+import cavern.entity.monster.EntityCavenicCreeper;
+import cavern.entity.monster.EntityCavenicSkeleton;
+import cavern.entity.monster.EntityCavenicSpider;
+import cavern.entity.monster.EntityCavenicWitch;
+import cavern.entity.monster.EntityCavenicZombie;
 import cavern.item.CaveItems;
 import cavern.world.CaveDimensions;
 import defeatedcrow.hac.api.climate.ClimateAPI;

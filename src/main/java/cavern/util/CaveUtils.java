@@ -64,7 +64,7 @@ public final class CaveUtils
 		return new ResourceLocation(Cavern.MODID, key);
 	}
 
-	public static int compareWithNull(Object o1, Object o2)
+	public static int compareWithNull(@Nullable Object o1, @Nullable Object o2)
 	{
 		return (o1 == null ? 1 : 0) - (o2 == null ? 1 : 0);
 	}
@@ -129,16 +129,16 @@ public final class CaveUtils
 		return false;
 	}
 
-	public static boolean areBlockStatesEqual(@Nullable IBlockState stateA, @Nullable IBlockState stateB)
+	public static boolean isBlockEqual(@Nullable IBlockState stateA, @Nullable IBlockState stateB)
 	{
-		if (stateA == stateB)
-		{
-			return true;
-		}
-
 		if (stateA == null || stateB == null)
 		{
 			return false;
+		}
+
+		if (stateA == stateB)
+		{
+			return true;
 		}
 
 		return stateA.getBlock() == stateB.getBlock() && stateA.getBlock().getMetaFromState(stateA) == stateB.getBlock().getMetaFromState(stateB);
@@ -244,11 +244,6 @@ public final class CaveUtils
 	@Nullable
 	public static String getEntityName(ResourceLocation key)
 	{
-		if (key == null)
-		{
-			return null;
-		}
-
 		String entityName = EntityList.getTranslationName(key);
 
 		if (!Strings.isNullOrEmpty(entityName))
@@ -257,12 +252,6 @@ public final class CaveUtils
 		}
 
 		return key.toString();
-	}
-
-	@Nullable
-	public static String getEntityName(Class<? extends Entity> entityClass)
-	{
-		return getEntityName(EntityList.getKey(entityClass));
 	}
 
 	public static boolean isMoving(@Nullable Entity entity)

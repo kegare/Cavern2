@@ -2,10 +2,10 @@ package cavern.magic;
 
 import javax.annotation.Nullable;
 
-import cavern.entity.EntitySummonCavenicSkeleton;
-import cavern.entity.EntitySummonCavenicZombie;
-import cavern.entity.EntitySummonSkeleton;
-import cavern.entity.EntitySummonZombie;
+import cavern.entity.monster.EntitySummonCavenicSkeleton;
+import cavern.entity.monster.EntitySummonCavenicZombie;
+import cavern.entity.monster.EntitySummonSkeleton;
+import cavern.entity.monster.EntitySummonZombie;
 import cavern.handler.CaveEventHooks;
 import cavern.util.PlayerHelper;
 import net.minecraft.entity.EntityLiving;

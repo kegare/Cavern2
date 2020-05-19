@@ -5,8 +5,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import cavern.core.Cavern;
-import cavern.entity.EntityRapidArrow;
-import cavern.entity.EntityTorchArrow;
+import cavern.entity.projectile.EntityRapidArrow;
+import cavern.entity.projectile.EntityTorchArrow;
 import cavern.util.CaveUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
@@ -24,6 +24,7 @@ import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -64,18 +65,9 @@ public class ItemBowCavenic extends ItemBow
 	public BowMode toggleBowMode(ItemStack stack)
 	{
 		BowMode current = BowMode.byItemStack(stack);
-		NBTTagCompound nbt = stack.getTagCompound();
-
-		if (nbt == null)
-		{
-			nbt = new NBTTagCompound();
-
-			stack.setTagCompound(nbt);
-		}
-
 		BowMode next = BowMode.byType(current.getType() + 1);
 
-		nbt.setInteger("Mode", next.getType());
+		stack.setTagInfo("Mode", new NBTTagInt(next.getType()));
 
 		return next;
 	}
@@ -95,40 +87,13 @@ public class ItemBowCavenic extends ItemBow
 		return false;
 	}
 
-	public ITextComponent getBowModeMessage(ItemStack stack)
+	private ITextComponent getBowModeMessage(ItemStack stack)
 	{
 		BowMode mode = BowMode.byItemStack(stack);
 		ITextComponent name = new TextComponentTranslation(mode.getUnlocalizedName(stack));
 		ITextComponent title = new TextComponentTranslation(stack.getUnlocalizedName() + ".mode");
 
 		return title.appendText(": ").appendSibling(name);
-	}
-
-	@Override
-	protected ItemStack findAmmo(EntityPlayer player)
-	{
-		if (isArrow(player.getHeldItem(EnumHand.OFF_HAND)))
-		{
-			return player.getHeldItem(EnumHand.OFF_HAND);
-		}
-		else if (isArrow(player.getHeldItem(EnumHand.MAIN_HAND)))
-		{
-			return player.getHeldItem(EnumHand.MAIN_HAND);
-		}
-		else
-		{
-			for (int i = 0; i < player.inventory.getSizeInventory(); ++i)
-			{
-				ItemStack stack = player.inventory.getStackInSlot(i);
-
-				if (isArrow(stack))
-				{
-					return stack;
-				}
-			}
-
-			return ItemStack.EMPTY;
-		}
 	}
 
 	protected ItemStack findTorch(EntityPlayer player)
@@ -141,32 +106,20 @@ public class ItemBowCavenic extends ItemBow
 		{
 			return player.getHeldItem(EnumHand.MAIN_HAND);
 		}
-		else
-		{
-			for (int i = 0; i < player.inventory.getSizeInventory(); ++i)
-			{
-				ItemStack stack = player.inventory.getStackInSlot(i);
 
-				if (isTorch(stack))
-				{
-					return stack;
-				}
-			}
-
-			return ItemStack.EMPTY;
-		}
+		return player.inventory.mainInventory.stream().filter(this::isTorch).findFirst().orElse(ItemStack.EMPTY);
 	}
 
 	protected boolean isTorch(ItemStack stack)
 	{
-		Block block = Block.getBlockFromItem(stack.getItem());
-
-		if (block != null && block instanceof BlockTorch)
+		if (stack.isEmpty())
 		{
-			return true;
+			return false;
 		}
 
-		return false;
+		Block block = Block.getBlockFromItem(stack.getItem());
+
+		return block != null && block instanceof BlockTorch;
 	}
 
 	@Nullable
@@ -392,7 +345,7 @@ public class ItemBowCavenic extends ItemBow
 
 			NBTTagCompound nbt = stack.getTagCompound();
 
-			if (nbt == null || !nbt.hasKey("Mode", NBT.TAG_ANY_NUMERIC))
+			if (nbt == null || !nbt.hasKey("Mode", NBT.TAG_INT))
 			{
 				return NORMAL;
 			}

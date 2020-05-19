@@ -1,6 +1,6 @@
 package cavern.client.renderer;
 
-import cavern.entity.EntityMagicTorcher;
+import cavern.entity.projectile.EntityMagicTorcher;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;

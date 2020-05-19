@@ -1,4 +1,4 @@
-package cavern.entity;
+package cavern.entity.passive;
 
 import cavern.api.CavernAPI;
 import cavern.core.Cavern;

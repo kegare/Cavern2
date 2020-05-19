@@ -73,14 +73,15 @@ public class WorldProviderCaveland extends WorldProviderCavern
 	@Override
 	public EntityLiving createSpawnCreature(WorldServer world, EnumCreatureType type, BlockPos pos, Biome.SpawnListEntry entry)
 	{
-		if (world.rand.nextInt(30) == 0)
+		if (world.rand.nextInt(20) == 0)
 		{
-			Biome.SpawnListEntry spawnEntry = WeightedRandom.getRandomItem(world.rand, CaveEntityRegistry.CAVELAND_ANIMAL_SPAWNS);
+			Biome.SpawnListEntry spawnEntry = WeightedRandom.getRandomItem(world.rand, CaveEntityRegistry.ANIMAL_SPAWNS);
 
 			try
 			{
 				return spawnEntry.newInstance(world);
-			} catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
