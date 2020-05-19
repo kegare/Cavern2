@@ -3,6 +3,7 @@ package cavern.world;
 import java.util.List;
 import java.util.Random;
 
+import cavern.block.BlockCavenicBush;
 import cavern.config.HugeCavernConfig;
 import cavern.config.manager.CaveBiome;
 import cavern.world.gen.MapGenHugeCaves;
@@ -21,6 +22,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenBase;
+import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -51,6 +53,7 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
+	private final WorldGenerator cavenicShroomGen = new WorldGenBush(new BlockCavenicBush());
 	private final WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
 	private final WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
 
@@ -235,6 +238,15 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 				z = rand.nextInt(16) + 8;
 
 				decorator.mushroomRedGen.generate(world, rand, blockPos.add(x, y, z));
+			}
+
+			if (rand.nextInt(10) <= i)
+			{
+				x = rand.nextInt(16) + 8;
+				y = rand.nextInt(worldHeight - 16) + 10;
+				z = rand.nextInt(16) + 8;
+
+				cavenicShroomGen.generate(world, rand, blockPos.add(x, y, z));
 			}
 		}
 

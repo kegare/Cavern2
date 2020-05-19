@@ -119,7 +119,7 @@ public class EntityDurangHog extends EntityPig
 		}
 		else
 		{
-			return eatTimer > 0 ? ((float) Math.PI / 5F) : rotationPitch * 0.017453292F;
+			return eatTimer > 0 ? ((float)Math.PI / 5F) : rotationPitch * 0.017453292F;
 		}
 	}
 

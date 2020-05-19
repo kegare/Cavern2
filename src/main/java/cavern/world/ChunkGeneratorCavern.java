@@ -316,7 +316,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 				decorator.mushroomRedGen.generate(world, rand, blockPos.add(x, y, z));
 			}
 
-			if (rand.nextInt(10) <= i)
+			if (rand.nextInt(8) <= i)
 			{
 				x = rand.nextInt(16) + 8;
 				y = rand.nextInt(worldHeight - 16) + 10;

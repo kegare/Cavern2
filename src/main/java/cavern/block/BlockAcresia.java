@@ -1,9 +1,6 @@
 package cavern.block;
 
-import java.util.List;
 import java.util.Random;
-
-import com.google.common.collect.Lists;
 
 import cavern.core.Cavern;
 import cavern.item.ItemAcresia;
@@ -25,6 +22,7 @@ import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -236,9 +234,8 @@ public class BlockAcresia extends BlockCrops
 	}
 
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
-		List<ItemStack> ret = Lists.newArrayList();
 		Random rand = world instanceof World ? ((World)world).rand : RANDOM;
 		int count = quantityDropped(state, fortune, rand);
 
@@ -248,7 +245,7 @@ public class BlockAcresia extends BlockCrops
 
 			if (item != null)
 			{
-				ret.add(new ItemStack(item, 1, damageDropped(state)));
+				drops.add(new ItemStack(item, 1, damageDropped(state)));
 			}
 		}
 
@@ -260,11 +257,9 @@ public class BlockAcresia extends BlockCrops
 			{
 				if (rand.nextInt(2 * getMaxAge()) <= age)
 				{
-					ret.add(getSeedItem());
+					drops.add(getSeedItem());
 				}
 			}
 		}
-
-		return ret;
 	}
 }
