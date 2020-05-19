@@ -9,6 +9,7 @@ import cavern.world.gen.MapGenCavelandRavine;
 import cavern.world.gen.VeinGenerator;
 import cavern.world.gen.WorldGenAcresia;
 import cavern.world.gen.WorldGenBirchTreePerverted;
+import cavern.world.gen.WorldGenCaveBush;
 import cavern.world.gen.WorldGenRuinedHouse;
 import cavern.world.gen.WorldGenSpruceTreePerverted;
 import cavern.world.gen.WorldGenTreesPerverted;
@@ -61,6 +62,8 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
+	private final WorldGenerator mushroomBrownGen = new WorldGenCaveBush(Blocks.BROWN_MUSHROOM);
+	private final WorldGenerator mushroomRedGen = new WorldGenCaveBush(Blocks.RED_MUSHROOM);
 	private final WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
 	private final WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
 	private final WorldGenerator deadBushGen = new WorldGenDeadBush();
@@ -248,23 +251,15 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 
 		if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.SHROOM))
 		{
-			for (int i = 0; i < 5; ++i)
-			{
-				x = rand.nextInt(16) + 8;
-				y = rand.nextInt(worldHeight - 10);
-				z = rand.nextInt(16) + 8;
+			x = rand.nextInt(16) + 8;
+			z = rand.nextInt(16) + 8;
 
-				decorator.mushroomBrownGen.generate(world, rand, blockPos.add(x, y, z));
-			}
+			mushroomBrownGen.generate(world, rand, blockPos.add(x, 0, z));
 
-			for (int i = 0; i < 5; ++i)
-			{
-				x = rand.nextInt(16) + 8;
-				y = rand.nextInt(worldHeight - 10);
-				z = rand.nextInt(16) + 8;
+			x = rand.nextInt(16) + 8;
+			z = rand.nextInt(16) + 8;
 
-				decorator.mushroomRedGen.generate(world, rand, blockPos.add(x, y, z));
-			}
+			mushroomRedGen.generate(world, rand, blockPos.add(x, 0, z));
 		}
 
 		if (BiomeDictionary.hasType(biome, Type.SANDY))

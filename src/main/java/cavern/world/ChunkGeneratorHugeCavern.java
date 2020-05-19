@@ -8,6 +8,7 @@ import cavern.config.HugeCavernConfig;
 import cavern.config.manager.CaveBiome;
 import cavern.world.gen.MapGenHugeCaves;
 import cavern.world.gen.VeinGenerator;
+import cavern.world.gen.WorldGenCaveBush;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
@@ -53,6 +54,8 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
+	private final WorldGenerator mushroomBrownGen = new WorldGenCaveBush(Blocks.BROWN_MUSHROOM);
+	private final WorldGenerator mushroomRedGen = new WorldGenCaveBush(Blocks.RED_MUSHROOM);
 	private final WorldGenerator cavenicShroomGen = new WorldGenBush(new BlockCavenicBush());
 	private final WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
 	private final WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
@@ -222,31 +225,28 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 				i += 1;
 			}
 
-			if (rand.nextInt(2) <= i)
-			{
-				x = rand.nextInt(16) + 8;
-				y = rand.nextInt(worldHeight - 16) + 10;
-				z = rand.nextInt(16) + 8;
-
-				decorator.mushroomBrownGen.generate(world, rand, blockPos.add(x, y, z));
-			}
-
 			if (rand.nextInt(7) <= i)
 			{
 				x = rand.nextInt(16) + 8;
-				y = rand.nextInt(worldHeight - 16) + 10;
 				z = rand.nextInt(16) + 8;
 
-				decorator.mushroomRedGen.generate(world, rand, blockPos.add(x, y, z));
+				mushroomBrownGen.generate(world, rand, blockPos.add(x, 0, z));
 			}
 
 			if (rand.nextInt(10) <= i)
 			{
 				x = rand.nextInt(16) + 8;
-				y = rand.nextInt(worldHeight - 16) + 10;
 				z = rand.nextInt(16) + 8;
 
-				cavenicShroomGen.generate(world, rand, blockPos.add(x, y, z));
+				mushroomRedGen.generate(world, rand, blockPos.add(x, 0, z));
+			}
+
+			if (rand.nextInt(5) <= i)
+			{
+				x = rand.nextInt(16) + 8;
+				z = rand.nextInt(16) + 8;
+
+				cavenicShroomGen.generate(world, rand, blockPos.add(x, 0, z));
 			}
 		}
 
