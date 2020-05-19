@@ -1,10 +1,8 @@
 package cavern.entity;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
+import cavern.entity.passive.EntityDurangHog;
 import cavern.util.CaveUtils;
+import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
@@ -14,11 +12,14 @@ import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.List;
+
 public class CaveEntityRegistry
 {
 	public static final List<SpawnListEntry> SPAWNS = Lists.newArrayList();
 	public static final List<SpawnListEntry> CRAZY_SPAWNS = Lists.newArrayList();
 	public static final List<SpawnListEntry> AQUA_SPAWNS = Lists.newArrayList();
+	public static final List<SpawnListEntry> CAVELAND_ANIMAL_SPAWNS = Lists.newArrayList();
 
 	protected static EntityEntry createEntry(Class<? extends Entity> entityClass, String key, String name)
 	{
@@ -49,6 +50,7 @@ public class CaveEntityRegistry
 		registry.register(createEntry(EntityCrazyZombie.class, "crazy_zombie", "CrazyZombie", 0x909090, 0x00A0A0));
 		registry.register(createEntry(EntityCrazySpider.class, "crazy_spider", "CrazySpider", 0x909090, 0x811F1F));
 		registry.register(createEntry(EntityCaveman.class, "caveman", "Caveman", 0xAAAAAA, 0xCCCCCC));
+		registry.register(createEntry(EntityDurangHog.class, "durang_hog", "DurangHog", 0xc69ea0, 0x7d5150));
 		registry.register(createEntry(EntitySummonZombie.class, "summon_zombie", "Zombie"));
 		registry.register(createEntry(EntitySummonSkeleton.class, "summon_skeleton", "Skeleton"));
 		registry.register(createEntry(EntitySummonCavenicZombie.class, "summon_cavenic_zombie", "CavenicZombie"));
@@ -66,6 +68,8 @@ public class CaveEntityRegistry
 		SPAWNS.add(new SpawnListEntry(EntityCavenicWitch.class, 15, 1, 1));
 		SPAWNS.add(new SpawnListEntry(EntityCavenicBear.class, 30, 1, 1));
 		SPAWNS.add(new SpawnListEntry(EntityCaveman.class, 35, 1, 1));
+
+		CAVELAND_ANIMAL_SPAWNS.add(new SpawnListEntry(EntityDurangHog.class, 5, 1, 2));
 
 		CRAZY_SPAWNS.add(new SpawnListEntry(EntityCrazySkeleton.class, 1, 1, 1));
 		CRAZY_SPAWNS.add(new SpawnListEntry(EntityCrazyCreeper.class, 1, 1, 1));

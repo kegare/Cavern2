@@ -395,6 +395,7 @@ entity.CrazySpider.name=クレイジースパイダー
 entity.CavenicBear.name=ケイブニックベア
 entity.CavenicWitch.name=ケイブニックウィッチ
 entity.Caveman.name=ケイブマン
+entity.DurangHog.name=デュラングホッグ
 entity.summon.name=召喚された%s
 
 dimension.cavern.name=大洞窟
