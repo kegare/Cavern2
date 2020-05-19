@@ -35,7 +35,9 @@ public class EntityAIAttackCavenicBow<T extends EntityMob & IRangedAttackMob> ex
 	}
 
 	@Override
-	public void setAttackCooldown(int time) {}
+	public void setAttackCooldown(int time)
+	{
+	}
 
 	@Override
 	public boolean shouldExecute()
@@ -108,8 +110,7 @@ public class EntityAIAttackCavenicBow<T extends EntityMob & IRangedAttackMob> ex
 			if (canSee)
 			{
 				++seeTime;
-			}
-			else
+			} else
 			{
 				--seeTime;
 			}
@@ -118,8 +119,7 @@ public class EntityAIAttackCavenicBow<T extends EntityMob & IRangedAttackMob> ex
 			{
 				attacker.getNavigator().clearPath();
 				++strafingTime;
-			}
-			else
+			} else
 			{
 				attacker.getNavigator().tryMoveToEntityLiving(target, moveSpeedAmp);
 				strafingTime = -1;
@@ -145,16 +145,14 @@ public class EntityAIAttackCavenicBow<T extends EntityMob & IRangedAttackMob> ex
 				if (dist > maxAttackDistance * 0.75F)
 				{
 					strafingBackwards = false;
-				}
-				else if (dist < maxAttackDistance * 0.25F)
+				} else if (dist < maxAttackDistance * 0.25F)
 				{
 					strafingBackwards = true;
 				}
 
 				attacker.getMoveHelper().strafe(strafingBackwards ? -0.5F : 0.5F, strafingClockwise ? 0.5F : -0.5F);
 				attacker.faceEntity(target, 30.0F, 30.0F);
-			}
-			else
+			} else
 			{
 				attacker.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
 			}
@@ -167,9 +165,10 @@ public class EntityAIAttackCavenicBow<T extends EntityMob & IRangedAttackMob> ex
 
 					attackTime = 0;
 					attackCooldown = 50;
-				}
-				else if (canSee && --attackCooldown <= 0) {
-					if (++attackRapid >= getAttackSpeed()) {
+				} else if (canSee && --attackCooldown <= 0)
+				{
+					if (++attackRapid >= getAttackSpeed())
+					{
 						attacker.attackEntityWithRangedAttack(target, ItemBow.getArrowVelocity(5));
 
 						attackRapid = 0;
@@ -177,8 +176,7 @@ public class EntityAIAttackCavenicBow<T extends EntityMob & IRangedAttackMob> ex
 
 					++attackTime;
 				}
-			}
-			else if (seeTime >= -20)
+			} else if (seeTime >= -20)
 			{
 				attacker.setActiveHand(EnumHand.MAIN_HAND);
 

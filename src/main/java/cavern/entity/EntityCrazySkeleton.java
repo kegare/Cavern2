@@ -35,10 +35,12 @@ public class EntityCrazySkeleton extends EntityCavenicSkeleton
 	@Override
 	protected void initCustomAI()
 	{
-        aiArrowAttack = new EntityAIAttackCavenicBow<>(this, 0.99D, 6.0F, 1);
-		aiAttackOnCollide = new EntityAIAttackMelee(this, 1.35D, false) {
+		aiArrowAttack = new EntityAIAttackCavenicBow<>(this, 0.99D, 6.0F, 1);
+		aiAttackOnCollide = new EntityAIAttackMelee(this, 1.35D, false)
+		{
 			@Override
-			public void resetTask() {
+			public void resetTask()
+			{
 				super.resetTask();
 
 				EntityCrazySkeleton.this.setSwingingArms(false);
@@ -100,7 +102,9 @@ public class EntityCrazySkeleton extends EntityCavenicSkeleton
 	}
 
 	@Override
-	public void onStruckByLightning(EntityLightningBolt lightningBolt) {}
+	public void onStruckByLightning(EntityLightningBolt lightningBolt)
+	{
+	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
