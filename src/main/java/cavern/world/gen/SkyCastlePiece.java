@@ -1,7 +1,7 @@
 package cavern.world.gen;
 
 import cavern.core.Cavern;
-import cavern.util.CaveLootTables;
+import cavern.util.CaveUtils;
 import com.google.common.collect.Lists;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,12 +19,14 @@ import net.minecraft.world.gen.structure.StructureComponentTemplate;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.gen.structure.template.TemplateManager;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import java.util.List;
 import java.util.Random;
 
 public class SkyCastlePiece
 {
+	private static final ResourceLocation LOOT_CHEST = LootTableList.register(CaveUtils.getKey("chests/sky_castle"));
 
 	public static void registerSkyCastlePiece()
 	{
@@ -145,7 +147,7 @@ public class SkyCastlePiece
 					TileEntity tileEntity = world.getTileEntity(pos.down());
 					if (tileEntity instanceof TileEntityChest)
 					{
-						((TileEntityChest) tileEntity).setLootTable(CaveLootTables.SKYCASTLE_LOOTTABLE, rand.nextLong());
+						((TileEntityChest) tileEntity).setLootTable(LOOT_CHEST, rand.nextLong());
 					}
 				}
 			}
