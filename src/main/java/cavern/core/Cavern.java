@@ -98,6 +98,7 @@ public final class Cavern
 	public void construct(FMLConstructionEvent event)
 	{
 		Version.initVersion();
+
 		CavernAPI.dimension = new DimensionHandler();
 		CavernAPI.data = new DataHandler();
 
