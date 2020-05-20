@@ -2,8 +2,6 @@ package cavern.world.mirage;
 
 import cavern.client.CaveMusics;
 import cavern.config.CavelandConfig;
-import cavern.config.manager.CaveBiomeManager;
-import cavern.config.property.ConfigBiomeType;
 import cavern.entity.CaveEntityRegistry;
 import cavern.world.CaveDimensions;
 import cavern.world.WorldProviderCavern;
@@ -15,12 +13,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldProviderCaveland extends WorldProviderCavern
 {
+	@Override
+	protected BiomeProvider createBiomeProvider()
+	{
+		return new BiomeProvider(world.getWorldInfo());
+	}
+
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
@@ -34,21 +39,9 @@ public class WorldProviderCaveland extends WorldProviderCavern
 	}
 
 	@Override
-	public ConfigBiomeType.Type getBiomeType()
-	{
-		return ConfigBiomeType.Type.NATURAL;
-	}
-
-	@Override
 	public int getWorldHeight()
 	{
 		return CavelandConfig.worldHeight;
-	}
-
-	@Override
-	public CaveBiomeManager getBiomeManager()
-	{
-		return null;
 	}
 
 	@Override

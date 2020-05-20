@@ -22,15 +22,15 @@ public class WorldGenCaveBush extends WorldGenBush
 	{
 		for (int y = 0, height = world.getActualHeight() - 10; y < height; ++y)
 		{
-			BlockPos pos = position.add(rand.nextInt(8) - rand.nextInt(8), y, rand.nextInt(8) - rand.nextInt(8));
+			BlockPos pos = position.add(rand.nextInt(4) - rand.nextInt(4), y, rand.nextInt(4) - rand.nextInt(4));
 
 			if (world.isAirBlock(pos) && block.canBlockStay(world, pos, block.getDefaultState()))
 			{
 				world.setBlockState(pos, block.getDefaultState(), 2);
 
-				for (int i = 0; i < 5; ++i)
+				for (int i = 0; i < 4; ++i)
 				{
-					pos = pos.add(rand.nextInt(8) - rand.nextInt(8), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(8) - rand.nextInt(8));
+					pos = pos.add(rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4));
 
 					if (world.isAirBlock(pos) && block.canBlockStay(world, pos, block.getDefaultState()))
 					{

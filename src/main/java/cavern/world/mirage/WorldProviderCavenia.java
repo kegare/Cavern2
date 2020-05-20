@@ -5,9 +5,8 @@ import java.util.List;
 import cavern.api.entity.ICavenicMob;
 import cavern.client.CaveMusics;
 import cavern.config.CaveniaConfig;
-import cavern.config.manager.CaveBiomeManager;
-import cavern.config.property.ConfigBiomeType;
 import cavern.entity.CaveEntityRegistry;
+import cavern.world.CaveBiomeProvider;
 import cavern.world.CaveDimensions;
 import cavern.world.WorldProviderCavern;
 import net.minecraft.client.audio.MusicTicker.MusicType;
@@ -21,12 +20,19 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldProviderCavenia extends WorldProviderCavern
 {
+	@Override
+	protected BiomeProvider createBiomeProvider()
+	{
+		return new CaveBiomeProvider(world, CaveniaConfig.biomeManager);
+	}
+
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
@@ -40,21 +46,9 @@ public class WorldProviderCavenia extends WorldProviderCavern
 	}
 
 	@Override
-	public ConfigBiomeType.Type getBiomeType()
-	{
-		return CaveniaConfig.biomeType.getType();
-	}
-
-	@Override
 	public int getWorldHeight()
 	{
 		return CaveniaConfig.worldHeight;
-	}
-
-	@Override
-	public CaveBiomeManager getBiomeManager()
-	{
-		return CaveniaConfig.biomeManager;
 	}
 
 	@Override
@@ -115,7 +109,7 @@ public class WorldProviderCavenia extends WorldProviderCavern
 			int rangeY = range > 1 ? range / 2 : range;
 
 			if (range <= 0 || world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.add(-range, -rangeY, -range), pos.add(range, rangeY, range)),
-				(entity) -> entity instanceof ICavenicMob && !entity.isNonBoss()).isEmpty())
+				entity -> entity instanceof ICavenicMob && !entity.isNonBoss()).isEmpty())
 			{
 				list = CaveEntityRegistry.CRAZY_SPAWNS;
 			}

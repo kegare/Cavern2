@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
-import cavern.client.gui.GuiSelectMirageWorlds;
+import cavern.client.gui.GuiSelectMirageWorld;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.DimensionType;
@@ -59,7 +59,7 @@ public class MirageSelectMessage implements IClientMessage<MirageSelectMessage, 
 	@Override
 	public IMessage process(Minecraft mc)
 	{
-		GuiSelectMirageWorlds gui = new GuiSelectMirageWorlds();
+		GuiSelectMirageWorld gui = new GuiSelectMirageWorld();
 
 		if (!dimensions.isEmpty())
 		{
