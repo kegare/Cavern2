@@ -1,7 +1,5 @@
 package cavern.core;
 
-import org.apache.logging.log4j.Level;
-
 import cavern.api.CavernAPI;
 import cavern.block.CaveBlocks;
 import cavern.block.RandomiteHelper;
@@ -42,6 +40,8 @@ import cavern.plugin.MCEPlugin;
 import cavern.util.CaveLog;
 import cavern.util.Version;
 import cavern.world.CaveDimensions;
+import cavern.world.gen.MapGenSkyCastle;
+import cavern.world.gen.SkyCastlePiece;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
@@ -49,6 +49,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -72,6 +73,7 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.apache.logging.log4j.Level;
 
 @Mod
 (
@@ -154,6 +156,9 @@ public final class Cavern
 		MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainEventHooks());
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new CaveGuiHandler());
+
+		MapGenStructureIO.registerStructure(MapGenSkyCastle.Start.class, "SkyCastle");
+		SkyCastlePiece.registerSkyCastlePiece();
 	}
 
 	@SubscribeEvent
