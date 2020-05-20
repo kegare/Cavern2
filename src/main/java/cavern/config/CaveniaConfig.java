@@ -37,6 +37,7 @@ public class CaveniaConfig
 	public static boolean generateLakes;
 
 	public static int monsterSpawn;
+	public static double crazySpawnChance;
 	public static double caveBrightness;
 
 	public static CaveBiomeManager biomeManager = new CaveBiomeManager();
@@ -129,6 +130,17 @@ public class CaveniaConfig
 		prop.setComment(comment);
 		propOrder.add(prop.getName());
 		monsterSpawn = prop.getInt(monsterSpawn);
+
+		prop = config.get(category, "crazySpawnChance", 0.1D);
+		prop.setMinValue(0.0D).setMaxValue(1.0D);
+		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
+		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
+		comment += " [range: " + prop.getMinValue() + " ~ " + prop.getMaxValue() + ", default: " + prop.getDefault() + "]";
+		comment += Configuration.NEW_LINE;
+		comment += "Note: If multiplayer, server-side only.";
+		prop.setComment(comment);
+		propOrder.add(prop.getName());
+		crazySpawnChance = prop.getDouble(crazySpawnChance);
 
 		prop = config.get(category, "caveBrightness", 0.125D);
 		prop.setMinValue(0.0D).setMaxValue(1.0D);

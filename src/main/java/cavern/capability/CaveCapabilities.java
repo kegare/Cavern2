@@ -57,18 +57,13 @@ public final class CaveCapabilities
 		MinecraftForge.EVENT_BUS.register(new CaveCapabilities());
 	}
 
-	public static <T> boolean isValid(Capability<T> capability)
+	public static <T> boolean hasCapability(@Nullable ICapabilityProvider entry, @Nullable Capability<T> capability)
 	{
-		return capability != null;
-	}
-
-	public static <T> boolean hasCapability(ICapabilityProvider entry, Capability<T> capability)
-	{
-		return entry != null && isValid(capability) && entry.hasCapability(capability, null);
+		return entry != null && capability != null && entry.hasCapability(capability, null);
 	}
 
 	@Nullable
-	public static <T> T getCapability(ICapabilityProvider entry, Capability<T> capability)
+	public static <T> T getCapability(@Nullable ICapabilityProvider entry, @Nullable Capability<T> capability)
 	{
 		return hasCapability(entry, capability) ? entry.getCapability(capability, null) : null;
 	}

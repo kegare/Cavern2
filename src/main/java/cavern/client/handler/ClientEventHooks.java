@@ -554,7 +554,7 @@ public final class ClientEventHooks
 
 			if (!equip.isHiddenTooltip() || event.getFlags().isAdvanced())
 			{
-				event.getToolTip().add(Cavern.proxy.translateFormat("tooltip.iceEquipment.charge", equip.getCharge(stack)));
+				event.getToolTip().add(I18n.format("tooltip.iceEquipment.charge", equip.getCharge(stack)));
 			}
 		}
 	}

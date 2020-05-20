@@ -7,7 +7,6 @@ import cavern.block.CaveBlocks;
 import cavern.block.RandomiteHelper;
 import cavern.capability.CaveCapabilities;
 import cavern.client.CaveKeyBindings;
-import cavern.client.CaveMusics;
 import cavern.client.CaveRenderingRegistry;
 import cavern.client.config.CaveConfigEntries;
 import cavern.client.gui.SelectListHelper;
@@ -99,7 +98,6 @@ public final class Cavern
 	public void construct(FMLConstructionEvent event)
 	{
 		Version.initVersion();
-
 		CavernAPI.dimension = new DimensionHandler();
 		CavernAPI.data = new DataHandler();
 
@@ -248,11 +246,6 @@ public final class Cavern
 		MirageWorldsConfig.syncConfig();
 
 		CaveDimensions.registerDimensions();
-
-		if (event.getSide().isClient())
-		{
-			CaveMusics.registerMusics();
-		}
 	}
 
 	@EventHandler

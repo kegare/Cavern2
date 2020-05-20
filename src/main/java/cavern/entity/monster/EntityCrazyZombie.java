@@ -1,6 +1,5 @@
 package cavern.entity.monster;
 
-import cavern.api.CavernAPI;
 import cavern.client.particle.ParticleCrazyMob;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -51,12 +50,6 @@ public class EntityCrazyZombie extends EntityCavenicZombie
 	protected boolean canBeRidden(Entity entity)
 	{
 		return false;
-	}
-
-	@Override
-	public boolean getCanSpawnHere()
-	{
-		return CavernAPI.dimension.isInCavenia(this) && super.getCanSpawnHere();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -120,7 +113,7 @@ public class EntityCrazyZombie extends EntityCavenicZombie
 			{
 				distance = getDistance(player);
 
-				if (canEntityBeSeen(player) || distance <= 32.0D)
+				if (canEntityBeSeen(player) && distance < 20.0D)
 				{
 					canSee = true;
 
@@ -128,7 +121,7 @@ public class EntityCrazyZombie extends EntityCavenicZombie
 				}
 			}
 
-			bossInfo.setDarkenSky(!canSee || distance <= 50.0D);
+			bossInfo.setDarkenSky(!canSee || distance < 30.0D);
 			bossInfo.setVisible(canSee);
 		}
 

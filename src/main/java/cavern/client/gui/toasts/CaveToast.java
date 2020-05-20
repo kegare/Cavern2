@@ -2,6 +2,9 @@ package cavern.client.gui.toasts;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.toasts.GuiToast;
 import net.minecraft.client.gui.toasts.IToast;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,42 +21,49 @@ public abstract class CaveToast implements IToast
 	@Override
 	public Visibility draw(GuiToast toastGui, long delta)
 	{
-		toastGui.getMinecraft().getTextureManager().bindTexture(TEXTURE_TOASTS);
+		Minecraft mc = toastGui.getMinecraft();
+
+		mc.getTextureManager().bindTexture(TEXTURE_TOASTS);
+
 		GlStateManager.color(1.0F, 1.0F, 1.0F);
+
 		toastGui.drawTexturedModalRect(0, 0, 0, getTextureIndex(), 160, 32);
 
-		List<String> list = toastGui.getMinecraft().fontRenderer.listFormattedStringToWidth(getDescription().getFormattedText(), 125);
-		int i = getTitleColor();
+		List<String> list = mc.fontRenderer.listFormattedStringToWidth(getDescription().getFormattedText(), 125);
+		int color = getTitleColor();
 
 		if (list.size() == 1)
 		{
-			toastGui.getMinecraft().fontRenderer.drawString(getTitle().getUnformattedText(), 30, 7, i | -16777216);
-			toastGui.getMinecraft().fontRenderer.drawString(getDescription().getFormattedText(), 30, 18, -1);
+			mc.fontRenderer.drawString(getTitle().getUnformattedText(), 30, 7, color | -16777216);
+			mc.fontRenderer.drawString(getDescription().getFormattedText(), 30, 18, -1);
 		}
 		else
 		{
 			if (delta < 1500L)
 			{
-				int j = MathHelper.floor(MathHelper.clamp((1500L - delta) / 300.0F, 0.0F, 1.0F) * 255.0F) << 24 | 67108864;
+				int i = MathHelper.floor(MathHelper.clamp((1500L - delta) / 300.0F, 0.0F, 1.0F) * 255.0F) << 24 | 67108864;
 
-				toastGui.getMinecraft().fontRenderer.drawString(getTitle().getUnformattedText(), 30, 11, i | j);
+				mc.fontRenderer.drawString(getTitle().getUnformattedText(), 30, 11, color | i);
 			}
 			else
 			{
-				int j = MathHelper.floor(MathHelper.clamp((delta - 1500L) / 300.0F, 0.0F, 1.0F) * 252.0F) << 24 | 67108864;
+				int i = MathHelper.floor(MathHelper.clamp((delta - 1500L) / 300.0F, 0.0F, 1.0F) * 252.0F) << 24 | 67108864;
 				int y = 16 - list.size() * toastGui.getMinecraft().fontRenderer.FONT_HEIGHT / 2;
 
 				for (String s : list)
 				{
-					toastGui.getMinecraft().fontRenderer.drawString(s, 30, y, 16777215 | j);
+					mc.fontRenderer.drawString(s, 30, y, 16777215 | i);
 
-					y += toastGui.getMinecraft().fontRenderer.FONT_HEIGHT;
+					y += mc.fontRenderer.FONT_HEIGHT;
 				}
 			}
 		}
 
+		GlStateManager.enableRescaleNormal();
 		RenderHelper.enableGUIStandardItemLighting();
-		toastGui.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(null, getIconItemStack(delta), 8, 8);
+		mc.getRenderItem().renderItemAndEffectIntoGUI(null, getIconItemStack(delta), 8, 8);
+		RenderHelper.disableStandardItemLighting();
+		GlStateManager.disableRescaleNormal();
 
 		return delta >= 5000L ? Visibility.HIDE : Visibility.SHOW;
 	}
@@ -66,6 +76,7 @@ public abstract class CaveToast implements IToast
 
 	protected abstract ITextComponent getDescription();
 
+	@Nonnull
 	protected ItemStack getIconItemStack(long delta)
 	{
 		return ItemStack.EMPTY;

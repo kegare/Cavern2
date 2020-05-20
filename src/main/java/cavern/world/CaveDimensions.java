@@ -2,8 +2,6 @@ package cavern.world;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Strings;
-
 import cavern.api.CavernAPI;
 import cavern.config.AquaCavernConfig;
 import cavern.config.CavelandConfig;
@@ -43,7 +41,7 @@ public final class CaveDimensions
 	@Nullable
 	private static DimensionType register(String name, int id, Class<? extends WorldProvider> provider)
 	{
-		if (Strings.isNullOrEmpty(name) || id == 0 || DimensionManager.isDimensionRegistered(id))
+		if (id == 0 || DimensionManager.isDimensionRegistered(id))
 		{
 			return null;
 		}
