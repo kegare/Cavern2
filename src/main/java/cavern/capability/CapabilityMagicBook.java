@@ -34,6 +34,6 @@ public class CapabilityMagicBook implements ICapabilityProvider
 
 	public static void register()
 	{
-		CapabilityManager.INSTANCE.register(MagicBook.class, new EmptyStorage<>(), () -> new MagicBook());
+		CapabilityManager.INSTANCE.register(MagicBook.class, new EmptyStorage<>(), MagicBook::new);
 	}
 }

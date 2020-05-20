@@ -112,7 +112,7 @@ public class ConfigMiningPoints
 
 		if (prop != null)
 		{
-			String[] data = entries.stream().filter(entry -> entry.isValid()).map(PointEntry::toString).toArray(String[]::new);
+			String[] data = entries.stream().filter(PointEntry::isValid).map(PointEntry::toString).toArray(String[]::new);
 
 			prop.set(data);
 

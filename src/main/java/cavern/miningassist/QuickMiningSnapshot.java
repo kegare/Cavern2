@@ -92,7 +92,7 @@ public class QuickMiningSnapshot extends MiningSnapshot
 			return false;
 		}
 
-		return isRedstoneOre(state) && isRedstoneOre(originState) || CaveUtils.areBlockStatesEqual(state, originState);
+		return isRedstoneOre(state) && isRedstoneOre(originState) || CaveUtils.isBlockEqual(state, originState);
 	}
 
 	private boolean isRedstoneOre(IBlockState state)

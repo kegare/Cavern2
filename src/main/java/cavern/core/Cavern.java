@@ -5,7 +5,6 @@ import cavern.block.CaveBlocks;
 import cavern.block.RandomiteHelper;
 import cavern.capability.CaveCapabilities;
 import cavern.client.CaveKeyBindings;
-import cavern.client.CaveMusics;
 import cavern.client.CaveRenderingRegistry;
 import cavern.client.config.CaveConfigEntries;
 import cavern.client.gui.SelectListHelper;
@@ -92,7 +91,7 @@ public final class Cavern
 	@Metadata(MODID)
 	public static ModMetadata metadata;
 
-	@SidedProxy(modId = MODID, clientSide = "cavern.client.ClientProxy", serverSide = "cavern.core.CommonProxy")
+	@SidedProxy(clientSide = "cavern.client.ClientProxy", serverSide = "cavern.core.CommonProxy")
 	public static CommonProxy proxy;
 
 	public static final CreativeTabCavern TAB_CAVERN = new CreativeTabCavern();
@@ -253,11 +252,6 @@ public final class Cavern
 		MirageWorldsConfig.syncConfig();
 
 		CaveDimensions.registerDimensions();
-
-		if (event.getSide().isClient())
-		{
-			CaveMusics.registerMusics();
-		}
 	}
 
 	@EventHandler

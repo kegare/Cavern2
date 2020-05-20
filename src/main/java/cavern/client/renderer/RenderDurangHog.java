@@ -1,6 +1,7 @@
 package cavern.client.renderer;
 
 import cavern.entity.passive.EntityDurangHog;
+import cavern.util.CaveUtils;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -10,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderDurangHog extends RenderLiving<EntityDurangHog>
 {
-	private static final ResourceLocation DURANGHOG_TEXTURES = new ResourceLocation("cavern", "textures/entity/durang_hog.png");
+	private static final ResourceLocation DURANGHOG_TEXTURES = CaveUtils.getKey("textures/entity/durang_hog.png");
 
 	public RenderDurangHog(RenderManager renderManager)
 	{

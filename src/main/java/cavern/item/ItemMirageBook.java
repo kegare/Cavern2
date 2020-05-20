@@ -56,7 +56,7 @@ public class ItemMirageBook extends Item implements ITeleporter
 		return Cavern.proxy.translateFormat(getUnlocalizedName() + ".name", super.getItemStackDisplayName(stack));
 	}
 
-	public int getCoupon(ItemStack stack)
+	public int getTicketCount(ItemStack stack)
 	{
 		if (stack.isEmpty())
 		{
@@ -65,40 +65,40 @@ public class ItemMirageBook extends Item implements ITeleporter
 
 		NBTTagCompound tag = stack.getTagCompound();
 
-		if (tag == null || !tag.hasKey("Coupon", NBT.TAG_INT))
+		if (tag == null || !tag.hasKey("Ticket", NBT.TAG_INT))
 		{
 			EnumType type = EnumType.byItemStack(stack);
 
-			setCoupon(stack, type.getCoupon());
+			setTicketCount(stack, type.getMaxTicket());
 
-			return type.getCoupon();
+			return type.getMaxTicket();
 		}
 
-		return tag.getInteger("Coupon");
+		return tag.getInteger("Ticket");
 	}
 
-	public ItemStack setCoupon(ItemStack stack, int coupon)
+	public ItemStack setTicketCount(ItemStack stack, int coupon)
 	{
-		stack.setTagInfo("Coupon", new NBTTagInt(Math.max(coupon, 0)));
+		stack.setTagInfo("Ticket", new NBTTagInt(Math.max(coupon, 0)));
 
 		return stack;
 	}
 
-	public boolean consumeCoupon(ItemStack stack, int coupon)
+	public boolean consumeTicket(ItemStack stack, int coupon)
 	{
 		if (coupon == 0)
 		{
 			return false;
 		}
 
-		int current = getCoupon(stack);
+		int current = getTicketCount(stack);
 
 		if (coupon > 0 && current < coupon)
 		{
 			return false;
 		}
 
-		setCoupon(stack, current - coupon);
+		setTicketCount(stack, current - coupon);
 
 		return true;
 	}
@@ -106,15 +106,15 @@ public class ItemMirageBook extends Item implements ITeleporter
 	@Override
 	public boolean showDurabilityBar(ItemStack stack)
 	{
-		int coupon = getCoupon(stack);
+		int coupon = getTicketCount(stack);
 
-		return coupon > 0 && coupon < EnumType.byItemStack(stack).getCoupon();
+		return coupon > 0 && coupon < EnumType.byItemStack(stack).getMaxTicket();
 	}
 
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack)
 	{
-		return 1.0D - ((double)getCoupon(stack) / (double)EnumType.byItemStack(stack).getCoupon());
+		return 1.0D - (double)getTicketCount(stack) / (double)EnumType.byItemStack(stack).getMaxTicket();
 	}
 
 	@Override
@@ -158,9 +158,9 @@ public class ItemMirageBook extends Item implements ITeleporter
 			return new ActionResult<>(EnumActionResult.PASS, stack);
 		}
 
-		if (consumeCoupon(stack, 1))
+		if (consumeTicket(stack, 1))
 		{
-			if (getCoupon(stack) <= 0)
+			if (getTicketCount(stack) <= 0)
 			{
 				player.setHeldItem(hand, new ItemStack(Items.BOOK));
 			}
@@ -402,18 +402,18 @@ public class ItemMirageBook extends Item implements ITeleporter
 
 		private final int meta;
 		private final String translationKey;
-		private final int coupon;
+		private final int ticket;
 
 		private EnumType(int meta, String name)
 		{
 			this(meta, name, 10);
 		}
 
-		private EnumType(int meta, String name, int coupon)
+		private EnumType(int meta, String name, int ticket)
 		{
 			this.meta = meta;
 			this.translationKey = name;
-			this.coupon = coupon;
+			this.ticket = ticket;
 		}
 
 		public int getMeta()
@@ -426,9 +426,9 @@ public class ItemMirageBook extends Item implements ITeleporter
 			return translationKey;
 		}
 
-		public int getCoupon()
+		public int getMaxTicket()
 		{
-			return coupon;
+			return ticket;
 		}
 
 		@Nullable
@@ -459,7 +459,7 @@ public class ItemMirageBook extends Item implements ITeleporter
 
 		public ItemStack getItemStack()
 		{
-			return CaveItems.MIRAGE_BOOK.setCoupon(new ItemStack(CaveItems.MIRAGE_BOOK, 1, getMeta()), getCoupon());
+			return CaveItems.MIRAGE_BOOK.setTicketCount(new ItemStack(CaveItems.MIRAGE_BOOK, 1, getMeta()), getMaxTicket());
 		}
 
 		public static EnumType byMetadata(int meta)

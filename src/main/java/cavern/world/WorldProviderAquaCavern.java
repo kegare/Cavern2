@@ -2,9 +2,7 @@ package cavern.world;
 
 import cavern.client.CaveMusics;
 import cavern.config.AquaCavernConfig;
-import cavern.config.manager.CaveBiomeManager;
-import cavern.config.property.ConfigBiomeType;
-import cavern.entity.EntityAquaSquid;
+import cavern.entity.passive.EntityAquaSquid;
 import net.minecraft.client.audio.MusicTicker.MusicType;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
@@ -13,12 +11,19 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldProviderAquaCavern extends WorldProviderCavern
 {
+	@Override
+	protected BiomeProvider createBiomeProvider()
+	{
+		return new CaveBiomeProvider(world, AquaCavernConfig.biomeManager);
+	}
+
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
@@ -32,21 +37,9 @@ public class WorldProviderAquaCavern extends WorldProviderCavern
 	}
 
 	@Override
-	public ConfigBiomeType.Type getBiomeType()
-	{
-		return AquaCavernConfig.biomeType.getType();
-	}
-
-	@Override
 	public int getWorldHeight()
 	{
 		return AquaCavernConfig.worldHeight;
-	}
-
-	@Override
-	public CaveBiomeManager getBiomeManager()
-	{
-		return AquaCavernConfig.biomeManager;
 	}
 
 	@Override

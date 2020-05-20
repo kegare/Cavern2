@@ -3,6 +3,8 @@ package cavern.data;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.ObjectUtils;
 
 import com.google.common.collect.HashBasedTable;
@@ -55,7 +57,7 @@ public class Miner implements IMiner
 		this(null);
 	}
 
-	public Miner(EntityPlayer player)
+	public Miner(@Nullable EntityPlayer player)
 	{
 		this.entityPlayer = player;
 	}

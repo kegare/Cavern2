@@ -1,5 +1,6 @@
 package cavern.client.renderer;
 
+import cavern.util.CaveUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSkeleton;
@@ -11,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderCrazySkeleton extends RenderSkeleton
 {
-	private static final ResourceLocation CRAZY_SKELETON_TEXTURE = new ResourceLocation("cavern", "textures/entity/crazy_skeleton.png");
+	private static final ResourceLocation CRAZY_SKELETON_TEXTURE = CaveUtils.getKey("textures/entity/crazy_skeleton.png");
 
 	public RenderCrazySkeleton(RenderManager manager)
 	{

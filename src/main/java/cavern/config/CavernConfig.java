@@ -18,13 +18,12 @@ import cavern.config.manager.CaveBiome;
 import cavern.config.manager.CaveBiomeManager;
 import cavern.config.manager.CaveVein;
 import cavern.config.manager.CaveVeinManager;
-import cavern.config.property.ConfigBiomeType;
 import cavern.config.property.ConfigEntities;
 import cavern.config.property.ConfigItems;
 import cavern.core.Cavern;
-import cavern.entity.EntityCavenicSkeleton;
-import cavern.entity.EntityCavenicSpider;
-import cavern.entity.EntityCavenicZombie;
+import cavern.entity.monster.EntityCavenicSkeleton;
+import cavern.entity.monster.EntityCavenicSpider;
+import cavern.entity.monster.EntityCavenicZombie;
 import cavern.util.BlockMeta;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockStone;
@@ -52,7 +51,6 @@ public class CavernConfig
 
 	public static int dimensionId;
 	public static int worldHeight;
-	public static ConfigBiomeType biomeType = new ConfigBiomeType();
 	public static ConfigItems triggerItems = new ConfigItems();
 
 	public static boolean generateCaves;
@@ -105,31 +103,6 @@ public class CavernConfig
 		prop.setComment(comment);
 		propOrder.add(prop.getName());
 		worldHeight = prop.getInt(worldHeight);
-
-		prop = config.get(category, "biomeType", ConfigBiomeType.Type.NATURAL.ordinal());
-		prop.setMinValue(0).setMaxValue(ConfigBiomeType.Type.values().length - 1).setConfigEntryClass(CaveConfigEntries.cycleInteger);
-		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
-		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
-		comment += " [range: " + prop.getMinValue() + " ~ " + prop.getMaxValue() + ", default: " + prop.getDefault() + "]";
-
-		int min = Integer.parseInt(prop.getMinValue());
-		int max = Integer.parseInt(prop.getMaxValue());
-
-		for (int i = min; i <= max; ++i)
-		{
-			comment += Configuration.NEW_LINE + i + ": " + Cavern.proxy.translate(prop.getLanguageKey() + "." + i);
-
-			if (i < max)
-			{
-				comment += ",";
-			}
-		}
-
-		comment += Configuration.NEW_LINE;
-		comment += "Note: If multiplayer, server-side only.";
-		prop.setComment(comment);
-		propOrder.add(prop.getName());
-		biomeType.setValue(prop.getInt(biomeType.getValue()));
 
 		prop = config.get(category, "triggerItems", new String[0]);
 		prop.setConfigEntryClass(CaveConfigEntries.selectBlocksAndItems);

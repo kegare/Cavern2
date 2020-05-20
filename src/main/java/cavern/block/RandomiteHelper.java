@@ -1,5 +1,6 @@
 package cavern.block;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.WeightedRandom;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 
 public final class RandomiteHelper
@@ -31,13 +33,7 @@ public final class RandomiteHelper
 		String[] targetNames = {"treeSapling", "sugarcane", "vine", "slimeball", "enderpearl", "bone", "gunpowder", "string", "torch"};
 		String[] targetPrefixes = {"gem", "ingot", "nugget", "dust", "crop"};
 
-		for (String name : targetNames)
-		{
-			if (OreDictionary.doesOreNameExist(name))
-			{
-				oreNames.add(name);
-			}
-		}
+		Arrays.stream(targetNames).filter(OreDictionary::doesOreNameExist).forEach(oreNames::add);
 
 		for (String name : OreDictionary.getOreNames())
 		{
@@ -87,9 +83,9 @@ public final class RandomiteHelper
 
 		Category.FOOD.getItems().clear();
 
-		for (Item item : Item.REGISTRY)
+		for (Item item : ForgeRegistries.ITEMS.getValuesCollection())
 		{
-			if (item == null || item == Items.AIR || item instanceof ItemBlock)
+			if (item == Items.AIR || item instanceof ItemBlock)
 			{
 				continue;
 			}

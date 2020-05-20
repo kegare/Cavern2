@@ -1,4 +1,4 @@
-package cavern.entity;
+package cavern.entity.monster;
 
 import cavern.api.entity.IEntitySummonable;
 import cavern.core.Cavern;

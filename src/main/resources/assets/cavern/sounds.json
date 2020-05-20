@@ -49,12 +49,12 @@
     "sounds": [
       {
         "name": "cavern:music/cavenia1",
-        "volume": 0.5,
+        "volume": 0.4,
         "stream": true
       },
       {
         "name": "cavern:music/cavenia2",
-        "volume": 0.5,
+        "volume": 0.4,
         "stream": true
       }
     ]

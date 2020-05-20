@@ -1,6 +1,6 @@
 package cavern.magic;
 
-import cavern.entity.EntityMagicTorcher;
+import cavern.entity.projectile.EntityMagicTorcher;
 import cavern.util.PlayerHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;

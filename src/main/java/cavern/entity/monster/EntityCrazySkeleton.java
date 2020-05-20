@@ -1,63 +1,79 @@
-package cavern.entity;
+package cavern.entity.monster;
 
-import cavern.api.CavernAPI;
 import cavern.client.particle.ParticleCrazyMob;
+import cavern.entity.ai.EntityAIAttackCavenicBow;
+import cavern.item.CaveItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Enchantments;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityCrazySpider extends EntityCavenicSpider
+public class EntityCrazySkeleton extends EntityCavenicSkeleton
 {
-	private final BossInfoServer bossInfo = new BossInfoServer(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS);
+	private final BossInfoServer bossInfo = new BossInfoServer(getDisplayName(), BossInfo.Color.WHITE, BossInfo.Overlay.PROGRESS);
 
-	public EntityCrazySpider(World world)
+	public EntityCrazySkeleton(World world)
 	{
 		super(world);
 		this.experienceValue = 50;
+		this.setDropChance(EntityEquipmentSlot.MAINHAND, 1.0F);
+	}
+
+	@Override
+	protected void initCustomAI()
+	{
+		aiArrowAttack = new EntityAIAttackCavenicBow<>(this, 0.99D, 6.0F, 1);
+		aiAttackOnCollide = new EntityAIAttackMelee(this, 1.35D, false)
+		{
+			@Override
+			public void resetTask()
+			{
+				super.resetTask();
+
+				EntityCrazySkeleton.this.setSwingingArms(false);
+			}
+
+			@Override
+			public void startExecuting()
+			{
+				super.startExecuting();
+
+				EntityCrazySkeleton.this.setSwingingArms(true);
+			}
+		};
 	}
 
 	@Override
 	protected void applyMobAttributes()
 	{
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1500.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2000.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.60000001192092896D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(22.0D);
 	}
 
 	@Override
-	protected int getBlindnessAttackPower()
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
 	{
-		switch (world.getDifficulty())
-		{
-			case NORMAL:
-				return 10;
-			case HARD:
-				return 20;
-			default:
-				return 5;
-		}
-	}
+		super.setEquipmentBasedOnDifficulty(difficulty);
 
-	@Override
-	protected int getPoisonAttackPower()
-	{
-		switch (world.getDifficulty())
-		{
-			case NORMAL:
-				return 5;
-			case HARD:
-				return 8;
-			default:
-				return 3;
-		}
+		ItemStack stack = new ItemStack(CaveItems.CAVENIC_BOW);
+
+		stack.addEnchantment(Enchantments.INFINITY, 1);
+
+		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
 	}
 
 	@Override
@@ -76,12 +92,6 @@ public class EntityCrazySpider extends EntityCavenicSpider
 	protected boolean canBeRidden(Entity entity)
 	{
 		return false;
-	}
-
-	@Override
-	public boolean getCanSpawnHere()
-	{
-		return CavernAPI.dimension.isInCavenia(this) && super.getCanSpawnHere();
 	}
 
 	@Override
@@ -126,7 +136,7 @@ public class EntityCrazySpider extends EntityCavenicSpider
 			{
 				distance = getDistance(player);
 
-				if (canEntityBeSeen(player) || distance <= 32.0D)
+				if (canEntityBeSeen(player) && distance < 20.0D)
 				{
 					canSee = true;
 
@@ -134,7 +144,7 @@ public class EntityCrazySpider extends EntityCavenicSpider
 				}
 			}
 
-			bossInfo.setDarkenSky(!canSee || distance <= 50.0D);
+			bossInfo.setDarkenSky(!canSee || distance < 30.0D);
 			bossInfo.setVisible(canSee);
 		}
 

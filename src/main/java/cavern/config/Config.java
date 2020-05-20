@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -161,7 +162,7 @@ public class Config
 
 		ResourceLocation key = new ResourceLocation(str);
 
-		return ObjectUtils.defaultIfNull(Biome.REGISTRY.getObject(key), fallback);
+		return ObjectUtils.defaultIfNull(ForgeRegistries.BIOMES.getValue(key), fallback);
 	}
 
 	public static boolean containsBiome(@Nullable String[] biomes, @Nullable Biome biome)

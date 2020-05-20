@@ -1,6 +1,6 @@
 package cavern.client.renderer;
 
-import cavern.entity.EntityCaveman;
+import cavern.entity.monster.EntityCaveman;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;

@@ -7,7 +7,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ModelDurangHog extends ModelBase
 {
 	private float headRotationAngleX;
@@ -59,67 +62,67 @@ public class ModelDurangHog extends ModelBase
 		this.head = new ModelRenderer(this, 0, 0);
 		this.head.setRotationPoint(0.0F, 12.0F, -6.0F);
 		this.head.addBox(-4.0F, -4.0F, -8.0F, 8, 8, 8, 0.0F);
-		this.nose.addChild(this.fangR);
-		this.nose.addChild(this.fangL);
+		this.nose.addChild(fangR);
+		this.nose.addChild(fangL);
 	}
 
 	@Override
 	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
-		if (this.isChild)
+		if (isChild)
 		{
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(0.0F, this.childYOffset * scale, this.childZOffset * scale);
-			this.head.render(scale);
-			this.nose.render(scale);
+			GlStateManager.translate(0.0F, childYOffset * scale, childZOffset * scale);
+			head.render(scale);
+			nose.render(scale);
 			GlStateManager.popMatrix();
 			GlStateManager.pushMatrix();
 			GlStateManager.scale(0.5F, 0.5F, 0.5F);
 			GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
 
-			this.body.render(scale);
-			this.legR.render(scale);
-			this.legL.render(scale);
-			this.backLegL.render(scale);
-			this.backLegR.render(scale);
+			body.render(scale);
+			legR.render(scale);
+			legL.render(scale);
+			backLegL.render(scale);
+			backLegR.render(scale);
 			GlStateManager.popMatrix();
 		}
 		else
 		{
-			this.head.render(scale);
-			this.nose.render(scale);
-			this.body.render(scale);
-			this.legR.render(scale);
-			this.legL.render(scale);
-			this.backLegL.render(scale);
-			this.backLegR.render(scale);
+			head.render(scale);
+			nose.render(scale);
+			body.render(scale);
+			legR.render(scale);
+			legL.render(scale);
+			backLegL.render(scale);
+			backLegR.render(scale);
 		}
-
 	}
 
-	public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTickTime)
+	@Override
+	public void setLivingAnimations(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTickTime)
 	{
-		super.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTickTime);
-		this.headRotationAngleX = ((EntityDurangHog) entitylivingbaseIn).getHeadRotationAngleX(partialTickTime);
+		super.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTickTime);
+
+		headRotationAngleX = ((EntityDurangHog)entity).getHeadRotationAngleX(partialTickTime);
 	}
 
-	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
+	@Override
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entity)
 	{
-		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-		this.head.rotateAngleX = this.headRotationAngleX;
-		this.head.rotateAngleY = netHeadYaw * 0.017453292F;
-		this.body.rotateAngleX = ((float) Math.PI / 2F);
-		this.legR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.legL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount;
-		this.backLegR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount;
-		this.backLegL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entity);
 
-		copyModelAngles(this.head, this.nose);
+		head.rotateAngleX = headRotationAngleX;
+		head.rotateAngleY = netHeadYaw * 0.017453292F;
+		body.rotateAngleX = (float)Math.PI / 2F;
+		legR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		legL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+		backLegR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+		backLegL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+
+		copyModelAngles(head, nose);
 	}
 
-	/**
-	 * This is a helper function from Tabula to set the rotation of model parts
-	 */
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z)
 	{
 		modelRenderer.rotateAngleX = x;

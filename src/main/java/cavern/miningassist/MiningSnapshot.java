@@ -184,7 +184,7 @@ public abstract class MiningSnapshot implements Comparator<BlockPos>
 			return miner.getHeldItemMainhand().canHarvestBlock(state);
 		}
 
-		return CaveUtils.areBlockStatesEqual(state, originState);
+		return CaveUtils.isBlockEqual(state, originState);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package cavern.entity;
+package cavern.entity.monster;
 
 import javax.annotation.Nullable;
 

@@ -8,10 +8,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.BiomeProvider;
 
 public abstract class WorldProviderMirageWorld extends WorldProvider implements CustomSeedProvider
 {
 	protected CustomSeedData seedData;
+
+	@Override
+	protected void init()
+	{
+		hasSkyLight = true;
+		biomeProvider = new BiomeProvider(world.getWorldInfo());
+		seedData = world instanceof WorldServer ? new CustomSeedData(world.getWorldInfo().getDimensionData(getDimension())) : new CustomSeedData();
+	}
 
 	@Override
 	public abstract DimensionType getDimensionType();

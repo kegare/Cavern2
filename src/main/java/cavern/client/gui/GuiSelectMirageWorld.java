@@ -29,7 +29,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiSelectMirageWorlds extends GuiScreen
+public class GuiSelectMirageWorld extends GuiScreen
 {
 	protected WorldList worldList;
 
@@ -166,7 +166,7 @@ public class GuiSelectMirageWorlds extends GuiScreen
 
 		protected WorldList()
 		{
-			super(GuiSelectMirageWorlds.this.mc, 0, 0, 0, 0, 18);
+			super(GuiSelectMirageWorld.this.mc, 0, 0, 0, 0, 18);
 
 			DimensionType select = null;
 

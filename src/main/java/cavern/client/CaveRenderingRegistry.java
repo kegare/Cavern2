@@ -1,5 +1,11 @@
 package cavern.client;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.ObjectUtils;
+
+import com.google.common.collect.Maps;
+
 import cavern.client.renderer.RenderCaveman;
 import cavern.client.renderer.RenderCavenicBear;
 import cavern.client.renderer.RenderCavenicCreeper;
@@ -13,28 +19,24 @@ import cavern.client.renderer.RenderCrazySpider;
 import cavern.client.renderer.RenderCrazyZombie;
 import cavern.client.renderer.RenderDurangHog;
 import cavern.client.renderer.RenderMagicTorcher;
-import cavern.entity.EntityCaveman;
-import cavern.entity.EntityCavenicBear;
-import cavern.entity.EntityCavenicCreeper;
-import cavern.entity.EntityCavenicSkeleton;
-import cavern.entity.EntityCavenicSpider;
-import cavern.entity.EntityCavenicWitch;
-import cavern.entity.EntityCavenicZombie;
-import cavern.entity.EntityCrazyCreeper;
-import cavern.entity.EntityCrazySkeleton;
-import cavern.entity.EntityCrazySpider;
-import cavern.entity.EntityCrazyZombie;
-import cavern.entity.EntityMagicTorcher;
+import cavern.entity.monster.EntityCaveman;
+import cavern.entity.monster.EntityCavenicBear;
+import cavern.entity.monster.EntityCavenicCreeper;
+import cavern.entity.monster.EntityCavenicSkeleton;
+import cavern.entity.monster.EntityCavenicSpider;
+import cavern.entity.monster.EntityCavenicWitch;
+import cavern.entity.monster.EntityCavenicZombie;
+import cavern.entity.monster.EntityCrazyCreeper;
+import cavern.entity.monster.EntityCrazySkeleton;
+import cavern.entity.monster.EntityCrazySpider;
+import cavern.entity.monster.EntityCrazyZombie;
 import cavern.entity.passive.EntityDurangHog;
-import com.google.common.collect.Maps;
+import cavern.entity.projectile.EntityMagicTorcher;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.ObjectUtils;
-
-import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class CaveRenderingRegistry

@@ -1,9 +1,9 @@
-package cavern.entity;
+package cavern.entity.monster;
 
-import cavern.api.CavernAPI;
 import cavern.client.particle.ParticleCrazyMob;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.BossInfo;
@@ -13,23 +13,14 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityCrazyCreeper extends EntityCavenicCreeper
+public class EntityCrazySpider extends EntityCavenicSpider
 {
-	private final BossInfoServer bossInfo = new BossInfoServer(getDisplayName(), BossInfo.Color.GREEN, BossInfo.Overlay.PROGRESS);
+	private final BossInfoServer bossInfo = new BossInfoServer(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS);
 
-	public EntityCrazyCreeper(World world)
+	public EntityCrazySpider(World world)
 	{
 		super(world);
 		this.experienceValue = 50;
-	}
-
-	@Override
-	protected void applyCustomValues()
-	{
-		fuseTime = 150;
-		explosionRadius = 30;
-
-		super.applyCustomValues();
 	}
 
 	@Override
@@ -37,7 +28,35 @@ public class EntityCrazyCreeper extends EntityCavenicCreeper
 	{
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1500.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.60000001192092896D);
+	}
+
+	@Override
+	protected int getBlindnessAttackPower()
+	{
+		switch (world.getDifficulty())
+		{
+			case NORMAL:
+				return 10;
+			case HARD:
+				return 20;
+			default:
+				return 5;
+		}
+	}
+
+	@Override
+	protected int getPoisonAttackPower()
+	{
+		switch (world.getDifficulty())
+		{
+			case NORMAL:
+				return 5;
+			case HARD:
+				return 8;
+			default:
+				return 3;
+		}
 	}
 
 	@Override
@@ -59,10 +78,7 @@ public class EntityCrazyCreeper extends EntityCavenicCreeper
 	}
 
 	@Override
-	public boolean getCanSpawnHere()
-	{
-		return CavernAPI.dimension.isInCavenia(this) && super.getCanSpawnHere();
-	}
+	public void onStruckByLightning(EntityLightningBolt lightningBolt) {}
 
 	@SideOnly(Side.CLIENT)
 	@Override
@@ -103,7 +119,7 @@ public class EntityCrazyCreeper extends EntityCavenicCreeper
 			{
 				distance = getDistance(player);
 
-				if (canEntityBeSeen(player) || distance <= 32.0D)
+				if (canEntityBeSeen(player) && distance < 20.0D)
 				{
 					canSee = true;
 
@@ -111,7 +127,7 @@ public class EntityCrazyCreeper extends EntityCavenicCreeper
 				}
 			}
 
-			bossInfo.setDarkenSky(!canSee || distance <= 50.0D);
+			bossInfo.setDarkenSky(!canSee || distance < 30.0D);
 			bossInfo.setVisible(canSee);
 		}
 
