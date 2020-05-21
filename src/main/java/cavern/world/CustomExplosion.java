@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import cavern.handler.CaveEventHooks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -32,11 +33,12 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 public class CustomExplosion extends Explosion
 {
+	private final Random random = CaveEventHooks.RANDOM;
+
 	private final boolean causesFire;
 	private final boolean damagesTerrain;
 
 	private final World world;
-	private final Random random;
 	private final double x;
 	private final double y;
 	private final double z;
@@ -52,7 +54,6 @@ public class CustomExplosion extends Explosion
 	{
 		super(world, entity, x, y, z, size, flaming, damagesTerrain);
 		this.world = world;
-		this.random = new Random();
 		this.x = x;
 		this.y = y;
 		this.z = z;

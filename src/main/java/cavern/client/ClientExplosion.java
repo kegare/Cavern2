@@ -3,6 +3,7 @@ package cavern.client;
 import java.util.List;
 import java.util.Random;
 
+import cavern.handler.CaveEventHooks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -13,8 +14,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ClientExplosion
 {
+	private final Random random = CaveEventHooks.RANDOM;
+
 	private final Minecraft mc;
-	private final Random random;
 	private final double x;
 	private final double y;
 	private final double z;
@@ -24,7 +26,6 @@ public class ClientExplosion
 	public ClientExplosion(Minecraft mc, double x, double y, double z, float size, List<BlockPos> positions)
 	{
 		this.mc = mc;
-		this.random = new Random();
 		this.x = x;
 		this.y = y;
 		this.z = z;
