@@ -32,9 +32,11 @@ public class WorldGenCaveBush extends WorldGenBush
 			{
 				world.setBlockState(pos, block.getDefaultState(), 2);
 
+				BlockPos blockpos = new BlockPos(pos);
+
 				for (int i = 0; i < 8; ++i)
 				{
-					pos.add(rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4));
+					blockpos.add(rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4));
 
 					if (world.isAirBlock(pos) && block.canBlockStay(world, pos, block.getDefaultState()))
 					{

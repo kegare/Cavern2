@@ -263,11 +263,9 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 		{
 			if (rand.nextInt(100) == 0)
 			{
-				x = rand.nextInt(16) + 8;
 				y = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
 
-				towerDungeonGen.generate(world, rand, blockPos.add(x, y, z));
+				towerDungeonGen.generate(world, rand, blockPos.add(16, y, 16));
 			}
 		}
 
@@ -276,7 +274,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 			if (rand.nextInt(50) == 0)
 			{
 				x = rand.nextInt(16) + 8;
-				y = rand.nextInt(32) + 8;
+				y = rand.nextInt(50) + 12;
 				z = rand.nextInt(16) + 8;
 
 				mirageRemnantGen.generate(world, rand, blockPos.add(x, y, z));
