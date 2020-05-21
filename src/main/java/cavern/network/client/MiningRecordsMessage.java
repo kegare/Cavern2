@@ -51,7 +51,7 @@ public class MiningRecordsMessage implements IPlayerMessage<MiningRecordsMessage
 		for (Entry<BlockMeta, Integer> record : records.entrySet())
 		{
 			buf.writeInt(GameData.getBlockStateIDMap().get(record.getKey().getBlockState()));
-			buf.writeInt(record.getValue().intValue());
+			buf.writeInt(record.getValue());
 		}
 	}
 
@@ -65,7 +65,7 @@ public class MiningRecordsMessage implements IPlayerMessage<MiningRecordsMessage
 		{
 			for (Entry<BlockMeta, Integer> record : records.entrySet())
 			{
-				miner.setMiningRecord(record.getKey(), record.getValue().intValue());
+				miner.setMiningRecord(record.getKey(), record.getValue());
 			}
 		}
 

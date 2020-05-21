@@ -80,7 +80,7 @@ public class WorldProviderAquaCavern extends WorldProviderCavern
 	{
 		if (type == EnumCreatureType.WATER_CREATURE)
 		{
-			return Integer.valueOf(100);
+			return 100;
 		}
 
 		return null;

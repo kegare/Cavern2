@@ -1,7 +1,5 @@
 package cavern.world.gen;
 
-import java.util.List;
-
 import cavern.world.CaveBiomeProvider;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
@@ -34,15 +32,10 @@ public class GenLayerCaveBiomes extends GenLayer
 			{
 				initChunkSeed(dx + x, dz + z);
 
-				dest[dx + dz * width] = Biome.getIdForBiome(getRandomBiome(provider.getCachedBiomes()));
+				dest[dx + dz * width] = Biome.getIdForBiome(provider.getRandomBiome());
 			}
 		}
 
 		return dest;
-	}
-
-	private Biome getRandomBiome(List<Biome> biomes)
-	{
-		return biomes.get(nextInt(biomes.size()));
 	}
 }

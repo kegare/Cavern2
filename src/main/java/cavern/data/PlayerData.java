@@ -22,7 +22,7 @@ public class PlayerData
 
 	public long getLastTeleportTime(DimensionType type)
 	{
-		return lastTeleportTimes.getOrDefault(type, 0L).longValue();
+		return lastTeleportTimes.getOrDefault(type, 0L);
 	}
 
 	public void setLastTeleportTime(DimensionType type, long time)
@@ -49,7 +49,7 @@ public class PlayerData
 			NBTTagCompound tag = new NBTTagCompound();
 
 			tag.setInteger("Dim", entry.getKey().getId());
-			tag.setLong("Time", entry.getValue().longValue());
+			tag.setLong("Time", entry.getValue());
 		}
 
 		nbt.setTag("LastTeleportTimes", tagList);

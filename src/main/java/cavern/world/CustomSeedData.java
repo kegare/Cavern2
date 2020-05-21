@@ -16,7 +16,7 @@ public class CustomSeedData
 	{
 		if (nbt != null && nbt.hasKey("Seed", NBT.TAG_ANY_NUMERIC))
 		{
-			seed = Long.valueOf(nbt.getLong("Seed"));
+			seed = nbt.getLong("Seed");
 		}
 	}
 
@@ -32,7 +32,7 @@ public class CustomSeedData
 			nbt = new NBTTagCompound();
 		}
 
-		nbt.setLong("Seed", seed.longValue());
+		nbt.setLong("Seed", seed);
 
 		return nbt;
 	}
@@ -49,7 +49,7 @@ public class CustomSeedData
 			setSeed(customSeed);
 		}
 
-		return seed.longValue();
+		return seed;
 	}
 
 	public long getSeedValue()
@@ -59,12 +59,12 @@ public class CustomSeedData
 
 	public long getSeedValue(long defaultSeed)
 	{
-		return seed == null ? defaultSeed : seed.longValue();
+		return seed == null ? defaultSeed : seed;
 	}
 
 	public void setSeed(long newSeed)
 	{
-		seed = Long.valueOf(newSeed);
+		seed = newSeed;
 	}
 
 	public void refreshSeed()

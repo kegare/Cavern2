@@ -220,7 +220,7 @@ public class CaveEntitySpawner
 
 			if (ret != null)
 			{
-				return ret.booleanValue();
+				return ret;
 			}
 		}
 
@@ -235,7 +235,7 @@ public class CaveEntitySpawner
 
 			if (ret != null)
 			{
-				return ret.intValue();
+				return ret;
 			}
 		}
 
@@ -250,7 +250,7 @@ public class CaveEntitySpawner
 
 			if (ret != null)
 			{
-				return ret.doubleValue();
+				return ret;
 			}
 		}
 

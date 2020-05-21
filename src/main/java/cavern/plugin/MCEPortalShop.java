@@ -6,8 +6,8 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
-import cavern.data.MinerRank;
 import cavern.data.Miner;
+import cavern.data.MinerRank;
 import cavern.util.CaveUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

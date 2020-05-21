@@ -144,7 +144,7 @@ public class MiningAssistUnit
 			return false;
 		}
 
-		capturedExperiences.put(pos, Integer.valueOf(experience));
+		capturedExperiences.put(pos, experience);
 
 		return true;
 	}

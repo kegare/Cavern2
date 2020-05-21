@@ -317,7 +317,7 @@ public class WorldProviderCavern extends WorldProviderSurface implements CustomS
 	{
 		if (!type.getPeacefulCreature())
 		{
-			return Integer.valueOf(getMonsterSpawn());
+			return getMonsterSpawn();
 		}
 
 		return null;
