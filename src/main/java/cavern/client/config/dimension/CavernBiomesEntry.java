@@ -27,7 +27,7 @@ public class CavernBiomesEntry extends CategoryEntry
 	@Override
 	protected GuiScreen buildChildScreen()
 	{
-		return new GuiBiomesEditor(owningScreen, CavernConfig.biomeManager);
+		return new GuiBiomesEditor(owningScreen, CavernConfig.BIOMES);
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class CavernBiomesEntry extends CategoryEntry
 	@Override
 	public void setToDefault()
 	{
-		CaveBiomeManager manager = CavernConfig.biomeManager;
+		CaveBiomeManager manager = CavernConfig.BIOMES;
 
 		try
 		{

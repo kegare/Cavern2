@@ -33,7 +33,7 @@ public class CaveConfigGuiEntries extends GuiConfigEntries
 
 		String desc;
 
-		if (Version.DEV_DEBUG)
+		if (Version.isDev())
 		{
 			desc = I18n.format(Config.LANG_KEY + "version.dev");
 		}

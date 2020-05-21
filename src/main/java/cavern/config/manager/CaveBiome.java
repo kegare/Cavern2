@@ -1,5 +1,7 @@
 package cavern.config.manager;
 
+import javax.annotation.Nonnull;
+
 import cavern.util.BlockMeta;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.WeightedRandom;
@@ -72,6 +74,7 @@ public class CaveBiome extends WeightedRandom.Item implements Comparable<CaveBio
 		itemWeight = weight;
 	}
 
+	@Nonnull
 	public BlockMeta getTerrainBlock()
 	{
 		if (terrainBlock == null)
@@ -87,6 +90,7 @@ public class CaveBiome extends WeightedRandom.Item implements Comparable<CaveBio
 		terrainBlock = terrain;
 	}
 
+	@Nonnull
 	public BlockMeta getTopBlock()
 	{
 		return topBlock == null ? getTerrainBlock() : topBlock;

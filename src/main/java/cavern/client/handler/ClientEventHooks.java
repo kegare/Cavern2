@@ -351,7 +351,7 @@ public final class ClientEventHooks
 
 			message = null;
 
-			if (Version.DEV_DEBUG)
+			if (Version.isDev())
 			{
 				message = new TextComponentTranslation("cavern.version.message.dev", name);
 			}

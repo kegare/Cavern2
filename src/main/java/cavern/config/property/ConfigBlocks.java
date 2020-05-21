@@ -3,7 +3,8 @@ package cavern.config.property;
 import java.util.Arrays;
 import java.util.Set;
 
-import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.Sets;
 
 import cavern.util.BlockMeta;
@@ -86,10 +87,8 @@ public class ConfigBlocks
 	{
 		blocks.clear();
 
-		Arrays.stream(getValues()).filter(value -> !Strings.isNullOrEmpty(value)).forEach(value ->
+		Arrays.stream(getValues()).map(String::trim).filter(StringUtils::isNotEmpty).forEach(value ->
 		{
-			value = value.trim();
-
 			if (OreDictionary.doesOreNameExist(value))
 			{
 				for (ItemStack stack : OreDictionary.getOres(value, false))

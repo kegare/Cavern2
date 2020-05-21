@@ -3,7 +3,8 @@ package cavern.config.property;
 import java.util.Arrays;
 import java.util.Set;
 
-import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.Sets;
 
 import net.minecraft.entity.Entity;
@@ -52,22 +53,14 @@ public class ConfigEntities
 		entities.clear();
 		keys.clear();
 
-		Arrays.stream(getValues()).filter(value -> !Strings.isNullOrEmpty(value)).forEach(value ->
+		Arrays.stream(getValues()).map(String::trim).filter(StringUtils::isNotEmpty).map(ResourceLocation::new).forEach(value ->
 		{
-			value = value.trim();
-
-			if (!value.contains(":"))
-			{
-				value = "minecraft:" + value;
-			}
-
-			ResourceLocation key = new ResourceLocation(value);
-			Class<? extends Entity> entityClass = EntityList.getClass(key);
+			Class<? extends Entity> entityClass = EntityList.getClass(value);
 
 			if (entityClass != null)
 			{
 				entities.add(entityClass);
-				keys.add(key);
+				keys.add(value);
 			}
 		});
 	}

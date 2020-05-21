@@ -43,7 +43,7 @@ public class CommandCavern extends CommandBase
 
 	public String[] getCommands()
 	{
-		return Version.DEV_DEBUG ? new String[] {"regenerate", "miner", "records"} : new String[] {"regenerate", "records"};
+		return Version.isDev() ? new String[] {"regenerate", "miner", "records"} : new String[] {"regenerate", "records"};
 	}
 
 	@Override

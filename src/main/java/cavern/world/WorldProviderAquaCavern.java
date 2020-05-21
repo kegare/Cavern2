@@ -21,7 +21,7 @@ public class WorldProviderAquaCavern extends WorldProviderCavern
 	@Override
 	protected BiomeProvider createBiomeProvider()
 	{
-		return new CaveBiomeProvider(world, AquaCavernConfig.biomeManager);
+		return new CaveBiomeProvider(world, AquaCavernConfig.BIOMES);
 	}
 
 	@Override

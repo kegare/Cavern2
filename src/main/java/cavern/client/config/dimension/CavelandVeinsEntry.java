@@ -27,7 +27,7 @@ public class CavelandVeinsEntry extends CategoryEntry
 	@Override
 	protected GuiScreen buildChildScreen()
 	{
-		return new GuiVeinsEditor(owningScreen, CavelandConfig.veinManager);
+		return new GuiVeinsEditor(owningScreen, CavelandConfig.VEINS);
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class CavelandVeinsEntry extends CategoryEntry
 	@Override
 	public void setToDefault()
 	{
-		CaveVeinManager manager = CavelandConfig.veinManager;
+		CaveVeinManager manager = CavelandConfig.VEINS;
 
 		try
 		{

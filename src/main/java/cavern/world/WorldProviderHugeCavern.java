@@ -10,7 +10,7 @@ public class WorldProviderHugeCavern extends WorldProviderCavern
 	@Override
 	protected BiomeProvider createBiomeProvider()
 	{
-		return new CaveBiomeProvider(world, HugeCavernConfig.biomeManager);
+		return new CaveBiomeProvider(world, HugeCavernConfig.BIOMES);
 	}
 
 	@Override

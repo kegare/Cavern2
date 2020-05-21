@@ -47,7 +47,7 @@ public class WorldProviderCavern extends WorldProviderSurface implements CustomS
 
 	protected BiomeProvider createBiomeProvider()
 	{
-		return new CaveBiomeProvider(world, CavernConfig.biomeManager);
+		return new CaveBiomeProvider(world, CavernConfig.BIOMES);
 	}
 
 	@Override
