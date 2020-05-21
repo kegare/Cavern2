@@ -371,8 +371,8 @@ public class ChunkGeneratorFrostMountains implements IChunkGenerator
 	{
 		BlockFalling.fallInstantly = true;
 
-		int blockX = x * 16;
-		int blockY = z * 16;
+		int blockX = x << 4;
+		int blockY = z << 4;
 		BlockPos blockpos = new BlockPos(blockX, 0, blockY);
 		rand.setSeed(world.getSeed());
 		long xSeed = rand.nextLong() / 2L * 2L + 1L;

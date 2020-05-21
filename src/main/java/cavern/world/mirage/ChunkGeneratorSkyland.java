@@ -383,7 +383,7 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 
 		ForgeEventFactory.onChunkPopulate(true, this, world, rand, chunkX, chunkZ, false);
 
-		BlockPos pos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
+		BlockPos pos = new BlockPos(chunkX << 4, 0, chunkZ << 4);
 		Biome biome = world.getBiome(pos.add(16, 0, 16));
 		rand.setSeed(world.getSeed());
 		long xSeed = rand.nextLong() / 2L * 2L + 1L;

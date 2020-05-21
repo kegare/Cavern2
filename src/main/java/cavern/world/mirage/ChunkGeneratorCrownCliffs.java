@@ -318,8 +318,8 @@ public class ChunkGeneratorCrownCliffs implements IChunkGenerator
 	{
 		BlockFalling.fallInstantly = true;
 
-		int x = chunkX * 16;
-		int z = chunkZ * 16;
+		int x = chunkX << 4;
+		int z = chunkZ << 4;
 		BlockPos blockpos = new BlockPos(x, 0, z);
 		Biome biome = world.getBiome(blockpos.add(16, 0, 16));
 		rand.setSeed(world.getSeed());

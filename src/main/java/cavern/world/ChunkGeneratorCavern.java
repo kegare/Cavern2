@@ -194,8 +194,8 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 	{
 		BlockFalling.fallInstantly = true;
 
-		int worldX = chunkX * 16;
-		int worldZ = chunkZ * 16;
+		int worldX = chunkX << 4;
+		int worldZ = chunkZ << 4;
 		BlockPos blockPos = new BlockPos(worldX, 0, worldZ);
 		ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
 		Biome biome = world.getBiome(blockPos.add(16, 0, 16));
@@ -302,26 +302,17 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 
 			if (rand.nextInt(5) <= i)
 			{
-				x = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
-
-				mushroomBrownGen.generate(world, rand, blockPos.add(x, 0, z));
+				mushroomBrownGen.generate(world, rand, blockPos.add(16, 0, 16));
 			}
 
 			if (rand.nextInt(10) <= i)
 			{
-				x = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
-
-				mushroomRedGen.generate(world, rand, blockPos.add(x, 0, z));
+				mushroomRedGen.generate(world, rand, blockPos.add(16, 0, 16));
 			}
 
 			if (rand.nextInt(7) <= i)
 			{
-				x = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
-
-				cavenicShroomGen.generate(world, rand, blockPos.add(x, 0, z));
+				cavenicShroomGen.generate(world, rand, blockPos.add(16, 0, 16));
 			}
 		}
 

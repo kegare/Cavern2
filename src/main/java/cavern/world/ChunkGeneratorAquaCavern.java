@@ -156,8 +156,8 @@ public class ChunkGeneratorAquaCavern implements IChunkGenerator
 	{
 		BlockFalling.fallInstantly = true;
 
-		int worldX = chunkX * 16;
-		int worldZ = chunkZ * 16;
+		int worldX = chunkX << 4;
+		int worldZ = chunkZ << 4;
 		BlockPos blockPos = new BlockPos(worldX, 0, worldZ);
 		ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
 		int worldHeight = world.provider.getActualHeight();

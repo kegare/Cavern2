@@ -1,23 +1,23 @@
-package cavern.world;
+package cavern.world.gen;
 
 import java.util.List;
 
+import cavern.world.CaveBiomeProvider;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerCaveBiomes extends GenLayer
 {
-	private final BiomeProvider provider;
+	private final CaveBiomeProvider provider;
 
-	public GenLayerCaveBiomes(BiomeProvider provider, long seed, GenLayer layer)
+	public GenLayerCaveBiomes(CaveBiomeProvider provider, long seed, GenLayer layer)
 	{
 		this(provider, seed);
 		this.parent = layer;
 	}
 
-	public GenLayerCaveBiomes(BiomeProvider provider, long seed)
+	public GenLayerCaveBiomes(CaveBiomeProvider provider, long seed)
 	{
 		super(seed);
 		this.provider = provider;
@@ -34,7 +34,7 @@ public class GenLayerCaveBiomes extends GenLayer
 			{
 				initChunkSeed(dx + x, dz + z);
 
-				dest[dx + dz * width] = Biome.getIdForBiome(getRandomBiome(provider.getBiomesToSpawnIn()));
+				dest[dx + dz * width] = Biome.getIdForBiome(getRandomBiome(provider.getCachedBiomes()));
 			}
 		}
 

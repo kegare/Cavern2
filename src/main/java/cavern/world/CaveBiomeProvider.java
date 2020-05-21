@@ -3,10 +3,13 @@ package cavern.world;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.collect.Lists;
 
 import cavern.config.manager.CaveBiomeManager;
 import cavern.util.CaveUtils;
+import cavern.world.gen.GenLayerCaveBiomes;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
@@ -16,14 +19,18 @@ import net.minecraft.world.gen.layer.GenLayerZoom;
 
 public class CaveBiomeProvider extends BiomeProvider
 {
+	private final World world;
 	private final CaveBiomeCache biomeCache;
 	private final CaveBiomeManager biomeManager;
 
+	private Pair<Long, List<Biome>> cachedBiomes;
+
 	public CaveBiomeProvider(World world, CaveBiomeManager biomeManager)
 	{
-		this.makeLayers(world.getSeed());
+		this.world = world;
 		this.biomeCache = new CaveBiomeCache(this, 512, true);
 		this.biomeManager = biomeManager;
+		this.makeLayers(world.getSeed());
 	}
 
 	private void makeLayers(long seed)
@@ -49,6 +56,18 @@ public class CaveBiomeProvider extends BiomeProvider
 	public List<Biome> getBiomesToSpawnIn()
 	{
 		return Lists.newArrayList(biomeManager.getCaveBiomes().keySet());
+	}
+
+	public List<Biome> getCachedBiomes()
+	{
+		long time = world.getWorldInfo().getWorldTotalTime();
+
+		if (cachedBiomes == null || cachedBiomes.getLeft().longValue() + 400L < time)
+		{
+			cachedBiomes = Pair.of(Long.valueOf(time), getBiomesToSpawnIn());
+		}
+
+		return cachedBiomes.getRight();
 	}
 
 	@Override
