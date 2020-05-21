@@ -257,11 +257,11 @@ public class CaveEntitySpawner
 		return 24.0D;
 	}
 
-	protected BlockPos getRandomPosition(World world, int x, int y, int z)
+	protected BlockPos getRandomPosition(World world, int chunkX, int y, int chunkZ)
 	{
-		int posX = x * 16 + world.rand.nextInt(16);
-		int posZ = z * 16 + world.rand.nextInt(16);
-		int posY = MathHelper.getInt(world.rand, Math.max(y - 32, 1), Math.min(y + 32, world.getActualHeight()));
+		int posX = (chunkX << 4) + world.rand.nextInt(16);
+		int posZ = (chunkZ << 4) + world.rand.nextInt(16);
+		int posY = MathHelper.getInt(world.rand, Math.max(y - 50, 1), Math.min(y + 50, world.getActualHeight()));
 
 		return new BlockPos(posX, posY, posZ);
 	}

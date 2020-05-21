@@ -1,5 +1,6 @@
 package cavern.world;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -388,9 +389,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 	@Override
 	public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
 	{
-		Biome biome = world.getBiome(pos);
-
-		return biome.getSpawnableList(creatureType);
+		return Collections.emptyList();
 	}
 
 	@Override
