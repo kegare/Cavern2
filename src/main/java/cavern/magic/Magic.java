@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import cavern.core.CaveSounds;
+import cavern.handler.CaveEventHooks;
 import cavern.item.ItemMagicBook;
 import cavern.item.ItemMagicBook.EnumType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class Magic
 {
-	protected static final Random RANDOM = new Random();
+	protected static final Random RANDOM = CaveEventHooks.RANDOM;
 
 	protected final World world;
 	protected final EntityPlayer player;

@@ -1,9 +1,10 @@
 package cavern.world;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import cavern.block.BlockCavenicBush;
+import cavern.block.CaveBlocks;
 import cavern.config.HugeCavernConfig;
 import cavern.config.manager.CaveBiome;
 import cavern.world.gen.MapGenHugeCaves;
@@ -56,7 +57,7 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
 	private final WorldGenerator mushroomBrownGen = new WorldGenCaveBush(Blocks.BROWN_MUSHROOM);
 	private final WorldGenerator mushroomRedGen = new WorldGenCaveBush(Blocks.RED_MUSHROOM);
-	private final WorldGenerator cavenicShroomGen = new WorldGenBush(new BlockCavenicBush());
+	private final WorldGenerator cavenicShroomGen = new WorldGenBush(CaveBlocks.CAVENIC_SHROOM);
 	private final WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
 	private final WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
 
@@ -161,8 +162,8 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 	{
 		BlockFalling.fallInstantly = true;
 
-		int worldX = chunkX * 16;
-		int worldZ = chunkZ * 16;
+		int worldX = chunkX << 4;
+		int worldZ = chunkZ << 4;
 		BlockPos blockPos = new BlockPos(worldX, 0, worldZ);
 		ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
 		Biome biome = world.getBiome(blockPos.add(16, 0, 16));
@@ -227,26 +228,17 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 
 			if (rand.nextInt(7) <= i)
 			{
-				x = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
-
-				mushroomBrownGen.generate(world, rand, blockPos.add(x, 0, z));
+				mushroomBrownGen.generate(world, rand, blockPos.add(16, 0, 16));
 			}
 
 			if (rand.nextInt(10) <= i)
 			{
-				x = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
-
-				mushroomRedGen.generate(world, rand, blockPos.add(x, 0, z));
+				mushroomRedGen.generate(world, rand, blockPos.add(16, 0, 16));
 			}
 
 			if (rand.nextInt(5) <= i)
 			{
-				x = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
-
-				cavenicShroomGen.generate(world, rand, blockPos.add(x, 0, z));
+				cavenicShroomGen.generate(world, rand, blockPos.add(16, 0, 16));
 			}
 		}
 
@@ -324,9 +316,7 @@ public class ChunkGeneratorHugeCavern implements IChunkGenerator
 	@Override
 	public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
 	{
-		Biome biome = world.getBiome(pos);
-
-		return biome.getSpawnableList(creatureType);
+		return Collections.emptyList();
 	}
 
 	@Override

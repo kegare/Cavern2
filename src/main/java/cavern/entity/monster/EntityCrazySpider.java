@@ -1,6 +1,5 @@
 package cavern.entity.monster;
 
-import cavern.api.CavernAPI;
 import cavern.client.particle.ParticleCrazyMob;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -79,12 +78,6 @@ public class EntityCrazySpider extends EntityCavenicSpider
 	}
 
 	@Override
-	public boolean getCanSpawnHere()
-	{
-		return CavernAPI.dimension.isInCavenia(this) && super.getCanSpawnHere();
-	}
-
-	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {}
 
 	@SideOnly(Side.CLIENT)
@@ -126,7 +119,7 @@ public class EntityCrazySpider extends EntityCavenicSpider
 			{
 				distance = getDistance(player);
 
-				if (canEntityBeSeen(player) || distance <= 32.0D)
+				if (canEntityBeSeen(player) && distance < 20.0D)
 				{
 					canSee = true;
 
@@ -134,7 +127,7 @@ public class EntityCrazySpider extends EntityCavenicSpider
 				}
 			}
 
-			bossInfo.setDarkenSky(!canSee || distance <= 50.0D);
+			bossInfo.setDarkenSky(!canSee || distance < 30.0D);
 			bossInfo.setVisible(canSee);
 		}
 

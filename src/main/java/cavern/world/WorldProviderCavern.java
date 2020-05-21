@@ -1,12 +1,8 @@
 package cavern.world;
 
-import javax.annotation.Nullable;
-
 import cavern.client.CaveMusics;
 import cavern.client.renderer.EmptyRenderer;
 import cavern.config.CavernConfig;
-import cavern.config.manager.CaveBiomeManager;
-import cavern.config.property.ConfigBiomeType;
 import cavern.entity.CaveEntityRegistry;
 import cavern.world.CaveEntitySpawner.IWorldEntitySpawner;
 import net.minecraft.client.audio.MusicTicker.MusicType;
@@ -26,6 +22,7 @@ import net.minecraft.world.WorldProviderSurface;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
@@ -45,27 +42,12 @@ public class WorldProviderCavern extends WorldProviderSurface implements CustomS
 		hasSkyLight = false;
 		seedData = world instanceof WorldServer ? new CustomSeedData(world.getWorldInfo().getDimensionData(getDimension())) : new CustomSeedData();
 		heightData = world instanceof WorldServer ? new CustomHeightData(world.getWorldInfo().getDimensionData(getDimension())) : null;
+		biomeProvider = createBiomeProvider();
+	}
 
-		CaveBiomeManager manager = getBiomeManager();
-
-		if (manager != null)
-		{
-			switch (getBiomeType())
-			{
-				case SQUARE:
-					biomeProvider = new BiomeProviderCavern(world, 1, manager);
-					return;
-				case LARGE_SQUARE:
-					biomeProvider = new BiomeProviderCavern(world, 5, manager);
-					return;
-				default:
-			}
-		}
-
-		if (biomeProvider == null)
-		{
-			biomeProvider = world.getWorldInfo().getTerrainType().getBiomeProvider(world);
-		}
+	protected BiomeProvider createBiomeProvider()
+	{
+		return new CaveBiomeProvider(world, CavernConfig.biomeManager);
 	}
 
 	@Override
@@ -78,11 +60,6 @@ public class WorldProviderCavern extends WorldProviderSurface implements CustomS
 	public DimensionType getDimensionType()
 	{
 		return CaveDimensions.CAVERN;
-	}
-
-	public ConfigBiomeType.Type getBiomeType()
-	{
-		return CavernConfig.biomeType.getType();
 	}
 
 	@Override
@@ -121,12 +98,6 @@ public class WorldProviderCavern extends WorldProviderSurface implements CustomS
 		}
 
 		return super.getActualHeight();
-	}
-
-	@Nullable
-	public CaveBiomeManager getBiomeManager()
-	{
-		return CavernConfig.biomeManager;
 	}
 
 	public int getMonsterSpawn()

@@ -29,19 +29,19 @@ import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class CaveEntityRegistry
+public final class CaveEntityRegistry
 {
 	public static final NonNullList<SpawnListEntry> SPAWNS = NonNullList.create();
 	public static final NonNullList<SpawnListEntry> CRAZY_SPAWNS = NonNullList.create();
 	public static final NonNullList<SpawnListEntry> AQUA_SPAWNS = NonNullList.create();
 	public static final NonNullList<SpawnListEntry> ANIMAL_SPAWNS = NonNullList.create();
 
-	protected static EntityEntry createEntry(Class<? extends Entity> entityClass, String key, String name)
+	private static EntityEntry createEntry(Class<? extends Entity> entityClass, String key, String name)
 	{
 		return new EntityEntry(entityClass, name).setRegistryName(CaveUtils.getKey(key));
 	}
 
-	protected static EntityEntry createEntry(Class<? extends Entity> entityClass, String key, String name, int primaryColor, int secondaryColor)
+	private static EntityEntry createEntry(Class<? extends Entity> entityClass, String key, String name, int primaryColor, int secondaryColor)
 	{
 		EntityEntry entry = new EntityEntry(entityClass, name);
 		ResourceLocation regKey = CaveUtils.getKey(key);

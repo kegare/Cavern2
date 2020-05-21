@@ -115,18 +115,18 @@ public class EntityDurangHog extends EntityPig
 		{
 			float f = (eatTimer - 4 - tick) / 32.0F;
 
-			return ((float)Math.PI / 5F) + ((float)Math.PI * 7F / 100F) * MathHelper.sin(f * 28.7F);
+			return (float)Math.PI / 5F + (float)Math.PI * 7F / 100F * MathHelper.sin(f * 28.7F);
 		}
 		else
 		{
-			return eatTimer > 0 ? ((float)Math.PI / 5F) : rotationPitch * 0.017453292F;
+			return eatTimer > 0 ? (float)Math.PI / 5F : rotationPitch * 0.017453292F;
 		}
 	}
 
 	@Override
 	public boolean getCanSpawnHere()
 	{
-		IBlockState state = world.getBlockState((new BlockPos(this)).down());
+		IBlockState state = world.getBlockState(new BlockPos(this).down());
 
 		int i = MathHelper.floor(posX);
 		int j = MathHelper.floor(getEntityBoundingBox().minY);

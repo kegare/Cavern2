@@ -1,5 +1,6 @@
 package cavern.world.mirage;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -185,8 +186,8 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 	{
 		BlockFalling.fallInstantly = true;
 
-		int worldX = chunkX * 16;
-		int worldZ = chunkZ * 16;
+		int worldX = chunkX << 4;
+		int worldZ = chunkZ << 4;
 		BlockPos blockPos = new BlockPos(worldX, 0, worldZ);
 		ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
 		Biome biome = world.getBiome(blockPos.add(16, 0, 16));
@@ -251,15 +252,9 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 
 		if (TerrainGen.decorate(world, rand, chunkPos, Decorate.EventType.SHROOM))
 		{
-			x = rand.nextInt(16) + 8;
-			z = rand.nextInt(16) + 8;
+			mushroomBrownGen.generate(world, rand, blockPos.add(16, 0, 16));
 
-			mushroomBrownGen.generate(world, rand, blockPos.add(x, 0, z));
-
-			x = rand.nextInt(16) + 8;
-			z = rand.nextInt(16) + 8;
-
-			mushroomRedGen.generate(world, rand, blockPos.add(x, 0, z));
+			mushroomRedGen.generate(world, rand, blockPos.add(16, 0, 16));
 		}
 
 		if (BiomeDictionary.hasType(biome, Type.SANDY))
@@ -428,9 +423,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 	@Override
 	public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
 	{
-		Biome biome = world.getBiome(pos);
-
-		return biome.getSpawnableList(creatureType);
+		return Collections.emptyList();
 	}
 
 	@Override

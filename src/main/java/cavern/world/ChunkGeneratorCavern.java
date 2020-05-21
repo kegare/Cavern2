@@ -1,5 +1,6 @@
 package cavern.world;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -194,8 +195,8 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 	{
 		BlockFalling.fallInstantly = true;
 
-		int worldX = chunkX * 16;
-		int worldZ = chunkZ * 16;
+		int worldX = chunkX << 4;
+		int worldZ = chunkZ << 4;
 		BlockPos blockPos = new BlockPos(worldX, 0, worldZ);
 		ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
 		Biome biome = world.getBiome(blockPos.add(16, 0, 16));
@@ -263,11 +264,9 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 		{
 			if (rand.nextInt(100) == 0)
 			{
-				x = rand.nextInt(16) + 8;
 				y = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
 
-				towerDungeonGen.generate(world, rand, blockPos.add(x, y, z));
+				towerDungeonGen.generate(world, rand, blockPos.add(16, y, 16));
 			}
 		}
 
@@ -276,7 +275,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 			if (rand.nextInt(50) == 0)
 			{
 				x = rand.nextInt(16) + 8;
-				y = rand.nextInt(32) + 8;
+				y = rand.nextInt(50) + 12;
 				z = rand.nextInt(16) + 8;
 
 				mirageRemnantGen.generate(world, rand, blockPos.add(x, y, z));
@@ -302,26 +301,17 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 
 			if (rand.nextInt(5) <= i)
 			{
-				x = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
-
-				mushroomBrownGen.generate(world, rand, blockPos.add(x, 0, z));
+				mushroomBrownGen.generate(world, rand, blockPos.add(16, 0, 16));
 			}
 
 			if (rand.nextInt(10) <= i)
 			{
-				x = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
-
-				mushroomRedGen.generate(world, rand, blockPos.add(x, 0, z));
+				mushroomRedGen.generate(world, rand, blockPos.add(16, 0, 16));
 			}
 
 			if (rand.nextInt(7) <= i)
 			{
-				x = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
-
-				cavenicShroomGen.generate(world, rand, blockPos.add(x, 0, z));
+				cavenicShroomGen.generate(world, rand, blockPos.add(16, 0, 16));
 			}
 		}
 
@@ -399,9 +389,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 	@Override
 	public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
 	{
-		Biome biome = world.getBiome(pos);
-
-		return biome.getSpawnableList(creatureType);
+		return Collections.emptyList();
 	}
 
 	@Override

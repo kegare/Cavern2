@@ -1,13 +1,14 @@
 package cavern.world.mirage;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import cavern.block.CaveBlocks;
 import cavern.config.CaveniaConfig;
 import cavern.config.manager.CaveBiome;
 import cavern.world.gen.MapGenCaveniaCaves;
 import cavern.world.gen.VeinGenerator;
-import cavern.world.gen.WorldGenCaveBush;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
@@ -22,6 +23,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenBase;
+import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -52,8 +54,7 @@ public class ChunkGeneratorCavenia implements IChunkGenerator
 
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
-	private final WorldGenerator mushroomBrownGen = new WorldGenCaveBush(Blocks.BROWN_MUSHROOM);
-	private final WorldGenerator mushroomRedGen = new WorldGenCaveBush(Blocks.RED_MUSHROOM);
+	private final WorldGenerator cavenicShroomGen = new WorldGenBush(CaveBlocks.CAVENIC_SHROOM);
 	private final WorldGenerator liquidWaterGen = new WorldGenLiquids(Blocks.FLOWING_WATER);
 	private final WorldGenerator liquidLavaGen = new WorldGenLiquids(Blocks.FLOWING_LAVA);
 
@@ -158,8 +159,8 @@ public class ChunkGeneratorCavenia implements IChunkGenerator
 	{
 		BlockFalling.fallInstantly = true;
 
-		int worldX = chunkX * 16;
-		int worldZ = chunkZ * 16;
+		int worldX = chunkX << 4;
+		int worldZ = chunkZ << 4;
 		BlockPos blockPos = new BlockPos(worldX, 0, worldZ);
 		ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
 		Biome biome = world.getBiome(blockPos.add(16, 0, 16));
@@ -222,20 +223,9 @@ public class ChunkGeneratorCavenia implements IChunkGenerator
 				i += 1;
 			}
 
-			if (rand.nextInt(10) <= i)
+			if (rand.nextInt(6) <= i)
 			{
-				x = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
-
-				mushroomBrownGen.generate(world, rand, blockPos.add(x, 0, z));
-			}
-
-			if (rand.nextInt(10) <= i)
-			{
-				x = rand.nextInt(16) + 8;
-				z = rand.nextInt(16) + 8;
-
-				mushroomRedGen.generate(world, rand, blockPos.add(x, 0, z));
+				cavenicShroomGen.generate(world, rand, blockPos.add(16, 0, 16));
 			}
 		}
 
@@ -313,9 +303,7 @@ public class ChunkGeneratorCavenia implements IChunkGenerator
 	@Override
 	public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
 	{
-		Biome biome = world.getBiome(pos);
-
-		return biome.getSpawnableList(creatureType);
+		return Collections.emptyList();
 	}
 
 	@Override

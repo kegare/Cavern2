@@ -371,8 +371,8 @@ public class ChunkGeneratorWideDesert implements IChunkGenerator
 	{
 		BlockFalling.fallInstantly = true;
 
-		int blockX = x * 16;
-		int blockZ = z * 16;
+		int blockX = x << 4;
+		int blockZ = z << 4;
 		BlockPos blockPos = new BlockPos(blockX, 0, blockZ);
 		rand.setSeed(world.getSeed());
 		long xSeed = rand.nextLong() / 2L * 2L + 1L;

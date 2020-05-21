@@ -114,7 +114,7 @@ public class ItemMirageBook extends Item implements ITeleporter
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack)
 	{
-		return 1.0D - ((double)getTicketCount(stack) / (double)EnumType.byItemStack(stack).getMaxTicket());
+		return 1.0D - (double)getTicketCount(stack) / (double)EnumType.byItemStack(stack).getMaxTicket();
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.management.PlayerChunkMapEntry;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -150,7 +151,7 @@ public class CaveEntitySpawner
 										{
 											if (entry == null)
 											{
-												entry = world.getSpawnListEntryForTypeAt(type, pos);
+												entry = getSpawnListEntryForTypeAt(world, type, pos);
 
 												if (entry == null)
 												{
@@ -158,7 +159,7 @@ public class CaveEntitySpawner
 												}
 											}
 
-											if (world.canCreatureTypeSpawnHere(type, entry, pos) &&
+											if (canCreatureTypeSpawnHere(world, type, entry, pos) &&
 												WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntitySpawnPlacementRegistry.getPlacementForEntity(entry.entityClass), world, pos))
 											{
 												EntityLiving entity = createSpawnCreature(world, type, spawnPos, entry);
@@ -256,13 +257,32 @@ public class CaveEntitySpawner
 		return 24.0D;
 	}
 
-	protected BlockPos getRandomPosition(World world, int x, int y, int z)
+	protected BlockPos getRandomPosition(World world, int chunkX, int y, int chunkZ)
 	{
-		int posX = x * 16 + world.rand.nextInt(16);
-		int posZ = z * 16 + world.rand.nextInt(16);
-		int posY = MathHelper.getInt(world.rand, Math.max(y - 32, 1), Math.min(y + 32, world.getActualHeight()));
+		int posX = (chunkX << 4) + world.rand.nextInt(16);
+		int posZ = (chunkZ << 4) + world.rand.nextInt(16);
+		int posY = MathHelper.getInt(world.rand, Math.max(y - 50, 1), Math.min(y + 50, world.getActualHeight()));
 
 		return new BlockPos(posX, posY, posZ);
+	}
+
+	@Nullable
+	protected Biome.SpawnListEntry getSpawnListEntryForTypeAt(WorldServer world, EnumCreatureType creatureType, BlockPos pos)
+	{
+		List<Biome.SpawnListEntry> list = world.getBiome(pos).getSpawnableList(creatureType);
+
+		list = ForgeEventFactory.getPotentialSpawns(world, creatureType, pos, list);
+
+		return list != null && !list.isEmpty() ? WeightedRandom.getRandomItem(world.rand, list) : null;
+	}
+
+	protected boolean canCreatureTypeSpawnHere(WorldServer world, EnumCreatureType creatureType, Biome.SpawnListEntry spawnListEntry, BlockPos pos)
+	{
+		List<Biome.SpawnListEntry> list = world.getBiome(pos).getSpawnableList(creatureType);
+
+		list = ForgeEventFactory.getPotentialSpawns(world, creatureType, pos, list);
+
+		return list != null && !list.isEmpty() ? list.contains(spawnListEntry) : false;
 	}
 
 	@Nullable

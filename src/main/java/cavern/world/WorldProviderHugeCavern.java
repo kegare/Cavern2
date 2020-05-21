@@ -1,13 +1,18 @@
 package cavern.world;
 
 import cavern.config.HugeCavernConfig;
-import cavern.config.manager.CaveBiomeManager;
-import cavern.config.property.ConfigBiomeType;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 
 public class WorldProviderHugeCavern extends WorldProviderCavern
 {
+	@Override
+	protected BiomeProvider createBiomeProvider()
+	{
+		return new CaveBiomeProvider(world, HugeCavernConfig.biomeManager);
+	}
+
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
@@ -21,21 +26,9 @@ public class WorldProviderHugeCavern extends WorldProviderCavern
 	}
 
 	@Override
-	public ConfigBiomeType.Type getBiomeType()
-	{
-		return ConfigBiomeType.Type.NATURAL;
-	}
-
-	@Override
 	public int getWorldHeight()
 	{
 		return HugeCavernConfig.worldHeight;
-	}
-
-	@Override
-	public CaveBiomeManager getBiomeManager()
-	{
-		return HugeCavernConfig.biomeManager;
 	}
 
 	@Override
