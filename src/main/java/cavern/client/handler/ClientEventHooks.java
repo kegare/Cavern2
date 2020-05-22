@@ -278,7 +278,7 @@ public final class ClientEventHooks
 			if (Miner.get(mc.player).getRank() < MiningAssistConfig.minerRank.getValue())
 			{
 				ITextComponent component = new TextComponentTranslation(MinerRank.get(MiningAssistConfig.minerRank.getValue()).getUnlocalizedName());
-				component.getStyle().setItalic(Boolean.valueOf(true));
+				component.getStyle().setItalic(true);
 				component = new TextComponentTranslation("cavern.miningassist.toggle.failed.message", component);
 				component.getStyle().setColor(TextFormatting.RED);
 
@@ -351,7 +351,7 @@ public final class ClientEventHooks
 
 			message = null;
 
-			if (Version.DEV_DEBUG)
+			if (Version.isDev())
 			{
 				message = new TextComponentTranslation("cavern.version.message.dev", name);
 			}
@@ -383,7 +383,7 @@ public final class ClientEventHooks
 			if (assist != MiningAssist.DISABLED)
 			{
 				ITextComponent message = new TextComponentTranslation(assist.getUnlocalizedName());
-				message.getStyle().setColor(TextFormatting.GRAY).setItalic(Boolean.valueOf(true));
+				message.getStyle().setColor(TextFormatting.GRAY).setItalic(true);
 				message = new TextComponentTranslation("cavern.miningassist.notify.message", message);
 
 				player.sendMessage(message);

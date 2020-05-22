@@ -167,43 +167,33 @@ public class ConfigMiningPoints
 		}
 	}
 
-	public class PointEntry implements Comparable<PointEntry>
+	private class PointEntry implements Comparable<PointEntry>
 	{
 		private String name;
 		private int point;
 
-		public PointEntry(String name, int point)
+		private PointEntry(String name, int point)
 		{
 			this.name = name;
 			this.point = point;
 		}
 
-		public PointEntry(BlockMeta blockMeta, int point)
+		private PointEntry(BlockMeta blockMeta, int point)
 		{
 			this(blockMeta.getName(true), point);
 		}
 
-		public String getName()
-		{
-			return name;
-		}
-
-		public int getPoint()
-		{
-			return point;
-		}
-
-		public boolean isOreDict()
+		private boolean isOreDict()
 		{
 			return OreDictionary.doesOreNameExist(name);
 		}
 
-		public boolean isNotOreDictEmpty()
+		private boolean isNotOreDictEmpty()
 		{
 			return OreDictionary.getOres(name, false).size() > 0;
 		}
 
-		public boolean isValid()
+		private boolean isValid()
 		{
 			if (Strings.isNullOrEmpty(name))
 			{

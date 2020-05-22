@@ -238,6 +238,6 @@ public class RegenerationMessage implements ISimpleMessage<RegenerationMessage, 
 
 	private void sendProgress(EnumType type)
 	{
-		CaveNetworkRegistry.sendToAll(new RegenerationGuiMessage(type));
+		CaveNetworkRegistry.NETWORK.sendToAll(new RegenerationGuiMessage(type));
 	}
 }

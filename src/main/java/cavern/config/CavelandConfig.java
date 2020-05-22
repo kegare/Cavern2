@@ -31,7 +31,7 @@ public class CavelandConfig
 	public static int monsterSpawn;
 	public static double caveBrightness;
 
-	public static CaveVeinManager veinManager = new CaveVeinManager();
+	public static final CaveVeinManager VEINS = new CaveVeinManager();
 
 	public static void syncConfig()
 	{
@@ -112,16 +112,16 @@ public class CavelandConfig
 
 	public static void syncVeinsConfig()
 	{
-		if (veinManager.config == null)
+		if (VEINS.config == null)
 		{
-			veinManager.config = Config.loadConfig("caveland", "veins");
+			VEINS.config = Config.loadConfig("caveland", "veins");
 		}
 		else
 		{
-			veinManager.getCaveVeins().clear();
+			VEINS.getCaveVeins().clear();
 		}
 
-		if (veinManager.config.getCategoryNames().isEmpty())
+		if (VEINS.config.getCategoryNames().isEmpty())
 		{
 			List<CaveVein> veins = Lists.newArrayList();
 
@@ -135,18 +135,18 @@ public class CavelandConfig
 			veins.add(new CaveVein(new BlockMeta(Blocks.SAND, BlockSand.EnumType.SAND.getMetadata()), 7, 10, 1, 10));
 			veins.add(new CaveVein(new BlockMeta(CaveBlocks.CAVE_BLOCK, BlockCave.EnumType.FISSURED_STONE.getMetadata()), 30, 2, 1, 10));
 
-			CavernConfig.generateVeinsConfig(veinManager, veins);
+			CavernConfig.generateVeinsConfig(VEINS, veins);
 		}
 		else
 		{
-			if (CavernConfig.addVeinsFromConfig(veinManager))
+			if (CavernConfig.addVeinsFromConfig(VEINS))
 			{
 				try
 				{
-					FileUtils.forceDelete(new File(veinManager.config.toString()));
+					FileUtils.forceDelete(new File(VEINS.config.toString()));
 
-					veinManager.getCaveVeins().clear();
-					veinManager.config = null;
+					VEINS.getCaveVeins().clear();
+					VEINS.config = null;
 
 					syncVeinsConfig();
 				}
@@ -157,6 +157,6 @@ public class CavelandConfig
 			}
 		}
 
-		Config.saveConfig(veinManager.config);
+		Config.saveConfig(VEINS.config);
 	}
 }

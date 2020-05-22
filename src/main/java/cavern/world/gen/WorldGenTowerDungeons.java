@@ -26,7 +26,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 public class WorldGenTowerDungeons extends WorldGenerator
 {
-	public static final ResourceLocation CHESTS_TOWER_DUNGEON = LootTableList.register(CaveUtils.getKey("chests/tower_dungeon"));
+	private static final ResourceLocation CHESTS_TOWER_DUNGEON = LootTableList.register(CaveUtils.getKey("chests/tower_dungeon"));
 
 	private int maxFloor;
 	private int roomSize;

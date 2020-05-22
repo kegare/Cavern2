@@ -240,7 +240,7 @@ public class BlockMeta implements Comparable<BlockMeta>
 							{
 								try
 								{
-									return ((Integer)method.invoke(obj, new Object[0])).intValue();
+									return (Integer)method.invoke(obj, new Object[0]);
 								}
 								catch (Exception e) {}
 							}
@@ -259,7 +259,7 @@ public class BlockMeta implements Comparable<BlockMeta>
 		public String load(Pair<Block, Integer> key) throws Exception
 		{
 			Block block = key.getLeft();
-			int meta = key.getRight().intValue();
+			int meta = key.getRight();
 
 			if (block == null)
 			{

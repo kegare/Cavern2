@@ -80,7 +80,7 @@ public final class CaveEventHooks
 
 			if (event.getEntity() instanceof EntityPlayerMP)
 			{
-				CaveNetworkRegistry.sendTo(new CustomSeedMessage(data.getSeedValue(world.getWorldInfo().getSeed())), (EntityPlayerMP)event.getEntity());
+				CaveNetworkRegistry.sendTo(() -> new CustomSeedMessage(data.getSeedValue(world.getWorldInfo().getSeed())), (EntityPlayerMP)event.getEntity());
 			}
 		}
 	}

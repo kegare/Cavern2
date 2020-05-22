@@ -162,7 +162,7 @@ public class BlockPortalCavern extends BlockPortal
 
 			if (playerMP.mcServer.getPlayerList().canSendCommands(playerMP.getGameProfile()))
 			{
-				CaveNetworkRegistry.sendTo(new RegenerationGuiMessage(RegenerationGuiMessage.EnumType.OPEN), playerMP);
+				CaveNetworkRegistry.sendTo(() -> new RegenerationGuiMessage(RegenerationGuiMessage.EnumType.OPEN), playerMP);
 			}
 		}
 

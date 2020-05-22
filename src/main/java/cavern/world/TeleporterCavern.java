@@ -10,6 +10,7 @@ import cavern.block.BlockPortalCavern;
 import cavern.config.GeneralConfig;
 import cavern.core.Cavern;
 import cavern.data.PortalCache;
+import net.minecraft.block.BlockPortal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockPattern;
 import net.minecraft.entity.Entity;
@@ -429,7 +430,7 @@ public class TeleporterCavern implements ITeleporter
 			}
 		}
 
-		IBlockState portalState = portalBlock.getDefaultState().withProperty(BlockPortalCavern.AXIS, i1 != 0 ? EnumFacing.Axis.X : EnumFacing.Axis.Z);
+		IBlockState portalState = portalBlock.getDefaultState().withProperty(BlockPortal.AXIS, i1 != 0 ? EnumFacing.Axis.X : EnumFacing.Axis.Z);
 		BlockPos portalPos = null;
 
 		for (int width = 0; width < 4; ++width)

@@ -66,7 +66,7 @@ public class GuiSelectMirageWorld extends GuiScreen
 		{
 			if (worldList.selected != null)
 			{
-				CaveNetworkRegistry.sendToServer(new MirageTeleportMessage(worldList.selected.getLeft()));
+				CaveNetworkRegistry.NETWORK.sendToServer(new MirageTeleportMessage(worldList.selected.getLeft()));
 			}
 
 			mc.displayGuiScreen(null);

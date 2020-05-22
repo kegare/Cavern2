@@ -40,7 +40,7 @@ public class WorldGenTreesPerverted extends WorldGenTrees
 	{
 		this(flag, min,
 			CaveBlocks.PERVERTED_LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, type),
-			CaveBlocks.PERVERTED_LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, type).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)), grow);
+			CaveBlocks.PERVERTED_LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, type).withProperty(BlockLeaves.CHECK_DECAY, false), grow);
 	}
 
 	@Override
@@ -238,12 +238,12 @@ public class WorldGenTreesPerverted extends WorldGenTrees
 
 	private void setCocoa(World world, int age, BlockPos pos, EnumFacing side)
 	{
-		setBlockAndNotifyAdequately(world, pos, Blocks.COCOA.getDefaultState().withProperty(BlockCocoa.AGE, Integer.valueOf(age)).withProperty(BlockHorizontal.FACING, side));
+		setBlockAndNotifyAdequately(world, pos, Blocks.COCOA.getDefaultState().withProperty(BlockCocoa.AGE, age).withProperty(BlockHorizontal.FACING, side));
 	}
 
 	private void setVine(World world, BlockPos pos, PropertyBool prop)
 	{
-		setBlockAndNotifyAdequately(world, pos, Blocks.VINE.getDefaultState().withProperty(prop, Boolean.valueOf(true)));
+		setBlockAndNotifyAdequately(world, pos, Blocks.VINE.getDefaultState().withProperty(prop, true));
 	}
 
 	private void setVines(World world, BlockPos pos, PropertyBool prop)

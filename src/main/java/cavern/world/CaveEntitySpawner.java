@@ -52,164 +52,177 @@ public class CaveEntitySpawner
 		{
 			return 0;
 		}
-		else
+
+		eligibleChunksForSpawning.clear();
+
+		int playerCount = 0;
+		double playerHeight = 0.0D;
+
+		for (EntityPlayer player : world.playerEntities)
 		{
-			eligibleChunksForSpawning.clear();
-
-			int playerCount = 0;
-			double playerHeight = 0.0D;
-
-			for (EntityPlayer player : world.playerEntities)
+			if (player.isSpectator())
 			{
-				if (!player.isSpectator())
+				continue;
+			}
+
+			int x = MathHelper.floor(player.posX / 16.0D);
+			int z = MathHelper.floor(player.posZ / 16.0D);
+			int range = 8;
+
+			for (int rx = -range; rx <= range; ++rx)
+			{
+				for (int rz = -range; rz <= range; ++rz)
 				{
-					int j = MathHelper.floor(player.posX / 16.0D);
-					int k = MathHelper.floor(player.posZ / 16.0D);
-					int range = 8;
+					boolean flag = rx == -range || rx == range || rz == -range || rz == range;
+					ChunkPos pos = new ChunkPos(rx + x, rz + z);
 
-					for (int i1 = -range; i1 <= range; ++i1)
+					if (!eligibleChunksForSpawning.contains(pos))
 					{
-						for (int j1 = -range; j1 <= range; ++j1)
+						++playerCount;
+
+						playerHeight += player.posY;
+
+						if (!flag && world.getWorldBorder().contains(pos))
 						{
-							boolean flag = i1 == -range || i1 == range || j1 == -range || j1 == range;
-							ChunkPos pos = new ChunkPos(i1 + j, j1 + k);
+							PlayerChunkMapEntry entry = world.getPlayerChunkMap().getEntry(pos.x, pos.z);
 
-							if (!eligibleChunksForSpawning.contains(pos))
+							if (entry != null && entry.isSentToPlayers())
 							{
-								++playerCount;
-
-								playerHeight += player.posY;
-
-								if (!flag && world.getWorldBorder().contains(pos))
-								{
-									PlayerChunkMapEntry entry = world.getPlayerChunkMap().getEntry(pos.x, pos.z);
-
-									if (entry != null && entry.isSentToPlayers())
-									{
-										eligibleChunksForSpawning.add(pos);
-									}
-								}
+								eligibleChunksForSpawning.add(pos);
 							}
 						}
 					}
 				}
 			}
-
-			int playerY = playerHeight > 0.0D ? MathHelper.ceil(playerHeight / playerCount) : 50;
-			int totalCount = 0;
-			BlockPos spawnPos = world.getSpawnPoint();
-
-			for (EnumCreatureType type : EnumCreatureType.values())
-			{
-				int maxNumber = getMaxNumberOfCreature(world, spawnHostileMobs, spawnPeacefulMobs, spawnOnSetTickRate, type);
-				double range = getSpawnRange(world, spawnHostileMobs, spawnPeacefulMobs, spawnOnSetTickRate, type);
-
-				if (maxNumber > 0 && canSpawnCreature(world, spawnHostileMobs, spawnPeacefulMobs, spawnOnSetTickRate, type))
-				{
-					int max = maxNumber * playerCount / MOB_COUNT_DIV;
-
-					if (world.countEntities(type, true) <= max)
-					{
-						List<ChunkPos> shuffled = Lists.newArrayList(eligibleChunksForSpawning);
-						Collections.shuffle(shuffled);
-
-						MutableBlockPos pos = new MutableBlockPos();
-
-						outside: for (ChunkPos chunkpos : shuffled)
-						{
-							BlockPos blockpos = getRandomPosition(world, chunkpos.x, playerY, chunkpos.z);
-							int originX = blockpos.getX();
-							int originY = blockpos.getY();
-							int originZ = blockpos.getZ();
-							IBlockState state = world.getBlockState(blockpos);
-
-							if (!state.isNormalCube())
-							{
-								int mobCount = 0;
-
-								for (int l = 0; l < 3; ++l)
-								{
-									int x = originX;
-									int y = originY;
-									int z = originZ;
-									int n = 6;
-									Biome.SpawnListEntry entry = null;
-									IEntityLivingData data = null;
-									int f = MathHelper.ceil(Math.random() * 4.0D);
-
-									for (int m = 0; m < f; ++m)
-									{
-										x += world.rand.nextInt(n) - world.rand.nextInt(n);
-										y += world.rand.nextInt(1) - world.rand.nextInt(1);
-										z += world.rand.nextInt(n) - world.rand.nextInt(n);
-										pos.setPos(x, y, z);
-
-										float posX = x + 0.5F;
-										float posZ = z + 0.5F;
-
-										if (!world.isAnyPlayerWithinRangeAt(posX, y, posZ, range) && spawnPos.distanceSq(posX, y, posZ) >= range * range)
-										{
-											if (entry == null)
-											{
-												entry = getSpawnListEntryForTypeAt(world, type, pos);
-
-												if (entry == null)
-												{
-													break;
-												}
-											}
-
-											if (canCreatureTypeSpawnHere(world, type, entry, pos) &&
-												WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntitySpawnPlacementRegistry.getPlacementForEntity(entry.entityClass), world, pos))
-											{
-												EntityLiving entity = createSpawnCreature(world, type, spawnPos, entry);
-
-												if (entity == null)
-												{
-													continue outside;
-												}
-
-												entity.setLocationAndAngles(posX, y, posZ, world.rand.nextFloat() * 360.0F, 0.0F);
-
-												Result canSpawn = ForgeEventFactory.canEntitySpawn(entity, world, posX, y, posZ, null);
-
-												if (canSpawn == Result.ALLOW || canSpawn == Result.DEFAULT && entity.getCanSpawnHere() && entity.isNotColliding())
-												{
-													if (!ForgeEventFactory.doSpecialSpawn(entity, world, posX, y, posZ, null))
-													{
-														data = entity.onInitialSpawn(world.getDifficultyForLocation(entity.getPosition()), data);
-													}
-
-													if (entity.isNotColliding())
-													{
-														++mobCount;
-
-														world.spawnEntity(entity);
-													}
-													else
-													{
-														entity.setDead();
-													}
-
-													if (mobCount >= ForgeEventFactory.getMaxSpawnPackSize(entity))
-													{
-														continue outside;
-													}
-												}
-
-												totalCount += mobCount;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
-			return totalCount;
 		}
+
+		int playerY = playerHeight > 0.0D ? MathHelper.ceil(playerHeight / playerCount) : 50;
+		int totalCount = 0;
+		BlockPos spawnPos = world.getSpawnPoint();
+
+		for (EnumCreatureType type : EnumCreatureType.values())
+		{
+			int maxNumber = getMaxNumberOfCreature(world, spawnHostileMobs, spawnPeacefulMobs, spawnOnSetTickRate, type);
+			double range = getSpawnRange(world, spawnHostileMobs, spawnPeacefulMobs, spawnOnSetTickRate, type);
+
+			if (maxNumber <= 0 || !canSpawnCreature(world, spawnHostileMobs, spawnPeacefulMobs, spawnOnSetTickRate, type))
+			{
+				continue;
+			}
+
+			if (world.countEntities(type, true) > maxNumber * playerCount / MOB_COUNT_DIV)
+			{
+				continue;
+			}
+
+			List<ChunkPos> shuffled = Lists.newArrayList(eligibleChunksForSpawning);
+			Collections.shuffle(shuffled);
+
+			MutableBlockPos pos = new MutableBlockPos();
+
+			outside: for (ChunkPos chunkpos : shuffled)
+			{
+				BlockPos blockpos = getRandomPosition(world, chunkpos.x, playerY, chunkpos.z);
+				IBlockState state = world.getBlockState(blockpos);
+
+				if (state.isNormalCube())
+				{
+					continue;
+				}
+
+				int mobCount = 0;
+
+				for (int i = 0; i < 3; ++i)
+				{
+					int x = blockpos.getX();
+					int y = blockpos.getY();
+					int z = blockpos.getZ();
+					int n = 6;
+					Biome.SpawnListEntry entry = null;
+					IEntityLivingData data = null;
+
+					for (int j = 0, chance = MathHelper.ceil(Math.random() * 4.0D); j < chance; ++j)
+					{
+						x += world.rand.nextInt(n) - world.rand.nextInt(n);
+						y += world.rand.nextInt(1) - world.rand.nextInt(1);
+						z += world.rand.nextInt(n) - world.rand.nextInt(n);
+						pos.setPos(x, y, z);
+
+						float posX = x + 0.5F;
+						float posZ = z + 0.5F;
+
+						if (world.isAnyPlayerWithinRangeAt(posX, y, posZ, range) || spawnPos.distanceSq(posX, y, posZ) < range * range)
+						{
+							continue;
+						}
+
+						if (entry == null)
+						{
+							entry = getSpawnListEntryForTypeAt(world, type, pos);
+
+							if (entry == null)
+							{
+								continue;
+							}
+						}
+
+						if (!canCreatureTypeSpawnHere(world, type, entry, pos))
+						{
+							continue;
+						}
+
+						if (!WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntitySpawnPlacementRegistry.getPlacementForEntity(entry.entityClass), world, pos))
+						{
+							continue;
+						}
+
+						EntityLiving entity = createSpawnCreature(world, type, pos, entry);
+
+						if (entity == null)
+						{
+							continue;
+						}
+
+						entity.setLocationAndAngles(posX, y, posZ, world.rand.nextFloat() * 360.0F, 0.0F);
+
+						Result canSpawn = ForgeEventFactory.canEntitySpawn(entity, world, posX, y, posZ, null);
+
+						if (canSpawn == Result.DENY)
+						{
+							continue;
+						}
+
+						if (entity.getCanSpawnHere() && entity.isNotColliding())
+						{
+							if (!ForgeEventFactory.doSpecialSpawn(entity, world, posX, y, posZ, null))
+							{
+								data = entity.onInitialSpawn(world.getDifficultyForLocation(entity.getPosition()), data);
+							}
+
+							if (entity.isNotColliding())
+							{
+								++mobCount;
+
+								world.spawnEntity(entity);
+							}
+							else
+							{
+								entity.setDead();
+							}
+
+							if (mobCount >= ForgeEventFactory.getMaxSpawnPackSize(entity))
+							{
+								continue outside;
+							}
+
+							totalCount += mobCount;
+						}
+					}
+				}
+			}
+		}
+
+		return totalCount;
 	}
 
 	protected boolean canSpawnCreature(WorldServer world, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnOnSetTickRate, EnumCreatureType type)
@@ -220,7 +233,7 @@ public class CaveEntitySpawner
 
 			if (ret != null)
 			{
-				return ret.booleanValue();
+				return ret;
 			}
 		}
 
@@ -235,7 +248,7 @@ public class CaveEntitySpawner
 
 			if (ret != null)
 			{
-				return ret.intValue();
+				return ret;
 			}
 		}
 
@@ -250,7 +263,7 @@ public class CaveEntitySpawner
 
 			if (ret != null)
 			{
-				return ret.doubleValue();
+				return ret;
 			}
 		}
 

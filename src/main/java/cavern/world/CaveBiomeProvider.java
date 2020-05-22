@@ -3,13 +3,18 @@ package cavern.world;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.Lists;
 
+import cavern.config.manager.CaveBiome;
 import cavern.config.manager.CaveBiomeManager;
 import cavern.util.CaveUtils;
 import cavern.world.gen.GenLayerCaveBiomes;
+import net.minecraft.init.Biomes;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
@@ -23,7 +28,7 @@ public class CaveBiomeProvider extends BiomeProvider
 	private final CaveBiomeCache biomeCache;
 	private final CaveBiomeManager biomeManager;
 
-	private Pair<Long, List<Biome>> cachedBiomes;
+	private Pair<Long, List<CaveBiome>> cachedBiomes;
 
 	public CaveBiomeProvider(World world, CaveBiomeManager biomeManager)
 	{
@@ -35,7 +40,7 @@ public class CaveBiomeProvider extends BiomeProvider
 
 	private void makeLayers(long seed)
 	{
-		GenLayer layer = new GenLayerCaveBiomes(this, 1L);
+		GenLayer layer = new GenLayerCaveBiomes(() -> getRandomBiome(), 1L);
 
 		layer = new GenLayerZoom(1000L, layer);
 		layer = new GenLayerZoom(1001L, layer);
@@ -58,13 +63,26 @@ public class CaveBiomeProvider extends BiomeProvider
 		return Lists.newArrayList(biomeManager.getCaveBiomes().keySet());
 	}
 
-	public List<Biome> getCachedBiomes()
+	@Nonnull
+	public Biome getRandomBiome()
+	{
+		CaveBiome biome = WeightedRandom.getRandomItem(world.rand, getCachedBiomes());
+
+		if (biome == null)
+		{
+			return Biomes.PLAINS;
+		}
+
+		return biome.getBiome();
+	}
+
+	public List<CaveBiome> getCachedBiomes()
 	{
 		long time = world.getWorldInfo().getWorldTotalTime();
 
 		if (cachedBiomes == null || cachedBiomes.getLeft().longValue() + 400L < time)
 		{
-			cachedBiomes = Pair.of(Long.valueOf(time), getBiomesToSpawnIn());
+			cachedBiomes = Pair.of(time, Lists.newArrayList(biomeManager.getCaveBiomes().values()));
 		}
 
 		return cachedBiomes.getRight();

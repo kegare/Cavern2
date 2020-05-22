@@ -3,9 +3,9 @@ package cavern.config.property;
 import java.util.Arrays;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 
 import cavern.util.ItemMeta;
@@ -93,10 +93,8 @@ public class ConfigItems
 	{
 		items.clear();
 
-		Arrays.stream(getValues()).filter(value -> !Strings.isNullOrEmpty(value)).forEach(value ->
+		Arrays.stream(getValues()).map(String::trim).filter(StringUtils::isNotEmpty).forEach(value ->
 		{
-			value = value.trim();
-
 			if (!value.contains(":"))
 			{
 				value = "minecraft:" + value;

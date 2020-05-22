@@ -63,7 +63,7 @@ public class EntityCaveman extends EntityMob implements ICavenicMob
 	{
 		super.entityInit();
 
-		dataManager.register(SITTING, Boolean.valueOf(false));
+		dataManager.register(SITTING, false);
 	}
 
 	@Override
@@ -112,12 +112,12 @@ public class EntityCaveman extends EntityMob implements ICavenicMob
 
 	public boolean isSitting()
 	{
-		return dataManager.get(SITTING).booleanValue();
+		return dataManager.get(SITTING);
 	}
 
 	public void setSitting(boolean sit)
 	{
-		dataManager.set(SITTING, Boolean.valueOf(sit));
+		dataManager.set(SITTING, sit);
 	}
 
 	public int getRestTime()

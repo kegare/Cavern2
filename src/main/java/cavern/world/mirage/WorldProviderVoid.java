@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -19,7 +20,13 @@ public class WorldProviderVoid extends WorldProviderMirageWorld
 	protected void init()
 	{
 		hasSkyLight = false;
-		biomeProvider = new BiomeProviderSingle(Biomes.VOID);
+		biomeProvider = createBiomeProvider();
+	}
+
+	@Override
+	protected BiomeProvider createBiomeProvider()
+	{
+		return new BiomeProviderSingle(Biomes.VOID);
 	}
 
 	@Override

@@ -61,8 +61,10 @@ public final class CavebornEventHooks
 		}
 
 		EntityPlayer player = event.getEntityPlayer();
+		int dimension = portal.getDimension().getId();
 
-		player.dimension = portal.getDimension().getId();
+		player.dimension = dimension;
+		player.setSpawnDimension(dimension);
 
 		firstPlayers.add(uuid);
 	}

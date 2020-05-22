@@ -59,8 +59,8 @@ public class AquaCavernConfig
 
 	public static double caveBrightness;
 
-	public static CaveBiomeManager biomeManager = new CaveBiomeManager();
-	public static CaveVeinManager veinManager = new CaveVeinManager();
+	public static final CaveBiomeManager BIOMES = new CaveBiomeManager();
+	public static final CaveVeinManager VEINS = new CaveVeinManager();
 
 	public static void syncConfig()
 	{
@@ -207,16 +207,16 @@ public class AquaCavernConfig
 
 	public static void syncBiomesConfig()
 	{
-		if (biomeManager.config == null)
+		if (BIOMES.config == null)
 		{
-			biomeManager.config = Config.loadConfig("aquacavern", "biomes");
+			BIOMES.config = Config.loadConfig("aquacavern", "biomes");
 		}
 		else
 		{
-			biomeManager.getCaveBiomes().clear();
+			BIOMES.getCaveBiomes().clear();
 		}
 
-		if (biomeManager.config.getCategoryNames().isEmpty())
+		if (BIOMES.config.getCategoryNames().isEmpty())
 		{
 			List<CaveBiome> biomes = Lists.newArrayList();
 
@@ -237,28 +237,28 @@ public class AquaCavernConfig
 			biomes.add(new CaveBiome(Biomes.SAVANNA, 50));
 			biomes.add(new CaveBiome(Biomes.MESA, 30, new BlockMeta(Blocks.RED_SANDSTONE.getDefaultState())));
 
-			CavernConfig.generateBiomesConfig(biomeManager, biomes);
+			CavernConfig.generateBiomesConfig(BIOMES, biomes);
 		}
 		else
 		{
-			CavernConfig.addBiomesFromConfig(biomeManager);
+			CavernConfig.addBiomesFromConfig(BIOMES);
 		}
 
-		Config.saveConfig(biomeManager.config);
+		Config.saveConfig(BIOMES.config);
 	}
 
 	public static void syncVeinsConfig()
 	{
-		if (veinManager.config == null)
+		if (VEINS.config == null)
 		{
-			veinManager.config = Config.loadConfig("aquacavern", "veins");
+			VEINS.config = Config.loadConfig("aquacavern", "veins");
 		}
 		else
 		{
-			veinManager.getCaveVeins().clear();
+			VEINS.getCaveVeins().clear();
 		}
 
-		if (veinManager.config.getCategoryNames().isEmpty())
+		if (VEINS.config.getCategoryNames().isEmpty())
 		{
 			List<CaveVein> veins = Lists.newArrayList();
 
@@ -294,18 +294,18 @@ public class AquaCavernConfig
 			veins.add(new CaveVein(new BlockMeta(Blocks.CLAY, 0), 30, 20, 128, 255));
 			veins.add(new CaveVein(new BlockMeta(Blocks.SAND, BlockSand.EnumType.SAND.getMetadata()), 10, 20, 128, 255, Type.SANDY));
 
-			CavernConfig.generateVeinsConfig(veinManager, veins);
+			CavernConfig.generateVeinsConfig(VEINS, veins);
 		}
 		else
 		{
-			if (CavernConfig.addVeinsFromConfig(veinManager))
+			if (CavernConfig.addVeinsFromConfig(VEINS))
 			{
 				try
 				{
-					FileUtils.forceDelete(new File(veinManager.config.toString()));
+					FileUtils.forceDelete(new File(VEINS.config.toString()));
 
-					veinManager.getCaveVeins().clear();
-					veinManager.config = null;
+					VEINS.getCaveVeins().clear();
+					VEINS.config = null;
 
 					syncVeinsConfig();
 				}
@@ -316,6 +316,6 @@ public class AquaCavernConfig
 			}
 		}
 
-		Config.saveConfig(veinManager.config);
+		Config.saveConfig(VEINS.config);
 	}
 }

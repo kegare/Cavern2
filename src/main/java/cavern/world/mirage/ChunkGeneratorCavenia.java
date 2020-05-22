@@ -50,7 +50,7 @@ public class ChunkGeneratorCavenia implements IChunkGenerator
 
 	private final MapGenBase caveGenerator = new MapGenCaveniaCaves();
 
-	private final VeinGenerator veinGenerator = new VeinGenerator(CaveniaConfig.veinManager.getCaveVeins());
+	private final VeinGenerator veinGenerator = new VeinGenerator(CaveniaConfig.VEINS.getCaveVeins());
 
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
@@ -93,7 +93,7 @@ public class ChunkGeneratorCavenia implements IChunkGenerator
 			for (int z = 0; z < 16; ++z)
 			{
 				Biome biome = biomesForGeneration[x * 16 + z];
-				CaveBiome caveBiome = CaveniaConfig.biomeManager.getCaveBiome(biome);
+				CaveBiome caveBiome = CaveniaConfig.BIOMES.getCaveBiome(biome);
 				IBlockState top = caveBiome == null ? STONE : caveBiome.getTopBlock().getBlockState();
 				IBlockState filter = caveBiome == null ? top : caveBiome.getTerrainBlock().getBlockState();
 

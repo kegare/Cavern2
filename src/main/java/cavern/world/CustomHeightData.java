@@ -13,7 +13,7 @@ public class CustomHeightData
 	{
 		if (nbt != null && nbt.hasKey("Height", NBT.TAG_ANY_NUMERIC))
 		{
-			height = Integer.valueOf(nbt.getInteger("Height"));
+			height = nbt.getInteger("Height");
 		}
 	}
 
@@ -41,11 +41,11 @@ public class CustomHeightData
 			setHeight(customHeight);
 		}
 
-		return height.intValue();
+		return height;
 	}
 
 	public void setHeight(int newHeight)
 	{
-		height = Integer.valueOf(newHeight);
+		height = newHeight;
 	}
 }

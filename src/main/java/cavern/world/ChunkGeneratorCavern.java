@@ -61,7 +61,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 	private final MapGenBase extremeRavineGenerator = new MapGenExtremeRavine();
 	private final MapGenMineshaft mineshaftGenerator = new MapGenMineshaft();
 
-	private final VeinGenerator veinGenerator = new VeinGenerator(CavernConfig.veinManager.getCaveVeins());
+	private final VeinGenerator veinGenerator = new VeinGenerator(CavernConfig.VEINS.getCaveVeins());
 
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
@@ -109,7 +109,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 			for (int z = 0; z < 16; ++z)
 			{
 				Biome biome = biomesForGeneration[x * 16 + z];
-				CaveBiome caveBiome = CavernConfig.biomeManager.getCaveBiome(biome);
+				CaveBiome caveBiome = CavernConfig.BIOMES.getCaveBiome(biome);
 				IBlockState top = caveBiome == null ? STONE : caveBiome.getTopBlock().getBlockState();
 				IBlockState filter = caveBiome == null ? top : caveBiome.getTerrainBlock().getBlockState();
 
