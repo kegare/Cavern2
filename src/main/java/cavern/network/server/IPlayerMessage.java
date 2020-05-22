@@ -20,7 +20,7 @@ public interface IPlayerMessage<REQ extends IPlayerMessage<REQ, REPLY>, REPLY ex
 	REPLY process(EntityPlayerMP player);
 
 	@Override
-	default REPLY onMessage(REQ message, MessageContext ctx)
+	default REPLY onMessage(final REQ message, final MessageContext ctx)
 	{
 		IThreadListener thread = FMLCommonHandler.instance().getWorldThread(ctx.netHandler);
 		EntityPlayerMP player = ctx.getServerHandler().player;
@@ -32,11 +32,11 @@ public interface IPlayerMessage<REQ extends IPlayerMessage<REQ, REPLY>, REPLY ex
 
 		thread.addScheduledTask(() ->
 		{
-			REPLY result = message.process(player);
+			final REPLY result = message.process(player);
 
 			if (result != null)
 			{
-				CaveNetworkRegistry.sendTo(result, player);
+				CaveNetworkRegistry.sendTo(() -> result, player);
 			}
 		});
 

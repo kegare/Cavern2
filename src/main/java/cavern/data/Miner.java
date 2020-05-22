@@ -262,10 +262,7 @@ public class Miner implements IMiner
 	@Override
 	public void adjustData()
 	{
-		if (entityPlayer != null && entityPlayer instanceof EntityPlayerMP)
-		{
-			CaveNetworkRegistry.sendTo(new MinerDataMessage(this), (EntityPlayerMP)entityPlayer);
-		}
+		CaveNetworkRegistry.sendTo(() -> new MinerDataMessage(this), entityPlayer);
 	}
 
 	@Override
@@ -326,7 +323,7 @@ public class Miner implements IMiner
 		{
 			miner.adjustData();
 
-			CaveNetworkRegistry.sendTo(new MiningRecordsMessage(miner), player);
+			CaveNetworkRegistry.sendTo(() -> new MiningRecordsMessage(miner), player);
 		}
 	}
 

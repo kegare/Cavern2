@@ -36,7 +36,7 @@ public class MagicInvisible extends Magic
 	{
 		if (!invisible && getSpellingProgress() >= 0.15D)
 		{
-			CaveNetworkRegistry.sendToServer(new MagicInvisibleMessage());
+			CaveNetworkRegistry.NETWORK.sendToServer(new MagicInvisibleMessage());
 
 			invisible = true;
 		}

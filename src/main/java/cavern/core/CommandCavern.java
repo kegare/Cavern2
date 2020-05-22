@@ -62,7 +62,7 @@ public class CommandCavern extends CommandBase
 
 			if (server.isSinglePlayer() || server.getPlayerList().canSendCommands(player.getGameProfile()))
 			{
-				CaveNetworkRegistry.sendTo(new RegenerationGuiMessage(EnumType.OPEN), player);
+				CaveNetworkRegistry.sendTo(() -> new RegenerationGuiMessage(EnumType.OPEN), player);
 			}
 			else throw new CommandException("commands.generic.permission");
 		}
@@ -81,7 +81,7 @@ public class CommandCavern extends CommandBase
 		}
 		else if (args[0].equalsIgnoreCase("records") && isPlayer)
 		{
-			CaveNetworkRegistry.sendTo(new MiningRecordsGuiMessage(), (EntityPlayerMP)sender);
+			CaveNetworkRegistry.sendTo(MiningRecordsGuiMessage::new, (EntityPlayerMP)sender);
 		}
 	}
 

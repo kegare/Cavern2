@@ -14,15 +14,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ExplosionMessage implements IClientMessage<ExplosionMessage, IMessage>
 {
-	private float x;
-	private float y;
-	private float z;
+	private double x;
+	private double y;
+	private double z;
 	private float strength;
 	private List<BlockPos> affectedBlockPositions;
 
 	public ExplosionMessage() {}
 
-	public ExplosionMessage(float x, float y, float z, float strength, List<BlockPos> positions)
+	public ExplosionMessage(double x, double y, double z, float strength, List<BlockPos> positions)
 	{
 		this.x = x;
 		this.y = y;
@@ -34,9 +34,9 @@ public class ExplosionMessage implements IClientMessage<ExplosionMessage, IMessa
 	@Override
 	public void fromBytes(ByteBuf buf)
 	{
-		x = buf.readFloat();
-		y = buf.readFloat();
-		z = buf.readFloat();
+		x = buf.readDouble();
+		y = buf.readDouble();
+		z = buf.readDouble();
 		strength = buf.readFloat();
 
 		int count = buf.readInt();
@@ -60,9 +60,9 @@ public class ExplosionMessage implements IClientMessage<ExplosionMessage, IMessa
 	@Override
 	public void toBytes(ByteBuf buf)
 	{
-		buf.writeFloat(x);
-		buf.writeFloat(y);
-		buf.writeFloat(z);
+		buf.writeDouble(x);
+		buf.writeDouble(y);
+		buf.writeDouble(z);
 		buf.writeFloat(strength);
 		buf.writeInt(affectedBlockPositions.size());
 

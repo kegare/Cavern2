@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class Magic
 {
-	protected static final Random RANDOM = CaveEventHooks.RANDOM;
+	protected final Random rand = CaveEventHooks.RANDOM;
 
 	protected final World world;
 	protected final EntityPlayer player;

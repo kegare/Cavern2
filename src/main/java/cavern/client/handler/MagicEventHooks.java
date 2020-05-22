@@ -82,7 +82,7 @@ public final class MagicEventHooks
 						{
 							ActionResult<ITextComponent> result = magic.fireMagic();
 
-							CaveNetworkRegistry.sendToServer(new MagicResultMessage(result.getType()));
+							CaveNetworkRegistry.NETWORK.sendToServer(new MagicResultMessage(result.getType()));
 
 							ITextComponent message = result.getResult();
 
@@ -98,7 +98,7 @@ public final class MagicEventHooks
 						}
 						else
 						{
-							CaveNetworkRegistry.sendToServer(new MagicResultMessage(EnumActionResult.FAIL));
+							CaveNetworkRegistry.NETWORK.sendToServer(new MagicResultMessage(EnumActionResult.FAIL));
 						}
 
 						magic.onCloseBook();
@@ -154,7 +154,7 @@ public final class MagicEventHooks
 					spellingSlot = mc.player.inventory.currentItem;
 				}
 
-				CaveNetworkRegistry.sendToServer(new MagicBookMessage(magic.getSpellingHand()));
+				CaveNetworkRegistry.NETWORK.sendToServer(new MagicBookMessage(magic.getSpellingHand()));
 			}
 
 			boolean hasSpecialMagic = book.getSpecialMagic() != null;
@@ -237,7 +237,7 @@ public final class MagicEventHooks
 
 			if (magic != null)
 			{
-				CaveNetworkRegistry.sendToServer(new MagicResultMessage(EnumActionResult.FAIL));
+				CaveNetworkRegistry.NETWORK.sendToServer(new MagicResultMessage(EnumActionResult.FAIL));
 
 				magic.onCloseBook();
 
@@ -268,7 +268,7 @@ public final class MagicEventHooks
 				mc.ingameGUI.setOverlayMessage(message, false);
 			}
 
-			CaveNetworkRegistry.sendToServer(new SpecialMagicMessage());
+			CaveNetworkRegistry.NETWORK.sendToServer(new SpecialMagicMessage());
 
 			book.setSpecialMagic(null);
 		}

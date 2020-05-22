@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class CaveRenderingRegistry
+public final class CaveRenderingRegistry
 {
 	public static final Map<Block, Block> RENDER_BLOCK_MAP = Maps.newHashMap();
 

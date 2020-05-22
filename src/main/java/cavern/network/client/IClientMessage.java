@@ -21,7 +21,7 @@ public interface IClientMessage<REQ extends IClientMessage<REQ, REPLY>, REPLY ex
 	REPLY process(Minecraft mc);
 
 	@Override
-	default REPLY onMessage(REQ message, MessageContext ctx)
+	default REPLY onMessage(final REQ message, final MessageContext ctx)
 	{
 		IThreadListener thread = FMLCommonHandler.instance().getWorldThread(ctx.netHandler);
 		Minecraft mc = FMLClientHandler.instance().getClient();
@@ -33,11 +33,11 @@ public interface IClientMessage<REQ extends IClientMessage<REQ, REPLY>, REPLY ex
 
 		thread.addScheduledTask(() ->
 		{
-			REPLY result = message.process(mc);
+			final REPLY result = message.process(mc);
 
 			if (result != null)
 			{
-				CaveNetworkRegistry.sendToServer(result);
+				CaveNetworkRegistry.NETWORK.sendToServer(result);
 			}
 		});
 

@@ -171,7 +171,7 @@ public final class MirageEventHooks
 					fallCancelPlayers.add(player.getCachedUniqueIdString());
 				}
 
-				CaveNetworkRegistry.sendTo(new FallTeleportMessage(), player);
+				CaveNetworkRegistry.sendTo(FallTeleportMessage::new, player);
 			}
 		}
 	}
