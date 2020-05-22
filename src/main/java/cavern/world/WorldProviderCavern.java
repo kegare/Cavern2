@@ -11,13 +11,10 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldProviderSurface;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
@@ -35,6 +32,9 @@ public class WorldProviderCavern extends WorldProviderSurface implements CustomS
 	private CustomHeightData heightData;
 
 	protected CaveEntitySpawner entitySpawner = new CaveEntitySpawner(this);
+
+	protected boolean spawnHostileMobs = true;
+	protected boolean spawnPeacefulMobs = true;
 
 	@Override
 	protected void init()
@@ -243,6 +243,15 @@ public class WorldProviderCavern extends WorldProviderSurface implements CustomS
 	}
 
 	@Override
+	public void setAllowedSpawnTypes(boolean allowHostile, boolean allowPeaceful)
+	{
+		super.setAllowedSpawnTypes(allowHostile, allowPeaceful);
+
+		spawnHostileMobs = allowHostile;
+		spawnPeacefulMobs = allowPeaceful;
+	}
+
+	@Override
 	public double getHorizon()
 	{
 		return getActualHeight();
@@ -293,21 +302,13 @@ public class WorldProviderCavern extends WorldProviderSurface implements CustomS
 	@Override
 	public void onWorldUpdateEntities()
 	{
-		if (getMonsterSpawn() > 0 && world instanceof WorldServer)
+		if (world instanceof WorldServer)
 		{
 			WorldServer worldServer = (WorldServer)world;
 
 			if (worldServer.getGameRules().getBoolean("doMobSpawning") && worldServer.getWorldInfo().getTerrainType() != WorldType.DEBUG_ALL_BLOCK_STATES)
 			{
-				MinecraftServer server = worldServer.getMinecraftServer();
-				boolean spawnHostileMobs = worldServer.getDifficulty() != EnumDifficulty.PEACEFUL;
-
-				if (server != null && !server.isSinglePlayer() && server.isDedicatedServer() && server instanceof DedicatedServer)
-				{
-					spawnHostileMobs = ((DedicatedServer)server).allowSpawnMonsters();
-				}
-
-				entitySpawner.findChunksForSpawning(worldServer, spawnHostileMobs, false, worldServer.getWorldInfo().getWorldTotalTime() % 400L == 0L);
+				entitySpawner.findChunksForSpawning(worldServer, spawnHostileMobs, spawnPeacefulMobs, worldServer.getWorldInfo().getWorldTotalTime() % 400L == 0L);
 			}
 		}
 	}

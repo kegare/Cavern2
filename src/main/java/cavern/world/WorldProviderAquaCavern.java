@@ -9,7 +9,6 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -59,20 +58,6 @@ public class WorldProviderAquaCavern extends WorldProviderCavern
 	public MusicType getMusicType()
 	{
 		return CaveMusics.AQUA_CAVES;
-	}
-
-	@Override
-	public void onWorldUpdateEntities()
-	{
-		if (world instanceof WorldServer)
-		{
-			WorldServer worldServer = (WorldServer)world;
-
-			if (worldServer.getWorldInfo().getTerrainType() != WorldType.DEBUG_ALL_BLOCK_STATES)
-			{
-				entitySpawner.findChunksForSpawning(worldServer, false, true, worldServer.getWorldInfo().getWorldTotalTime() % 400L == 0L);
-			}
-		}
 	}
 
 	@Override
