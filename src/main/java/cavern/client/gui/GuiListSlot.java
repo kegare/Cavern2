@@ -11,8 +11,8 @@ import org.lwjgl.util.glu.Project;
 import com.google.common.base.Strings;
 
 import cavern.client.CaveRenderingRegistry;
-import cavern.core.Cavern;
 import cavern.util.BlockMeta;
+import cavern.util.CaveUtils;
 import cavern.util.PanoramaPaths;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -54,7 +54,7 @@ public abstract class GuiListSlot extends GuiSlot
 
 			for (int j = 0; j < paths.length; ++j)
 			{
-				paths[j] = new ResourceLocation(Cavern.MODID, String.format("textures/gui/panorama/%d/%d.png", i, j));
+				paths[j] = CaveUtils.getKey(String.format("textures/gui/panorama/%d/%d.png", i, j));
 			}
 
 			PANORAMA_PATHS.add(new PanoramaPaths(paths[0], paths[1], paths[2], paths[3], paths[4], paths[5]));
