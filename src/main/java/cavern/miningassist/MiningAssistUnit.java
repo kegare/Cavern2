@@ -21,7 +21,7 @@ public class MiningAssistUnit
 	private final EntityPlayer player;
 
 	private MiningSnapshot snapshot;
-	private boolean captureDrops, captureExperiences;
+	private boolean checking, breaking, captureDrops, captureExperiences;
 
 	private Map<BlockPos, NonNullList<ItemStack>> capturedDrops;
 	private Map<BlockPos, Integer> capturedExperiences;
@@ -83,6 +83,26 @@ public class MiningAssistUnit
 	public float getBreakSpeed(MiningSnapshot snapshot)
 	{
 		return snapshot.getBreakSpeed();
+	}
+
+	public boolean isChecking()
+	{
+		return checking;
+	}
+
+	public void setChecking(boolean state)
+	{
+		checking = state;
+	}
+
+	public boolean isBreaking()
+	{
+		return breaking;
+	}
+
+	public void setBreaking(boolean state)
+	{
+		breaking = state;
 	}
 
 	public boolean getCaptureDrops()

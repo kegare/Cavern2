@@ -21,6 +21,7 @@ public class MiningAssistConfig
 
 	public static ConfigItems effectiveItems = new ConfigItems();
 	public static ConfigMinerRank minerRank = new ConfigMinerRank();
+	public static boolean actualMining;
 	public static boolean collectDrops;
 	public static boolean collectExps;
 	public static ConfigBlocks quickTargetBlocks = new ConfigBlocks();
@@ -76,6 +77,15 @@ public class MiningAssistConfig
 		prop.setComment(comment);
 		propOrder.add(prop.getName());
 		minerRank.setValue(prop.getInt(minerRank.getValue()));
+
+		prop = config.get(category, "actualMining", true);
+		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
+		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
+		comment += Configuration.NEW_LINE;
+		comment += "Note: If multiplayer, server-side only.";
+		prop.setComment(comment);
+		propOrder.add(prop.getName());
+		actualMining = prop.getBoolean(actualMining);
 
 		prop = config.get(category, "collectDrops", true);
 		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());

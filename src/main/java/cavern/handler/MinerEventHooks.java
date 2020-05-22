@@ -10,10 +10,12 @@ import cavern.api.data.IMiner;
 import cavern.api.data.IMiningData;
 import cavern.api.event.CriticalMiningEvent;
 import cavern.config.GeneralConfig;
+import cavern.config.MiningAssistConfig;
 import cavern.data.Miner;
 import cavern.data.MinerRank;
 import cavern.data.MiningData;
 import cavern.item.ItemCave;
+import cavern.miningassist.MiningAssistUnit;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.MiningMessage;
 import cavern.util.BlockMeta;
@@ -63,6 +65,11 @@ public final class MinerEventHooks
 		EntityPlayerMP player = (EntityPlayerMP)entityPlayer;
 
 		if (!CavernAPI.dimension.isInCaveDimensions(player))
+		{
+			return;
+		}
+
+		if (MiningAssistConfig.actualMining && MiningAssistUnit.get(player).isBreaking())
 		{
 			return;
 		}
