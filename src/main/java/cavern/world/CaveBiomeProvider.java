@@ -40,7 +40,7 @@ public class CaveBiomeProvider extends BiomeProvider
 
 	private void makeLayers(long seed)
 	{
-		GenLayer layer = new GenLayerCaveBiomes(this, 1L);
+		GenLayer layer = new GenLayerCaveBiomes(() -> getRandomBiome(), 1L);
 
 		layer = new GenLayerZoom(1000L, layer);
 		layer = new GenLayerZoom(1001L, layer);

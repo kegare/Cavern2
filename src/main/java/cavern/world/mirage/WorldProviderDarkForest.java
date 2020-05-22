@@ -3,6 +3,7 @@ package cavern.world.mirage;
 import cavern.world.CaveDimensions;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -10,10 +11,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class WorldProviderDarkForest extends WorldProviderMirageWorld
 {
 	@Override
-	protected void init()
+	protected BiomeProvider createBiomeProvider()
 	{
-		super.init();
-		biomeProvider = new BiomeProviderSingle(Biomes.ROOFED_FOREST);
+		return new BiomeProviderSingle(Biomes.ROOFED_FOREST);
 	}
 
 	@Override
