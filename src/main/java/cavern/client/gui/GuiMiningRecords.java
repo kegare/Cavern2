@@ -177,7 +177,7 @@ public class GuiMiningRecords extends GuiScreen
 			for (Entry<BlockMeta, Integer> entry : Miner.get(GuiMiningRecords.this.mc.player).getMiningRecords().entrySet())
 			{
 				BlockMeta blockMeta = entry.getKey();
-				int count = entry.getValue().intValue();
+				int count = entry.getValue();
 
 				entries.add(new MiningRecord(blockMeta, count));
 

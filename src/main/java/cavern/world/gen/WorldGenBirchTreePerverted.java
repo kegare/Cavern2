@@ -80,7 +80,7 @@ public class WorldGenBirchTreePerverted extends WorldGenBirchTree
 			else
 			{
 				IBlockState wood = CaveBlocks.PERVERTED_LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.BIRCH);
-				IBlockState leaves = CaveBlocks.PERVERTED_LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.BIRCH).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+				IBlockState leaves = CaveBlocks.PERVERTED_LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.BIRCH).withProperty(BlockLeaves.CHECK_DECAY, false);
 				BlockPos down = pos.down();
 				IBlockState state = world.getBlockState(down);
 				boolean isSoil = state.getBlock().canSustainPlant(state, world, down, EnumFacing.UP, CaveBlocks.PERVERTED_SAPLING);

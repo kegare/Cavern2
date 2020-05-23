@@ -43,7 +43,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
-public class CaveRenderingRegistry
+public final class CaveRenderingRegistry
 {
 	public static final Map<Block, Block> RENDER_BLOCK_MAP = Maps.newHashMap();
 

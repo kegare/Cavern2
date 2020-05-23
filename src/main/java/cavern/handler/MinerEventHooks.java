@@ -10,10 +10,12 @@ import cavern.api.data.IMiner;
 import cavern.api.data.IMiningData;
 import cavern.api.event.CriticalMiningEvent;
 import cavern.config.GeneralConfig;
+import cavern.config.MiningAssistConfig;
 import cavern.data.Miner;
 import cavern.data.MinerRank;
 import cavern.data.MiningData;
 import cavern.item.ItemCave;
+import cavern.miningassist.MiningAssistUnit;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.MiningMessage;
 import cavern.util.BlockMeta;
@@ -67,50 +69,58 @@ public final class MinerEventHooks
 			return;
 		}
 
-		World world = event.getWorld();
-		IBlockState state = event.getState();
+		if (MiningAssistConfig.actualMining && MiningAssistUnit.get(player).isBreaking())
+		{
+			return;
+		}
+
 		ItemStack stack = player.getHeldItemMainhand();
 
-		if (GeneralConfig.isMiningPointItem(stack))
+		if (!GeneralConfig.isMiningPointItem(stack))
 		{
-			int point = Miner.getPointAmount(state);
-
-			if (point != 0)
-			{
-				IMiner miner = Miner.get(player);
-				IMiningData data = MiningData.get(player);
-
-				if (player.inventory.hasItemStack(ItemCave.EnumType.MINER_ORB.getItemStack()))
-				{
-					if (rand.nextDouble() < 0.15D)
-					{
-						point += Math.max(point / 2, 1);
-					}
-				}
-
-				miner.addPoint(point);
-				miner.addMiningRecord(new BlockMeta(state));
-
-				data.notifyMining(state, point);
-
-				int combo = data.getMiningCombo();
-
-				if (combo > 0 && combo % 10 == 0)
-				{
-					world.playSound(null, player.posX, player.posY + 0.25D, player.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
-						SoundCategory.PLAYERS, 0.1F, 0.5F * ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.8F));
-
-					player.addExperience(combo / 10);
-				}
-
-				if (combo >= 50)
-				{
-					PlayerHelper.grantAdvancement(player, "good_mine");
-				}
-
-				CaveNetworkRegistry.sendTo(new MiningMessage(state, point), player);
-			}
+			return;
 		}
+
+		World world = event.getWorld();
+		IBlockState state = event.getState();
+		int point = Miner.getPointAmount(state);
+
+		if (point <= 0)
+		{
+			return;
+		}
+
+		IMiner miner = Miner.get(player);
+		IMiningData data = MiningData.get(player);
+
+		if (player.inventory.hasItemStack(ItemCave.EnumType.MINER_ORB.getItemStack()) && rand.nextDouble() < 0.1D)
+		{
+			point += Math.max(point / 2, 1);
+		}
+
+		miner.addPoint(point);
+		miner.addMiningRecord(new BlockMeta(state));
+
+		data.notifyMining(state, point);
+
+		int combo = data.getMiningCombo();
+
+		if (combo > 0 && combo % 10 == 0)
+		{
+			world.playSound(null, player.posX, player.posY + 0.25D, player.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
+				SoundCategory.PLAYERS, 0.1F, 0.5F * ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.8F));
+
+			player.addExperience(combo / 10);
+		}
+
+		if (combo >= 50)
+		{
+			PlayerHelper.grantAdvancement(player, "good_mine");
+		}
+
+		final MiningMessage message = new MiningMessage(state, point);
+
+		CaveNetworkRegistry.sendTo(() -> message, player);
 	}
 
 	@SubscribeEvent

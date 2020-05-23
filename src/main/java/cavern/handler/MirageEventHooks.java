@@ -134,8 +134,8 @@ public final class MirageEventHooks
 
 		if (world.provider.getDimensionType() == CaveDimensions.DARK_FOREST && rand.nextInt(50) == 0)
 		{
-			int x = rand.nextInt(16) + 8;
-			int z = rand.nextInt(16) + 8;
+			int x = rand.nextInt(8) + 4;
+			int z = rand.nextInt(8) + 4;
 			int top = world.getHeight(chunkPos.getXStart() + x, chunkPos.getZStart() + z);
 			int seaLevel = world.getSeaLevel();
 
@@ -171,7 +171,7 @@ public final class MirageEventHooks
 					fallCancelPlayers.add(player.getCachedUniqueIdString());
 				}
 
-				CaveNetworkRegistry.sendTo(new FallTeleportMessage(), player);
+				CaveNetworkRegistry.sendTo(FallTeleportMessage::new, player);
 			}
 		}
 	}

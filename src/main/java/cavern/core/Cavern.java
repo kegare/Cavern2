@@ -37,7 +37,6 @@ import cavern.network.CaveNetworkRegistry;
 import cavern.plugin.HaCPlugin;
 import cavern.plugin.MCEPlugin;
 import cavern.util.CaveLog;
-import cavern.util.Version;
 import cavern.world.CaveDimensions;
 import cavern.world.gen.MapGenSkyWatchTower;
 import cavern.world.gen.SkyWatchTowerPiece;
@@ -99,8 +98,6 @@ public final class Cavern
 	@EventHandler
 	public void construct(FMLConstructionEvent event)
 	{
-		Version.initVersion();
-
 		CavernAPI.dimension = new DimensionHandler();
 		CavernAPI.data = new DataHandler();
 

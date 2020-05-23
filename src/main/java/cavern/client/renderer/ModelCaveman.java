@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ModelCaveman extends ModelBiped
 {
-	public ModelRenderer bipedBack;
+	private ModelRenderer bipedBack;
 
 	private final float
 	headPtY = -1.0F,

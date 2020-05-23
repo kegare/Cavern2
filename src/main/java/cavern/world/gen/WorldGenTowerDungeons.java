@@ -26,7 +26,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 public class WorldGenTowerDungeons extends WorldGenerator
 {
-	public static final ResourceLocation CHESTS_TOWER_DUNGEON = LootTableList.register(CaveUtils.getKey("chests/tower_dungeon"));
+	private static final ResourceLocation CHESTS_TOWER_DUNGEON = LootTableList.register(CaveUtils.getKey("chests/tower_dungeon"));
 
 	private int maxFloor;
 	private int roomSize;
@@ -64,8 +64,8 @@ public class WorldGenTowerDungeons extends WorldGenerator
 	protected void setRandomStructures(World world, Random rand, BlockPos pos)
 	{
 		maxFloor = rand.nextInt(4) + 5;
-		roomSize = rand.nextInt(4) + 7;
-		roomHeight = rand.nextInt(3) + 6;
+		roomSize = rand.nextInt(4) + 4;
+		roomHeight = rand.nextInt(4) + 5;
 	}
 
 	protected void generateAirs(World world, Random rand, BlockPos pos)

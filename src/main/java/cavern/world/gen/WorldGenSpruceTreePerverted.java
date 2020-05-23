@@ -77,7 +77,7 @@ public class WorldGenSpruceTreePerverted extends WorldGenTaiga2
 			else
 			{
 				IBlockState wood = CaveBlocks.PERVERTED_LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE);
-				IBlockState leaves = CaveBlocks.PERVERTED_LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+				IBlockState leaves = CaveBlocks.PERVERTED_LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockLeaves.CHECK_DECAY, false);
 				BlockPos down = pos.down();
 				IBlockState state = world.getBlockState(down);
 

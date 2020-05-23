@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.google.common.base.Joiner;
 
-import cavern.data.MinerRank;
 import cavern.api.data.IMiner;
 import cavern.data.Miner;
+import cavern.data.MinerRank;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.MiningRecordsGuiMessage;
 import cavern.network.client.RegenerationGuiMessage;
@@ -43,7 +43,7 @@ public class CommandCavern extends CommandBase
 
 	public String[] getCommands()
 	{
-		return Version.DEV_DEBUG ? new String[] {"regenerate", "miner", "records"} : new String[] {"regenerate", "records"};
+		return Version.isDev() ? new String[] {"regenerate", "miner", "records"} : new String[] {"regenerate", "records"};
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class CommandCavern extends CommandBase
 
 			if (server.isSinglePlayer() || server.getPlayerList().canSendCommands(player.getGameProfile()))
 			{
-				CaveNetworkRegistry.sendTo(new RegenerationGuiMessage(EnumType.OPEN), player);
+				CaveNetworkRegistry.sendTo(() -> new RegenerationGuiMessage(EnumType.OPEN), player);
 			}
 			else throw new CommandException("commands.generic.permission");
 		}
@@ -81,7 +81,7 @@ public class CommandCavern extends CommandBase
 		}
 		else if (args[0].equalsIgnoreCase("records") && isPlayer)
 		{
-			CaveNetworkRegistry.sendTo(new MiningRecordsGuiMessage(), (EntityPlayerMP)sender);
+			CaveNetworkRegistry.sendTo(MiningRecordsGuiMessage::new, (EntityPlayerMP)sender);
 		}
 	}
 

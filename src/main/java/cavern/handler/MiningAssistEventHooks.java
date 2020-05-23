@@ -36,9 +36,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public final class MiningAssistEventHooks
 {
-	private boolean breaking;
-	private boolean checking;
-
 	private boolean isActive(EntityPlayer player, IBlockState state)
 	{
 		ItemStack held = player.getHeldItemMainhand();
@@ -73,12 +70,14 @@ public final class MiningAssistEventHooks
 			return;
 		}
 
-		if (checking)
+		EntityPlayer player = event.getEntityPlayer();
+		MiningAssistUnit assist = MiningAssistUnit.get(player);
+
+		if (assist.isChecking())
 		{
 			return;
 		}
 
-		EntityPlayer player = event.getEntityPlayer();
 		IBlockState state = event.getState();
 
 		if (!isActive(player, state))
@@ -86,11 +85,10 @@ public final class MiningAssistEventHooks
 			return;
 		}
 
-		MiningAssistUnit assist = MiningAssistUnit.get(player);
 		MiningAssist type = MiningAssist.byPlayer(player);
 		BlockPos pos = event.getPos();
 
-		checking = true;
+		assist.setChecking(true);
 
 		MiningSnapshot snapshot = assist.getSnapshot(type, pos, state);
 
@@ -99,7 +97,7 @@ public final class MiningAssistEventHooks
 			event.setNewSpeed(assist.getBreakSpeed(snapshot));
 		}
 
-		checking = false;
+		assist.setChecking(false);
 	}
 
 	@SubscribeEvent
@@ -127,7 +125,7 @@ public final class MiningAssistEventHooks
 			event.setExpToDrop(0);
 		}
 
-		if (breaking)
+		if (assist.isBreaking())
 		{
 			return;
 		}
@@ -157,7 +155,7 @@ public final class MiningAssistEventHooks
 		assist.captureDrops(MiningAssistConfig.collectDrops);
 		assist.captureExperiences(MiningAssistConfig.collectExps);
 
-		breaking = true;
+		assist.setBreaking(true);
 
 		for (BlockPos target : snapshot.getTargets())
 		{
@@ -167,7 +165,7 @@ public final class MiningAssistEventHooks
 			}
 		}
 
-		breaking = false;
+		assist.setBreaking(false);
 
 		Map<BlockPos, NonNullList<ItemStack>> drops = assist.captureDrops(false);
 

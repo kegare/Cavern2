@@ -262,10 +262,7 @@ public class Miner implements IMiner
 	@Override
 	public void adjustData()
 	{
-		if (entityPlayer != null && entityPlayer instanceof EntityPlayerMP)
-		{
-			CaveNetworkRegistry.sendTo(new MinerDataMessage(this), (EntityPlayerMP)entityPlayer);
-		}
+		CaveNetworkRegistry.sendTo(() -> new MinerDataMessage(this), entityPlayer);
 	}
 
 	@Override
@@ -283,7 +280,7 @@ public class Miner implements IMiner
 
 			tag.setString("Name", record.getKey().getBlockName());
 			tag.setInteger("Meta", record.getKey().getMeta());
-			tag.setInteger("Count", record.getValue().intValue());
+			tag.setInteger("Count", record.getValue());
 
 			list.appendTag(tag);
 		}
@@ -326,7 +323,7 @@ public class Miner implements IMiner
 		{
 			miner.adjustData();
 
-			CaveNetworkRegistry.sendTo(new MiningRecordsMessage(miner), player);
+			CaveNetworkRegistry.sendTo(() -> new MiningRecordsMessage(miner), player);
 		}
 	}
 
@@ -334,7 +331,7 @@ public class Miner implements IMiner
 	{
 		Integer ret = MINING_POINTS.get(block, meta);
 
-		return ret == null ? 0 : ret.intValue();
+		return ret == null ? 0 : ret;
 	}
 
 	public static int getPointAmount(IBlockState state)

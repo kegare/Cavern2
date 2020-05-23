@@ -11,7 +11,6 @@ import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -87,7 +86,7 @@ public class MagicExplosion extends Magic
 		return true;
 	}
 
-	public void doExplosion(BlockPos pos)
+	private void doExplosion(BlockPos pos)
 	{
 		boolean grief = world.getGameRules().getBoolean("mobGriefing");
 		float overload = 0.0F;
@@ -100,12 +99,12 @@ public class MagicExplosion extends Magic
 		createExplosion(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D, 8.0F + overload, grief);
 	}
 
-	public Explosion createExplosion(double x, double y, double z, float strength, boolean damagesTerrain)
+	private Explosion createExplosion(double x, double y, double z, float strength, boolean damagesTerrain)
 	{
 		return newExplosion(x, y, z, strength, false, damagesTerrain, true);
 	}
 
-	public Explosion newExplosion(double x, double y, double z, float strength, boolean flaming, boolean damagesTerrain, boolean attackEntities)
+	private Explosion newExplosion(double x, double y, double z, float strength, boolean flaming, boolean damagesTerrain, boolean attackEntities)
 	{
 		if (FMLCommonHandler.instance().getSide().isServer())
 		{
@@ -132,20 +131,23 @@ public class MagicExplosion extends Magic
 			explosion.doExplosionEntities();
 		}
 
-		for (EntityPlayer player : world.playerEntities)
+		if (!world.isRemote)
 		{
-			if (player instanceof EntityPlayerMP && player.getDistanceSq(x, y, z) < 4096.0D)
+			for (EntityPlayer player : world.playerEntities)
 			{
-				CaveNetworkRegistry.sendTo(new ExplosionMessage((float)x, (float)y, (float)z, strength, explosion.getAffectedBlockPositions()), (EntityPlayerMP)player);
+				if (player.getDistanceSq(x, y, z) < 4096.0D)
+				{
+					CaveNetworkRegistry.sendTo(() -> new ExplosionMessage(x, y, z, strength, explosion.getAffectedBlockPositions()), player);
+				}
 			}
 		}
 
 		return explosion;
 	}
 
-	public class Explosion extends CustomExplosion
+	private class Explosion extends CustomExplosion
 	{
-		public Explosion(World world, Entity entity, double x, double y, double z, float size, boolean flaming, boolean damagesTerrain)
+		private Explosion(World world, Entity entity, double x, double y, double z, float size, boolean flaming, boolean damagesTerrain)
 		{
 			super(world, entity, x, y, z, size, flaming, damagesTerrain);
 		}

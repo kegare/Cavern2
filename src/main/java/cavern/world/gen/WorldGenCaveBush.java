@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBush;
 
@@ -20,17 +21,22 @@ public class WorldGenCaveBush extends WorldGenBush
 	@Override
 	public boolean generate(World world, Random rand, BlockPos position)
 	{
-		for (int y = 0, height = world.getActualHeight() - 10; y < height; ++y)
+		MutableBlockPos pos = new MutableBlockPos();
+
+		for (int y = 10, height = world.getActualHeight() - 10; y < height; ++y)
 		{
-			BlockPos pos = position.add(rand.nextInt(4) - rand.nextInt(4), y, rand.nextInt(4) - rand.nextInt(4));
+			pos.setPos(position.getX(), y, position.getZ());
+			pos.add(rand.nextInt(8) - rand.nextInt(8), 0, rand.nextInt(8) - rand.nextInt(8));
 
 			if (world.isAirBlock(pos) && block.canBlockStay(world, pos, block.getDefaultState()))
 			{
 				world.setBlockState(pos, block.getDefaultState(), 2);
 
-				for (int i = 0; i < 4; ++i)
+				BlockPos blockpos = new BlockPos(pos);
+
+				for (int i = 0; i < 8; ++i)
 				{
-					pos = pos.add(rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4));
+					blockpos.add(rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4));
 
 					if (world.isAirBlock(pos) && block.canBlockStay(world, pos, block.getDefaultState()))
 					{

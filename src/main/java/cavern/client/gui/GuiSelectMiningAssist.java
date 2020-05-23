@@ -56,7 +56,7 @@ public class GuiSelectMiningAssist extends GuiScreen
 
 			if (select != null && select != MiningAssist.byPlayer(mc.player))
 			{
-				CaveNetworkRegistry.sendToServer(new MiningAssistMessage(select));
+				CaveNetworkRegistry.NETWORK.sendToServer(new MiningAssistMessage(select));
 			}
 
 			mc.displayGuiScreen(null);

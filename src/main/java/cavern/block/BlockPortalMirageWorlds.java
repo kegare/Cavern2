@@ -117,7 +117,7 @@ public class BlockPortalMirageWorlds extends BlockPortalCavern
 				return;
 			}
 
-			MirageSelectMessage message = new MirageSelectMessage();
+			final MirageSelectMessage message = new MirageSelectMessage();
 
 			for (DimensionType type : types)
 			{
@@ -152,7 +152,7 @@ public class BlockPortalMirageWorlds extends BlockPortalCavern
 				}
 			}
 
-			CaveNetworkRegistry.sendTo(message, player);
+			CaveNetworkRegistry.sendTo(() -> message, player);
 		}
 		else
 		{

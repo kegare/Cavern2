@@ -2,7 +2,7 @@ package cavern.world.gen;
 
 import java.util.Random;
 
-import cavern.core.Cavern;
+import cavern.util.CaveUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
@@ -16,7 +16,7 @@ import net.minecraft.world.gen.structure.template.TemplateManager;
 
 public class WorldGenSandHouse extends WorldGenerator
 {
-	public static final ResourceLocation SAND_HOUSE = new ResourceLocation(Cavern.MODID, "sand_house");
+	private static final ResourceLocation SAND_HOUSE = CaveUtils.getKey("sand_house");
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos)

@@ -2,7 +2,7 @@ package cavern.world.gen;
 
 import java.util.Random;
 
-import cavern.core.Cavern;
+import cavern.util.CaveUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
@@ -16,7 +16,7 @@ import net.minecraft.world.gen.structure.template.TemplateManager;
 
 public class WorldGenDarkLibrary extends WorldGenerator
 {
-	public static final ResourceLocation DARK_LIBRARY = new ResourceLocation(Cavern.MODID, "dark_library");
+	private static final ResourceLocation DARK_LIBRARY = CaveUtils.getKey("dark_library");
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos)

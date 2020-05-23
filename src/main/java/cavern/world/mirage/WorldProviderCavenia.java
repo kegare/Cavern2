@@ -30,7 +30,7 @@ public class WorldProviderCavenia extends WorldProviderCavern
 	@Override
 	protected BiomeProvider createBiomeProvider()
 	{
-		return new CaveBiomeProvider(world, CaveniaConfig.biomeManager);
+		return new CaveBiomeProvider(world, CaveniaConfig.BIOMES);
 	}
 
 	@Override

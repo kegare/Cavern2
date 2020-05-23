@@ -42,7 +42,7 @@ public final class PlayerHelper
 	{
 		if (grantCriterion(player, "toasts/" + key, key))
 		{
-			CaveNetworkRegistry.sendTo(new ToastMessage(key), (EntityPlayerMP)player);
+			CaveNetworkRegistry.sendTo(() -> new ToastMessage(key), player);
 
 			return true;
 		}

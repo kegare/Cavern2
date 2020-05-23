@@ -82,12 +82,7 @@ public class CaveVein
 			}
 			else if (element instanceof Type)
 			{
-				Type type = (Type)element;
-
-				for (Biome biome : BiomeDictionary.getBiomes(type))
-				{
-					biomes.add(biome.getRegistryName().toString());
-				}
+				BiomeDictionary.getBiomes((Type)element).stream().map(Biome::getRegistryName).map(ResourceLocation::toString).forEach(biomes::add);
 			}
 		}
 

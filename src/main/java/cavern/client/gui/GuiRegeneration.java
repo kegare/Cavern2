@@ -309,7 +309,7 @@ public class GuiRegeneration extends GuiScreen
 
 					if (!message.dimensions.isEmpty())
 					{
-						CaveNetworkRegistry.sendToServer(message);
+						CaveNetworkRegistry.NETWORK.sendToServer(message);
 
 						regenButton.enabled = false;
 						cancelButton.visible = false;

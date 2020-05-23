@@ -14,19 +14,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ModelDurangHog extends ModelBase
 {
 	private float headRotationAngleX;
+	private float childYOffset = 4.0F;
+	private float childZOffset = 4.0F;
 
-	protected float childYOffset = 4.0F;
-	protected float childZOffset = 4.0F;
-
-	public ModelRenderer head;
-	public ModelRenderer nose;
-	public ModelRenderer legR;
-	public ModelRenderer backLegR;
-	public ModelRenderer legL;
-	public ModelRenderer backLegL;
-	public ModelRenderer body;
-	public ModelRenderer fangR;
-	public ModelRenderer fangL;
+	private ModelRenderer head, nose, legR, backLegR, legL, backLegL, body, fangR, fangL;
 
 	public ModelDurangHog()
 	{

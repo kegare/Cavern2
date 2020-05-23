@@ -16,14 +16,10 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class Config
 {
 	public static final String LANG_KEY = "cavern.config.";
-
-	protected static final Side SIDE = FMLLaunchHandler.side();
 
 	public static ConfigChecker configChecker;
 

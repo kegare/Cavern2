@@ -55,7 +55,7 @@ public class MagicThunderbolt extends Magic implements Predicate<Entity>
 
 				for (int count = 0; count < 5;)
 				{
-					BlockPos blockpos = pos.add(RANDOM.nextInt(12) - 6, 0, RANDOM.nextInt(12) - 6);
+					BlockPos blockpos = pos.add(rand.nextInt(12) - 6, 0, rand.nextInt(12) - 6);
 
 					if (!world.isAirBlock(blockpos))
 					{

@@ -18,8 +18,13 @@ public abstract class WorldProviderMirageWorld extends WorldProvider implements 
 	protected void init()
 	{
 		hasSkyLight = true;
-		biomeProvider = new BiomeProvider(world.getWorldInfo());
+		biomeProvider = createBiomeProvider();
 		seedData = world instanceof WorldServer ? new CustomSeedData(world.getWorldInfo().getDimensionData(getDimension())) : new CustomSeedData();
+	}
+
+	protected BiomeProvider createBiomeProvider()
+	{
+		return new BiomeProvider(world.getWorldInfo());
 	}
 
 	@Override
