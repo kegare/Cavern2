@@ -396,7 +396,7 @@ entity.CrystalTurret.name=CrystalTurret
 entity.SkySeeker.name=SkySeeker
 entity.DurangHog.name=Durang Hog
 entity.summon.name=Summoned %s
-entity.Beam.name=ビーム
+entity.Beam.name=Beam
 
 dimension.cavern.name=Cavern
 dimension.hugeCavern.name=Huge Cavern
