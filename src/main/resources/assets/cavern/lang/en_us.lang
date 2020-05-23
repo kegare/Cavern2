@@ -394,8 +394,11 @@ entity.CrazySpider.name=Crazy Spider
 entity.CavenicBear.name=Cavenic Bear
 entity.CavenicWitch.name=Cavenic Witch
 entity.Caveman.name=Caveman
+entity.CrystalTurret.name=Crystal Turret
+entity.SkySeeker.name=Sky Seeker
 entity.DurangHog.name=Durang Hog
 entity.summon.name=Summoned %s
+entity.Beam.name=Beam
 
 dimension.cavern.name=Cavern
 dimension.hugeCavern.name=Huge Cavern

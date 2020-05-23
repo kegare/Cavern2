@@ -1,15 +1,14 @@
 package cavern.world.mirage;
 
-import java.util.List;
-import java.util.Random;
-
 import cavern.world.gen.MapGenSkyCaves;
+import cavern.world.gen.MapGenSkyWatchTower;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEntitySpawner;
@@ -29,6 +28,9 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate;
 import net.minecraftforge.event.terraingen.TerrainGen;
+
+import java.util.List;
+import java.util.Random;
 
 public class ChunkGeneratorSkyland implements IChunkGenerator
 {
@@ -53,6 +55,7 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 	private double[] noise4;
 	private double[] noise5;
 
+	private final MapGenSkyWatchTower skyWatchTowerGenerator = new MapGenSkyWatchTower(this);
 	private final MapGenBase caveGenerator = new MapGenSkyCaves();
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
@@ -361,6 +364,8 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 		setBlocksInChunk(chunkX, chunkZ, primer);
 		buildSurfaces(primer);
 
+		skyWatchTowerGenerator.generate(world, chunkX, chunkZ, primer);
+
 		caveGenerator.generate(world, chunkX, chunkZ, primer);
 
 		Chunk chunk = new Chunk(world, primer, chunkX, chunkZ);
@@ -368,7 +373,7 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 
 		for (int index = 0; index < biomes.length; ++index)
 		{
-			biomes[index] = (byte)Biome.getIdForBiome(biomesForGeneration[index]);
+			biomes[index] = (byte) Biome.getIdForBiome(biomesForGeneration[index]);
 		}
 
 		chunk.generateSkylightMap();
@@ -466,6 +471,10 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 
 		ForgeEventFactory.onChunkPopulate(false, this, world, rand, chunkX, chunkZ, false);
 
+		ChunkPos coord = new ChunkPos(chunkX, chunkZ);
+
+		skyWatchTowerGenerator.generateStructure(world, rand, coord);
+
 		BlockFalling.fallInstantly = false;
 	}
 
@@ -482,17 +491,30 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 	}
 
 	@Override
-	public BlockPos getNearestStructurePos(World world, String structureName, BlockPos position, boolean findUnexplored)
-	{
-		return null;
-	}
-
-	@Override
 	public boolean isInsideStructure(World world, String structureName, BlockPos pos)
 	{
+		if ("SkyWatchTower".equals(structureName) && skyWatchTowerGenerator != null)
+		{
+			return skyWatchTowerGenerator.isInsideStructure(pos);
+		}
+
 		return false;
 	}
 
 	@Override
-	public void recreateStructures(Chunk chunk, int x, int z) {}
+	public BlockPos getNearestStructurePos(World world, String structureName, BlockPos pos, boolean findUnexplored)
+	{
+		if ("SkyWatchTower".equals(structureName) && skyWatchTowerGenerator != null)
+		{
+			return skyWatchTowerGenerator.getNearestStructurePos(world, pos, findUnexplored);
+		}
+
+		return null;
+	}
+
+	@Override
+	public void recreateStructures(Chunk chunk, int x, int z)
+	{
+		skyWatchTowerGenerator.generate(world, x, z, null);
+	}
 }
