@@ -17,135 +17,127 @@ public class EntityAIAttackMoveRanged<T extends EntityMob & IRangedAttackMob> ex
 	private boolean strafingBackwards;
 	private int strafingTime = -1;
 
-	public EntityAIAttackMoveRanged(T p_i47515_1_, double p_i47515_2_, int p_i47515_4_, float p_i47515_5_)
+	public EntityAIAttackMoveRanged(T entity, double move, int cooldown, float distance)
 	{
-		this.entity = p_i47515_1_;
-		this.moveSpeedAmp = p_i47515_2_;
-		this.attackCooldown = p_i47515_4_;
-		this.maxAttackDistance = p_i47515_5_ * p_i47515_5_;
+		this.entity = entity;
+		this.moveSpeedAmp = move;
+		this.attackCooldown = cooldown;
+		this.maxAttackDistance = distance * distance;
 		this.setMutexBits(3);
 	}
 
-	public void setAttackCooldown(int p_189428_1_)
+	public void setAttackCooldown(int time)
 	{
-		this.attackCooldown = p_189428_1_;
+		attackCooldown = time;
 	}
 
-	/**
-	 * Returns whether the EntityAIBase should begin execution.
-	 */
+	@Override
 	public boolean shouldExecute()
 	{
 		return this.entity.getAttackTarget() != null;
 	}
 
-
-	/**
-	 * Returns whether an in-progress EntityAIBase should continue executing
-	 */
+	@Override
 	public boolean shouldContinueExecuting()
 	{
-		return (this.shouldExecute() || !this.entity.getNavigator().noPath());
+		return (shouldExecute() || !entity.getNavigator().noPath());
 	}
 
-	/**
-	 * Execute a one shot task or start executing a continuous task
-	 */
+	@Override
 	public void startExecuting()
 	{
 		super.startExecuting();
-		((IRangedAttackMob) this.entity).setSwingingArms(true);
+
+		((IRangedAttackMob)entity).setSwingingArms(true);
 	}
 
-	/**
-	 * Reset the task's internal state. Called when this task is interrupted by another one
-	 */
+	@Override
 	public void resetTask()
 	{
 		super.resetTask();
-		this.entity.getNavigator().clearPath();
-		((IRangedAttackMob) this.entity).setSwingingArms(false);
-		this.seeTime = 0;
-		this.setAttackTime(-1);
+
+		entity.getNavigator().clearPath();
+		((IRangedAttackMob)entity).setSwingingArms(false);
+		seeTime = 0;
+		setAttackTime(-1);
 	}
 
-	/**
-	 * Keep ticking a continuous task that has already been started
-	 */
+	@Override
 	public void updateTask()
 	{
-		EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
+		EntityLivingBase target = entity.getAttackTarget();
 
-		if (entitylivingbase != null)
+		if (target != null)
 		{
-			double d0 = this.entity.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
-			boolean flag = this.entity.getEntitySenses().canSee(entitylivingbase);
-			boolean flag1 = this.seeTime > 0;
+			double dist = entity.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
+			boolean canSee = entity.getEntitySenses().canSee(target);
+			boolean seeing = seeTime > 0;
 
-			if (flag != flag1)
+			if (canSee != seeing)
 			{
-				this.seeTime = 0;
+				seeTime = 0;
 			}
 
-			if (flag)
+			if (canSee)
 			{
-				++this.seeTime;
-			}
-			else
-			{
-				--this.seeTime;
-			}
-
-			if (d0 <= (double) this.maxAttackDistance)
-			{
-				this.entity.getNavigator().clearPath();
-				++this.strafingTime;
+				++seeTime;
 			}
 			else
 			{
-				this.entity.getNavigator().tryMoveToEntityLiving(entitylivingbase, this.moveSpeedAmp);
-				this.strafingTime = -1;
+				--seeTime;
 			}
 
-			if (this.strafingTime >= 20)
+			if (dist <= maxAttackDistance)
 			{
-				if ((double) this.entity.getRNG().nextFloat() < 0.3D)
-				{
-					this.strafingClockwise = !this.strafingClockwise;
-				}
+				entity.getNavigator().clearPath();
 
-				if ((double) this.entity.getRNG().nextFloat() < 0.3D)
-				{
-					this.strafingBackwards = !this.strafingBackwards;
-				}
-
-				this.strafingTime = 0;
+				++strafingTime;
+			}
+			else
+			{
+				entity.getNavigator().tryMoveToEntityLiving(target, moveSpeedAmp);
+				strafingTime = -1;
 			}
 
-			if (this.strafingTime > -1)
+			if (strafingTime >= 20)
 			{
-				if (d0 > (double) (this.maxAttackDistance * 0.75F))
+				if (entity.getRNG().nextFloat() < 0.3D)
 				{
-					this.strafingBackwards = false;
-				}
-				else if (d0 < (double) (this.maxAttackDistance * 0.25F))
-				{
-					this.strafingBackwards = true;
+					strafingClockwise = !strafingClockwise;
 				}
 
-				this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-				this.entity.faceEntity(entitylivingbase, 30.0F, 30.0F);
+				if (entity.getRNG().nextFloat() < 0.3D)
+				{
+					strafingBackwards = !strafingBackwards;
+				}
+
+				strafingTime = 0;
 			}
 
-			this.entity.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
-
-
-			if (flag && this.seeTime > 60)
+			if (strafingTime > -1)
 			{
-				((IRangedAttackMob) this.entity).attackEntityWithRangedAttack(entitylivingbase, 0.6F);
-				this.setAttackTime(this.attackCooldown);
+				if (dist > maxAttackDistance * 0.75F)
+				{
+					strafingBackwards = false;
+				}
+				else if (dist < maxAttackDistance * 0.25F)
+				{
+					strafingBackwards = true;
+				}
 
-				this.seeTime = 0;
+				entity.getMoveHelper().strafe(strafingBackwards ? -0.5F : 0.5F, strafingClockwise ? 0.5F : -0.5F);
+				entity.faceEntity(target, 30.0F, 30.0F);
+			}
+
+			entity.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
+
+			if (canSee && seeTime > 60)
+			{
+				((IRangedAttackMob)entity).attackEntityWithRangedAttack(target, 0.6F);
+
+				setAttackTime(attackCooldown);
+
+				seeTime = 0;
 			}
 
 		}
@@ -156,8 +148,8 @@ public class EntityAIAttackMoveRanged<T extends EntityMob & IRangedAttackMob> ex
 		return attackTime;
 	}
 
-	public void setAttackTime(int attackTime)
+	public void setAttackTime(int time)
 	{
-		this.attackTime = attackTime;
+		attackTime = time;
 	}
 }

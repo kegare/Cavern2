@@ -1,7 +1,7 @@
 package cavern.entity.monster;
 
 import cavern.entity.ai.EntityAIAttackMoveRanged;
-import cavern.entity.movehelper.EntityCaveFlyHelper;
+import cavern.entity.ai.EntityFlyHelper;
 import cavern.entity.projectile.EntityBeam;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -29,25 +29,25 @@ public class EntityCrystalTurret extends EntityMob implements IRangedAttackMob
 	private float heightOffset = 0.5f;
 	private int heightOffsetUpdateTime;
 
-	public EntityCrystalTurret(World worldIn)
+	public EntityCrystalTurret(World world)
 	{
-		super(worldIn);
+		super(world);
 		this.setSize(0.65F, 0.65F);
 		this.isImmuneToFire = true;
-		this.moveHelper = new EntityCaveFlyHelper(this);
+		this.moveHelper = new EntityFlyHelper(this);
 	}
 
 	@Override
 	protected void initEntityAI()
 	{
-		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.tasks.addTask(3, new EntityAIAttackMoveRanged<>(this, 1.0D, 35, 16.0F));
-		this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.1D));
-		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		this.tasks.addTask(6, new EntityAILookIdle(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[0]));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
-		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<>(this, EntityIronGolem.class, true));
+		tasks.addTask(1, new EntityAISwimming(this));
+		tasks.addTask(3, new EntityAIAttackMoveRanged<>(this, 1.0D, 35, 16.0F));
+		tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.1D));
+		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		tasks.addTask(6, new EntityAILookIdle(this));
+		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[0]));
+		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
+		targetTasks.addTask(3, new EntityAINearestAttackableTarget<>(this, EntityIronGolem.class, true));
 	}
 
 	@Override
@@ -55,18 +55,18 @@ public class EntityCrystalTurret extends EntityMob implements IRangedAttackMob
 	{
 		super.applyEntityAttributes();
 
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(3.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.282896D);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20D);
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
-		this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.42D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
+		getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(3.0D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.282896D);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20D);
+		getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
+		getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.42D);
 	}
 
 	@Override
 	public float getEyeHeight()
 	{
-		return this.height * 0.55F;
+		return height * 0.55F;
 	}
 
 	@Override
@@ -81,21 +81,24 @@ public class EntityCrystalTurret extends EntityMob implements IRangedAttackMob
 		return true;
 	}
 
-	protected PathNavigate createNavigator(World worldIn)
+	@Override
+	protected PathNavigate createNavigator(World world)
 	{
-		PathNavigateFlying pathnavigateflying = new PathNavigateFlying(this, worldIn);
-		pathnavigateflying.setCanOpenDoors(false);
-		pathnavigateflying.setCanFloat(true);
-		pathnavigateflying.setCanEnterDoors(true);
-		return pathnavigateflying;
+		PathNavigateFlying flying = new PathNavigateFlying(this, world);
+
+		flying.setCanOpenDoors(false);
+		flying.setCanFloat(true);
+		flying.setCanEnterDoors(true);
+
+		return flying;
 	}
 
 	@Override
 	public void onLivingUpdate()
 	{
-		if (!this.onGround && this.motionY < 0.0D)
+		if (!onGround && motionY < 0.0D)
 		{
-			this.motionY *= 0.6D;
+			motionY *= 0.6D;
 		}
 
 		super.onLivingUpdate();
@@ -104,25 +107,20 @@ public class EntityCrystalTurret extends EntityMob implements IRangedAttackMob
 	@Override
 	protected void updateAITasks()
 	{
-		// stay over the target by moment
+		--heightOffsetUpdateTime;
 
-		--this.heightOffsetUpdateTime;
-
-		if (this.heightOffsetUpdateTime <= 0)
+		if (heightOffsetUpdateTime <= 0)
 		{
-
-			this.heightOffsetUpdateTime = 100;
-
-			this.heightOffset = 0.5f + (float) this.rand.nextGaussian() * 2.0f;
-
+			heightOffsetUpdateTime = 100;
+			heightOffset = 0.5f + (float)rand.nextGaussian() * 2.0f;
 		}
 
 		EntityLivingBase target = getAttackTarget();
 
-		if (target != null && target.isEntityAlive() && target.posY + (double) target.getEyeHeight() > this.posY + (double) getEyeHeight() + (double) this.heightOffset)
+		if (target != null && target.isEntityAlive() && target.posY + target.getEyeHeight() > posY + getEyeHeight() + heightOffset)
 		{
-			this.motionY = (0.2 - motionY) * 0.2;
-			this.isAirBorne = true;
+			motionY = (0.2 - motionY) * 0.2;
+			isAirBorne = true;
 		}
 
 		super.updateAITasks();
@@ -137,34 +135,31 @@ public class EntityCrystalTurret extends EntityMob implements IRangedAttackMob
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor)
 	{
-		double d1 = target.posX - this.posX;
-		double d2 = target.getEntityBoundingBox().minY + (double) (target.height / 2.0F) - (this.posY + (double) (this.height / 2.0F));
-		double d3 = target.posZ - this.posZ;
+		double d1 = target.posX - posX;
+		double d2 = target.getEntityBoundingBox().minY + target.height / 2.0F - (posY + height / 2.0F);
+		double d3 = target.posZ - posZ;
 
-		EntityBeam projectile = new EntityBeam(this.world, this, d1 + this.getRNG().nextGaussian() * 0.01 - 0.005, d2, d3 + this.getRNG().nextGaussian() * 0.01 - 0.005);
-
+		EntityBeam projectile = new EntityBeam(world, this, d1 + getRNG().nextGaussian() * 0.01 - 0.005, d2, d3 + getRNG().nextGaussian() * 0.01 - 0.005);
 		Vec3d vec3d = this.getLook(1.0F);
 
-		playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+		playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
 
-		projectile.setLocationAndAngles(this.posX + vec3d.x * 1.3D, this.posY + this.getEyeHeight(), this.posZ + vec3d.z * 1.3D, this.rotationYaw, this.rotationPitch);
+		projectile.setLocationAndAngles(posX + vec3d.x * 1.3D, posY + getEyeHeight(), posZ + vec3d.z * 1.3D, rotationYaw, rotationPitch);
+		projectile.posY = posY + height / 2.0F + 0.5D;
 
-//        float d0 = (this.rand.nextFloat() * 16.0F) - 8.0F;
-
-		projectile.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
-		this.world.spawnEntity(projectile);
+		world.spawnEntity(projectile);
 	}
 
 	@Override
-	public boolean isOnSameTeam(Entity entityIn)
+	public boolean isOnSameTeam(Entity entity)
 	{
-		if (super.isOnSameTeam(entityIn))
+		if (super.isOnSameTeam(entity))
 		{
 			return true;
 		}
-		else if (entityIn instanceof EntityCrystalTurret)
+		else if (entity instanceof EntityCrystalTurret)
 		{
-			return this.getTeam() == null && entityIn.getTeam() == null;
+			return getTeam() == null && entity.getTeam() == null;
 		}
 		else
 		{
@@ -173,18 +168,11 @@ public class EntityCrystalTurret extends EntityMob implements IRangedAttackMob
 	}
 
 	@Override
-	public void fall(float distance, float damageMultiplier)
-	{
-	}
+	public void fall(float distance, float damageMultiplier) {}
 
 	@Override
-	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
-	{
-	}
+	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {}
 
 	@Override
-	public void setSwingingArms(boolean swingingArms)
-	{
-
-	}
+	public void setSwingingArms(boolean swingingArms) {}
 }

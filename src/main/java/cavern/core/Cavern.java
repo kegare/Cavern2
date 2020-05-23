@@ -1,5 +1,7 @@
 package cavern.core;
 
+import org.apache.logging.log4j.Level;
+
 import cavern.api.CavernAPI;
 import cavern.block.CaveBlocks;
 import cavern.block.RandomiteHelper;
@@ -71,7 +73,6 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
-import org.apache.logging.log4j.Level;
 
 @Mod
 (

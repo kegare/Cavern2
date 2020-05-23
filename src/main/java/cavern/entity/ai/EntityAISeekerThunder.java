@@ -12,8 +12,7 @@ public class EntityAISeekerThunder extends EntityAIBase
 {
 	private final EntitySkySeeker attacker;
 	private EntityLivingBase targetEntity;
-
-	World world;
+	private World world;
 
 	private double attackPosX;
 	private double attackPosY;
@@ -22,41 +21,41 @@ public class EntityAISeekerThunder extends EntityAIBase
 	private double attackPosY2;
 	private double attackPosZ2;
 
-	public EntityAISeekerThunder(EntitySkySeeker entitySkySeeker)
+	public EntityAISeekerThunder(EntitySkySeeker entity)
 	{
-		this.attacker = entitySkySeeker;
-		this.world = entitySkySeeker.world;
+		this.attacker = entity;
+		this.world = entity.world;
 	}
 
 	@Override
 	public boolean shouldExecute()
 	{
-		this.targetEntity = this.attacker.getAttackTarget();
+		targetEntity = attacker.getAttackTarget();
 
-		if (this.targetEntity == null)
+		if (targetEntity == null)
 		{
 			return false;
 		}
 		else
 		{
-			this.attackPosX = this.targetEntity.posX;
-			this.attackPosY = this.targetEntity.posY;
-			this.attackPosZ = this.targetEntity.posZ;
+			attackPosX = targetEntity.posX;
+			attackPosY = targetEntity.posY;
+			attackPosZ = targetEntity.posZ;
 
-			return this.attacker.getAttackStatus() == EntitySkySeeker.Status.THUNDER_PRE;
+			return attacker.getAttackStatus() == EntitySkySeeker.Status.THUNDER_PRE;
 		}
 	}
 
 	@Override
 	public boolean shouldContinueExecuting()
 	{
-		return this.attacker.getAttackStatus() == EntitySkySeeker.Status.THUNDER_PRE && this.targetEntity != null || this.attacker.getAttackStatus() == EntitySkySeeker.Status.THUNDER && this.targetEntity != null;
+		return attacker.getAttackStatus() == EntitySkySeeker.Status.THUNDER_PRE && targetEntity != null || attacker.getAttackStatus() == EntitySkySeeker.Status.THUNDER && targetEntity != null;
 	}
 
 	@Override
 	public void resetTask()
 	{
-		this.targetEntity = null;
+		targetEntity = null;
 	}
 
 	@Override
@@ -64,61 +63,56 @@ public class EntityAISeekerThunder extends EntityAIBase
 	{
 		super.updateTask();
 
-		double d0 = this.attacker.getDistanceSq(targetEntity.posX, targetEntity.getEntityBoundingBox().minY, targetEntity.posZ);
+		attacker.getNavigator().clearPath();
 
-
-		this.attacker.getNavigator().clearPath();
-
-		if (this.attacker.getAttackStatus() == EntitySkySeeker.Status.THUNDER_PRE)
+		if (attacker.getAttackStatus() == EntitySkySeeker.Status.THUNDER_PRE)
 		{
-			if (this.attacker.getTicksProgress() == 1)
+			if (attacker.getTicksProgress() == 1)
 			{
-				this.attacker.playSound(CaveSounds.MAGIC_SPELLING, 2.0F, 1.0F);
+				attacker.playSound(CaveSounds.MAGIC_SPELLING, 2.0F, 1.0F);
 			}
-			else if (this.attacker.getTicksProgress() == 40)
+			else if (attacker.getTicksProgress() == 40)
 			{
-				this.attackPosX2 = this.targetEntity.posX;
-				this.attackPosY2 = this.targetEntity.posY;
-				this.attackPosZ2 = this.targetEntity.posZ;
+				attackPosX2 = targetEntity.posX;
+				attackPosY2 = targetEntity.posY;
+				attackPosZ2 = targetEntity.posZ;
 			}
 
-			this.world.spawnParticle(EnumParticleTypes.SPELL_INSTANT, this.attackPosX, this.attackPosY, this.attackPosZ, 0.0F, 0.0F, 0.0F);
+			world.spawnParticle(EnumParticleTypes.SPELL_INSTANT, attackPosX, attackPosY, attackPosZ, 0.0F, 0.0F, 0.0F);
 		}
-		else if (this.attacker.getAttackStatus() == EntitySkySeeker.Status.THUNDER)
+		else if (attacker.getAttackStatus() == EntitySkySeeker.Status.THUNDER)
 		{
-			if (this.attacker.getTicksProgress() == 1)
+			if (attacker.getTicksProgress() == 1)
 			{
-				this.attacker.playSound(CaveSounds.MAGIC_SUCCESS_MISC, 2.0F, 1.0F);
+				attacker.playSound(CaveSounds.MAGIC_SUCCESS_MISC, 2.0F, 1.0F);
 			}
 
-
-			if (this.attacker.getTicksProgress() == 20)
+			if (attacker.getTicksProgress() == 20)
 			{
-				EntityLightningBolt thunderbolt = new EntityLightningBolt(this.world, this.attackPosX, this.attackPosY, this.attackPosZ, false);
+				EntityLightningBolt thunderbolt = new EntityLightningBolt(world, attackPosX, attackPosY, attackPosZ, false);
 
-				this.world.addWeatherEffect(thunderbolt);
-			}
-			if (this.attacker.getTicksProgress() == 40)
-			{
-				EntityLightningBolt thunderbolt = new EntityLightningBolt(this.world, this.attackPosX2, this.attackPosY2, this.attackPosZ2, false);
-
-				this.world.addWeatherEffect(thunderbolt);
+				world.addWeatherEffect(thunderbolt);
 			}
 
-			if (this.attacker.getHealth() < this.attacker.getMaxHealth() / 2.25 && this.attacker.getTicksProgress() == 60)
+			if (attacker.getTicksProgress() == 40)
 			{
-				EntityLightningBolt thunderbolt = new EntityLightningBolt(this.world, this.attackPosX, this.attackPosY, this.attackPosZ, false);
+				EntityLightningBolt thunderbolt = new EntityLightningBolt(world, attackPosX2, attackPosY2, attackPosZ2, false);
 
-				this.world.addWeatherEffect(thunderbolt);
-
-				EntityLightningBolt thunderbolt2 = new EntityLightningBolt(this.world, this.attackPosX2, this.attackPosY2, this.attackPosZ2, false);
-
-				this.world.addWeatherEffect(thunderbolt2);
+				world.addWeatherEffect(thunderbolt);
 			}
 
+			if (attacker.getHealth() < attacker.getMaxHealth() / 2.25 && attacker.getTicksProgress() == 60)
+			{
+				EntityLightningBolt thunderbolt = new EntityLightningBolt(world, attackPosX, attackPosY, attackPosZ, false);
+
+				world.addWeatherEffect(thunderbolt);
+
+				EntityLightningBolt thunderbolt2 = new EntityLightningBolt(world, attackPosX2, attackPosY2, attackPosZ2, false);
+
+				world.addWeatherEffect(thunderbolt2);
+			}
 		}
 
-
-		this.attacker.getLookHelper().setLookPositionWithEntity(this.targetEntity, 30.0F, 30.0F);
+		attacker.getLookHelper().setLookPositionWithEntity(targetEntity, 30.0F, 30.0F);
 	}
 }

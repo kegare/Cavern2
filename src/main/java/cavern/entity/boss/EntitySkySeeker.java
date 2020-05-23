@@ -1,10 +1,12 @@
 package cavern.entity.boss;
 
+import javax.annotation.Nullable;
+
 import cavern.entity.ai.EntityAIAttackMoveRanged;
 import cavern.entity.ai.EntityAISeekerChase;
+import cavern.entity.ai.EntityAISeekerStatus;
 import cavern.entity.ai.EntityAISeekerThunder;
-import cavern.entity.ai.EntityAIUpdateStatus;
-import cavern.entity.movehelper.EntityCaveFlyHelper;
+import cavern.entity.ai.EntityFlyHelper;
 import cavern.entity.projectile.EntityBeam;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -43,28 +45,24 @@ import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 {
 	private static final DataParameter<Boolean> SLEEP = EntityDataManager.<Boolean>createKey(EntitySkySeeker.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<String> ATTACK_STATUS = EntityDataManager.<String>createKey(EntitySkySeeker.class, DataSerializers.STRING);
-
 
 	private float heightOffset = 0.5f;
 	private int heightOffsetUpdateTime;
 
 	private int ticksProgress;
 
+	public final BossInfoServer bossInfo = new BossInfoServer(getDisplayName(), BossInfo.Color.WHITE, BossInfo.Overlay.PROGRESS);
 
-	public final BossInfoServer bossInfo = (BossInfoServer) (new BossInfoServer(this.getDisplayName(), BossInfo.Color.WHITE, BossInfo.Overlay.PROGRESS));
-
-	public EntitySkySeeker(World worldIn)
+	public EntitySkySeeker(World world)
 	{
-		super(worldIn);
+		super(world);
 		this.setSize(0.75F, 1.9F);
 		this.isImmuneToFire = true;
-		this.moveHelper = new EntityCaveFlyHelper(this);
+		this.moveHelper = new EntityFlyHelper(this);
 		this.experienceValue = 100;
 		this.bossInfo.setVisible(false);
 	}
@@ -80,15 +78,14 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 		return bossInfo;
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	protected void initEntityAI()
 	{
-		this.tasks.addTask(0, new AIDoNothing());
-		this.tasks.addTask(1, new EntityAIUpdateStatus(this));
-		this.tasks.addTask(2, new EntityAISeekerChase(this, 1.25F));
-		this.tasks.addTask(3, new EntityAISeekerThunder(this));
-		this.tasks.addTask(5, new EntityAIAttackMoveRanged(this, 1.0D, 50, 16.0F)
+		tasks.addTask(0, new AIDoNothing());
+		tasks.addTask(1, new EntityAISeekerStatus(this));
+		tasks.addTask(2, new EntityAISeekerChase(this, 1.25F));
+		tasks.addTask(3, new EntityAISeekerThunder(this));
+		tasks.addTask(5, new EntityAIAttackMoveRanged<EntitySkySeeker>(this, 1.0D, 50, 16.0F)
 		{
 			@Override
 			public boolean shouldExecute()
@@ -102,14 +99,14 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 				return super.shouldContinueExecuting() && isBeamStatus();
 			}
 		});
-		this.tasks.addTask(8, new EntityAIWanderAvoidWater(this, 1.1D));
-		this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
-		this.tasks.addTask(10, new EntityAILookIdle(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
-		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<>(this, AbstractIllager.class, true));
-		this.targetTasks.addTask(4, new EntityAINearestAttackableTarget<>(this, EntityIronGolem.class, true));
+		tasks.addTask(8, new EntityAIWanderAvoidWater(this, 1.1D));
+		tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		tasks.addTask(9, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
+		tasks.addTask(10, new EntityAILookIdle(this));
+		targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
+		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
+		targetTasks.addTask(3, new EntityAINearestAttackableTarget<>(this, AbstractIllager.class, true));
+		targetTasks.addTask(4, new EntityAINearestAttackableTarget<>(this, EntityIronGolem.class, true));
 	}
 
 	@Override
@@ -117,45 +114,50 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 	{
 		super.applyEntityAttributes();
 
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(340.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(8.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.262896D);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(30D);
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
-		this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.44D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(340.0D);
+		getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(8.0D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.262896D);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(30D);
+		getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
+		getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.44D);
 	}
 
 	@Override
 	protected void entityInit()
 	{
 		super.entityInit();
-		this.dataManager.register(SLEEP, Boolean.FALSE);
-		this.dataManager.register(ATTACK_STATUS, Status.NONE.name());
-	}
 
-	public void setInWeb()
-	{
-	}
-
-	public void addTrackingPlayer(EntityPlayerMP player)
-	{
-		super.addTrackingPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
-
-	public void removeTrackingPlayer(EntityPlayerMP player)
-	{
-		super.removeTrackingPlayer(player);
-		this.bossInfo.removePlayer(player);
+		dataManager.register(SLEEP, Boolean.FALSE);
+		dataManager.register(ATTACK_STATUS, Status.NONE.name());
 	}
 
 	@Override
-	public void setAttackTarget(@Nullable EntityLivingBase entitylivingbaseIn)
+	public void setInWeb() {}
+
+	@Override
+	public void addTrackingPlayer(EntityPlayerMP player)
 	{
-		super.setAttackTarget(entitylivingbaseIn);
-		if (entitylivingbaseIn == null)
+		super.addTrackingPlayer(player);
+
+		bossInfo.addPlayer(player);
+	}
+
+	@Override
+	public void removeTrackingPlayer(EntityPlayerMP player)
+	{
+		super.removeTrackingPlayer(player);
+
+		bossInfo.removePlayer(player);
+	}
+
+	@Override
+	public void setAttackTarget(@Nullable EntityLivingBase living)
+	{
+		super.setAttackTarget(living);
+
+		if (living == null)
 		{
-			this.setAttackStatus(Status.NONE);
+			setAttackStatus(Status.NONE);
 		}
 	}
 
@@ -163,11 +165,12 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 	public void readEntityFromNBT(NBTTagCompound compound)
 	{
 		super.readEntityFromNBT(compound);
-		this.setSleep(compound.getBoolean("Sleep"));
 
-		if (this.hasCustomName())
+		setSleep(compound.getBoolean("Sleep"));
+
+		if (hasCustomName())
 		{
-			this.bossInfo.setName(this.getDisplayName());
+			bossInfo.setName(getDisplayName());
 		}
 	}
 
@@ -175,43 +178,48 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 	public void writeEntityToNBT(NBTTagCompound compound)
 	{
 		super.writeEntityToNBT(compound);
-		compound.setBoolean("Sleep", this.isSleep());
+
+		compound.setBoolean("Sleep", isSleep());
 	}
 
+	@Override
 	public void setCustomNameTag(String name)
 	{
 		super.setCustomNameTag(name);
-		this.bossInfo.setName(this.getDisplayName());
+
+		bossInfo.setName(getDisplayName());
 	}
 
 	@Override
 	public float getEyeHeight()
 	{
-		return this.height * 0.8F;
+		return height * 0.8F;
 	}
 
 	@Override
-	protected void collideWithEntity(Entity entityIn)
+	protected void collideWithEntity(Entity entity)
 	{
-		super.collideWithEntity(entityIn);
-		if (this.getAttackStatus() == Status.STOMP)
+		super.collideWithEntity(entity);
+
+		if (getAttackStatus() == Status.STOMP)
 		{
-			entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), 10.0F);
-			if (entityIn instanceof EntityLivingBase)
+			entity.attackEntityFrom(DamageSource.causeMobDamage(this), 10.0F);
+
+			if (entity instanceof EntityLivingBase)
 			{
-				((EntityLivingBase) entityIn).knockBack(this, 1.25F * 0.5F, MathHelper.sin(rotationYaw * 0.017453292F), -MathHelper.cos(rotationYaw * 0.017453292F));
+				((EntityLivingBase)entity).knockBack(this, 1.25F * 0.5F, MathHelper.sin(rotationYaw * 0.017453292F), -MathHelper.cos(rotationYaw * 0.017453292F));
 			}
 			else
 			{
-				entityIn.addVelocity(-MathHelper.sin(rotationYaw * 0.017453292F) * 1.25F * 0.5F, 0.1D, MathHelper.cos(rotationYaw * 0.017453292F) * 1.25F * 0.5F);
+				entity.addVelocity(-MathHelper.sin(rotationYaw * 0.017453292F) * 1.25F * 0.5F, 0.1D, MathHelper.cos(rotationYaw * 0.017453292F) * 1.25F * 0.5F);
 			}
 		}
 	}
 
-	@Nullable
+	@Override
 	public AxisAlignedBB getCollisionBoundingBox()
 	{
-		return this.isEntityAlive() ? this.getEntityBoundingBox() : null;
+		return isEntityAlive() ? getEntityBoundingBox() : null;
 	}
 
 	@Override
@@ -227,67 +235,69 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 	}
 
 	@Override
-	protected PathNavigate createNavigator(World worldIn)
+	protected PathNavigate createNavigator(World world)
 	{
-		PathNavigateFlying pathnavigateflying = new PathNavigateFlying(this, worldIn);
-		pathnavigateflying.setCanOpenDoors(false);
-		pathnavigateflying.setCanFloat(true);
-		pathnavigateflying.setCanEnterDoors(true);
-		return pathnavigateflying;
+		PathNavigateFlying flying = new PathNavigateFlying(this, world);
+
+		flying.setCanOpenDoors(false);
+		flying.setCanFloat(true);
+		flying.setCanEnterDoors(true);
+
+		return flying;
 	}
 
 	@Override
 	public void onLivingUpdate()
 	{
-		if (this.getAttackStatus() != Status.STOMP && !this.onGround && this.motionY < 0.0D)
+		if (getAttackStatus() != Status.STOMP && !onGround && motionY < 0.0D)
 		{
-			this.motionY *= 0.6D;
+			motionY *= 0.6D;
 		}
 
-		this.setTicksProgress(this.getTicksProgress() + 1);
+		setTicksProgress(getTicksProgress() + 1);
 
-		if (this.getAttackStatus() != Status.NONE && this.getTicksProgress() >= this.getMaxTicksForStatus())
+		if (getAttackStatus() != Status.NONE && getTicksProgress() >= getMaxTicksForStatus())
 		{
-			this.updateStatus();
+			updateStatus();
 		}
-
 
 		super.onLivingUpdate();
 	}
 
 	private void updateStatus()
 	{
-		if (this.getAttackStatus() == Status.CHASE)
+		if (getAttackStatus() == Status.CHASE)
 		{
-			this.setAttackStatus(Status.STOMP);
+			setAttackStatus(Status.STOMP);
 		}
-		else if (this.getAttackStatus() == Status.THUNDER_PRE)
+		else if (getAttackStatus() == Status.THUNDER_PRE)
 		{
-			this.setAttackStatus(Status.THUNDER);
+			setAttackStatus(Status.THUNDER);
 		}
-		else if (this.getAttackStatus() != Status.NONE)
+		else if (getAttackStatus() != Status.NONE)
 		{
-			this.setAttackStatus(Status.NONE);
+			setAttackStatus(Status.NONE);
 		}
 	}
 
 	public void setAttackStatus(String statusName)
 	{
-		this.setTicksProgress(0);
-		this.dataManager.set(ATTACK_STATUS, statusName);
+		setTicksProgress(0);
+
+		dataManager.set(ATTACK_STATUS, statusName);
 	}
 
 	public void setAttackStatus(Status status)
 	{
-		this.setTicksProgress(0);
-		this.dataManager.set(ATTACK_STATUS, status.name());
+		setTicksProgress(0);
+
+		dataManager.set(ATTACK_STATUS, status.name());
 	}
 
 	public Status getAttackStatus()
 	{
 		return Status.getTypeByName(dataManager.get(ATTACK_STATUS));
 	}
-
 
 	public int getMaxTicksForStatus()
 	{
@@ -324,9 +334,9 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 		return ticksProgress;
 	}
 
-	public void setTicksProgress(int ticksProgress)
+	public void setTicksProgress(int progress)
 	{
-		this.ticksProgress = ticksProgress;
+		ticksProgress = progress;
 	}
 
 	@Override
@@ -334,44 +344,43 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 	{
 		if (!isSleep())
 		{
-			--this.heightOffsetUpdateTime;
+			--heightOffsetUpdateTime;
 
-			if (this.heightOffsetUpdateTime <= 0)
+			if (heightOffsetUpdateTime <= 0)
 			{
+				heightOffsetUpdateTime = 100;
 
-				this.heightOffsetUpdateTime = 100;
-
-				this.heightOffset = 0.5f + (float) this.rand.nextGaussian() * 2.0f;
-
+				heightOffset = 0.5f + (float)rand.nextGaussian() * 2.0f;
 			}
 
 			EntityLivingBase target = getAttackTarget();
 
-			if (target != null && target.isEntityAlive() && target.posY + (double) target.getEyeHeight() > this.posY + (double) getEyeHeight() + (double) this.heightOffset)
+			if (target != null && target.isEntityAlive() && target.posY + target.getEyeHeight() > posY + getEyeHeight() + heightOffset)
 			{
-				this.motionY = (0.2 - motionY) * 0.2;
-				this.isAirBorne = true;
+				motionY = (0.2 - motionY) * 0.2;
+				isAirBorne = true;
 			}
 
 			super.updateAITasks();
 
-			this.bossInfo.setVisible(true);
+			bossInfo.setVisible(true);
 		}
 		else
 		{
-			this.bossInfo.setVisible(false);
+			bossInfo.setVisible(false);
 		}
-		this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+
+		bossInfo.setPercent(getHealth() / getMaxHealth());
 	}
 
 	public boolean isSleep()
 	{
-		return ((Boolean) this.dataManager.get(SLEEP)).booleanValue();
+		return dataManager.get(SLEEP);
 	}
 
 	public void setSleep(boolean sleep)
 	{
-		this.dataManager.set(SLEEP, Boolean.valueOf(sleep));
+		dataManager.set(SLEEP, sleep);
 	}
 
 	@Override
@@ -383,35 +392,28 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor)
 	{
-		double d1 = target.posX - this.posX;
-		double d2 = target.getEntityBoundingBox().minY + (double) (target.height / 2.0F) - (this.posY + (double) (this.height / 2.0F));
-		double d3 = target.posZ - this.posZ;
+		double d1 = target.posX - posX;
+		double d2 = target.getEntityBoundingBox().minY + target.height / 2.0F - (posY + height / 2.0F);
+		double d3 = target.posZ - posZ;
 
-		EntityBeam projectile = new EntityBeam(this.world, this, d1 + this.getRNG().nextGaussian() * 0.01 - 0.005, d2, d3 + this.getRNG().nextGaussian() * 0.01 - 0.005);
+		EntityBeam projectile = new EntityBeam(world, this, d1 + getRNG().nextGaussian() * 0.01 - 0.005, d2, d3 + getRNG().nextGaussian() * 0.01 - 0.005);
+		Vec3d vec3d = getLook(1.0F);
 
-		Vec3d vec3d = this.getLook(1.0F);
+		playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
 
-		playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+		projectile.setLocationAndAngles(posX + vec3d.x * 1.3D, posY + getEyeHeight(), posZ + vec3d.z * 1.3D, rotationYaw, rotationPitch);
+		projectile.posY = posY + height / 2.0F + 0.5D;
 
-		projectile.setLocationAndAngles(this.posX + vec3d.x * 1.3D, this.posY + this.getEyeHeight(), this.posZ + vec3d.z * 1.3D, this.rotationYaw, this.rotationPitch);
-
-//        float d0 = (this.rand.nextFloat() * 16.0F) - 8.0F;
-
-		projectile.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
-		this.world.spawnEntity(projectile);
-
+		world.spawnEntity(projectile);
 	}
 
 	@Override
-	public void setSwingingArms(boolean swingingArms)
-	{
-
-	}
+	public void setSwingingArms(boolean swingingArms) {}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
-		if (this.isEntityInvulnerable(source))
+		if (isEntityInvulnerable(source))
 		{
 			return false;
 		}
@@ -430,6 +432,7 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 					return false;
 				}
 			}
+
 			if (source.getImmediateSource() instanceof EntityArrow)
 			{
 				return false;
@@ -445,22 +448,21 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 		}
 	}
 
-
 	@Override
 	public void fall(float distance, float damageMultiplier)
 	{
 		if (getAttackStatus() == Status.STOMP)
 		{
-			for (int f = 0; f < 10; f++)
+			for (int i = 0; i < 10; i++)
 			{
-				int i = MathHelper.floor(this.posX);
-				int j = MathHelper.floor(this.posY - 0.20000000298023224D);
-				int k = MathHelper.floor(this.posZ);
-				IBlockState iblockstate = this.world.getBlockState(new BlockPos(i, j, k));
+				int x = MathHelper.floor(posX);
+				int y = MathHelper.floor(posY - 0.20000000298023224D);
+				int z = MathHelper.floor(posZ);
+				IBlockState state = world.getBlockState(new BlockPos(x, y, z));
 
-				if (iblockstate.getMaterial() != Material.AIR)
+				if (state.getMaterial() != Material.AIR)
 				{
-					this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + ((double) this.rand.nextFloat() - 0.5D) * (double) this.width, this.getEntityBoundingBox().minY + 0.1D, this.posZ + ((double) this.rand.nextFloat() - 0.5D) * (double) this.width, 4.0D * ((double) this.rand.nextFloat() - 0.5D), 0.5D, ((double) this.rand.nextFloat() - 0.5D) * 4.0D, Block.getStateId(iblockstate));
+					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, posX + (rand.nextFloat() - 0.5D) * width, getEntityBoundingBox().minY + 0.1D, posZ + (rand.nextFloat() - 0.5D) * width, 4.0D * (rand.nextFloat() - 0.5D), 0.5D, (rand.nextFloat() - 0.5D) * 4.0D, Block.getStateId(state));
 				}
 			}
 
@@ -469,9 +471,7 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 	}
 
 	@Override
-	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
-	{
-	}
+	protected void updateFallState(double y, boolean onGround, IBlockState state, BlockPos pos) {}
 
 	public enum Status
 	{
@@ -482,36 +482,35 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 		CHASE(100),
 		STOMP(60);
 
-		final int duration;
+		private final int duration;
 
-		Status(int duration)
+		private Status(int duration)
 		{
 			this.duration = duration;
 		}
 
-		private static Status getTypeByName(String nameIn)
+		private static Status getTypeByName(String name)
 		{
 			for (Status type : values())
 			{
-				if (type.name().equals(nameIn))
+				if (type.name().equals(name))
 				{
 					return type;
 				}
 			}
+
 			return NONE;
 		}
 	}
 
-	class AIDoNothing extends EntityAIBase
+	private class AIDoNothing extends EntityAIBase
 	{
-		public AIDoNothing()
+		private AIDoNothing()
 		{
 			this.setMutexBits(7);
 		}
 
-		/**
-		 * Returns whether the EntityAIBase should begin execution.
-		 */
+		@Override
 		public boolean shouldExecute()
 		{
 			return EntitySkySeeker.this.isSleep();
@@ -521,6 +520,7 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 		public void updateTask()
 		{
 			super.updateTask();
+
 			EntitySkySeeker.this.getNavigator().clearPath();
 		}
 	}

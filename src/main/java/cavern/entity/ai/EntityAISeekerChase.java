@@ -10,38 +10,39 @@ public class EntityAISeekerChase extends EntityAIBase
 	private EntityLivingBase targetEntity;
 	private final double speed;
 
-	public EntityAISeekerChase(EntitySkySeeker entitySkySeeker, double speedIn)
+	public EntityAISeekerChase(EntitySkySeeker entity, double speed)
 	{
-		this.attacker = entitySkySeeker;
-		this.speed = speedIn;
+		this.attacker = entity;
+		this.speed = speed;
 	}
 
 	@Override
 	public boolean shouldExecute()
 	{
-		this.targetEntity = this.attacker.getAttackTarget();
+		targetEntity = attacker.getAttackTarget();
 
-		if (this.targetEntity == null)
+		if (targetEntity == null)
 		{
 			return false;
 		}
 		else
 		{
-			return this.attacker.getAttackStatus() == EntitySkySeeker.Status.CHASE;
+			return attacker.getAttackStatus() == EntitySkySeeker.Status.CHASE;
 		}
 	}
 
 	@Override
 	public boolean shouldContinueExecuting()
 	{
-		return this.attacker.getAttackStatus() == EntitySkySeeker.Status.CHASE && this.targetEntity != null || this.attacker.getAttackStatus() == EntitySkySeeker.Status.STOMP && this.targetEntity != null;
+		return attacker.getAttackStatus() == EntitySkySeeker.Status.CHASE && targetEntity != null || attacker.getAttackStatus() == EntitySkySeeker.Status.STOMP && targetEntity != null;
 	}
 
 	@Override
 	public void resetTask()
 	{
-		this.attacker.getNavigator().clearPath();
-		this.targetEntity = null;
+		attacker.getNavigator().clearPath();
+
+		targetEntity = null;
 	}
 
 	@Override
@@ -49,17 +50,16 @@ public class EntityAISeekerChase extends EntityAIBase
 	{
 		super.updateTask();
 
-		if (this.attacker.getAttackStatus() == EntitySkySeeker.Status.CHASE)
+		if (attacker.getAttackStatus() == EntitySkySeeker.Status.CHASE)
 		{
-			this.attacker.getNavigator().tryMoveToXYZ(this.targetEntity.posX, this.targetEntity.posY + 6, this.targetEntity.posZ, this.speed);
+			attacker.getNavigator().tryMoveToXYZ(targetEntity.posX, targetEntity.posY + 6, targetEntity.posZ, speed);
 		}
-		else if (this.attacker.getAttackStatus() == EntitySkySeeker.Status.STOMP)
+		else if (attacker.getAttackStatus() == EntitySkySeeker.Status.STOMP)
 		{
-			this.attacker.motionY = -0.45F;
-			this.attacker.getNavigator().clearPath();
+			attacker.motionY = -0.45F;
+			attacker.getNavigator().clearPath();
 		}
 
-
-		this.attacker.getLookHelper().setLookPositionWithEntity(this.targetEntity, 30.0F, 30.0F);
+		attacker.getLookHelper().setLookPositionWithEntity(targetEntity, 30.0F, 30.0F);
 	}
 }

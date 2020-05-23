@@ -1,5 +1,8 @@
 package cavern.world.mirage;
 
+import java.util.List;
+import java.util.Random;
+
 import cavern.world.gen.MapGenSkyCaves;
 import cavern.world.gen.MapGenSkyWatchTower;
 import net.minecraft.block.BlockFalling;
@@ -28,9 +31,6 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate;
 import net.minecraftforge.event.terraingen.TerrainGen;
-
-import java.util.List;
-import java.util.Random;
 
 public class ChunkGeneratorSkyland implements IChunkGenerator
 {

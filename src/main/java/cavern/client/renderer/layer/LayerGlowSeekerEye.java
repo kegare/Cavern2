@@ -1,51 +1,53 @@
 package cavern.client.renderer.layer;
 
-import cavern.core.Cavern;
 import cavern.entity.boss.EntitySkySeeker;
+import cavern.util.CaveUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class LayerGlowSeekerEye<T extends EntitySkySeeker> implements LayerRenderer<T>
 {
-	private final ResourceLocation EYE_TEXTURE;
+	private final ResourceLocation eyeTexture;
 	private final RenderLiving<T> render;
 
-	public LayerGlowSeekerEye(RenderLiving<T> renderIn, String string)
+	public LayerGlowSeekerEye(RenderLiving<T> render, String key)
 	{
-		this.render = renderIn;
-		EYE_TEXTURE = new ResourceLocation(Cavern.MODID, string);
+		this.render = render;
+		this.eyeTexture = CaveUtils.getKey(key);
 	}
 
-	public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+	@Override
+	public void doRenderLayer(T living, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
-		if (!entitylivingbaseIn.isSleep())
+		if (!living.isSleep())
 		{
-			this.render.bindTexture(EYE_TEXTURE);
+			render.bindTexture(eyeTexture);
 			GlStateManager.enableBlend();
 			GlStateManager.disableAlpha();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 			GlStateManager.disableLighting();
-			GlStateManager.depthMask(!entitylivingbaseIn.isInvisible());
-			int i = 61680;
-			int j = 61680;
-			int k = 0;
+			GlStateManager.depthMask(!living.isInvisible());
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
 			GlStateManager.enableLighting();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
-			this.render.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+			render.getMainModel().render(living, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 			Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
-			this.render.setLightmap(entitylivingbaseIn);
+			render.setLightmap(living);
 			GlStateManager.depthMask(true);
 			GlStateManager.disableBlend();
 			GlStateManager.enableAlpha();
 		}
 	}
 
+	@Override
 	public boolean shouldCombineTextures()
 	{
 		return false;

@@ -95,7 +95,7 @@ public class ModelDurangHog extends ModelBase
 	{
 		super.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTickTime);
 
-		headRotationAngleX = ((EntityDurangHog) entity).getHeadRotationAngleX(partialTickTime);
+		headRotationAngleX = ((EntityDurangHog)entity).getHeadRotationAngleX(partialTickTime);
 	}
 
 	@Override
@@ -105,10 +105,10 @@ public class ModelDurangHog extends ModelBase
 
 		head.rotateAngleX = headRotationAngleX;
 		head.rotateAngleY = netHeadYaw * 0.017453292F;
-		body.rotateAngleX = (float) Math.PI / 2F;
+		body.rotateAngleX = (float)Math.PI / 2F;
 		legR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		legL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount;
-		backLegR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount;
+		legL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+		backLegR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
 		backLegL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
 
 		copyModelAngles(head, nose);

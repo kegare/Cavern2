@@ -1,5 +1,11 @@
 package cavern.client;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.ObjectUtils;
+
+import com.google.common.collect.Maps;
+
 import cavern.client.renderer.RenderBeam;
 import cavern.client.renderer.RenderCaveman;
 import cavern.client.renderer.RenderCavenicBear;
@@ -32,15 +38,11 @@ import cavern.entity.monster.EntityCrystalTurret;
 import cavern.entity.passive.EntityDurangHog;
 import cavern.entity.projectile.EntityBeam;
 import cavern.entity.projectile.EntityMagicTorcher;
-import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.ObjectUtils;
-
-import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public final class CaveRenderingRegistry

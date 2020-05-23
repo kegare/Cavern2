@@ -1,6 +1,8 @@
 package cavern.world.gen;
 
-import cavern.core.Cavern;
+import java.util.List;
+import java.util.Random;
+
 import cavern.entity.boss.EntitySkySeeker;
 import cavern.entity.monster.EntityCrystalTurret;
 import cavern.util.CaveUtils;
@@ -21,9 +23,6 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.gen.structure.template.TemplateManager;
 import net.minecraft.world.storage.loot.LootTableList;
-
-import java.util.List;
-import java.util.Random;
 
 public class SkyWatchTowerPiece
 {
@@ -67,34 +66,35 @@ public class SkyWatchTowerPiece
 		list.add(new SkyWatchTowerPiece.SkyCastleTemplate(templateManager, pos1, rotation, "sky_watchtower_main2"));
 	}
 
-	private static void addSubCastle(TemplateManager templateManager, List<SkyCastleTemplate> p_191129_1_, BlockPos p_191129_2_, Rotation p_191129_3_, EnumFacing p_191129_4_, Random random)
+	private static void addSubCastle(TemplateManager templateManager, List<SkyCastleTemplate> list, BlockPos pos, Rotation rotationIn, EnumFacing facing, Random random)
 	{
 		Rotation rotation = Rotation.NONE;
 		String s = get1x1(random);
 
-		if (p_191129_4_ != EnumFacing.EAST)
+		if (facing != EnumFacing.EAST)
 		{
-			if (p_191129_4_ == EnumFacing.NORTH)
+			if (facing == EnumFacing.NORTH)
 			{
 				rotation = rotation.add(Rotation.COUNTERCLOCKWISE_90);
 			}
-			else if (p_191129_4_ == EnumFacing.WEST)
+			else if (facing == EnumFacing.WEST)
 			{
 				rotation = rotation.add(Rotation.CLOCKWISE_180);
 			}
-			else if (p_191129_4_ == EnumFacing.SOUTH)
+			else if (facing == EnumFacing.SOUTH)
 			{
 				rotation = rotation.add(Rotation.CLOCKWISE_90);
 			}
 		}
 
-
-		//structure base size: x 19 z 19
 		BlockPos blockpos = Template.getZeroPositionWithTransform(new BlockPos(1, 0, 0), Mirror.NONE, rotation, 19, 19);
-		rotation = rotation.add(p_191129_3_);
-		blockpos = blockpos.rotate(p_191129_3_);
-		BlockPos blockpos1 = p_191129_2_.add(blockpos.getX(), 0, blockpos.getZ());
-		p_191129_1_.add(new SkyCastleTemplate(templateManager, blockpos1, rotation, s));
+
+		rotation = rotation.add(rotationIn);
+		blockpos = blockpos.rotate(rotationIn);
+
+		BlockPos blockpos1 = pos.add(blockpos.getX(), 0, blockpos.getZ());
+
+		list.add(new SkyCastleTemplate(templateManager, blockpos1, rotation, s));
 	}
 
 	private static String get1x1(Random random)
@@ -109,9 +109,7 @@ public class SkyWatchTowerPiece
 		private String templateName;
 		private boolean isAleadyBossRoomGen;
 
-		public SkyCastleTemplate()
-		{ //Needs empty constructor
-		}
+		public SkyCastleTemplate() {}
 
 		public SkyCastleTemplate(TemplateManager manager, BlockPos pos, Rotation rotation, String templateName)
 		{
@@ -130,18 +128,19 @@ public class SkyWatchTowerPiece
 
 		private void loadTemplate(TemplateManager manager)
 		{
-			Template template = manager.getTemplate(null, new ResourceLocation(Cavern.MODID, "sky_watchtower/" + this.templateName));
-			PlacementSettings placementsettings = (new PlacementSettings()).setIgnoreEntities(true).setRotation(this.rotation).setMirror(this.mirror);
-			this.setup(template, this.templatePosition, placementsettings);
+			Template template = manager.getTemplate(null, CaveUtils.getKey("sky_watchtower/" + templateName));
+			PlacementSettings placementsettings = (new PlacementSettings()).setIgnoreEntities(true).setRotation(rotation).setMirror(mirror);
+
+			setup(template, templatePosition, placementsettings);
 		}
 
 		@Override
 		public boolean addComponentParts(World world, Random random, StructureBoundingBox box)
 		{
 			super.addComponentParts(world, random, box);
+
 			return true;
 		}
-
 
 		@Override
 		protected void handleDataMarker(String function, BlockPos pos, World world, Random rand, StructureBoundingBox box)
@@ -151,6 +150,7 @@ public class SkyWatchTowerPiece
 				if (box.isVecInside(pos))
 				{
 					TileEntity tileEntity = world.getTileEntity(pos.down());
+
 					if (tileEntity instanceof TileEntityChest)
 					{
 						((TileEntityChest) tileEntity).setLootTable(LOOT_CHEST, rand.nextLong());
@@ -159,28 +159,27 @@ public class SkyWatchTowerPiece
 			}
 			else if (function.equals("Guard"))
 			{
-				EntityCrystalTurret entityturret = new EntityCrystalTurret(world);
-				entityturret.enablePersistence();
-				entityturret.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
-				world.spawnEntity(entityturret);
+				EntityCrystalTurret entity = new EntityCrystalTurret(world);
+
+				entity.enablePersistence();
+				entity.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
+
+				world.spawnEntity(entity);
 				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 			}
 			else if (function.equals("Rift"))
 			{
-				/*EntityCrystalTurret entityturret = new EntityCrystalTurret(world);
-				entityturret.enablePersistence();
-				entityturret.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
-				world.spawnEntity(entityturret);*/
 				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 			}
 			else if (function.equals("Boss"))
 			{
-				EntitySkySeeker entitySeeker = new EntitySkySeeker(world);
-				entitySeeker.enablePersistence();
-				entitySeeker.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
-				entitySeeker.setSleep(true);
+				EntitySkySeeker entity = new EntitySkySeeker(world);
 
-				world.spawnEntity(entitySeeker);
+				entity.enablePersistence();
+				entity.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
+				entity.setSleep(true);
+
+				world.spawnEntity(entity);
 				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 			}
 		}
@@ -189,21 +188,24 @@ public class SkyWatchTowerPiece
 		protected void writeStructureToNBT(NBTTagCompound compound)
 		{
 			super.writeStructureToNBT(compound);
-			compound.setBoolean("BossRoom", this.isAleadyBossRoomGen);
-			compound.setString("Template", this.templateName);
-			compound.setString("Rot", this.placeSettings.getRotation().name());
-			compound.setString("Mi", this.placeSettings.getMirror().name());
+
+			compound.setBoolean("BossRoom", isAleadyBossRoomGen);
+			compound.setString("Template", templateName);
+			compound.setString("Rot", placeSettings.getRotation().name());
+			compound.setString("Mi", placeSettings.getMirror().name());
 		}
 
 		@Override
 		protected void readStructureFromNBT(NBTTagCompound compound, TemplateManager manager)
 		{
 			super.readStructureFromNBT(compound, manager);
-			this.isAleadyBossRoomGen = compound.getBoolean("BossRoom");
-			this.templateName = compound.getString("Template");
-			this.rotation = Rotation.valueOf(compound.getString("Rot"));
-			this.mirror = Mirror.valueOf(compound.getString("Mi"));
-			this.loadTemplate(manager);
+
+			isAleadyBossRoomGen = compound.getBoolean("BossRoom");
+			templateName = compound.getString("Template");
+			rotation = Rotation.valueOf(compound.getString("Rot"));
+			mirror = Mirror.valueOf(compound.getString("Mi"));
+
+			loadTemplate(manager);
 		}
 	}
 }
