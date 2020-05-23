@@ -186,6 +186,7 @@ public final class CaveBlocks
 		OreDictionary.registerOre("oreRandomite", BlockCave.EnumType.RANDOMITE_ORE.getItemStack());
 		OreDictionary.registerOre("oreHexcite", BlockCave.EnumType.HEXCITE_ORE.getItemStack());
 		OreDictionary.registerOre("blockHexcite", BlockCave.EnumType.HEXCITE_BLOCK.getItemStack());
+		OreDictionary.registerOre("oreFissured", BlockCave.EnumType.FISSURED_STONE.getItemStack());
 		OreDictionary.registerOre("treeLeaves", new ItemStack(PERVERTED_LEAVES, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("treeSapling", new ItemStack(PERVERTED_SAPLING, 1, OreDictionary.WILDCARD_VALUE));
 	}

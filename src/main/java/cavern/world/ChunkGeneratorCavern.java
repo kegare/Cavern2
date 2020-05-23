@@ -61,7 +61,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 	private final MapGenBase extremeRavineGenerator = new MapGenExtremeRavine();
 	private final MapGenMineshaft mineshaftGenerator = new MapGenMineshaft();
 
-	private final VeinGenerator veinGenerator = new VeinGenerator(CavernConfig.VEINS.getCaveVeins());
+	private final VeinGenerator veinGenerator;
 
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
@@ -78,6 +78,7 @@ public class ChunkGeneratorCavern implements IChunkGenerator
 	{
 		this.world = world;
 		this.rand = new Random(world.getSeed());
+		this.veinGenerator = new VeinGenerator(new CaveVeinProvider(world, () -> CavernConfig.autoVeins ? null : CavernConfig.VEINS));
 	}
 
 	public void setBlocksInChunk(ChunkPrimer primer)

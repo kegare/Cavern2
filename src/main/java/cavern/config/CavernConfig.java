@@ -69,6 +69,8 @@ public class CavernConfig
 	public static int monsterSpawn;
 	public static double caveBrightness;
 
+	public static boolean autoVeins;
+
 	public static final CaveBiomeManager BIOMES = new CaveBiomeManager();
 	public static final CaveVeinManager VEINS = new CaveVeinManager();
 
@@ -263,6 +265,16 @@ public class CavernConfig
 		prop.setComment(comment);
 		propOrder.add(prop.getName());
 		caveBrightness = prop.getDouble(caveBrightness);
+
+		prop = config.get(category, "autoVeins", false);
+		prop.setLanguageKey(Config.LANG_KEY + category + "." + prop.getName());
+		comment = Cavern.proxy.translate(prop.getLanguageKey() + ".tooltip");
+		comment += " [default: " + prop.getDefault() + "]";
+		comment += Configuration.NEW_LINE;
+		comment += "Note: If multiplayer, server-side only.";
+		prop.setComment(comment);
+		propOrder.add(prop.getName());
+		autoVeins = prop.getBoolean(autoVeins);
 
 		config.setCategoryPropertyOrder(category, propOrder);
 

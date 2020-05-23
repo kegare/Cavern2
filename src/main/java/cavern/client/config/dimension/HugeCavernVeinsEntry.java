@@ -62,4 +62,10 @@ public class HugeCavernVeinsEntry extends CategoryEntry
 			((GuiVeinsEditor)childScreen).refreshVeins(manager.getCaveVeins());
 		}
 	}
+
+	@Override
+	public boolean enabled()
+	{
+		return super.enabled() && !HugeCavernConfig.autoVeins;
+	}
 }
