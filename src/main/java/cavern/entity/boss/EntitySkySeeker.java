@@ -8,6 +8,7 @@ import cavern.entity.ai.EntityAISeekerStatus;
 import cavern.entity.ai.EntityAISeekerThunder;
 import cavern.entity.ai.EntityFlyHelper;
 import cavern.entity.projectile.EntityBeam;
+import cavern.util.CaveUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -37,6 +38,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -44,9 +46,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 {
+	private static final ResourceLocation LOOT_SEEKER = LootTableList.register(CaveUtils.getKey("entities/sky_seeker"));
+
 	private static final DataParameter<Boolean> SLEEP = EntityDataManager.<Boolean>createKey(EntitySkySeeker.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<String> ATTACK_STATUS = EntityDataManager.<String>createKey(EntitySkySeeker.class, DataSerializers.STRING);
 
@@ -55,7 +60,7 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 
 	private int ticksProgress;
 
-	public final BossInfoServer bossInfo = new BossInfoServer(getDisplayName(), BossInfo.Color.WHITE, BossInfo.Overlay.PROGRESS);
+	private final BossInfoServer bossInfo = new BossInfoServer(getDisplayName(), BossInfo.Color.WHITE, BossInfo.Overlay.PROGRESS);
 
 	public EntitySkySeeker(World world)
 	{
@@ -129,6 +134,12 @@ public class EntitySkySeeker extends EntityMob implements IRangedAttackMob
 
 		dataManager.register(SLEEP, Boolean.FALSE);
 		dataManager.register(ATTACK_STATUS, Status.NONE.name());
+	}
+
+	@Override
+	protected ResourceLocation getLootTable()
+	{
+		return LOOT_SEEKER;
 	}
 
 	@Override
