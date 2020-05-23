@@ -90,10 +90,8 @@ public final class CaveEntityRegistry
 		registry.register(createEntry(EntitySummonCavenicSkeleton.class, "summon_cavenic_skeleton", "CavenicSkeleton"));
 		registry.register(createEntry(EntityAquaSquid.class, "squid", "Squid"));
 		registry.register(createEntry(EntityMagicTorcher.class, "magic_torcher", "MagicTorcher"));
-		registry.register(createEntry(EntityBeam.class, "beam", "Beam"));
-		//when projectile need to register, must use EntityRegistry's register
-		registerEntity(EntityBeam.class, "beam", "cavern.Beam", 100, 1, true);
 
+		registerEntity(EntityBeam.class, "beam", "Beam", 100, 1, true);
 	}
 
 	public static void regsiterSpawns()
