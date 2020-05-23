@@ -1,5 +1,7 @@
 package cavern.entity;
 
+import cavern.core.Cavern;
+import cavern.entity.boss.EntitySkySeeker;
 import cavern.entity.monster.EntityCaveman;
 import cavern.entity.monster.EntityCavenicBear;
 import cavern.entity.monster.EntityCavenicCreeper;
@@ -11,12 +13,14 @@ import cavern.entity.monster.EntityCrazyCreeper;
 import cavern.entity.monster.EntityCrazySkeleton;
 import cavern.entity.monster.EntityCrazySpider;
 import cavern.entity.monster.EntityCrazyZombie;
+import cavern.entity.monster.EntityCrystalTurret;
 import cavern.entity.monster.EntitySummonCavenicSkeleton;
 import cavern.entity.monster.EntitySummonCavenicZombie;
 import cavern.entity.monster.EntitySummonSkeleton;
 import cavern.entity.monster.EntitySummonZombie;
 import cavern.entity.passive.EntityAquaSquid;
 import cavern.entity.passive.EntityDurangHog;
+import cavern.entity.projectile.EntityBeam;
 import cavern.entity.projectile.EntityMagicTorcher;
 import cavern.util.CaveUtils;
 import net.minecraft.entity.Entity;
@@ -27,6 +31,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public final class CaveEntityRegistry
@@ -35,6 +40,18 @@ public final class CaveEntityRegistry
 	public static final NonNullList<SpawnListEntry> CRAZY_SPAWNS = NonNullList.create();
 	public static final NonNullList<SpawnListEntry> AQUA_SPAWNS = NonNullList.create();
 	public static final NonNullList<SpawnListEntry> ANIMAL_SPAWNS = NonNullList.create();
+
+	private static int entityId;
+
+	public static void registerEntity(Class<? extends Entity> entityClass, String key, String name, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
+	{
+		EntityRegistry.registerModEntity(CaveUtils.getKey(key), entityClass, name, entityId++, Cavern.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
+	}
+
+	public static void registerEntity(Class<? extends Entity> entityClass, String key, String name, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int primaryColor, int secondaryColor)
+	{
+		EntityRegistry.registerModEntity(CaveUtils.getKey(key), entityClass, name, entityId++, Cavern.instance, trackingRange, updateFrequency, sendsVelocityUpdates, primaryColor, secondaryColor);
+	}
 
 	private static EntityEntry createEntry(Class<? extends Entity> entityClass, String key, String name)
 	{
@@ -65,6 +82,8 @@ public final class CaveEntityRegistry
 		registry.register(createEntry(EntityCrazyZombie.class, "crazy_zombie", "CrazyZombie", 0x909090, 0x00A0A0));
 		registry.register(createEntry(EntityCrazySpider.class, "crazy_spider", "CrazySpider", 0x909090, 0x811F1F));
 		registry.register(createEntry(EntityCaveman.class, "caveman", "Caveman", 0xAAAAAA, 0xCCCCCC));
+		registry.register(createEntry(EntityCrystalTurret.class, "crystal_turret", "CrystalTurret", 0xAAAAAA, 0xd1e6f6));
+		registry.register(createEntry(EntitySkySeeker.class, "sky_seeker", "SkySeeker", 0xAAAAAA, 0xd1e6f6));
 		registry.register(createEntry(EntityDurangHog.class, "durang_hog", "DurangHog", 0xC69EA0, 0x7D5150));
 		registry.register(createEntry(EntitySummonZombie.class, "summon_zombie", "Zombie"));
 		registry.register(createEntry(EntitySummonSkeleton.class, "summon_skeleton", "Skeleton"));
@@ -72,6 +91,10 @@ public final class CaveEntityRegistry
 		registry.register(createEntry(EntitySummonCavenicSkeleton.class, "summon_cavenic_skeleton", "CavenicSkeleton"));
 		registry.register(createEntry(EntityAquaSquid.class, "squid", "Squid"));
 		registry.register(createEntry(EntityMagicTorcher.class, "magic_torcher", "MagicTorcher"));
+		registry.register(createEntry(EntityBeam.class, "beam", "Beam"));
+		//when projectile need to register, must use EntityRegistry's register
+		registerEntity(EntityBeam.class, "beam", "cavern.Beam", 100, 1, true);
+
 	}
 
 	public static void regsiterSpawns()

@@ -1,7 +1,7 @@
 package cavern.world.mirage;
 
-import cavern.world.gen.MapGenSkyCastle;
 import cavern.world.gen.MapGenSkyCaves;
+import cavern.world.gen.MapGenSkyWatchTower;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -55,7 +55,7 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 	private double[] noise4;
 	private double[] noise5;
 
-	private final MapGenSkyCastle skyCastleGenerator = new MapGenSkyCastle(this);
+	private final MapGenSkyWatchTower skyWatchTowerGenerator = new MapGenSkyWatchTower(this);
 	private final MapGenBase caveGenerator = new MapGenSkyCaves();
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
@@ -364,7 +364,7 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 		setBlocksInChunk(chunkX, chunkZ, primer);
 		buildSurfaces(primer);
 
-		skyCastleGenerator.generate(world, chunkX, chunkZ, primer);
+		skyWatchTowerGenerator.generate(world, chunkX, chunkZ, primer);
 
 		caveGenerator.generate(world, chunkX, chunkZ, primer);
 
@@ -473,7 +473,7 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 
 		ChunkPos coord = new ChunkPos(chunkX, chunkZ);
 
-		skyCastleGenerator.generateStructure(world, rand, coord);
+		skyWatchTowerGenerator.generateStructure(world, rand, coord);
 
 		BlockFalling.fallInstantly = false;
 	}
@@ -493,9 +493,9 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 	@Override
 	public boolean isInsideStructure(World world, String structureName, BlockPos pos)
 	{
-		if ("SkyCastle".equals(structureName) && skyCastleGenerator != null)
+		if ("SkyWatchTower".equals(structureName) && skyWatchTowerGenerator != null)
 		{
-			return skyCastleGenerator.isInsideStructure(pos);
+			return skyWatchTowerGenerator.isInsideStructure(pos);
 		}
 
 		return false;
@@ -504,9 +504,9 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 	@Override
 	public BlockPos getNearestStructurePos(World world, String structureName, BlockPos pos, boolean findUnexplored)
 	{
-		if ("SkyCastle".equals(structureName) && skyCastleGenerator != null)
+		if ("SkyWatchTower".equals(structureName) && skyWatchTowerGenerator != null)
 		{
-			return skyCastleGenerator.getNearestStructurePos(world, pos, findUnexplored);
+			return skyWatchTowerGenerator.getNearestStructurePos(world, pos, findUnexplored);
 		}
 
 		return null;
@@ -515,6 +515,6 @@ public class ChunkGeneratorSkyland implements IChunkGenerator
 	@Override
 	public void recreateStructures(Chunk chunk, int x, int z)
 	{
-		skyCastleGenerator.generate(world, x, z, null);
+		skyWatchTowerGenerator.generate(world, x, z, null);
 	}
 }

@@ -12,7 +12,7 @@ import net.minecraft.world.gen.structure.StructureStart;
 import java.util.List;
 import java.util.Random;
 
-public class MapGenSkyCastle extends MapGenStructure
+public class MapGenSkyWatchTower extends MapGenStructure
 {
 	/**
 	 * None
@@ -20,15 +20,15 @@ public class MapGenSkyCastle extends MapGenStructure
 	private int distance;
 	private final ChunkGeneratorSkyland provider;
 
-	public MapGenSkyCastle(ChunkGeneratorSkyland providerIn)
+	public MapGenSkyWatchTower(ChunkGeneratorSkyland providerIn)
 	{
-		this.distance = 36;
+		this.distance = 34;
 		this.provider = providerIn;
 	}
 
 	public String getStructureName()
 	{
-		return "SkyCastle";
+		return "SkyWatchTower";
 	}
 
 	protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ)
@@ -65,12 +65,12 @@ public class MapGenSkyCastle extends MapGenStructure
 	public BlockPos getNearestStructurePos(World worldIn, BlockPos pos, boolean findUnexplored)
 	{
 		this.world = worldIn;
-		return findNearestStructurePosBySpacing(worldIn, this, pos, this.distance, 8, 10387312, false, 100, findUnexplored);
+		return findNearestStructurePosBySpacing(worldIn, this, pos, this.distance, 8, 14267312, false, 100, findUnexplored);
 	}
 
 	protected StructureStart getStructureStart(int chunkX, int chunkZ)
 	{
-		return new MapGenSkyCastle.Start(this.world, this.provider, this.rand, chunkX, chunkZ);
+		return new MapGenSkyWatchTower.Start(this.world, this.provider, this.rand, chunkX, chunkZ);
 	}
 
 	public static class Start extends StructureStart
@@ -98,8 +98,8 @@ public class MapGenSkyCastle extends MapGenStructure
 
 
 			BlockPos blockpos = new BlockPos(p_191092_4_ * 16 + 8, 90, p_191092_5_ * 16 + 8);
-			List<SkyCastlePiece.SkyCastleTemplate> list = Lists.<SkyCastlePiece.SkyCastleTemplate>newLinkedList();
-			SkyCastlePiece.generateCore(p_191092_1_.getSaveHandler().getStructureTemplateManager(), blockpos, rotation, list, p_191092_3_);
+			List<SkyWatchTowerPiece.SkyCastleTemplate> list = Lists.<SkyWatchTowerPiece.SkyCastleTemplate>newLinkedList();
+			SkyWatchTowerPiece.generateCore(p_191092_1_.getSaveHandler().getStructureTemplateManager(), blockpos, rotation, list, p_191092_3_);
 			this.components.addAll(list);
 			this.updateBoundingBox();
 			this.isValid = true;

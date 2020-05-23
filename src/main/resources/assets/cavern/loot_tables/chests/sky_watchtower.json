@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-      "name": "sky_castle_1",
+      "name": "sky_watchtower_1",
       "rolls": {
         "min": 1,
         "max": 3
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "name": "sky_castle_2",
+      "name": "sky_watchtower_2",
       "rolls": {
         "min": 2,
         "max": 4

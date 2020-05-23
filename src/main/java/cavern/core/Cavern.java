@@ -39,8 +39,8 @@ import cavern.plugin.MCEPlugin;
 import cavern.util.CaveLog;
 import cavern.util.Version;
 import cavern.world.CaveDimensions;
-import cavern.world.gen.MapGenSkyCastle;
-import cavern.world.gen.SkyCastlePiece;
+import cavern.world.gen.MapGenSkyWatchTower;
+import cavern.world.gen.SkyWatchTowerPiece;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
@@ -156,8 +156,8 @@ public final class Cavern
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new CaveGuiHandler());
 
-		MapGenStructureIO.registerStructure(MapGenSkyCastle.Start.class, "SkyCastle");
-		SkyCastlePiece.registerSkyCastlePiece();
+		MapGenStructureIO.registerStructure(MapGenSkyWatchTower.Start.class, "SkyCastle");
+		SkyWatchTowerPiece.registerSkyCastlePiece();
 	}
 
 	@SubscribeEvent

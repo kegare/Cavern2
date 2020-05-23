@@ -1,8 +1,9 @@
 package cavern.world.gen;
 
 import cavern.core.Cavern;
+import cavern.entity.boss.EntitySkySeeker;
+import cavern.entity.monster.EntityCrystalTurret;
 import cavern.util.CaveUtils;
-import com.google.common.collect.Lists;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -24,43 +25,46 @@ import net.minecraft.world.storage.loot.LootTableList;
 import java.util.List;
 import java.util.Random;
 
-public class SkyCastlePiece
+public class SkyWatchTowerPiece
 {
-	private static final ResourceLocation LOOT_CHEST = LootTableList.register(CaveUtils.getKey("chests/sky_castle"));
+	private static final ResourceLocation LOOT_CHEST = LootTableList.register(CaveUtils.getKey("chests/sky_watchtower"));
 
 	public static void registerSkyCastlePiece()
 	{
-		MapGenStructureIO.registerStructureComponent(SkyCastlePiece.SkyCastleTemplate.class, "SCT");
+		MapGenStructureIO.registerStructureComponent(SkyWatchTowerPiece.SkyCastleTemplate.class, "SCT");
 	}
 
 	public static void generateCore(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<SkyCastleTemplate> list, Random random)
 	{
-		generatesub(templateManager, pos, rotation, list, random);
 		generateMain(templateManager, pos, rotation, list, random);
+		generateWatchTower(templateManager, pos, rotation, list, random);
+	}
+
+	private static void generateWatchTower(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<SkyCastleTemplate> list, Random random)
+	{
+		BlockPos blockpos2 = pos.offset(rotation.rotate(EnumFacing.WEST), 32);
+
+		addSubCastle(templateManager, list, blockpos2, rotation, EnumFacing.WEST, random);
+
+		blockpos2 = pos.offset(rotation.rotate(EnumFacing.EAST), 32);
+
+		addSubCastle(templateManager, list, blockpos2, rotation, EnumFacing.EAST, random);
+
+		blockpos2 = pos.offset(rotation.rotate(EnumFacing.NORTH), 32);
+
+		addSubCastle(templateManager, list, blockpos2, rotation, EnumFacing.NORTH, random);
+
+		blockpos2 = pos.offset(rotation.rotate(EnumFacing.SOUTH), 32);
+
+		addSubCastle(templateManager, list, blockpos2, rotation, EnumFacing.SOUTH, random);
 	}
 
 	private static void generateMain(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<SkyCastleTemplate> list, Random random)
 	{
 		BlockPos pos1 = new BlockPos(pos.up(15));
 
-		list.add(new SkyCastlePiece.SkyCastleTemplate(templateManager, pos, rotation, "sky_castle_main"));
-		list.add(new SkyCastlePiece.SkyCastleTemplate(templateManager, pos1, rotation, "sky_castle_main2"));
-	}
-
-	private static void generateUnderSub(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<SkyCastleTemplate> list, Random random)
-	{
-
-	}
-
-	private static void generatesub(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<SkyCastleTemplate> list, Random random)
-	{
-		//generate sub
-
-		List<EnumFacing> listFacing = Lists.<EnumFacing>newArrayList();
-
-		EnumFacing enumfacing1 = listFacing.get(random.nextInt(listFacing.size()));
-
-		addSubCastle(templateManager, list, pos, rotation, enumfacing1, random);
+		list.add(new SkyWatchTowerPiece.SkyCastleTemplate(templateManager, pos, rotation, "sky_watchtower_main"));
+		list.add(new SkyWatchTowerPiece.SkyCastleTemplate(templateManager, pos1, rotation, "sky_watchtower_main2"));
 	}
 
 	private static void addSubCastle(TemplateManager templateManager, List<SkyCastleTemplate> p_191129_1_, BlockPos p_191129_2_, Rotation p_191129_3_, EnumFacing p_191129_4_, Random random)
@@ -84,7 +88,9 @@ public class SkyCastlePiece
 			}
 		}
 
-		BlockPos blockpos = Template.getZeroPositionWithTransform(new BlockPos(2, 0, 0), Mirror.NONE, rotation, 19, 19);
+
+		//structure base size: x 19 z 19
+		BlockPos blockpos = Template.getZeroPositionWithTransform(new BlockPos(1, 0, 0), Mirror.NONE, rotation, 19, 19);
 		rotation = rotation.add(p_191129_3_);
 		blockpos = blockpos.rotate(p_191129_3_);
 		BlockPos blockpos1 = p_191129_2_.add(blockpos.getX(), 0, blockpos.getZ());
@@ -93,7 +99,7 @@ public class SkyCastlePiece
 
 	private static String get1x1(Random random)
 	{
-		return "sky_castle_sub_1x1" + 1;
+		return "sky_watchtower_sub_1x1_" + (random.nextInt(1) + 1);
 	}
 
 	public static class SkyCastleTemplate extends StructureComponentTemplate
@@ -124,7 +130,7 @@ public class SkyCastlePiece
 
 		private void loadTemplate(TemplateManager manager)
 		{
-			Template template = manager.getTemplate(null, new ResourceLocation(Cavern.MODID, "sky_castle/" + this.templateName));
+			Template template = manager.getTemplate(null, new ResourceLocation(Cavern.MODID, "sky_watchtower/" + this.templateName));
 			PlacementSettings placementsettings = (new PlacementSettings()).setIgnoreEntities(true).setRotation(this.rotation).setMirror(this.mirror);
 			this.setup(template, this.templatePosition, placementsettings);
 		}
@@ -153,10 +159,10 @@ public class SkyCastlePiece
 			}
 			else if (function.equals("Guard"))
 			{
-				/*EntityCrystalTurret entityturret = new EntityCrystalTurret(world);
+				EntityCrystalTurret entityturret = new EntityCrystalTurret(world);
 				entityturret.enablePersistence();
 				entityturret.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
-				world.spawnEntity(entityturret);*/
+				world.spawnEntity(entityturret);
 				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 			}
 			else if (function.equals("Rift"))
@@ -169,6 +175,12 @@ public class SkyCastlePiece
 			}
 			else if (function.equals("Boss"))
 			{
+				EntitySkySeeker entitySeeker = new EntitySkySeeker(world);
+				entitySeeker.enablePersistence();
+				entitySeeker.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
+				entitySeeker.setSleep(true);
+
+				world.spawnEntity(entitySeeker);
 				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 			}
 		}
