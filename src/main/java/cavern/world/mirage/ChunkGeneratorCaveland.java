@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import cavern.config.CavelandConfig;
+import cavern.world.CaveVeinProvider;
 import cavern.world.gen.MapGenCavelandCaves;
 import cavern.world.gen.MapGenCavelandRavine;
 import cavern.world.gen.VeinGenerator;
@@ -59,7 +60,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 	private final MapGenBase caveGenerator = new MapGenCavelandCaves();
 	private final MapGenBase ravineGenerator = new MapGenCavelandRavine();
 
-	private final VeinGenerator veinGenerator = new VeinGenerator(CavelandConfig.VEINS.getCaveVeins());
+	private final VeinGenerator veinGenerator;
 
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
@@ -75,6 +76,7 @@ public class ChunkGeneratorCaveland implements IChunkGenerator
 	{
 		this.world = world;
 		this.rand = new Random(world.getSeed());
+		this.veinGenerator = new VeinGenerator(new CaveVeinProvider(world, () -> CavelandConfig.autoVeins ? null : CavelandConfig.VEINS));
 	}
 
 	public void setBlocksInChunk(ChunkPrimer primer)

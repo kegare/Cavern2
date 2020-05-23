@@ -7,6 +7,7 @@ import java.util.Random;
 import cavern.block.CaveBlocks;
 import cavern.config.CaveniaConfig;
 import cavern.config.manager.CaveBiome;
+import cavern.world.CaveVeinProvider;
 import cavern.world.gen.MapGenCaveniaCaves;
 import cavern.world.gen.VeinGenerator;
 import net.minecraft.block.BlockFalling;
@@ -50,7 +51,7 @@ public class ChunkGeneratorCavenia implements IChunkGenerator
 
 	private final MapGenBase caveGenerator = new MapGenCaveniaCaves();
 
-	private final VeinGenerator veinGenerator = new VeinGenerator(CaveniaConfig.VEINS.getCaveVeins());
+	private final VeinGenerator veinGenerator;
 
 	private final WorldGenerator lakeWaterGen = new WorldGenLakes(Blocks.WATER);
 	private final WorldGenerator lakeLavaGen = new WorldGenLakes(Blocks.LAVA);
@@ -62,6 +63,7 @@ public class ChunkGeneratorCavenia implements IChunkGenerator
 	{
 		this.world = world;
 		this.rand = new Random(world.getSeed());
+		this.veinGenerator = new VeinGenerator(new CaveVeinProvider(world, () -> CaveniaConfig.autoVeins ? null : CaveniaConfig.VEINS));
 	}
 
 	public void setBlocksInChunk(ChunkPrimer primer)

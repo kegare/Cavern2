@@ -62,4 +62,10 @@ public class CavelandVeinsEntry extends CategoryEntry
 			((GuiVeinsEditor)childScreen).refreshVeins(manager.getCaveVeins());
 		}
 	}
+
+	@Override
+	public boolean enabled()
+	{
+		return super.enabled() && !CavelandConfig.autoVeins;
+	}
 }

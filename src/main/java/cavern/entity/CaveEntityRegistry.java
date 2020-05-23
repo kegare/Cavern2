@@ -33,7 +33,6 @@ public final class CaveEntityRegistry
 {
 	public static final NonNullList<SpawnListEntry> SPAWNS = NonNullList.create();
 	public static final NonNullList<SpawnListEntry> CRAZY_SPAWNS = NonNullList.create();
-	public static final NonNullList<SpawnListEntry> AQUA_SPAWNS = NonNullList.create();
 	public static final NonNullList<SpawnListEntry> ANIMAL_SPAWNS = NonNullList.create();
 
 	private static EntityEntry createEntry(Class<? extends Entity> entityClass, String key, String name)

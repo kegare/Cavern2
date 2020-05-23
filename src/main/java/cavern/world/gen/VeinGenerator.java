@@ -1,10 +1,10 @@
 package cavern.world.gen;
 
-import java.util.List;
 import java.util.Random;
 
 import cavern.config.Config;
 import cavern.config.manager.CaveVein;
+import cavern.world.CaveVeinProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.MathHelper;
@@ -14,18 +14,18 @@ import net.minecraft.world.chunk.ChunkPrimer;
 
 public class VeinGenerator
 {
-	private final List<? extends CaveVein> veins;
+	private final CaveVeinProvider provider;
 
-	public VeinGenerator(List<? extends CaveVein> veins)
+	public VeinGenerator(CaveVeinProvider provider)
 	{
-		this.veins = veins;
+		this.provider = provider;
 	}
 
 	public void generate(World world, Random rand, Biome[] biomes, ChunkPrimer primer)
 	{
 		int worldHeight = world.getActualHeight();
 
-		for (CaveVein vein : veins)
+		for (CaveVein vein : provider.getVeins())
 		{
 			if (vein == null || vein.getWeight() <= 0 || vein.getSize() <= 0)
 			{
