@@ -1,5 +1,8 @@
 package cavern.world;
 
+import cavern.block.BlockPortalCavern;
+import cavern.block.CaveBlocks;
+import cavern.capability.CaveCapabilities;
 import cavern.client.CaveMusics;
 import cavern.client.renderer.EmptyRenderer;
 import cavern.config.CavernConfig;
@@ -10,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
@@ -227,13 +231,53 @@ public class WorldProviderCavern extends WorldProviderSurface implements CustomS
 	@Override
 	public BlockPos getSpawnPoint()
 	{
-		return BlockPos.ORIGIN.up(50);
+		BlockPos origin = BlockPos.ORIGIN.up(50);
+		CavePortalList portalList = world.getCapability(CaveCapabilities.CAVE_PORTAL_LIST, null);
+
+		if (portalList == null || portalList.isPortalEmpty())
+		{
+			return origin;
+		}
+
+		for (BlockPortalCavern portal : CaveBlocks.PORTALS)
+		{
+			if (portal.getDimension() == getDimensionType())
+			{
+				BlockPos pos = portalList.getPortalPositions(portal).stream().findAny().orElse(null);
+
+				if (pos != null)
+				{
+					return pos;
+				}
+			}
+		}
+
+		return portalList.getPortalPositions().stream().findAny().orElse(origin);
 	}
 
 	@Override
 	public BlockPos getRandomizedSpawnPoint()
 	{
 		return getSpawnPoint();
+	}
+
+	@Override
+	public boolean canRespawnHere()
+	{
+		return false;
+	}
+
+	@Override
+	public int getRespawnDimension(EntityPlayerMP player)
+	{
+		CavePortalList portalList = world.getCapability(CaveCapabilities.CAVE_PORTAL_LIST, null);
+
+		if ((portalList == null || portalList.isPortalEmpty()) && player.getBedLocation(getDimension()) == null)
+		{
+			return 0;
+		}
+
+		return getDimension();
 	}
 
 	@Override

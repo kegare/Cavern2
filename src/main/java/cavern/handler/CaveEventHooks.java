@@ -140,6 +140,8 @@ public final class CaveEventHooks
 			{
 				CaveItems.MIRAGE_BOOK.placeEntity(world, player, player.rotationYaw);
 			}
+
+			player.timeUntilPortal = 100;
 		}
 	}
 

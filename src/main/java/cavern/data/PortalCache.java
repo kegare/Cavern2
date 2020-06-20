@@ -10,25 +10,18 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
 
-import cavern.capability.CaveCapabilities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class PortalCache
 {
 	private final Map<ResourceLocation, DimensionType> lastDim = Maps.newHashMap();
 	private final Table<ResourceLocation, DimensionType, BlockPos> lastPos = HashBasedTable.create();
-
-	private Vec3d lastPortalVec;
-	private EnumFacing teleportDirection;
 
 	public DimensionType getLastDim(ResourceLocation key)
 	{
@@ -81,26 +74,6 @@ public class PortalCache
 				lastPos.remove(entry.getRowKey(), entry.getColumnKey());
 			}
 		}
-	}
-
-	public Vec3d getLastPortalVec()
-	{
-		return lastPortalVec;
-	}
-
-	public void setLastPortalVec(Vec3d vec)
-	{
-		lastPortalVec = vec;
-	}
-
-	public EnumFacing getTeleportDirection()
-	{
-		return teleportDirection;
-	}
-
-	public void setTeleportDirection(EnumFacing direction)
-	{
-		teleportDirection = direction;
 	}
 
 	public void writeToNBT(NBTTagCompound nbt)
@@ -195,10 +168,5 @@ public class PortalCache
 				lastPos.put(new ResourceLocation(tag.getString("Key")), type, NBTUtil.getPosFromTag(tag));
 			}
 		}
-	}
-
-	public static PortalCache get(ICapabilityProvider provider)
-	{
-		return ObjectUtils.defaultIfNull(CaveCapabilities.getCapability(provider, CaveCapabilities.PORTAL_CACHE), new PortalCache());
 	}
 }

@@ -3,6 +3,7 @@ package cavern.item;
 import javax.annotation.Nullable;
 
 import cavern.api.CavernAPI;
+import cavern.capability.CaveCapabilities;
 import cavern.core.Cavern;
 import cavern.data.PlayerData;
 import cavern.data.PortalCache;
@@ -184,10 +185,10 @@ public class ItemMirageBook extends Item implements ITeleporter
 		}
 
 		ResourceLocation key = CaveUtils.getKey("mirage_worlds");
-		PortalCache cache = PortalCache.get(player);
+		PortalCache cache = player.getCapability(CaveCapabilities.PORTAL_CACHE, null);
 		DimensionType dimOld = player.world.provider.getDimensionType();
 
-		if (dimNew == null)
+		if (dimNew == null && cache != null)
 		{
 			dimNew = cache.getLastDim(key, null);
 		}
@@ -197,12 +198,15 @@ public class ItemMirageBook extends Item implements ITeleporter
 			return false;
 		}
 
-		if (CavernAPI.dimension.isMirageWorlds(dimNew))
+		if (cache != null)
 		{
-			cache.setLastDim(key, dimOld);
-		}
+			if (CavernAPI.dimension.isMirageWorlds(dimNew))
+			{
+				cache.setLastDim(key, dimOld);
+			}
 
-		cache.setLastPos(key, dimOld, player.getPosition());
+			cache.setLastPos(key, dimOld, player.getPosition());
+		}
 
 		player.timeUntilPortal = player.getPortalCooldown();
 
@@ -246,7 +250,13 @@ public class ItemMirageBook extends Item implements ITeleporter
 
 	protected boolean attemptToLastPos(World world, Entity entity)
 	{
-		PortalCache cache = PortalCache.get(entity);
+		PortalCache cache = entity.getCapability(CaveCapabilities.PORTAL_CACHE, null);
+
+		if (cache == null)
+		{
+			return false;
+		}
+
 		ResourceLocation key = CaveUtils.getKey("mirage_worlds");
 		DimensionType type = world.provider.getDimensionType();
 

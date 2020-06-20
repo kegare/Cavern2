@@ -39,6 +39,9 @@ public final class CaveBlocks
 	public static final BlockPortalHugeCavern HUGE_CAVERN_PORTAL = new BlockPortalHugeCavern();
 	public static final BlockPortalAquaCavern AQUA_CAVERN_PORTAL = new BlockPortalAquaCavern();
 	public static final BlockPortalMirageWorlds MIRAGE_PORTAL = new BlockPortalMirageWorlds();
+
+	public static final BlockPortalCavern[] PORTALS = {CAVERN_PORTAL, HUGE_CAVERN_PORTAL, AQUA_CAVERN_PORTAL, MIRAGE_PORTAL};
+
 	public static final BlockCave CAVE_BLOCK = new BlockCave();
 	public static final BlockCavenicBush CAVENIC_SHROOM = new BlockCavenicBush();
 	public static final BlockAcresia ACRESIA = new BlockAcresia();

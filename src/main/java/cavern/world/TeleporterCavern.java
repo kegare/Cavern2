@@ -1,15 +1,17 @@
 package cavern.world;
 
-import java.util.Random;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 import cavern.block.BlockPortalCavern;
+import cavern.capability.CaveCapabilities;
 import cavern.config.GeneralConfig;
 import cavern.core.Cavern;
 import cavern.data.PortalCache;
+import it.unimi.dsi.fastutil.longs.LongArraySet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.block.BlockPortal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockPattern;
@@ -19,11 +21,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.ITeleporter;
 
 public class TeleporterCavern implements ITeleporter
@@ -31,285 +33,322 @@ public class TeleporterCavern implements ITeleporter
 	private static final IBlockState AIR = Blocks.AIR.getDefaultState();
 	private static final IBlockState MOSSY_STONE = Blocks.MOSSY_COBBLESTONE.getDefaultState();
 
-	protected final World world;
-	protected final Random random;
 	protected final BlockPortalCavern portalBlock;
 
-	private PortalCache portalCache;
+	private Vec3d portalVec;
+	private EnumFacing teleportDirection;
 
-	public TeleporterCavern(World world, BlockPortalCavern portal)
+	public TeleporterCavern(BlockPortalCavern portal)
 	{
-		this.world = world;
-		this.random = new Random(world.getSeed());
 		this.portalBlock = portal;
 	}
 
-	protected PortalCache getCache(ICapabilityProvider provider)
+	public TeleporterCavern setPortalInfo(Vec3d vec, EnumFacing direction)
 	{
-		if (portalCache != null)
-		{
-			return portalCache;
-		}
+		portalVec = vec;
+		teleportDirection = direction;
 
-		portalCache = PortalCache.get(provider);
-
-		return portalCache;
+		return this;
 	}
 
 	@Override
-	public void placeEntity(World worldIn, Entity entity, float rotationYaw)
+	public void placeEntity(World world, Entity entity, float yaw)
 	{
-		int baseY = world.getSeaLevel();
-		int rangeY = 30;
-		int min = baseY - rangeY;
-		int max = baseY + rangeY;
-		int worldHeight = world.getActualHeight();
-		max = Math.min(min < 0 ? max + Math.abs(min) : max, worldHeight);
-		min = Math.max(max > worldHeight ? Math.max(min - (max - worldHeight), 0) : min, 0);
+		int radius = GeneralConfig.findPortalRange;
+		boolean placed = false;
 
 		if (GeneralConfig.portalCache)
 		{
-			ResourceLocation key = portalBlock.getRegistryName();
-			DimensionType type = world.provider.getDimensionType();
-			BlockPos lastPos = getCache(entity).getLastPos(key, type);
+			PortalCache cache = entity.getCapability(CaveCapabilities.PORTAL_CACHE, null);
 
-			if (lastPos != null)
+			if (cache != null)
 			{
-				Cavern.proxy.loadChunk(world, lastPos.getX() >> 4, lastPos.getZ() >> 4);
-
-				if (placeInPortal(entity, rotationYaw, 0, min, max, lastPos))
-				{
-					return;
-				}
+				placed = placeInCachedPortal(world, entity, yaw, radius, cache);
 			}
 		}
 
-		BlockPos pos = new BlockPos(entity);
-		int range = GeneralConfig.findPortalRange;
+		BlockPos pos = entity.getPosition();
 
-		Cavern.proxy.loadChunks(world, pos.getX() >> 4, pos.getZ() >> 4, range >> 4);
-
-		if (placeInPortal(entity, rotationYaw, range, min, max, null))
+		if (!placed)
 		{
-			return;
+			CavePortalList portalList = world.getCapability(CaveCapabilities.CAVE_PORTAL_LIST, null);
+
+			if (portalList != null)
+			{
+				placed = placeInStoredPortal(world, entity, yaw, radius, pos, portalList);
+			}
 		}
 
-		BlockPos portalPos = makePortal(entity, range, min, max, false);
-
-		if (portalPos != null && placeInPortal(entity, rotationYaw, 0, min, max, portalPos))
+		if (!placed)
 		{
-			return;
-		}
+			placed = placeInPortal(world, entity, yaw, radius, pos);
 
-		placeInPortal(entity, rotationYaw, 0, min, max, makePortal(entity, 16, min, max, true));
+			if (!placed)
+			{
+				placed = placeInPortal(world, entity, yaw, radius, makePortal(world, entity, radius));
+			}
+		}
 	}
 
-	public boolean placeInPortal(Entity entity, float rotationYaw, int checkRange, int checkMin, int checkMax, @Nullable BlockPos checkPos)
+	public boolean placeInCachedPortal(World world, Entity entity, float yaw, int radius, PortalCache cache)
 	{
-		double portalDist = -1.0D;
-		BlockPos pos = BlockPos.ORIGIN;
+		ResourceLocation key = portalBlock.getRegistryName();
+		DimensionType dim = world.provider.getDimensionType();
+		BlockPos pos = cache.getLastPos(key, dim, null);
 
-		if (checkPos != null)
+		if (pos == null)
 		{
-			portalDist = 0.0D;
-			pos = checkPos;
-		}
-		else
-		{
-			BlockPos origin = new BlockPos(entity);
-			MutableBlockPos current = new MutableBlockPos();
-
-			if (portalDist < 0.0D)
-			{
-				for (int range = 1; range <= checkRange; ++range)
-				{
-					for (int i = -range; i <= range; ++i)
-					{
-						for (int j = -range; j <= range; ++j)
-						{
-							if (Math.abs(i) < range && Math.abs(j) < range) continue;
-
-							current.setPos(origin.getX() + i, checkMax, origin.getZ() + j);
-
-							while (current.getY() > checkMin)
-							{
-								current.move(EnumFacing.DOWN);
-
-								if (world.getBlockState(current).getBlock() == portalBlock)
-								{
-									while (world.getBlockState(current.move(EnumFacing.DOWN)).getBlock() == portalBlock)
-									{
-										;
-									}
-
-									current.move(EnumFacing.UP);
-
-									double dist = current.distanceSq(origin);
-
-									if (portalDist < 0.0D || dist < portalDist)
-									{
-										portalDist = dist;
-										pos = new BlockPos(current);
-									}
-								}
-							}
-						}
-					}
-
-					if (portalDist >= 0.0D)
-					{
-						break;
-					}
-				}
-			}
+			return false;
 		}
 
-		if (portalDist >= 0.0D)
+		return placeInPortal(world, entity, yaw, radius, pos);
+	}
+
+	public boolean placeInStoredPortal(World world, Entity entity, float yaw, int radius, BlockPos checkPos, CavePortalList list)
+	{
+		List<BlockPos> positions = list.getPortalPositions(portalBlock).stream()
+			.filter(o -> new BlockPos(o.getX(), 0, o.getZ()).getDistance(checkPos.getX(), 0, checkPos.getZ()) <= radius)
+			.sorted((o1, o2) -> Double.compare(o1.distanceSq(checkPos), o2.distanceSq(checkPos))).collect(Collectors.toList());
+
+		for (BlockPos portalPos : positions)
 		{
-			PortalCache cache = getCache(entity);
-			Vec3d portalVec = ObjectUtils.defaultIfNull(cache.getLastPortalVec(), Vec3d.ZERO);
-			EnumFacing teleportDirection = ObjectUtils.defaultIfNull(cache.getTeleportDirection(), EnumFacing.NORTH);
-			double posX = pos.getX() + 0.5D;
-			double posZ = pos.getZ() + 0.5D;
-			BlockPattern.PatternHelper pattern = portalBlock.createPatternHelper(world, pos);
-			boolean flag1 = pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE;
-			double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
-			double posY = pattern.getFrontTopLeft().getY() + 1 - portalVec.y * pattern.getHeight();
-
-			if (flag1)
+			if (placeInPortal(world, entity, yaw, 8, portalPos))
 			{
-				++d1;
+				return true;
 			}
 
-			if (pattern.getForwards().getAxis() == EnumFacing.Axis.X)
-			{
-				posZ = d1 + (1.0D - portalVec.x) * pattern.getWidth() * pattern.getForwards().rotateY().getAxisDirection().getOffset();
-			}
-			else
-			{
-				posX = d1 + (1.0D - portalVec.x) * pattern.getWidth() * pattern.getForwards().rotateY().getAxisDirection().getOffset();
-			}
-
-			float f1 = 0.0F;
-			float f2 = 0.0F;
-			float f3 = 0.0F;
-			float f4 = 0.0F;
-
-			if (pattern.getForwards().getOpposite() == teleportDirection)
-			{
-				f1 = 1.0F;
-				f2 = 1.0F;
-			}
-			else if (pattern.getForwards().getOpposite() == teleportDirection.getOpposite())
-			{
-				f1 = -1.0F;
-				f2 = -1.0F;
-			}
-			else if (pattern.getForwards().getOpposite() == teleportDirection.rotateY())
-			{
-				f3 = 1.0F;
-				f4 = -1.0F;
-			}
-			else
-			{
-				f3 = -1.0F;
-				f4 = 1.0F;
-			}
-
-			double mx = entity.motionX;
-			double mz = entity.motionZ;
-
-			entity.motionX = mx * f1 + mz * f4;
-			entity.motionZ = mx * f3 + mz * f2;
-			entity.rotationYaw = rotationYaw - teleportDirection.getOpposite().getHorizontalIndex() * 90 + pattern.getForwards().getHorizontalIndex() * 90;
-
-			entity.setPositionAndUpdate(posX, posY, posZ);
-
-			return true;
+			list.removePortal(portalBlock, portalPos);
 		}
 
 		return false;
 	}
 
-	@Nullable
-	public BlockPos makePortal(Entity entity, int findRange, int findMin, int findMax, boolean makeRoom)
+	public boolean placeInPortal(World world, Entity entity, float yaw, int radius, final BlockPos checkPos)
 	{
-		double portalDist = -1.0D;
-		int x = MathHelper.floor(entity.posX);
-		int y = MathHelper.floor(entity.posY);
-		int z = MathHelper.floor(entity.posZ);
-		int x1 = x;
-		int y1 = y;
-		int z1 = z;
-		int i = 0;
-		int j = random.nextInt(4);
-		MutableBlockPos pos = new MutableBlockPos();
+		BlockPos pos = null;
 
-		for (int range = 1; range <= findRange; ++range)
+		if (world.getBlockState(checkPos).getBlock() == portalBlock)
 		{
-			for (int ix = -range; ix <= range; ++ix)
-			{
-				for (int iz = -range; iz <= range; ++iz)
-				{
-					if (Math.abs(ix) < range && Math.abs(iz) < range) continue;
+			pos = checkPos;
+		}
+		else
+		{
+			int min = 1;
+			int max = world.getActualHeight() - 1;
+			MutableBlockPos findPos = new MutableBlockPos(checkPos);
+			LongSet findChunks = new LongArraySet();
 
-					int px = x + ix;
-					int pz = z + iz;
+			findChunks.add(ChunkPos.asLong(checkPos.getX() >> 4, checkPos.getZ() >> 4));
+
+			outside: for (int r = 1; r <= radius; ++r)
+			{
+				for (int i = -r; i <= r; ++i)
+				{
+					for (int j = -r; j <= r; ++j)
+					{
+						if (Math.abs(i) < r && Math.abs(j) < r) continue;
+
+						int x = checkPos.getX() + i;
+						int z = checkPos.getZ() + j;
+						ChunkPos chunkPos = new ChunkPos(findPos.setPos(x, 0, z));
+
+						if (findChunks.add(ChunkPos.asLong(chunkPos.x, chunkPos.z)))
+						{
+							Cavern.proxy.loadChunks(world, chunkPos.x, chunkPos.z, 1);
+						}
+
+						for (int y = checkPos.getY(); y < max; ++y)
+						{
+							if (world.getBlockState(findPos.setPos(x, y, z)).getBlock() == portalBlock)
+							{
+								pos = findPos.toImmutable();
+
+								break outside;
+							}
+						}
+
+						for (int y = checkPos.getY(); y > min; --y)
+						{
+							if (world.getBlockState(findPos.setPos(x, y, z)).getBlock() == portalBlock)
+							{
+								pos = findPos.toImmutable();
+
+								break outside;
+							}
+						}
+					}
+				}
+			}
+
+			if (pos == null)
+			{
+				pos = world.getSpawnPoint();
+			}
+
+			if (world.getBlockState(pos).getBlock() != portalBlock)
+			{
+				return false;
+			}
+		}
+
+		CavePortalList portalList = world.getCapability(CaveCapabilities.CAVE_PORTAL_LIST, null);
+
+		if (portalList != null)
+		{
+			portalList.addPortal(portalBlock, pos);
+		}
+
+		if (portalVec == null)
+		{
+			portalVec = Vec3d.ZERO;
+		}
+
+		if (teleportDirection == null)
+		{
+			teleportDirection = EnumFacing.NORTH;
+		}
+
+		BlockPattern.PatternHelper pattern = portalBlock.createPatternHelper(world, pos);
+		double posX = pos.getX() + 0.5D;
+		double posY = pattern.getFrontTopLeft().getY() + 1 - portalVec.y * pattern.getHeight();
+		double posZ = pos.getZ() + 0.5D;
+		double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
+		boolean flag = pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE;
+
+		if (flag)
+		{
+			++d1;
+		}
+
+		if (pattern.getForwards().getAxis() == EnumFacing.Axis.X)
+		{
+			posZ = d1 + (1.0D - portalVec.x) * pattern.getWidth() * pattern.getForwards().rotateY().getAxisDirection().getOffset();
+		}
+		else
+		{
+			posX = d1 + (1.0D - portalVec.x) * pattern.getWidth() * pattern.getForwards().rotateY().getAxisDirection().getOffset();
+		}
+
+		float f1 = 0.0F;
+		float f2 = 0.0F;
+		float f3 = 0.0F;
+		float f4 = 0.0F;
+
+		if (pattern.getForwards().getOpposite() == teleportDirection)
+		{
+			f1 = 1.0F;
+			f2 = 1.0F;
+		}
+		else if (pattern.getForwards().getOpposite() == teleportDirection.getOpposite())
+		{
+			f1 = -1.0F;
+			f2 = -1.0F;
+		}
+		else if (pattern.getForwards().getOpposite() == teleportDirection.rotateY())
+		{
+			f3 = 1.0F;
+			f4 = -1.0F;
+		}
+		else
+		{
+			f3 = -1.0F;
+			f4 = 1.0F;
+		}
+
+		double mx = entity.motionX;
+		double mz = entity.motionZ;
+
+		entity.motionX = mx * f1 + mz * f4;
+		entity.motionZ = mx * f3 + mz * f2;
+		entity.rotationYaw = yaw - teleportDirection.getOpposite().getHorizontalIndex() * 90 + pattern.getForwards().getHorizontalIndex() * 90;
+
+		entity.setPositionAndUpdate(posX, posY, posZ);
+
+		return true;
+	}
+
+	@Nullable
+	public BlockPos makePortal(World world, Entity entity, int radius)
+	{
+		int originX = MathHelper.floor(entity.posX);
+		int originY = MathHelper.floor(entity.posY);
+		int originZ = MathHelper.floor(entity.posZ);
+		int min = 10;
+		int max = world.getActualHeight() - 10;
+		int x = originX;
+		int y = originY;
+		int z = originZ;
+		int i = 0;
+		int j = world.rand.nextInt(4);
+		MutableBlockPos pos = new MutableBlockPos();
+		double portalDist = -1.0D;
+
+		for (int r = 1; r <= radius; ++r)
+		{
+			for (int rx = -r; rx <= r; ++rx)
+			{
+				for (int rz = -r; rz <= r; ++rz)
+				{
+					if (Math.abs(rx) < r && Math.abs(rz) < r) continue;
+
+					int px = originX + rx;
+					int pz = originZ + rz;
 					double xSize = px + 0.5D - entity.posX;
 					double zSize = pz + 0.5D - entity.posZ;
 
-					outside: for (int py = findMax - 1; py > findMin; --py)
+					int py = min;
+
+					while (py < max && !world.isAirBlock(pos.setPos(px, py, pz)))
 					{
-						if (world.isAirBlock(pos.setPos(px, py, pz)))
+						++py;
+					}
+
+					if (py >= max)
+					{
+						continue;
+					}
+
+					outside: for (int k = j; k < j + 4; ++k)
+					{
+						int i1 = k % 2;
+						int j1 = 1 - i1;
+
+						if (k % 4 >= 2)
 						{
-							while (py > 0 && world.isAirBlock(pos.setPos(px, py - 1, pz)))
+							i1 = -i1;
+							j1 = -j1;
+						}
+
+						for (int size1 = 0; size1 < 3; ++size1)
+						{
+							for (int size2 = 0; size2 < 4; ++size2)
 							{
-								--py;
-							}
-
-							for (int k = j; k < j + 4; ++k)
-							{
-								int i1 = k % 2;
-								int j1 = 1 - i1;
-
-								if (k % 4 >= 2)
+								for (int height = -1; height < 4; ++height)
 								{
-									i1 = -i1;
-									j1 = -j1;
-								}
+									int checkX = px + (size2 - 1) * i1 + size1 * j1;
+									int checkY = py + height;
+									int checkZ = pz + (size2 - 1) * j1 - size1 * i1;
 
-								for (int size1 = 0; size1 < 3; ++size1)
-								{
-									for (int size2 = 0; size2 < 4; ++size2)
+									pos.setPos(checkX, checkY, checkZ);
+
+									if (height < 0 && !world.getBlockState(pos).getMaterial().isSolid() || height >= 0 && !world.isAirBlock(pos))
 									{
-										for (int height = -1; height < 4; ++height)
-										{
-											int checkX = px + (size2 - 1) * i1 + size1 * j1;
-											int checkY = py + height;
-											int checkZ = pz + (size2 - 1) * j1 - size1 * i1;
-
-											pos.setPos(checkX, checkY, checkZ);
-
-											if (height < 0 && !world.getBlockState(pos).getMaterial().isSolid() || height >= 0 && !world.isAirBlock(pos))
-											{
-												continue outside;
-											}
-										}
+										continue outside;
 									}
 								}
-
-								double ySize = py + 0.5D - entity.posY;
-								double size = xSize * xSize + ySize * ySize + zSize * zSize;
-
-								if (portalDist < 0.0D || size < portalDist)
-								{
-									portalDist = size;
-									x1 = px;
-									y1 = py;
-									z1 = pz;
-									i = k % 4;
-								}
 							}
+						}
+
+						double ySize = py + 0.5D - entity.posY;
+						double size = xSize * xSize + ySize * ySize + zSize * zSize;
+
+						if (portalDist < 0.0D || size < portalDist)
+						{
+							portalDist = size;
+							x = px;
+							y = py;
+							z = pz;
+							i = k % 4;
 						}
 					}
 				}
@@ -323,62 +362,63 @@ public class TeleporterCavern implements ITeleporter
 
 		if (portalDist < 0.0D)
 		{
-			for (int range = 1; range <= findRange; ++range)
+			for (int r = 1; r <= radius; ++r)
 			{
-				for (int ix = -range; ix <= range; ++ix)
+				for (int rx = -r; rx <= r; ++rx)
 				{
-					for (int iz = -range; iz <= range; ++iz)
+					for (int rz = -r; rz <= r; ++rz)
 					{
-						if (Math.abs(ix) < range && Math.abs(iz) < range) continue;
+						if (Math.abs(rx) < r && Math.abs(rz) < r) continue;
 
-						int px = x + ix;
-						int pz = z + iz;
+						int px = originX + rx;
+						int pz = originZ + rz;
 						double xSize = px + 0.5D - entity.posX;
 						double zSize = pz + 0.5D - entity.posZ;
 
-						outside: for (int py = findMax - 1; py > findMin; --py)
+						int py = min;
+
+						while (py < max && !world.isAirBlock(pos.setPos(px, py, pz)))
 						{
-							if (world.isAirBlock(pos.setPos(px, py, pz)))
+							++py;
+						}
+
+						if (py >= max)
+						{
+							continue;
+						}
+
+						outside: for (int k = j; k < j + 2; ++k)
+						{
+							int i1 = k % 2;
+							int j1 = 1 - i1;
+
+							for (int width = 0; width < 4; ++width)
 							{
-								while (py > 0 && world.isAirBlock(pos.setPos(px, py - 1, pz)))
+								for (int height = -1; height < 4; ++height)
 								{
-									--py;
-								}
+									int px1 = px + (width - 1) * i1;
+									int py1 = py + height;
+									int pz1 = pz + (width - 1) * j1;
 
-								for (int k = j; k < j + 2; ++k)
-								{
-									int i1 = k % 2;
-									int j1 = 1 - i1;
+									pos.setPos(px1, py1, pz1);
 
-									for (int width = 0; width < 4; ++width)
+									if (height < 0 && !world.getBlockState(pos).getMaterial().isSolid() || height >= 0 && !world.isAirBlock(pos))
 									{
-										for (int height = -1; height < 4; ++height)
-										{
-											int px1 = px + (width - 1) * i1;
-											int py1 = py + height;
-											int pz1 = pz + (width - 1) * j1;
-
-											pos.setPos(px1, py1, pz1);
-
-											if (height < 0 && !world.getBlockState(pos).getMaterial().isSolid() || height >= 0 && !world.isAirBlock(pos))
-											{
-												continue outside;
-											}
-										}
-									}
-
-									double ySize = py + 0.5D - entity.posY;
-									double size = xSize * xSize + ySize * ySize + zSize * zSize;
-
-									if (portalDist < 0.0D || size < portalDist)
-									{
-										portalDist = size;
-										x1 = px;
-										y1 = py;
-										z1 = pz;
-										i = k % 2;
+										continue outside;
 									}
 								}
+							}
+
+							double ySize = py + 0.5D - entity.posY;
+							double size = xSize * xSize + ySize * ySize + zSize * zSize;
+
+							if (portalDist < 0.0D || size < portalDist)
+							{
+								portalDist = size;
+								x = px;
+								y = py;
+								z = pz;
+								i = k % 2;
 							}
 						}
 					}
@@ -391,14 +431,9 @@ public class TeleporterCavern implements ITeleporter
 			}
 		}
 
-		if (!makeRoom && portalDist < 0.0D)
-		{
-			return null;
-		}
-
-		int x2 = x1;
-		int y2 = y1;
-		int z2 = z1;
+		int x2 = x;
+		int y1 = y;
+		int z2 = z;
 		int i1 = i % 2;
 		int j1 = 1 - i1;
 
@@ -410,8 +445,8 @@ public class TeleporterCavern implements ITeleporter
 
 		if (portalDist < 0.0D)
 		{
-			y1 = MathHelper.clamp(y1, findMin, findMax - 10);
-			y2 = y1;
+			y = MathHelper.clamp(y, min, max);
+			y1 = y;
 
 			for (int size1 = -1; size1 <= 1; ++size1)
 			{
@@ -420,7 +455,7 @@ public class TeleporterCavern implements ITeleporter
 					for (int height = -1; height < 3; ++height)
 					{
 						int blockX = x2 + (size2 - 1) * i1 + size1 * j1;
-						int blockY = y2 + height;
+						int blockY = y1 + height;
 						int blockZ = z2 + (size2 - 1) * j1 - size1 * i1;
 						boolean isFloor = height < 0;
 
@@ -438,7 +473,7 @@ public class TeleporterCavern implements ITeleporter
 			for (int height = -1; height < 4; ++height)
 			{
 				int blockX = x2 + (width - 1) * i1;
-				int blockY = y2 + height;
+				int blockY = y1 + height;
 				int blockZ = z2 + (width - 1) * j1;
 				boolean isFrame = width == 0 || width == 3 || height == -1 || height == 3;
 
