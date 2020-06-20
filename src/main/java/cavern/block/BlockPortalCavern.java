@@ -271,7 +271,7 @@ public class BlockPortalCavern extends BlockPortal
 			}
 		}
 
-		CavePortalList portalList = entity.getCapability(CaveCapabilities.CAVE_PORTAL_LIST, null);
+		CavePortalList portalList = world.getCapability(CaveCapabilities.CAVE_PORTAL_LIST, null);
 
 		if (portalList != null)
 		{

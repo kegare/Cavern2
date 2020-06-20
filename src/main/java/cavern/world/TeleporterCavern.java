@@ -71,7 +71,7 @@ public class TeleporterCavern implements ITeleporter
 
 		if (!placed)
 		{
-			CavePortalList portalList = entity.getCapability(CaveCapabilities.CAVE_PORTAL_LIST, null);
+			CavePortalList portalList = world.getCapability(CaveCapabilities.CAVE_PORTAL_LIST, null);
 
 			if (portalList != null)
 			{
@@ -191,7 +191,7 @@ public class TeleporterCavern implements ITeleporter
 			}
 		}
 
-		CavePortalList portalList = entity.getCapability(CaveCapabilities.CAVE_PORTAL_LIST, null);
+		CavePortalList portalList = world.getCapability(CaveCapabilities.CAVE_PORTAL_LIST, null);
 
 		if (portalList != null)
 		{
