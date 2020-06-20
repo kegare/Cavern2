@@ -10,14 +10,12 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
 
-import cavern.capability.CaveCapabilities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class PortalCache
@@ -170,10 +168,5 @@ public class PortalCache
 				lastPos.put(new ResourceLocation(tag.getString("Key")), type, NBTUtil.getPosFromTag(tag));
 			}
 		}
-	}
-
-	public static PortalCache get(ICapabilityProvider provider)
-	{
-		return ObjectUtils.defaultIfNull(CaveCapabilities.getCapability(provider, CaveCapabilities.PORTAL_CACHE), new PortalCache());
 	}
 }

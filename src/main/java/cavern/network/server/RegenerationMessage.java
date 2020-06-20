@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.google.common.collect.Lists;
 
+import cavern.capability.CaveCapabilities;
 import cavern.data.PortalCache;
 import cavern.network.CaveNetworkRegistry;
 import cavern.network.client.RegenerationGuiMessage;
@@ -146,7 +147,12 @@ public class RegenerationMessage implements ISimpleMessage<RegenerationMessage, 
 			{
 				if (player != null)
 				{
-					PortalCache.get(player).clearLastPos(null, type);
+					PortalCache cache = player.getCapability(CaveCapabilities.PORTAL_CACHE, null);
+
+					if (cache != null)
+					{
+						cache.clearLastPos(null, type);
+					}
 
 					player.setSpawnChunk(null, false, type.getId());
 				}

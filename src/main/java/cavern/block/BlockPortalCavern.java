@@ -251,11 +251,25 @@ public class BlockPortalCavern extends BlockPortal
 			return;
 		}
 
-		ResourceLocation key = getRegistryName();
-		PortalCache cache = PortalCache.get(entity);
 		DimensionType dimOld = world.provider.getDimensionType();
-		DimensionType dimNew = dimOld == getDimension() ? cache.getLastDim(key) : getDimension();
-		BlockPos prevPos = entity.getPosition();
+		DimensionType dimNew = dimOld == getDimension() ? DimensionType.OVERWORLD : getDimension();
+		PortalCache cache = entity.getCapability(CaveCapabilities.PORTAL_CACHE, null);
+
+		if (cache != null)
+		{
+			ResourceLocation key = getRegistryName();
+			DimensionType prevDim = dimNew;
+
+			dimNew = cache.getLastDim(key, dimNew);
+
+			if (dimNew == dimOld)
+			{
+				dimNew = prevDim;
+			}
+
+			cache.setLastDim(key, dimOld);
+			cache.setLastPos(key, dimOld, entity.getPosition());
+		}
 
 		entity.timeUntilPortal = cd;
 
@@ -277,9 +291,6 @@ public class BlockPortalCavern extends BlockPortal
 		{
 			portalList.addPortal(this, pos);
 		}
-
-		cache.setLastDim(key, dimOld);
-		cache.setLastPos(key, dimOld, prevPos);
 
 		TeleporterCavern teleporter = new TeleporterCavern(this);
 		PatternHelper pattern = createPatternHelper(world, pos);
