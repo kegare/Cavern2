@@ -12,10 +12,12 @@ import cavern.item.OreCompass;
 import cavern.magic.MagicBook;
 import cavern.miningassist.MiningAssistUnit;
 import cavern.util.CaveUtils;
+import cavern.world.CavePortalList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -42,6 +44,8 @@ public final class CaveCapabilities
 	public static final Capability<MagicBook> MAGIC_BOOK = null;
 	@CapabilityInject(InventoryMagicStorage.class)
 	public static final Capability<InventoryMagicStorage> MAGIC_STORAGE = null;
+	@CapabilityInject(CavePortalList.class)
+	public static final Capability<CavePortalList> CAVE_PORTAL_LIST = null;
 
 	public static void registerCapabilities()
 	{
@@ -53,6 +57,7 @@ public final class CaveCapabilities
 		CapabilityOreCompass.register();
 		CapabilityMagicBook.register();
 		CapabilityMagicStorage.register();
+		CapabilityCavePortalList.register();
 
 		MinecraftForge.EVENT_BUS.register(new CaveCapabilities());
 	}
@@ -97,6 +102,12 @@ public final class CaveCapabilities
 				event.addCapability(stack.getItem().getRegistryName(), new CapabilityMagicStorage());
 			}
 		}
+	}
+
+	@SubscribeEvent
+	public void onAttachWorldCapabilities(AttachCapabilitiesEvent<World> event)
+	{
+		event.addCapability(CaveUtils.getKey("cave_portal_list"), new CapabilityCavePortalList());
 	}
 
 	@SubscribeEvent

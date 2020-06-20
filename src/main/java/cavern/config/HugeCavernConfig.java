@@ -164,12 +164,9 @@ public class HugeCavernConfig
 			biomes.add(new CaveBiome(Biomes.FOREST_HILLS, 10));
 			biomes.add(new CaveBiome(Biomes.TAIGA, 80));
 			biomes.add(new CaveBiome(Biomes.TAIGA_HILLS, 10));
-			biomes.add(new CaveBiome(Biomes.JUNGLE, 80, null, new BlockMeta(Blocks.GRAVEL.getDefaultState())));
-			biomes.add(new CaveBiome(Biomes.JUNGLE_HILLS, 10, null, new BlockMeta(Blocks.GRAVEL.getDefaultState())));
 			biomes.add(new CaveBiome(Biomes.SWAMPLAND, 60));
 			biomes.add(new CaveBiome(Biomes.EXTREME_HILLS, 50));
 			biomes.add(new CaveBiome(Biomes.SAVANNA, 50));
-			biomes.add(new CaveBiome(Biomes.MESA, 50, null, new BlockMeta(Blocks.RED_SANDSTONE.getDefaultState())));
 
 			CavernConfig.generateBiomesConfig(BIOMES, biomes);
 		}

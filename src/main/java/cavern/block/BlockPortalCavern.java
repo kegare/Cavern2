@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.google.common.cache.LoadingCache;
 
 import cavern.api.CavernAPI;
+import cavern.capability.CaveCapabilities;
 import cavern.client.gui.GuiMiningRecords;
 import cavern.client.gui.GuiRegeneration;
 import cavern.config.CavernConfig;
@@ -20,6 +21,7 @@ import cavern.network.client.RegenerationGuiMessage;
 import cavern.plugin.MCEPlugin;
 import cavern.util.CaveUtils;
 import cavern.world.CaveDimensions;
+import cavern.world.CavePortalList;
 import cavern.world.TeleporterCavern;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPortal;
@@ -38,7 +40,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
@@ -49,10 +50,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -255,11 +253,8 @@ public class BlockPortalCavern extends BlockPortal
 
 		ResourceLocation key = getRegistryName();
 		PortalCache cache = PortalCache.get(entity);
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		DimensionType dimOld = world.provider.getDimensionType();
 		DimensionType dimNew = dimOld == getDimension() ? cache.getLastDim(key) : getDimension();
-		WorldServer worldNew = server.getWorld(dimNew.getId());
-		ITeleporter teleporter = new TeleporterCavern(worldNew, this);
 		BlockPos prevPos = entity.getPosition();
 
 		entity.timeUntilPortal = cd;
@@ -276,19 +271,24 @@ public class BlockPortalCavern extends BlockPortal
 			}
 		}
 
+		CavePortalList portalList = entity.getCapability(CaveCapabilities.CAVE_PORTAL_LIST, null);
+
+		if (portalList != null)
+		{
+			portalList.addPortal(this, pos);
+		}
+
 		cache.setLastDim(key, dimOld);
 		cache.setLastPos(key, dimOld, prevPos);
 
+		TeleporterCavern teleporter = new TeleporterCavern(this);
 		PatternHelper pattern = createPatternHelper(world, pos);
 		double d0 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? (double)pattern.getFrontTopLeft().getZ() : (double)pattern.getFrontTopLeft().getX();
 		double d1 = pattern.getForwards().getAxis() == EnumFacing.Axis.X ? entity.posZ : entity.posX;
 		d1 = Math.abs(MathHelper.pct(d1 - (pattern.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - pattern.getWidth()));
 		double d2 = MathHelper.pct(entity.posY - 1.0D, pattern.getFrontTopLeft().getY(), pattern.getFrontTopLeft().getY() - pattern.getHeight());
 
-		cache.setLastPortalVec(new Vec3d(d1, d2, 0.0D));
-		cache.setTeleportDirection(pattern.getForwards());
-
-		entity.changeDimension(dimNew.getId(), teleporter);
+		entity.changeDimension(dimNew.getId(), teleporter.setPortalInfo(new Vec3d(d1, d2, 0.0D), pattern.getForwards()));
 	}
 
 	@Override
